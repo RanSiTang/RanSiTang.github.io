@@ -195,7 +195,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-07 14:05:31" itemprop="dateModified" datetime="2025-09-07T14:05:31+08:00">2025-09-07</time>
+      <time title="修改时间：2025-09-09 12:14:05" itemprop="dateModified" datetime="2025-09-09T12:14:05+08:00">2025-09-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -309,14 +309,37 @@
 <ul>
 <li><code>NEW</code> -&gt; <code>RUNNABLE</code>: 当线程对象的<code>start()</code>方法被调用时。</li>
 </ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Thread</span> <span class="variable">thread</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">    <span class="comment">// ... some task</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 此时, thread.getState() 的结果是 NEW</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h4 id="1-2-2-RUNNABLE-可运行"><a href="#1-2-2-RUNNABLE-可运行" class="headerlink" title="1.2.2 RUNNABLE (可运行)"></a>1.2.2 <code>RUNNABLE</code> (可运行)</h4><ul>
+<li><strong>定义</strong>：这是一个复合状态，它包含了操作系统线程状态中的 <strong>Ready（就绪）</strong> 和 <strong>Running（运行中）</strong>。<ul>
+<li><strong>就绪 (Ready)</strong>：线程已经准备好运行，获取了除CPU时间片之外的所有资源，正在等待操作系统的线程调度器分配CPU时间。</li>
+<li><strong>运行中 (Running)</strong>：线程已经获得了CPU时间片，正在执行<code>run()</code>方法中的代码。</li>
+</ul>
 </li>
-<li><pre><code class="language-java">Thread thread = new Thread(() -&gt; &#123;
-    // ... some task
-&#125;);
-// 此时, thread.getState() 的结果是 NEW
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">****</span><br><span class="line"></span><br><span class="line">#### 1.2.2 `RUNNABLE` (可运行)</span><br><span class="line"></span><br><span class="line">- **定义**：这是一个复合状态，它包含了操作系统线程状态中的 **Ready（就绪）** 和 **Running（运行中）**。</span><br><span class="line">  - **就绪 (Ready)**：线程已经准备好运行，获取了除CPU时间片之外的所有资源，正在等待操作系统的线程调度器分配CPU时间。</span><br><span class="line">  - **运行中 (Running)**：线程已经获得了CPU时间片，正在执行`run()`方法中的代码。</span><br><span class="line">- **特征**：处于`RUNNABLE`状态的线程可能正在运行，也可能在等待CPU。Java虚拟机（JVM）层面不区分这两种情况，统一视为`RUNNABLE`。</span><br><span class="line">- **状态切换**：</span><br><span class="line">  - `NEW` -&gt; `RUNNABLE`: 调用`start()`方法。</span><br><span class="line">  - `RUNNABLE` -&gt; `BLOCKED`: 线程试图进入一个`synchronized`同步块，但该锁被其他线程持有。</span><br><span class="line">  - `RUNNABLE` -&gt; `WAITING`: 线程调用了`Object.wait()`, `Thread.join()`, 或 `LockSupport.park()`。</span><br><span class="line">  - `RUNNABLE` -&gt; `TIMED_WAITING`: 线程调用了`Thread.sleep(long)`, `Object.wait(long)`, `Thread.join(long)`, `LockSupport.parkNanos()` 或 `LockSupport.parkUntil()`。</span><br><span class="line">  - `RUNNABLE` -&gt; `TERMINATED`: 线程的`run()`方法执行完毕，或者因未捕获的异常而退出。</span><br><span class="line"></span><br><span class="line">****</span><br><span class="line"></span><br><span class="line">#### 1.2.3 `BLOCKED` (阻塞)</span><br><span class="line"></span><br><span class="line">- **定义**：线程正在等待获取一个**监视器锁 (Monitor Lock)**。这**专指**线程在进入`synchronized`修饰的方法或代码块时，因为锁被其他线程占用而导致的等待状态。</span><br><span class="line"></span><br><span class="line">- **特征**：处于`BLOCKED`状态的线程会暂停执行，直到它获得了它所等待的锁。</span><br><span class="line"></span><br><span class="line">- **状态切换**：</span><br><span class="line"></span><br><span class="line">  - `RUNNABLE` -&gt; `BLOCKED`: 线程请求`synchronized`锁失败。</span><br><span class="line">  - `BLOCKED` -&gt; `RUNNABLE`: 持有锁的线程释放了该锁，并且线程调度器选择了这个线程来获取锁。</span><br><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  Object lock = new Object();</span><br><span class="line">  // 线程A</span><br><span class="line">  synchronized (lock) &#123;</span><br><span class="line">      // 线程A持有锁，长时间运行</span><br><span class="line">      Thread.sleep(10000);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // 线程B</span><br><span class="line">  synchronized (lock) &#123; // 线程B在这里会进入 BLOCKED 状态，直到线程A释放锁</span><br><span class="line">      // ...</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-</code></pre>
+<li><strong>特征</strong>：处于<code>RUNNABLE</code>状态的线程可能正在运行，也可能在等待CPU。Java虚拟机（JVM）层面不区分这两种情况，统一视为<code>RUNNABLE</code>。</li>
+<li><strong>状态切换</strong>：<ul>
+<li><code>NEW</code> -&gt; <code>RUNNABLE</code>: 调用<code>start()</code>方法。</li>
+<li><code>RUNNABLE</code> -&gt; <code>BLOCKED</code>: 线程试图进入一个<code>synchronized</code>同步块，但该锁被其他线程持有。</li>
+<li><code>RUNNABLE</code> -&gt; <code>WAITING</code>: 线程调用了<code>Object.wait()</code>, <code>Thread.join()</code>, 或 <code>LockSupport.park()</code>。</li>
+<li><code>RUNNABLE</code> -&gt; <code>TIMED_WAITING</code>: 线程调用了<code>Thread.sleep(long)</code>, <code>Object.wait(long)</code>, <code>Thread.join(long)</code>, <code>LockSupport.parkNanos()</code> 或 <code>LockSupport.parkUntil()</code>。</li>
+<li><code>RUNNABLE</code> -&gt; <code>TERMINATED</code>: 线程的<code>run()</code>方法执行完毕，或者因未捕获的异常而退出。</li>
+</ul>
 </li>
+</ul>
+<hr>
+<h4 id="1-2-3-BLOCKED-阻塞"><a href="#1-2-3-BLOCKED-阻塞" class="headerlink" title="1.2.3 BLOCKED (阻塞)"></a>1.2.3 <code>BLOCKED</code> (阻塞)</h4><ul>
+<li><p><strong>定义</strong>：线程正在等待获取一个<strong>监视器锁 (Monitor Lock)</strong>。这<strong>专指</strong>线程在进入<code>synchronized</code>修饰的方法或代码块时，因为锁被其他线程占用而导致的等待状态。</p>
+</li>
+<li><p><strong>特征</strong>：处于<code>BLOCKED</code>状态的线程会暂停执行，直到它获得了它所等待的锁。</p>
+</li>
+<li><p><strong>状态切换</strong>：</p>
+<ul>
+<li><code>RUNNABLE</code> -&gt; <code>BLOCKED</code>: 线程请求<code>synchronized</code>锁失败。</li>
+<li><code>BLOCKED</code> -&gt; <code>RUNNABLE</code>: 持有锁的线程释放了该锁，并且线程调度器选择了这个线程来获取锁。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"><span class="comment">// 线程A</span></span><br><span class="line"><span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">    <span class="comment">// 线程A持有锁，长时间运行</span></span><br><span class="line">    Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程B</span></span><br><span class="line"><span class="keyword">synchronized</span> (lock) &#123; <span class="comment">// 线程B在这里会进入 BLOCKED 状态，直到线程A释放锁</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <h4 id="1-2-4-WAITING-无限期等待"><a href="#1-2-4-WAITING-无限期等待" class="headerlink" title="1.2.4 WAITING (无限期等待)"></a>1.2.4 <code>WAITING</code> (无限期等待)</h4><ul>
@@ -2486,7 +2509,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-07 14:05:13" itemprop="dateModified" datetime="2025-09-07T14:05:13+08:00">2025-09-07</time>
+      <time title="修改时间：2025-09-09 12:12:11" itemprop="dateModified" datetime="2025-09-09T12:12:11+08:00">2025-09-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2754,88 +2777,8 @@
 <li><p><strong>缺点</strong>: 编程模型比BIO复杂得多，需要手动处理Buffer的读写切换、事件的分发等细节。</p>
 </li>
 <li><img src="https://rst-blog.oss-cn-beijing.aliyuncs.com/JavaBlog/img/NIO.png" alt="NIO" style="zoom:67%;" /> 
-</li>
-<li><pre><code class="language-java">public class NioServer &#123;
-    public static void main(String[] args) throws IOException &#123;
-        Selector selector = Selector.open();
-        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-        serverSocketChannel.bind(new InetSocketAddress(8080));
-        serverSocketChannel.configureBlocking(false);
-        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-        
-        System.out.println(&quot;NIO服务器已启动，端口: 8080&quot;);
-        
-        while (true) &#123;
-            selector.select();
-            Set&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys();
-            Iterator&lt;SelectionKey&gt; iter = selectedKeys.iterator();
-            
-            while (iter.hasNext()) &#123;
-                SelectionKey key = iter.next();
-                iter.remove();
-                
-                if (key.isAcceptable()) &#123;
-                    handleAccept(key, selector);
-                &#125; else if (key.isReadable()) &#123;
-                    handleRead(key);
-                &#125; else if (key.isWritable()) &#123;
-                    handleWrite(key);
-                &#125;
-            &#125;
-        &#125;
-    &#125;
-    
-    private static void handleAccept(SelectionKey key, Selector selector) throws IOException &#123;
-        ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
-        SocketChannel clientChannel = serverChannel.accept();
-        clientChannel.configureBlocking(false);
-        clientChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
-        System.out.println(&quot;客户端连接: &quot; + clientChannel.getRemoteAddress());
-    &#125;
-    
-    private static void handleRead(SelectionKey key) throws IOException &#123;
-        SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer buffer = (ByteBuffer) key.attachment();
-        
-        int bytesRead = channel.read(buffer);
-        if (bytesRead == -1) &#123;
-            System.out.println(&quot;客户端断开连接: &quot; + channel.getRemoteAddress());
-            channel.close();
-            return;
-        &#125;
-        
-        if (bytesRead &gt; 0) &#123;
-            buffer.flip();
-            byte[] data = new byte[buffer.remaining()];
-            buffer.get(data);
-            String message = new String(data, StandardCharsets.UTF_8);
-            System.out.println(&quot;收到消息: &quot; + message);
-            
-            // 准备回复
-            String response = &quot;服务器回复: &quot; + message;
-            ByteBuffer responseBuffer = ByteBuffer.wrap(response.getBytes(StandardCharsets.UTF_8));
-            key.attach(responseBuffer);
-            key.interestOps(SelectionKey.OP_WRITE);
-        &#125;
-    &#125;
-    
-    private static void handleWrite(SelectionKey key) throws IOException &#123;
-        SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer buffer = (ByteBuffer) key.attachment();
-        
-        if (buffer.hasRemaining()) &#123;
-            channel.write(buffer);
-        &#125;
-        
-        if (!buffer.hasRemaining()) &#123;
-            // 写完后重新关注读事件
-            key.attach(ByteBuffer.allocate(1024));
-            key.interestOps(SelectionKey.OP_READ);
-        &#125;
-    &#125;
-&#125;
-</code></pre>
-</li>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NioServer</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">Selector</span> <span class="variable">selector</span> <span class="operator">=</span> Selector.open();</span><br><span class="line">        <span class="type">ServerSocketChannel</span> <span class="variable">serverSocketChannel</span> <span class="operator">=</span> ServerSocketChannel.open();</span><br><span class="line">        serverSocketChannel.bind(<span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(<span class="number">8080</span>));</span><br><span class="line">        serverSocketChannel.configureBlocking(<span class="literal">false</span>);</span><br><span class="line">        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="string">&quot;NIO服务器已启动，端口: 8080&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            selector.select();</span><br><span class="line">            Set&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys();</span><br><span class="line">            Iterator&lt;SelectionKey&gt; iter = selectedKeys.iterator();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">while</span> (iter.hasNext()) &#123;</span><br><span class="line">                <span class="type">SelectionKey</span> <span class="variable">key</span> <span class="operator">=</span> iter.next();</span><br><span class="line">                iter.remove();</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (key.isAcceptable()) &#123;</span><br><span class="line">                    handleAccept(key, selector);</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">                    handleRead(key);</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">                    handleWrite(key);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">handleAccept</span><span class="params">(SelectionKey key, Selector selector)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">ServerSocketChannel</span> <span class="variable">serverChannel</span> <span class="operator">=</span> (ServerSocketChannel) key.channel();</span><br><span class="line">        <span class="type">SocketChannel</span> <span class="variable">clientChannel</span> <span class="operator">=</span> serverChannel.accept();</span><br><span class="line">        clientChannel.configureBlocking(<span class="literal">false</span>);</span><br><span class="line">        clientChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(<span class="number">1024</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;客户端连接: &quot;</span> + clientChannel.getRemoteAddress());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">handleRead</span><span class="params">(SelectionKey key)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">SocketChannel</span> <span class="variable">channel</span> <span class="operator">=</span> (SocketChannel) key.channel();</span><br><span class="line">        <span class="type">ByteBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> (ByteBuffer) key.attachment();</span><br><span class="line">        </span><br><span class="line">        <span class="type">int</span> <span class="variable">bytesRead</span> <span class="operator">=</span> channel.read(buffer);</span><br><span class="line">        <span class="keyword">if</span> (bytesRead == -<span class="number">1</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;客户端断开连接: &quot;</span> + channel.getRemoteAddress());</span><br><span class="line">            channel.close();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (bytesRead &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            buffer.flip();</span><br><span class="line">            <span class="type">byte</span>[] data = <span class="keyword">new</span> <span class="title class_">byte</span>[buffer.remaining()];</span><br><span class="line">            buffer.get(data);</span><br><span class="line">            <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(data, StandardCharsets.UTF_8);</span><br><span class="line">            System.out.println(<span class="string">&quot;收到消息: &quot;</span> + message);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 准备回复</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">response</span> <span class="operator">=</span> <span class="string">&quot;服务器回复: &quot;</span> + message;</span><br><span class="line">            <span class="type">ByteBuffer</span> <span class="variable">responseBuffer</span> <span class="operator">=</span> ByteBuffer.wrap(response.getBytes(StandardCharsets.UTF_8));</span><br><span class="line">            key.attach(responseBuffer);</span><br><span class="line">            key.interestOps(SelectionKey.OP_WRITE);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">handleWrite</span><span class="params">(SelectionKey key)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">SocketChannel</span> <span class="variable">channel</span> <span class="operator">=</span> (SocketChannel) key.channel();</span><br><span class="line">        <span class="type">ByteBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> (ByteBuffer) key.attachment();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (buffer.hasRemaining()) &#123;</span><br><span class="line">            channel.write(buffer);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!buffer.hasRemaining()) &#123;</span><br><span class="line">            <span class="comment">// 写完后重新关注读事件</span></span><br><span class="line">            key.attach(ByteBuffer.allocate(<span class="number">1024</span>));</span><br><span class="line">            key.interestOps(SelectionKey.OP_READ);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <hr>
 <h3 id="4-3-AIO-Asynchronous-I-O-异步I-O"><a href="#4-3-AIO-Asynchronous-I-O-异步I-O" class="headerlink" title="4.3 AIO (Asynchronous I&#x2F;O - 异步I&#x2F;O)"></a>4.3 AIO (Asynchronous I&#x2F;O - 异步I&#x2F;O)</h3><ul>
