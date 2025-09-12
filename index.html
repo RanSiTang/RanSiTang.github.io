@@ -195,7 +195,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-09 12:14:05" itemprop="dateModified" datetime="2025-09-09T12:14:05+08:00">2025-09-09</time>
+      <time title="修改时间：2025-09-09 12:16:17" itemprop="dateModified" datetime="2025-09-09T12:16:17+08:00">2025-09-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2509,7 +2509,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-09 12:12:11" itemprop="dateModified" datetime="2025-09-09T12:12:11+08:00">2025-09-09</time>
+      <time title="修改时间：2025-09-12 17:46:31" itemprop="dateModified" datetime="2025-09-12T17:46:31+08:00">2025-09-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2599,10 +2599,10 @@
 <li><strong>面向字节流 (Byte Stream)</strong>: 数据像水流一样，没有边界。发送方写入的数据和接收方读取的数据在字节序列上是一致的，但读取的次数和大小可能与写入时不同。</li>
 </ol>
 <hr>
-<h4 id="3-1-2-底层核心机制"><a href="#3-1-2-底层核心机制" class="headerlink" title="3.1.2 底层核心机制:"></a>3.1.2 <strong>底层核心机制</strong>:</h4><h5 id="1-三次握手-Three-Way-Handshake-建立连接"><a href="#1-三次握手-Three-Way-Handshake-建立连接" class="headerlink" title="1. 三次握手 (Three-Way Handshake) - 建立连接:"></a>1. 三次握手 (Three-Way Handshake) - 建立连接:</h5><ol>
-<li><code>SYN</code>: 客户端发送一个SYN（同步序列编号）包到服务器，请求建立连接，并进入<code>SYN_SENT</code>状态。</li>
-<li><code>SYN+ACK</code>: 服务器收到SYN包后，必须确认客户端的SYN（ack&#x3D;j+1），同时自己也发送一个SYN包（seq&#x3D;k），即SYN+ACK包，此时服务器进入<code>SYN_RECV</code>状态。</li>
-<li><code>ACK</code>: 客户端收到服务器的SYN+ACK包后，会发送一个ACK（确认）包，此包发送完毕，客户端和服务器进入<code>ESTABLISHED</code>（已建立连接）状态，完成三次握手。</li>
+<h4 id="3-1-2-底层核心机制"><a href="#3-1-2-底层核心机制" class="headerlink" title="3.1.2 底层核心机制"></a>3.1.2 底层核心机制</h4><h5 id="1-三次握手-Three-Way-Handshake-建立连接"><a href="#1-三次握手-Three-Way-Handshake-建立连接" class="headerlink" title="1. 三次握手 (Three-Way Handshake) - 建立连接:"></a>1. 三次握手 (Three-Way Handshake) - 建立连接:</h5><ol>
+<li><code>SYN</code>: 客户端发送一个SYN（同步序列编号 <code>seq=x</code> ）包到服务器，请求建立连接，并进入<code>SYN_SENT</code>状态。</li>
+<li><code>SYN+ACK</code>: 服务器收到SYN包后，必须确认客户端的SYN（<code>ack=x+1</code>），同时自己也发送一个SYN包（<code>seq=y</code>），即SYN+ACK包，此时服务器进入<code>SYN_RECV</code>状态。</li>
+<li><code>ACK</code>: 客户端收到服务器的SYN+ACK包后，会发送一个ACK（<code>ack=y+1</code>）包，此包发送完毕，客户端和服务器进入<code>ESTABLISHED</code>（已建立连接）状态，完成三次握手。</li>
 </ol>
 <ul>
 <li><strong>目的</strong>: 确保双方都具备发送和接收数据的能力。</li>
@@ -2611,10 +2611,10 @@
 
 <hr>
 <h5 id="2-四次挥手-Four-Way-Wave-断开连接"><a href="#2-四次挥手-Four-Way-Wave-断开连接" class="headerlink" title="2. 四次挥手 (Four-Way Wave) - 断开连接:"></a>2. 四次挥手 (Four-Way Wave) - 断开连接:</h5><ol>
-<li><code>FIN</code>: 客户端（或服务器）发送一个FIN（结束）报文，用来关闭从该端到另一端的数据传送，进入<code>FIN_WAIT_1</code>状态。</li>
-<li><code>ACK</code>: 另一端收到FIN后，发送一个ACK给对方，确认序号为收到序号+1。此时，这一方向的连接关闭，进入<code>CLOSE_WAIT</code>状态。</li>
-<li><code>FIN</code>: 当这一端也准备好关闭连接时，发送FIN报文给对方，进入<code>LAST_ACK</code>状态。</li>
-<li><code>ACK</code>: 对方收到FIN报文后，发送ACK报文作为应答，进入<code>TIME_WAIT</code>状态。发送ACK后，接收端进入<code>CLOSED</code>状态。发送端在等待2MSL（最长报文段寿命）后，也进入<code>CLOSED</code>状态。</li>
+<li><code>FIN</code>: 客户端（或服务器）发送一个FIN（结束 <code>seq=u</code>）报文，用来关闭从该端到另一端的数据传送，进入<code>FIN_WAIT_1</code>状态。</li>
+<li><code>ACK</code>: 另一端收到FIN后，发送一个ACK给对方，确认序号为收到序号+1(<code>ack=u+1</code>)。此时，这一方向的连接关闭，进入<code>CLOSE_WAIT</code>状态。</li>
+<li><code>FIN</code>: 当这一端也准备好关闭连接时，发送FIN报文给对方(<code>seq=w</code>)，进入<code>LAST_ACK</code>状态。</li>
+<li><code>ACK</code>: 对方收到FIN报文后，发送ACK报文作为应答(<code>ack=w+1</code>)，进入<code>TIME_WAIT</code>状态。发送ACK后，接收端进入<code>CLOSED</code>状态。发送端在等待2MSL（最长报文段寿命）后，进入<code>CLOSED</code>状态。</li>
 </ol>
 <ul>
 <li><strong>目的</strong>: 确保双方数据都已传输完毕，并优雅地关闭连接。</li>
@@ -2879,7 +2879,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-07 14:05:02" itemprop="dateModified" datetime="2025-09-07T14:05:02+08:00">2025-09-07</time>
+      <time title="修改时间：2025-09-12 17:39:14" itemprop="dateModified" datetime="2025-09-12T17:39:14+08:00">2025-09-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -3337,7 +3337,7 @@
 <p>现在，方法的签名 <code>Optional&lt;User&gt;</code> 清楚地表明了结果可能为空。</p>
 <hr>
 <h4 id="范例2：反模式-vs-推荐模式"><a href="#范例2：反模式-vs-推荐模式" class="headerlink" title="范例2：反模式 vs 推荐模式"></a>范例2：反模式 vs 推荐模式</h4><p><strong>反模式：<code>isPresent()</code> + <code>get()</code></strong> - 这与传统的 <code>if (obj != null)</code> 几乎没有区别。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 反模式 (Anti-Pattern)</span></span><br><span class="line">Optional&lt;User&gt; userOpt = findUserByIdOptional(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (userOpt.isPresent()) &#123;</span><br><span class="line">    System.out.println(userOpt.get().getName());</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;User not found.&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 反模式 (Anti-Pattern)</span></span><br><span class="line">Optional&lt;User&gt; userOpt = findUserByIdOptional(<span class="string">&quot;123&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (userOpt.isPresent()) &#123;</span><br><span class="line">    System.out.println(userOpt.get().getName());</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;User not found.&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>推荐模式：使用 <code>orElse</code>, <code>ifPresent</code>, <code>map</code> 等</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 推荐方式 1: 提供默认值</span></span><br><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> findUserByIdOptional(<span class="string">&quot;404&quot;</span>).orElse(<span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;Default User&quot;</span>));</span><br><span class="line">System.out.println(user.getName()); <span class="comment">// 输出: Default User</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 推荐方式 2: 值存在时执行操作</span></span><br><span class="line">findUserByIdOptional(<span class="string">&quot;123&quot;</span>).ifPresent(u -&gt; System.out.println(u.getName())); <span class="comment">// 输出: Alice</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 推荐方式 3: 链式调用，获取用户名，不存在则返回 &quot;Guest&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> findUserByIdOptional(<span class="string">&quot;404&quot;</span>)</span><br><span class="line">                    .map(User::getName) <span class="comment">// Optional&lt;User&gt; -&gt; Optional&lt;String&gt;</span></span><br><span class="line">                    .orElse(<span class="string">&quot;Guest&quot;</span>);</span><br><span class="line">System.out.println(username); <span class="comment">// 输出: Guest</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 推荐方式 4: 找不到用户时抛出自定义异常</span></span><br><span class="line"><span class="type">User</span> <span class="variable">foundUser</span> <span class="operator">=</span> findUserByIdOptional(<span class="string">&quot;404&quot;</span>)</span><br><span class="line">                    .orElseThrow(() -&gt; <span class="keyword">new</span> <span class="title class_">ResourceNotFoundException</span>(<span class="string">&quot;User not found&quot;</span>));</span><br></pre></td></tr></table></figure>
@@ -3492,7 +3492,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LambdaScopeDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">10</span>; <span class="comment">// num 是 effectively final</span></span><br><span class="line">        <span class="type">Runnable</span> <span class="variable">r</span> <span class="operator">=</span> () -&gt; System.out.println(<span class="string">&quot;The number is: &quot;</span> + num);</span><br><span class="line">        r.run();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果在这里修改 num 的值，上面的 Lambda 就会编译失败</span></span><br><span class="line">        <span class="comment">// num = 20; // Error: Variable &#x27;num&#x27; is accessed from within inner class, needs to be final or effectively final</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>为什么有这个限制？</strong></p>
-<p>这是为了避免在多线程环境下（Lambda 表达式常用于并发）出现线程安全问题。如果 Lambd8a 可以修改外部变量，那么当 Lambda 在另一个线程执行时，就可能出现数据不一致的问题。Java 设计者通过强制变量为事实 final 来简化并发模型，避免了这类错误。</p>
+<p>这是为了避免在多线程环境下（Lambda 表达式常用于并发）出现线程安全问题。如果 Lambda 可以修改外部变量，那么当 Lambda 在另一个线程执行时，就可能出现数据不一致的问题。Java 设计者通过强制变量为事实 final 来简化并发模型，避免了这类错误。</p>
 <hr>
 <h3 id="3-7-代码示例"><a href="#3-7-代码示例" class="headerlink" title="3.7 代码示例"></a>3.7 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; languages = Arrays.asList(<span class="string">&quot;Java&quot;</span>, <span class="string">&quot;Scala&quot;</span>, <span class="string">&quot;Python&quot;</span>, <span class="string">&quot;JavaScript&quot;</span>, <span class="string">&quot;Go&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 使用 Predicate 进行过滤</span></span><br><span class="line">List&lt;String&gt; languagesWithJ = languages.stream()</span><br><span class="line">    .filter(lang -&gt; lang.startsWith(<span class="string">&quot;J&quot;</span>)) <span class="comment">// Predicate&lt;String&gt;</span></span><br><span class="line">    .collect(Collectors.toList());</span><br><span class="line">System.out.println(languagesWithJ); <span class="comment">// [Java, JavaScript]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 使用 Function 进行映射</span></span><br><span class="line">List&lt;Integer&gt; lengths = languages.stream()</span><br><span class="line">    .map(String::length) <span class="comment">// Function&lt;String, Integer&gt; 使用了方法引用</span></span><br><span class="line">    .collect(Collectors.toList());</span><br><span class="line">System.out.println(lengths); <span class="comment">// [4, 5, 6, 10, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用 Consumer 进行遍历</span></span><br><span class="line">languages.forEach(System.out::println); <span class="comment">// Consumer&lt;String&gt; 使用了方法引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 使用 BinaryOperator 进行归约</span></span><br><span class="line"><span class="type">String</span> <span class="variable">combined</span> <span class="operator">=</span> languages.stream()</span><br><span class="line">    .reduce(<span class="string">&quot;&quot;</span>, (acc, lang) -&gt; acc + <span class="string">&quot; &quot;</span> + lang); <span class="comment">// BinaryOperator&lt;String&gt;</span></span><br><span class="line">System.out.println(combined.trim()); <span class="comment">// Java Scala Python JavaScript Go</span></span><br></pre></td></tr></table></figure>
 
@@ -11318,7 +11318,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-07 14:03:47" itemprop="dateModified" datetime="2025-09-07T14:03:47+08:00">2025-09-07</time>
+      <time title="修改时间：2025-09-12 17:53:14" itemprop="dateModified" datetime="2025-09-12T17:53:14+08:00">2025-09-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -11777,7 +11777,7 @@
 <p><strong>注意：</strong></p>
 <ul>
 <li><code>byte</code>、<code>short</code>、<code>char</code> 三者是平级的，在计算时会<strong>首先自动转换为 <code>int</code></strong> 类型。</li>
-<li><code>long</code> 是 64 位，<code>float</code> 也是 32 位，但 <code>long</code> 可以自动转为 <code>float</code>，因为浮点数的表示范围更大。</li>
+<li><code>long</code> 是 64 位，<code>float</code> 是 32 位，但 <code>long</code> 可以自动转为 <code>float</code>，因为浮点数的表示范围更大。</li>
 <li><code>整数类型</code> 可以自动转换为 <code>浮点类型</code>，但可能会损失精度（例如，将很大的 <code>long</code> 转换为 <code>float</code>）。</li>
 </ul>
 <p><strong>示例：</strong></p>
