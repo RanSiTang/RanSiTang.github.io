@@ -195,7 +195,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-20 11:26:53" itemprop="dateModified" datetime="2025-09-20T11:26:53+08:00">2025-09-20</time>
+      <time title="修改时间：2025-09-21 21:50:59" itemprop="dateModified" datetime="2025-09-21T21:50:59+08:00">2025-09-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1625,7 +1625,7 @@
 <tr>
 <td><code>MEDIUMINT</code></td>
 <td>3 字节</td>
-<td>-8,388,608 到 8,388,607</td>
+<td>-8,388,608 到 8,388,607&#x3D;</td>
 <td>0 到 16,777,215</td>
 <td>中等大小的编号</td>
 </tr>
@@ -1720,6 +1720,71 @@
 </tbody></table>
 <p><strong>注意</strong>：<code>TEXT</code> 类型在性能上通常不如 <code>VARCHAR</code>，尤其是在排序和索引方面。应仅在确实需要存储超过 <code>VARCHAR</code> 长度限制的文本时使用。</p>
 <hr>
+<h5 id="3-二进制大对象-BLOB-Types"><a href="#3-二进制大对象-BLOB-Types" class="headerlink" title="3. 二进制大对象 (BLOB Types)"></a>3. 二进制大对象 (BLOB Types)</h5><p>用于存储大量的二进制数据，如图片、音频文件、PDF 或任何原始字节流。<code>BLOB</code> 类型与 <code>TEXT</code> 类型在存储容量上完全对应，但有本质区别。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>最大存储长度</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>TINYBLOB</code></td>
+<td>255 字节</td>
+<td>很小的二进制数据，如缩略图的原始数据</td>
+</tr>
+<tr>
+<td><code>BLOB</code></td>
+<td>64 KB</td>
+<td>小型图片、图标、短音频</td>
+</tr>
+<tr>
+<td><code>MEDIUMBLOB</code></td>
+<td>16 MB</td>
+<td>文档 (PDF, Word), 较长的音频、小型视频片段</td>
+</tr>
+<tr>
+<td><code>LONGBLOB</code></td>
+<td>4 GB</td>
+<td>视频文件、大型软件安装包、数据库备份文件（不推荐）</td>
+</tr>
+</tbody></table>
+<p><strong><code>BLOB</code> vs. <code>TEXT</code> 的核心区别：</strong></p>
+<ol>
+<li><strong>数据内容</strong>：<ul>
+<li><code>BLOB</code>：存储的是<strong>二进制字节串</strong> (Binary String)。它没有字符集或排序规则的概念。</li>
+<li><code>TEXT</code>：存储的是<strong>非二进制字符串</strong> (Character String)。它有字符集和排序规则，用于正确的字符表示、排序和比较。</li>
+</ul>
+</li>
+<li><strong>处理方式</strong>：<ul>
+<li>对 <code>BLOB</code> 进行排序和比较是基于其原始的<strong>数值字节值</strong>。</li>
+<li>对 <code>TEXT</code> 进行排序和比较会遵循其列定义的<strong>排序规则</strong>（例如，不区分大小写比较）。</li>
+</ul>
+</li>
+</ol>
+<p><strong>选择准则：</strong></p>
+<ul>
+<li>如果要存储的是人类可读的文本内容（文章、评论、日志），<strong>使用 <code>TEXT</code></strong>。</li>
+<li>如果要存储的是非文本的二进制文件（图片、音频、序列化对象），<strong>使用 <code>BLOB</code></strong>。</li>
+</ul>
+<p><strong>重要注意事项与行业最佳实践：</strong></p>
+<ul>
+<li><strong>谨慎使用</strong>：在数据库中存储大型文件（尤其是 <code>MEDIUMBLOB</code> 和 <code>LONGBLOB</code>）通常是<strong>反模式 (Anti-Pattern)</strong> 的。</li>
+<li><strong>性能影响</strong>：<ul>
+<li>会显著增加数据库的体积，导致<strong>备份和恢复时间</strong>急剧变长。</li>
+<li><code>SELECT *</code> 这样的查询会变得非常缓慢和消耗内存，因为它需要传输大量数据。</li>
+<li>数据库的内存缓存（如 InnoDB Buffer Pool）效率会降低，因为被大对象数据占据。</li>
+</ul>
+</li>
+<li><strong>推荐的替代方案</strong>：<ul>
+<li>将文件存储在专用的<strong>文件系统、对象存储服务 (如 AWS S3, 阿里云 OSS) 或内容分发网络 (CDN)</strong> 上。</li>
+<li>在数据库中，只存储文件的<strong>元数据</strong> (metadata)，如文件名、大小、类型，以及一个指向文件存储位置的 <strong>URL 或路径</strong>（使用 <code>VARCHAR</code> 类型）。</li>
+<li><strong>结论</strong>：除非存储的是非常小的二进制数据（如几十 KB 的小图标），否则强烈建议采用<strong>路径存储</strong>方案。</li>
+</ul>
+</li>
+</ul>
+<hr>
 <h4 id="3-1-3-日期与时间类型-Date-and-Time-Types"><a href="#3-1-3-日期与时间类型-Date-and-Time-Types" class="headerlink" title="3.1.3 日期与时间类型 (Date and Time Types)"></a>3.1.3 日期与时间类型 (Date and Time Types)</h4><table>
 <thead>
 <tr>
@@ -1779,20 +1844,132 @@
 <li>用 <code>DATETIME</code> 记录一个固定的、不应随服务器时区变化的具体时刻，如用户的生日活动时间。</li>
 </ul>
 <hr>
-<h4 id="3-1-4-其他常用类型"><a href="#3-1-4-其他常用类型" class="headerlink" title="3.1.4 其他常用类型"></a>3.1.4 其他常用类型</h4><ul>
+<h4 id="3-1-4-高级数据类型"><a href="#3-1-4-高级数据类型" class="headerlink" title="3.1.4 高级数据类型"></a>3.1.4 高级数据类型</h4><h5 id="1-JSON-类型-MySQL-5-7"><a href="#1-JSON-类型-MySQL-5-7" class="headerlink" title="1. JSON 类型 (MySQL 5.7+)"></a>1. JSON 类型 (MySQL 5.7+)</h5><ul>
+<li><p><strong>核心定义</strong></p>
+<ul>
+<li>允许在一个字段中存储和操作 JSON 文档（对象或数组）。</li>
+<li>与 <code>TEXT</code> 不同，MySQL 会验证其格式是否正确，并以一种优化的二进制格式存储，从而能高效地访问内部元素。</li>
+</ul>
+</li>
+<li><p><strong>优势</strong></p>
+<ul>
+<li><strong>灵活的模式</strong>：无需预先定义所有字段，非常适合存储结构多变的数据（如商品属性、用户配置）。</li>
+<li><strong>专用函数支持</strong>：提供了一整套函数（如 <code>JSON_EXTRACT</code>, <code>JSON_CONTAINS</code>）和操作符（<code>-&gt;</code>, <code>-&gt;&gt;</code>）进行高效查询和操作。</li>
+<li><strong>可索引</strong>：可对 JSON 文档内的特定路径创建索引（通过<strong>生成列 (Generated Column)</strong>），以加速查询。</li>
+</ul>
+</li>
+<li><p><strong>用途</strong></p>
+<ul>
+<li>电商商品规格参数、用户个性化配置、非结构化的日志数据。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询品牌为 &#x27;Apple&#x27; 的产品</span></span><br><span class="line"><span class="comment">-- -&gt;&gt; 操作符提取的是不带引号的字符串，适合用于 WHERE 条件</span></span><br><span class="line"><span class="keyword">SELECT</span> name, details <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> details <span class="operator">-</span><span class="operator">&gt;&gt;</span> <span class="string">&#x27;$.brand&#x27;</span> <span class="operator">=</span> <span class="string">&#x27;Apple&#x27;</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>注意事项</strong></p>
+<ul>
+<li><strong>不要滥用</strong>：JSON 不是关系模型的替代品。核心的、结构固定的、需要频繁关联的字段仍应使用传统列。</li>
+<li><strong>性能</strong>：对频繁查询的路径，应通过<strong>生成列</strong>并对其建立索引来优化，否则查询效率低下。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h5 id="2-空间数据类型-Spatial-Data-Types"><a href="#2-空间数据类型-Spatial-Data-Types" class="headerlink" title="2. 空间数据类型 (Spatial Data Types)"></a>2. 空间数据类型 (Spatial Data Types)</h5><ul>
+<li><p><strong>核心定义</strong></p>
+<ul>
+<li>用于存储和处理地理空间数据，如点 (<code>POINT</code>)、线 (<code>LINESTRING</code>)、多边形 (<code>POLYGON</code>) 等。遵循 OpenGIS 规范。</li>
+</ul>
+</li>
+<li><p><strong>优势</strong></p>
+<ul>
+<li><strong>专业地理计算</strong>：内置大量以 <code>ST_</code> 开头的函数，用于计算距离、判断包含&#x2F;相交关系等。</li>
+<li><strong>空间索引 (<code>SPATIAL</code> INDEX)</strong>：可创建专用索引，极大提升基于地理位置的范围查询（如“附近的人”）效率。</li>
+</ul>
+</li>
+<li><p><strong>用途</strong></p>
+<ul>
+<li><strong>LBS 应用</strong>（“附近的人”、“附近的餐厅”）、地图与物流（计算配送范围）、地理数据分析。</li>
+</ul>
+</li>
+<li><p><strong>关键点</strong></p>
+<ul>
+<li><strong>必须创建空间索引</strong>：否则任何基于位置的范围查询都将是灾难性的全表扫描。</li>
+<li><strong>坐标系 (SRID)</strong>：在 MySQL 8.0+ 中，强烈建议为空间数据指定 SRID (如 4326 代表 WGS 84 经纬度坐标系)，以确保距离计算的准确性。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查找距离北京特定坐标点 100 公里以内的所有地点</span></span><br><span class="line"><span class="comment">-- (需 MySQL 8.0+ 和 SRID 支持)</span></span><br><span class="line"><span class="keyword">SELECT</span> name <span class="keyword">FROM</span> locations <span class="keyword">WHERE</span> ST_Distance_Sphere(coords, ST_GeomFromText(<span class="string">&#x27;POINT(116.40 39.90)&#x27;</span>, <span class="number">4326</span>)) <span class="operator">&lt;=</span> <span class="number">100000</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h5 id="3-枚举与集合类型-ENUM-SET"><a href="#3-枚举与集合类型-ENUM-SET" class="headerlink" title="3. 枚举与集合类型 (ENUM &amp; SET)"></a>3. 枚举与集合类型 (ENUM &amp; SET)</h5><p>这两个类型将字符串值映射为内部的数字索引，从而在存储上非常高效，但也有明显缺点。</p>
+<ul>
 <li><strong><code>ENUM(&#39;value1&#39;, &#39;value2&#39;, ...)</code></strong><ul>
-<li>枚举类型。值只能是预定义列表中的一个。</li>
-<li><strong>优点</strong>：存储高效 (内部存为整数)，自带数据校验。</li>
-<li><strong>用途</strong>：状态字段，如 <code>status ENUM(&#39;pending&#39;, &#39;processing&#39;, &#39;shipped&#39;, &#39;completed&#39;)</code>。</li>
+<li><strong>类型</strong>：枚举。值只能从一个预定义的列表中选择<strong>一个</strong>。</li>
+<li><strong>用途</strong>：值非常固定且数量有限的场景，如订单状态 <code>status ENUM(&#39;pending&#39;, &#39;active&#39;, &#39;inactive&#39;)</code>、用户性别。</li>
 </ul>
 </li>
-<li><strong><code>BOOLEAN</code> &#x2F; <code>BOOL</code></strong><ul>
-<li>在 MySQL 中，它们是 <code>TINYINT(1)</code> 的同义词。通常用 0 代表 <code>false</code>，1 代表 <code>true</code>。</li>
+<li><strong><code>SET(&#39;value1&#39;, &#39;value2&#39;, ...)</code></strong><ul>
+<li><strong>类型</strong>：集合。值可以从一个预定义的列表中选择<strong>零个或多个</strong>。</li>
+<li><strong>用途</strong>：用户权限 <code>permissions SET(&#39;read&#39;, &#39;write&#39;, &#39;execute&#39;)</code>、文章标签。</li>
 </ul>
 </li>
-<li><strong><code>JSON</code></strong> (MySQL 5.7+ an)<ul>
-<li>用于存储 JSON 格式的数据。</li>
-<li>MySQL 提供了专门的函数来操作和查询 JSON 数据，比将其存为 <code>TEXT</code> 效率更高、功能更强。</li>
+<li><strong>警告与替代方案</strong><ul>
+<li><strong>灵活性差</strong>：增加新选项需要执行 <code>ALTER TABLE</code>，在生产环境的大表上是高风险且成本高昂的操作。</li>
+<li><strong>可移植性差</strong>：是 MySQL 特有的，不利于未来可能的数据库迁移。</li>
+<li><strong>查询复杂</strong>：对 <code>SET</code> 类型的查询通常需要使用 <code>FIND_IN_SET()</code> 函数，无法有效利用索引。</li>
+<li><strong>最佳实践</strong>：对于绝大多数场景，特别是选项可能变化的，<strong>强烈建议使用一个独立的查找表 (Lookup Table) 并通过外键关联</strong>。这是更规范、更具扩展性的数据库设计方法。&#x3D;</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="3-1-5-其他常用类型"><a href="#3-1-5-其他常用类型" class="headerlink" title="3.1.5 其他常用类型"></a>3.1.5 其他常用类型</h4><h5 id="1-布尔类型-BOOLEAN-BOOL"><a href="#1-布尔类型-BOOLEAN-BOOL" class="headerlink" title="1. 布尔类型 (BOOLEAN &#x2F; BOOL)"></a>1. 布尔类型 (BOOLEAN &#x2F; BOOL)</h5><ul>
+<li><strong>核心定义</strong>：在 MySQL 中，<code>BOOLEAN</code> 和 <code>BOOL</code> 是 <code>TINYINT(1)</code> 的<strong>同义词 (Synonym)</strong>。它们并不是一个独立的类型。</li>
+<li><strong>存储约定</strong>：习惯上，使用 <code>0</code> 代表 <code>FALSE</code> (假)，使用 <code>1</code> (或任何非零值) 代表 <code>TRUE</code> (真)。</li>
+<li><strong>典型用途</strong>：用于存储只有两种状态的标志位。</li>
+<li><strong>示例</strong>：<code>is_active BOOLEAN DEFAULT TRUE</code>, <code>is_verified TINYINT(1) NOT NULL DEFAULT 0</code>。</li>
+</ul>
+<hr>
+<h5 id="2-位类型-BIT"><a href="#2-位类型-BIT" class="headerlink" title="2. 位类型 (BIT)"></a>2. 位类型 (BIT)</h5><ul>
+<li><strong>核心定义</strong>：<code>BIT(N)</code> 用于存储位值（0 或 1）。<code>N</code> 代表可以存储的位数，范围是 1 到 64。</li>
+<li><strong>典型用途</strong>：当需要将多个布尔标志位压缩存储在单个列中以节省空间时。例如，一个 <code>BIT(8)</code> 的列可以存储 8 个独立的开关状态。</li>
+<li><strong>与 <code>BOOLEAN</code> 的对比</strong>：<ul>
+<li><code>BIT(1)</code> 在功能上可以替代 <code>BOOLEAN</code>。</li>
+<li>但在实践中，<code>TINYINT(1)</code>（即 <code>BOOLEAN</code>）的可读性和客户端兼容性更好，通常是存储单个布尔值的首选。</li>
+<li>仅在确实需要进行位运算或极致地压缩存储空间时才考虑使用 <code>BIT(N)</code>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h5 id="3-如何存储-UUID-通用唯一识别码"><a href="#3-如何存储-UUID-通用唯一识别码" class="headerlink" title="3. 如何存储 UUID (通用唯一识别码)"></a>3. 如何存储 UUID (通用唯一识别码)</h5><p>UUID 在分布式系统中非常常用作主键，但 MySQL（8.0 之前）没有原生的 <code>UUID</code> 类型。如何存储它对性能至关重要。</p>
+<ul>
+<li><p><strong>方法一：错误的方式 (<code>CHAR(36)</code> &#x2F; <code>VARCHAR(36)</code>)</strong></p>
+<ul>
+<li><strong>做法</strong>：直接将 UUID 的字符串形式 <code>(&#39;550e8400-e29b-41d4-a716-446655440000&#39;)</code> 存储。</li>
+<li><strong>缺点</strong>：<ol>
+<li><strong>空间浪费</strong>：需要 36 个字节。</li>
+<li><strong>索引性能差</strong>：字符串比较效率低；UUID v4 是随机的，作为主键（聚簇索引）会导致大量的页分裂和索引碎片，插入性能急剧下降。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>方法二：推荐的方式 (<code>BINARY(16)</code>)</strong></p>
+<ul>
+<li><p><strong>做法</strong>：UUID 的本质是一个 128 位的数字，恰好是 16 个字节。将其原始的二进制形式存入 <code>BINARY(16)</code> 列中。</p>
+</li>
+<li><p><strong>优点</strong>：</p>
+<ol>
+<li><strong>空间最优</strong>：仅需 16 字节，比字符串形式节省超过一半的空间。</li>
+<li><strong>索引高效</strong>：作为固定长度的二进制类型，比较和查找速度更快。</li>
+</ol>
+</li>
+<li><p><strong>如何使用 (MySQL 8.0+)</strong>：MySQL 提供了内置函数来轻松转换。</p>
+<ul>
+<li><code>UUID_TO_BIN()</code>：将 UUID 字符串转换为 <code>BINARY(16)</code>。</li>
+<li><code>BIN_TO_UUID()</code>：将 <code>BINARY(16)</code> 转换回 UUID 字符串。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> products (</span><br><span class="line">    <span class="comment">-- 注意：UUID v1 包含时间戳，更有序，更适合做主键。</span></span><br><span class="line">    <span class="comment">-- MySQL 8.0 的 UUID_TO_BIN 第二个参数为 true 可以重排 v1 UUID，使其更有序</span></span><br><span class="line">    id <span class="type">BINARY</span>(<span class="number">16</span>) <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 插入数据</span></span><br><span class="line"><span class="keyword">INSERT INTO</span> products (id, name) <span class="keyword">VALUES</span> (UUID_TO_BIN(UUID()), <span class="string">&#x27;My Product&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询数据 (为了可读性进行转换)</span></span><br><span class="line"><span class="keyword">SELECT</span> BIN_TO_UUID(id) <span class="keyword">AS</span> uuid, name <span class="keyword">FROM</span> products;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
@@ -5617,108 +5794,11 @@
 <li><strong>熟悉 ORM 框架的数据加载策略</strong>：深入理解所使用的 ORM 框架的**懒加载（Lazy Loading）<strong>和</strong>预加载&#x2F;即时加载（Eager Loading）**机制。N+1 问题往往是由于不恰当的懒加载或默认的加载策略导致的。解决问题的本质就是将多次查询变为一次或少数几次预加载。</li>
 </ol>
 <hr>
-<h3 id="3-3-连接池"><a href="#3-3-连接池" class="headerlink" title="3.3 连接池"></a>3.3 连接池</h3><h4 id="3-3-1-概述"><a href="#3-3-1-概述" class="headerlink" title="3.3.1 概述"></a>3.3.1 概述</h4><p><strong>数据库连接池</strong>是一种管理数据库连接的<strong>缓冲池技术</strong>。它的核心思想是在应用程序启动时，预先创建并维护一定数量的数据库连接对象，并将这些连接存放在一个“池子”里。当应用程序需要与数据库交互时，它不是直接创建一个新的连接，而是从池中“借用”一个已存在的空闲连接。使用完毕后，也不是关闭这个连接，而是将其“归还”到池中，以供其他线程或请求复用。</p>
-<hr>
-<h4 id="3-3-2-解决的核心问题"><a href="#3-3-2-解决的核心问题" class="headerlink" title="3.3.2 解决的核心问题"></a>3.3.2 解决的核心问题</h4><p>如果不使用连接池，每次数据库操作都遵循“<strong>建立连接 -&gt; 执行SQL -&gt; 关闭连接</strong>”的流程。这个过程，尤其是“建立连接”，是一个非常耗费资源和时间的操作。</p>
-<p><strong>建立一个数据库连接的成本包括：</strong></p>
-<ol>
-<li><strong>网络开销</strong>：客户端与数据库服务器之间需要经过 TCP&#x2F;IP 的三次握手来建立物理连接。</li>
-<li><strong>数据库认证</strong>：数据库需要验证客户端提供的用户名和密码。</li>
-<li><strong>会话准备</strong>：数据库需要为这个连接创建和分配内存、准备会话环境等。</li>
-<li><strong>资源消耗</strong>：频繁地创建和销毁连接会给数据库服务器带来巨大的性能压力，并消耗大量的内存和 CPU 资源。</li>
-</ol>
-<p><strong>使用连接池带来的核心优势：</strong></p>
-<ul>
-<li><strong>性能提升</strong>：通过复用连接，避免了频繁创建和销毁连接的开销，极大地减少了请求的响应时间。</li>
-<li><strong>资源管理</strong>：连接池可以统一管理连接的分配和释放，有效控制应用程序的最大连接数，防止因连接数过多而压垮数据库。</li>
-<li><strong>可靠性增强</strong>：连接池通常具备连接有效性检测、自动重连等功能，可以剔除失效的连接，保证应用程序获取到的连接是可用的。</li>
-</ul>
-<hr>
-<h4 id="3-3-3-连接池的工作原理"><a href="#3-3-3-连接池的工作原理" class="headerlink" title="3.3.3 连接池的工作原理"></a>3.3.3 连接池的工作原理</h4><p>一个典型的连接池工作流程如下：</p>
-<ol>
-<li><strong>初始化 (Initialization)</strong>：服务启动时，连接池根据配置创建一组初始的数据库连接（<code>initialSize</code>），并将它们置为空闲状态。</li>
-<li><strong>借用连接 (Borrowing)</strong>：<ul>
-<li>当应用程序请求连接时，连接池首先检查是否有空闲连接。</li>
-<li>如果有，就将一个空闲连接标记为“活动”状态并返回给应用程序。</li>
-<li>如果没有空闲连接，且当前总连接数未达到上限（<code>maxActive</code>），连接池会创建一个新的连接。</li>
-<li>如果已达到上限，请求线程会根据配置进行等待（<code>maxWait</code>），直到有连接被归还或等待超时。</li>
-</ul>
-</li>
-<li><strong>使用连接 (Using)</strong>：应用程序使用这个连接执行数据库操作。</li>
-<li><strong>归还连接 (Returning)</strong>：<ul>
-<li>应用程序调用 <code>connection.close()</code> 方法。</li>
-<li><strong>关键点</strong>：这个 <code>close()</code> 方法被连接池框架重写了。它并<strong>不会真正关闭物理连接</strong>，而是将连接的状态从“活动”重置为“空闲”，然后将其放回池中。</li>
-</ul>
-</li>
-<li><strong>维护 (Maintenance)</strong>：连接池在后台会有一个维护线程，定期检查池中连接的健康状况（如使用 <code>validationQuery</code>），关闭长时间未使用的空闲连接（维持在 <code>minIdle</code> 数量），并确保连接的有效性。</li>
-</ol>
-<hr>
-<h4 id="3-3-4-核心配置参数解析"><a href="#3-3-4-核心配置参数解析" class="headerlink" title="3.3.4 核心配置参数解析"></a>3.3.4 核心配置参数解析</h4><p>配置连接池时，通常会遇到以下几个关键参数，合理配置它们对系统性能至关重要。</p>
-<table>
-<thead>
-<tr>
-<th>参数名 (常见)</th>
-<th>含义</th>
-<th>建议与说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>initialSize</code></td>
-<td>初始连接数。连接池启动时创建的连接数量。</td>
-<td>建议设置一个合理的值，避免应用启动后短时间内因创建连接导致响应变慢。</td>
-</tr>
-<tr>
-<td><code>minIdle</code></td>
-<td>最小空闲连接数。即使没有请求，池中也要保留的最小连接数。</td>
-<td>如果系统有突发流量，设置此值可以保证能快速响应，因为它避免了从零开始创建连接。</td>
-</tr>
-<tr>
-<td><code>maxActive</code> &#x2F; <code>maximumPoolSize</code></td>
-<td>最大连接数。池中允许存在的最大连接总数（包括活动和空闲）。</td>
-<td><strong>最关键的参数</strong>。设置过小会导致请求排队等待，设置过大会耗尽数据库资源。需要根据数据库并发能力和应用QPS进行压测后确定。</td>
-</tr>
-<tr>
-<td><code>maxWait</code> &#x2F; <code>connectionTimeout</code></td>
-<td>最大等待时间。当池中没有可用连接时，请求线程等待的最长时间（毫秒）。</td>
-<td>设置-1表示无限等待（不推荐）。建议设置一个合理的超时时间（如3000ms），超时后应抛出异常，防止线程无限期阻塞。</td>
-</tr>
-<tr>
-<td><code>validationQuery</code></td>
-<td>连接有效性检查SQL。用于在借出连接前，检查该连接是否仍然有效。</td>
-<td>例如 <code>SELECT 1</code> (MySQL)。开启此功能会带来轻微性能损耗，但能有效避免拿到“死亡”连接。</td>
-</tr>
-<tr>
-<td><code>testOnBorrow</code></td>
-<td>是否在借用连接前进行有效性检查。</td>
-<td>设为 <code>true</code> 可以保证每次拿到的连接都是可用的，但性能开销较大。现代连接池（如HikariCP）有更高效的检测机制。</td>
-</tr>
-</tbody></table>
-<hr>
-<h4 id="3-3-5-主流连接池实现"><a href="#3-3-5-主流连接池实现" class="headerlink" title="3.3.5 主流连接池实现"></a>3.3.5 主流连接池实现</h4><ul>
-<li><strong>HikariCP</strong>：目前公认的性能最好、最可靠的连接池。从 Spring Boot 2.0 开始成为默认的数据库连接池。</li>
-<li><strong>Druid</strong>：由阿里巴巴开源，以其强大的监控和扩展功能而闻名，内置了SQL防火墙、性能监控等，在国内应用非常广泛。</li>
-<li><strong>C3P0</strong> &#x2F; <strong>DBCP (Database Connection Pool)</strong>：都是比较老牌的连接池实现，在一些旧项目或特定场景下仍有使用。</li>
-</ul>
-<hr>
-<h4 id="3-3-6-示例：Spring-Boot-中配置-HikariCP"><a href="#3-3-6-示例：Spring-Boot-中配置-HikariCP" class="headerlink" title="3.3.6 示例：Spring Boot 中配置 HikariCP"></a>3.3.6 示例：Spring Boot 中配置 HikariCP</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="comment"># JDBC URL, 用户名和密码</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/my_database?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=Asia/Shanghai</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">your_password</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">    <span class="comment"># 指定使用 HikariCP 连接池</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">com.zaxxer.hikari.HikariDataSource</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># HikariCP specific settings</span></span><br><span class="line">    <span class="attr">hikari:</span></span><br><span class="line">      <span class="comment"># 连接池名称</span></span><br><span class="line">      <span class="attr">pool-name:</span> <span class="string">MyHikariPool</span></span><br><span class="line">      <span class="comment"># 最小空闲连接数</span></span><br><span class="line">      <span class="attr">minimum-idle:</span> <span class="number">5</span></span><br><span class="line">      <span class="comment"># 最大连接数（默认10）</span></span><br><span class="line">      <span class="attr">maximum-pool-size:</span> <span class="number">20</span></span><br><span class="line">      <span class="comment"># 连接超时时间（获取连接的超时时间, 默认30秒）</span></span><br><span class="line">      <span class="attr">connection-timeout:</span> <span class="number">30000</span> </span><br><span class="line">      <span class="comment"># 空闲连接超时时间（连接在池中闲置过久则被回收, 默认10分钟）</span></span><br><span class="line">      <span class="attr">idle-timeout:</span> <span class="number">600000</span></span><br><span class="line">      <span class="comment"># 连接最大生命周期（一个连接在池中存活的最长时间, 默认30分钟）</span></span><br><span class="line">      <span class="attr">max-lifetime:</span> <span class="number">1800000</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="3-3-7-连接泄漏-Connection-Leak"><a href="#3-3-7-连接泄漏-Connection-Leak" class="headerlink" title="3.3.7 连接泄漏 (Connection Leak)"></a>3.3.7 连接泄漏 (Connection Leak)</h4><p><strong>连接泄漏</strong>是指应用程序从连接池中借用了连接，但在使用完毕后<strong>没有将其归还</strong>。这会导致池中的可用连接越来越少，最终耗尽所有连接，使得新的请求无法获取连接，导致整个应用无响应或超时。</p>
-<p><strong>主要原因</strong>：通常是由于代码中存在逻辑缺陷，如在 <code>try</code> 块中获取连接，但在 <code>finally</code> 块中没有确保执行 <code>connection.close()</code>。</p>
-<p><strong>如何避免：</strong></p>
-<p>始终使用 <code>try-with-resources</code> (Java 7+) 语句或 <code>try-finally</code> 结构来保证连接一定会被关闭（归还）。</p>
-<p><strong>正确示范 (try-with-resources):</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Connection, PreparedStatement, ResultSet 都实现了 AutoCloseable 接口</span></span><br><span class="line"><span class="comment">// JVM 会自动在末尾调用它们的 close() 方法</span></span><br><span class="line"><span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> dataSource.getConnection();</span><br><span class="line">     <span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> conn.prepareStatement(sql)) &#123;</span><br><span class="line">    <span class="comment">// ... 执行SQL ...</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// ... 异常处理 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>正确示范 (try-finally):</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    conn = dataSource.getConnection();</span><br><span class="line">    <span class="comment">// ... 执行SQL ...</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// ... 异常处理 ...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (conn != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            conn.close(); <span class="comment">// 确保归还连接</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">            <span class="comment">// log error</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="3-4-SQL-注入"><a href="#3-4-SQL-注入" class="headerlink" title="3.4 SQL 注入"></a>3.4 SQL 注入</h3><h4 id="3-4-1-什么是-SQL-注入？"><a href="#3-4-1-什么是-SQL-注入？" class="headerlink" title="3.4.1 什么是 SQL 注入？"></a>3.4.1 什么是 SQL 注入？</h4><p><strong>SQL 注入</strong>是一种常见的网络攻击技术，攻击者通过在应用程序的用户输入接口（如网页表单、URL参数等）中<strong>注入恶意的 SQL 代码片段</strong>，欺骗应用程序执行非预期的数据库操作。</p>
+<h3 id="3-3-SQL-注入"><a href="#3-3-SQL-注入" class="headerlink" title="3.3 SQL 注入"></a>3.3 SQL 注入</h3><h4 id="3-3-1-什么是-SQL-注入？"><a href="#3-3-1-什么是-SQL-注入？" class="headerlink" title="3.3.1 什么是 SQL 注入？"></a>3.3.1 什么是 SQL 注入？</h4><p><strong>SQL 注入</strong>是一种常见的网络攻击技术，攻击者通过在应用程序的用户输入接口（如网页表单、URL参数等）中<strong>注入恶意的 SQL 代码片段</strong>，欺骗应用程序执行非预期的数据库操作。</p>
 <p>简单来说，当应用程序将用户输入的内容<strong>直接拼接</strong>到 SQL 查询语句中时，攻击者就可以构造特殊的输入，篡改原有的 SQL 语义，从而达到窃取数据、篡改数据、甚至控制整个数据库服务器的目的。</p>
 <p><strong>核心原则：永远不要信任用户的任何输入！</strong></p>
 <hr>
-<h4 id="3-4-2-SQL-注入的危害"><a href="#3-4-2-SQL-注入的危害" class="headerlink" title="3.4.2 SQL 注入的危害"></a>3.4.2 SQL 注入的危害</h4><p>SQL 注入的危害是极其严重的，它可能导致：</p>
+<h4 id="3-3-2-SQL-注入的危害"><a href="#3-3-2-SQL-注入的危害" class="headerlink" title="3.3.2 SQL 注入的危害"></a>3.3.2 SQL 注入的危害</h4><p>SQL 注入的危害是极其严重的，它可能导致：</p>
 <ol>
 <li><strong>数据泄露</strong>：攻击者可以绕过认证，查询并窃取数据库中的敏感信息，如用户个人资料、密码、银行卡信息等。</li>
 <li><strong>数据篡改</strong>：攻击者可以修改、添加或删除数据库中的数据，破坏数据的完整性。</li>
@@ -5726,7 +5806,7 @@
 <li><strong>拒绝服务 (DoS)</strong>：攻击者可以执行耗时很长的查询（如 <code>BENCHMARK()</code>, <code>SLEEP()</code>），耗尽数据库资源，导致网站或应用无法正常服务。</li>
 </ol>
 <hr>
-<h4 id="3-4-3-SQL-注入是如何发生的？-一个经典的登录场景"><a href="#3-4-3-SQL-注入是如何发生的？-一个经典的登录场景" class="headerlink" title="3.4.3 SQL 注入是如何发生的？(一个经典的登录场景)"></a>3.4.3 SQL 注入是如何发生的？(一个经典的登录场景)</h4><p>假设我们有一个用户登录功能，后台的验证逻辑是根据用户名和密码查询数据库。</p>
+<h4 id="3-3-3-SQL-注入是如何发生的？-一个经典的登录场景"><a href="#3-3-3-SQL-注入是如何发生的？-一个经典的登录场景" class="headerlink" title="3.3.3 SQL 注入是如何发生的？(一个经典的登录场景)"></a>3.3.3 SQL 注入是如何发生的？(一个经典的登录场景)</h4><p>假设我们有一个用户登录功能，后台的验证逻辑是根据用户名和密码查询数据库。</p>
 <h5 id="存在漏洞的代码-Java-JDBC-示例"><a href="#存在漏洞的代码-Java-JDBC-示例" class="headerlink" title="存在漏洞的代码 (Java + JDBC 示例):"></a><strong>存在漏洞的代码 (Java + JDBC 示例):</strong></h5><p>这里的关键问题是<strong>使用字符串拼接 <code>+</code> 来构造 SQL 语句</strong>。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">login</span><span class="params">(String username, String password)</span> &#123;</span><br><span class="line">    <span class="comment">// 危险：直接将用户输入拼接到 SQL 语句中</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;SELECT * FROM users WHERE username = &#x27;&quot;</span> + username + <span class="string">&quot;&#x27; AND password = &#x27;&quot;</span> + password + <span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> dataSource.getConnection();</span><br><span class="line">         <span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">         <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(sql)) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 如果能查到记录，说明用户名和密码匹配</span></span><br><span class="line">        <span class="keyword">return</span> rs.next();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        <span class="comment">// ... 异常处理</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -5779,7 +5859,7 @@
 </li>
 </ol>
 <hr>
-<h4 id="3-4-4-如何防止-SQL-注入？-核心防御手段"><a href="#3-4-4-如何防止-SQL-注入？-核心防御手段" class="headerlink" title="3.4.4 如何防止 SQL 注入？(核心防御手段)"></a>3.4.4 如何防止 SQL 注入？(核心防御手段)</h4><p>防御 SQL 注入的根本方法是<strong>确保用户输入永远被当作“数据”处理，而不是被当作“SQL指令”的一部分来执行。</strong></p>
+<h4 id="3-3-4-如何防止-SQL-注入？-核心防御手段"><a href="#3-3-4-如何防止-SQL-注入？-核心防御手段" class="headerlink" title="3.3.4 如何防止 SQL 注入？(核心防御手段)"></a>3.3.4 如何防止 SQL 注入？(核心防御手段)</h4><p>防御 SQL 注入的根本方法是<strong>确保用户输入永远被当作“数据”处理，而不是被当作“SQL指令”的一部分来执行。</strong></p>
 <h5 id="1-使用参数化查询-Parameterized-Queries-PreparedStatement"><a href="#1-使用参数化查询-Parameterized-Queries-PreparedStatement" class="headerlink" title="1. 使用参数化查询 (Parameterized Queries &#x2F; PreparedStatement)"></a><strong>1. 使用参数化查询 (Parameterized Queries &#x2F; PreparedStatement)</strong></h5><p>这是<strong>最有效、最推荐</strong>的防御方法。</p>
 <p><strong>原理</strong>：<br>它将 SQL 语句的“结构”和“数据”分离开来。</p>
 <ol>
