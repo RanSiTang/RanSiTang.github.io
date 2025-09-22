@@ -2044,7 +2044,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-21 21:52:12" itemprop="dateModified" datetime="2025-09-21T21:52:12+08:00">2025-09-21</time>
+      <time title="修改时间：2025-09-22 14:41:01" itemprop="dateModified" datetime="2025-09-22T14:41:01+08:00">2025-09-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -7539,47 +7539,10 @@
 <li><strong>在应用层添加重试机制</strong>：<br>对于高并发系统，完全避免死锁有时是不现实的。因此，应用层代码应该具备处理死锁错误的能力。当捕获到死锁异常（如 MySQL 的 <code>1213</code> 错误码）时，可以等待一个随机的短暂时间后，自动重试该事务</li>
 </ul>
 <hr>
-<h2 id="3-应用层交互"><a href="#3-应用层交互" class="headerlink" title="3. 应用层交互"></a>3. 应用层交互</h2><h3 id="3-1-ORM-对象关系映射"><a href="#3-1-ORM-对象关系映射" class="headerlink" title="3.1 ORM (对象关系映射)"></a>3.1 ORM (对象关系映射)</h3><h4 id="3-1-1-概述"><a href="#3-1-1-概述" class="headerlink" title="3.1.1 概述"></a>3.1.1 概述</h4><p><strong>ORM（Object-Relational Mapping，对象关系映射）</strong> 是一种编程技术，用于在关系型数据库和面向对象编程语言之间建立一座“桥梁”。它的核心思想是将数据库中的**关系数据（表、行、列）<strong>与程序中的</strong>对象（类、对象、属性）**进行自动化的映射。</p>
-<p>简单来说，ORM 框架允许开发者<strong>使用操作对象的方式来操作数据库表</strong>，而无需手动编写繁琐、重复的 SQL 语句和 JDBC 代码。</p>
-<ul>
-<li><strong>O (Object):</strong> 指的是我们编程语言中的对象，例如一个 Java 类 <code>User</code>。</li>
-<li><strong>R (Relational):</strong> 指的是关系型数据库，例如 MySQL 中的一张表 <code>users</code>。</li>
-<li><strong>M (Mapping):</strong> 指的是 ORM 框架建立的映射规则，它告诉程序：<ul>
-<li><code>User</code> 类 对应 <code>users</code> 表。</li>
-<li><code>User</code> 类的 <code>id</code> 属性 对应 <code>users</code> 表的 <code>id</code> 字段。</li>
-<li><code>User</code> 类的 <code>username</code> 属性 对应 <code>users</code> 表的 <code>username</code> 字段。</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-1-2-核心优势"><a href="#3-1-2-核心优势" class="headerlink" title="3.1.2 核心优势"></a>3.1.2 核心优势</h4><p>在没有 ORM 的时代，我们使用原生 JDBC 来与数据库交互，代码通常是这样的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 伪代码：原生 JDBC 查询</span></span><br><span class="line"><span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="type">PreparedStatement</span> <span class="variable">ps</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    conn = DriverManager.getConnection(...);</span><br><span class="line">    <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;SELECT id, username, password FROM users WHERE id = ?&quot;</span>;</span><br><span class="line">    ps = conn.prepareStatement(sql);</span><br><span class="line">    ps.setInt(<span class="number">1</span>, <span class="number">101</span>);</span><br><span class="line">    rs = ps.executeQuery();</span><br><span class="line">    <span class="keyword">if</span> (rs.next()) &#123;</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        user.setId(rs.getInt(<span class="string">&quot;id&quot;</span>));</span><br><span class="line">        user.setUsername(rs.getString(<span class="string">&quot;username&quot;</span>));</span><br><span class="line">        user.setPassword(rs.getString(<span class="string">&quot;password&quot;</span>));</span><br><span class="line">        <span class="comment">// ... 使用 user 对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">    <span class="comment">// 异常处理</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// 繁琐的资源关闭</span></span><br><span class="line">    <span class="keyword">if</span> (rs != <span class="literal">null</span>) rs.close();</span><br><span class="line">    <span class="keyword">if</span> (ps != <span class="literal">null</span>) ps.close();</span><br><span class="line">    <span class="keyword">if</span> (conn != <span class="literal">null</span>) conn.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用 ORM 框架后，代码变得极其简洁：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 伪代码：使用 ORM 框架查询</span></span><br><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userMapper.findUserById(<span class="number">101</span>);</span><br><span class="line"><span class="comment">// ... 直接使用 user 对象</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>ORM 的主要优势：</strong></p>
-<ol>
-<li><strong>提高开发效率</strong>：将开发者从繁琐的 SQL 编写、参数设置、结果集映射等重复性劳动中解放出来，专注于业务逻辑。</li>
-<li><strong>代码更简洁、可读性更高</strong>：用面向对象的方式操作数据，使得业务逻辑更加清晰。</li>
-<li><strong>更好的可维护性</strong>：<ul>
-<li><strong>解耦</strong>：将数据访问层与业务逻辑层解耦。</li>
-<li><strong>易于修改</strong>：当数据库表结构发生微小变化时（如增加一个字段），通常只需修改映射关系和对象类，而不用深入到每个 SQL 语句中去修改。</li>
-</ul>
-</li>
-<li><strong>数据库无关性</strong>：优秀的 ORM 框架支持多种数据库。当需要更换数据库时（如从 MySQL 切换到 PostgreSQL），通常只需修改配置文件，而无需修改大量的业务代码和 SQL 语句。</li>
-<li><strong>内置高级功能</strong>：许多 ORM 框架内置了缓存、懒加载、事务管理等高级功能，简化了复杂应用的开发。</li>
-</ol>
-<h4 id="3-1-3-ORM-的缺点与挑战"><a href="#3-1-3-ORM-的缺点与挑战" class="headerlink" title="3.1.3 ORM 的缺点与挑战"></a>3.1.3 ORM 的缺点与挑战</h4><ol>
-<li><strong>性能开销</strong>：ORM 框架在对象和 SQL 之间增加了一个抽象层，这会带来一定的性能损失。对于性能要求极高的场景，手写优化的 SQL 可能效率更高。</li>
-<li><strong>学习成本</strong>：需要学习 ORM 框架本身的使用方法、API 和配置。</li>
-<li><strong>复杂查询的挑战</strong>：对于非常复杂的多表连接、统计报表等查询，使用 ORM 可能变得笨拙，甚至不如直接编写原生 SQL 灵活和高效。</li>
-<li><strong>“黑盒”问题</strong>：ORM 可能会隐藏底层的 SQL 执行细节，导致开发者不清楚实际执行了哪些 SQL，可能会产生意料之外的性能问题（如下一节的 <code>N+1</code> 查询问题）。</li>
-</ol>
-<hr>
-<h3 id="3-2-N-1-查询问题"><a href="#3-2-N-1-查询问题" class="headerlink" title="3.2 N+1 查询问题"></a>3.2 N+1 查询问题</h3><h4 id="3-2-1-概述-1"><a href="#3-2-1-概述-1" class="headerlink" title="3.2.1 概述"></a>3.2.1 概述</h4><p><strong>N+1 查询问题</strong> 指的是在查询一个主实体列表（<strong>1</strong> 次查询）时，如果在遍历这个列表的过程中，又为列表中的<strong>每</strong>一个实体都单独执行了一次查询来获取其关联的子实体（<strong>N</strong> 次查询），那么最终执行的查询总数就是 <code>1 + N</code> 次。</p>
+<h2 id="3-应用层交互"><a href="#3-应用层交互" class="headerlink" title="3. 应用层交互"></a>3. 应用层交互</h2><h3 id="3-1-N-1-查询问题"><a href="#3-1-N-1-查询问题" class="headerlink" title="3.1 N+1 查询问题"></a>3.1 N+1 查询问题</h3><h4 id="3-1-1-概述"><a href="#3-1-1-概述" class="headerlink" title="3.1.1 概述"></a>3.1.1 概述</h4><p><strong>N+1 查询问题</strong> 指的是在查询一个主实体列表（<strong>1</strong> 次查询）时，如果在遍历这个列表的过程中，又为列表中的<strong>每</strong>一个实体都单独执行了一次查询来获取其关联的子实体（<strong>N</strong> 次查询），那么最终执行的查询总数就是 <code>1 + N</code> 次。</p>
 <p>这种模式会导致数据库交互次数随着主实体数量 <code>N</code> 的增长而线性增长，造成大量的数据库往返开销和性能急剧下降。</p>
 <hr>
-<h4 id="3-2-2-代码示例"><a href="#3-2-2-代码示例" class="headerlink" title="3.2.2 代码示例"></a>3.2.2 代码示例</h4><p>假设我们有两个实体：<strong>班级(Classes)</strong> 和 <strong>学生(Student)</strong>。一个班级可以包含多名学生，这是一个典型的一对多关系。</p>
+<h4 id="3-1-2-代码示例"><a href="#3-1-2-代码示例" class="headerlink" title="3.1.2 代码示例"></a>3.1.2 代码示例</h4><p>假设我们有两个实体：<strong>班级(Classes)</strong> 和 <strong>学生(Student)</strong>。一个班级可以包含多名学生，这是一个典型的一对多关系。</p>
 <p><strong>数据库表结构:</strong></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 班级表</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> `classes` (</span><br><span class="line">  `id` <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">  `name` <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT NULL</span> <span class="comment">-- 班级名称</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 学生表</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> `students` (</span><br><span class="line">  `id` <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">  `name` <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">NOT NULL</span>, <span class="comment">-- 学生姓名</span></span><br><span class="line">  `class_id` <span class="type">INT</span>, <span class="comment">-- 外键，关联到班级表的ID</span></span><br><span class="line">  <span class="keyword">FOREIGN KEY</span> (`class_id`) <span class="keyword">REFERENCES</span> `classes`(`id`)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 插入测试数据</span></span><br><span class="line"><span class="keyword">INSERT INTO</span> classes (name) <span class="keyword">VALUES</span> (<span class="string">&#x27;一班&#x27;</span>), (<span class="string">&#x27;二班&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT INTO</span> students (name, class_id) <span class="keyword">VALUES</span> (<span class="string">&#x27;张三&#x27;</span>, <span class="number">1</span>), (<span class="string">&#x27;李四&#x27;</span>, <span class="number">1</span>), (<span class="string">&#x27;王五&#x27;</span>, <span class="number">2</span>), (<span class="string">&#x27;赵六&#x27;</span>, <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
 
@@ -7610,7 +7573,7 @@
 </ol>
 <p>总共执行了 <code>1 + 2 = 3</code> 次查询。如果有一百个班级，就会执行 <code>1 + 100 = 101</code> 次查询！这就是典型的 N+1 问题。</p>
 <hr>
-<h4 id="3-2-3-解决方案"><a href="#3-2-3-解决方案" class="headerlink" title="3.2.3 解决方案"></a>3.2.3 解决方案</h4><p>核心思想是：<strong>通过一次查询或有限次数的查询，获取所有需要的数据</strong>。</p>
+<h4 id="3-1-3-解决方案"><a href="#3-1-3-解决方案" class="headerlink" title="3.1.3 解决方案"></a>3.1.3 解决方案</h4><p>核心思想是：<strong>通过一次查询或有限次数的查询，获取所有需要的数据</strong>。</p>
 <p><strong>解决方案：使用 JOIN 查询和 Mybatis 的 <code>&lt;resultMap&gt;</code></strong></p>
 <p>我们可以使用 <code>LEFT JOIN</code> 将 <code>classes</code> 表和 <code>students</code> 表连接起来，一次性获取所有数据，然后通过 Mybatis 强大的 <code>&lt;resultMap&gt;</code> 将扁平化的结果集映射成嵌套的 Java 对象。</p>
 <p><strong>第1步：修改 <code>ClassesMapper.xml</code></strong></p>
@@ -7636,18 +7599,18 @@
 
 <p>这样，Mybatis 会执行一条 <code>JOIN</code> SQL，获取所有班级和学生的数据，然后在内存中根据 <code>resultMap</code> 的规则，自动将结果组装成 <code>List&lt;Classes&gt;</code>，每个 <code>Classes</code> 对象内部都填充好了对应的 <code>List&lt;Student&gt;</code>。<strong>从根本上解决了 N+1 查询问题</strong>。</p>
 <hr>
-<h4 id="3-2-4-如何预防"><a href="#3-2-4-如何预防" class="headerlink" title="3.2.4 如何预防"></a>3.2.4 如何预防</h4><ol>
+<h4 id="3-1-4-如何预防"><a href="#3-1-4-如何预防" class="headerlink" title="3.1.4 如何预防"></a>3.1.4 如何预防</h4><ol>
 <li><strong>开启 SQL 日志</strong>：在开发和测试阶段，务必开启 ORM 框架的 SQL 日志（如在 Mybatis 的配置文件或 <code>application.yml</code> 中设置日志级别为 <code>DEBUG</code>），观察控制台打印的 SQL 语句。如果你看到在一次操作中，出现了大量重复模式的查询，就要警惕 N+1 问题。</li>
 <li><strong>性能压测</strong>：在压测环境中，N+1 问题会导致数据库连接被迅速耗尽，响应时间急剧增加，很容易被发现。</li>
 <li><strong>代码审查 (Code Review)</strong>：在审查处理关联关系的代码时，要特别关注数据加载方式。看到循环中包含数据库查询，就要高度警惕。</li>
 <li><strong>熟悉 ORM 框架的数据加载策略</strong>：深入理解所使用的 ORM 框架的**懒加载（Lazy Loading）<strong>和</strong>预加载&#x2F;即时加载（Eager Loading）**机制。N+1 问题往往是由于不恰当的懒加载或默认的加载策略导致的。解决问题的本质就是将多次查询变为一次或少数几次预加载。</li>
 </ol>
 <hr>
-<h3 id="3-3-SQL-注入"><a href="#3-3-SQL-注入" class="headerlink" title="3.3 SQL 注入"></a>3.3 SQL 注入</h3><h4 id="3-3-1-什么是-SQL-注入？"><a href="#3-3-1-什么是-SQL-注入？" class="headerlink" title="3.3.1 什么是 SQL 注入？"></a>3.3.1 什么是 SQL 注入？</h4><p><strong>SQL 注入</strong>是一种常见的网络攻击技术，攻击者通过在应用程序的用户输入接口（如网页表单、URL参数等）中<strong>注入恶意的 SQL 代码片段</strong>，欺骗应用程序执行非预期的数据库操作。</p>
+<h3 id="3-2-SQL-注入"><a href="#3-2-SQL-注入" class="headerlink" title="3.2 SQL 注入"></a>3.2 SQL 注入</h3><h4 id="3-2-1-什么是-SQL-注入？"><a href="#3-2-1-什么是-SQL-注入？" class="headerlink" title="3.2.1 什么是 SQL 注入？"></a>3.2.1 什么是 SQL 注入？</h4><p><strong>SQL 注入</strong>是一种常见的网络攻击技术，攻击者通过在应用程序的用户输入接口（如网页表单、URL参数等）中<strong>注入恶意的 SQL 代码片段</strong>，欺骗应用程序执行非预期的数据库操作。</p>
 <p>简单来说，当应用程序将用户输入的内容<strong>直接拼接</strong>到 SQL 查询语句中时，攻击者就可以构造特殊的输入，篡改原有的 SQL 语义，从而达到窃取数据、篡改数据、甚至控制整个数据库服务器的目的。</p>
 <p><strong>核心原则：永远不要信任用户的任何输入！</strong></p>
 <hr>
-<h4 id="3-3-2-SQL-注入的危害"><a href="#3-3-2-SQL-注入的危害" class="headerlink" title="3.3.2 SQL 注入的危害"></a>3.3.2 SQL 注入的危害</h4><p>SQL 注入的危害是极其严重的，它可能导致：</p>
+<h4 id="3-2-2-SQL-注入的危害"><a href="#3-2-2-SQL-注入的危害" class="headerlink" title="3.2.2 SQL 注入的危害"></a>3.2.2 SQL 注入的危害</h4><p>SQL 注入的危害是极其严重的，它可能导致：</p>
 <ol>
 <li><strong>数据泄露</strong>：攻击者可以绕过认证，查询并窃取数据库中的敏感信息，如用户个人资料、密码、银行卡信息等。</li>
 <li><strong>数据篡改</strong>：攻击者可以修改、添加或删除数据库中的数据，破坏数据的完整性。</li>
@@ -7655,7 +7618,7 @@
 <li><strong>拒绝服务 (DoS)</strong>：攻击者可以执行耗时很长的查询（如 <code>BENCHMARK()</code>, <code>SLEEP()</code>），耗尽数据库资源，导致网站或应用无法正常服务。</li>
 </ol>
 <hr>
-<h4 id="3-3-3-SQL-注入是如何发生的？-一个经典的登录场景"><a href="#3-3-3-SQL-注入是如何发生的？-一个经典的登录场景" class="headerlink" title="3.3.3 SQL 注入是如何发生的？(一个经典的登录场景)"></a>3.3.3 SQL 注入是如何发生的？(一个经典的登录场景)</h4><p>假设我们有一个用户登录功能，后台的验证逻辑是根据用户名和密码查询数据库。</p>
+<h4 id="3-2-3-SQL-注入是如何发生的？-一个经典的登录场景"><a href="#3-2-3-SQL-注入是如何发生的？-一个经典的登录场景" class="headerlink" title="3.2.3 SQL 注入是如何发生的？(一个经典的登录场景)"></a>3.2.3 SQL 注入是如何发生的？(一个经典的登录场景)</h4><p>假设我们有一个用户登录功能，后台的验证逻辑是根据用户名和密码查询数据库。</p>
 <h5 id="存在漏洞的代码-Java-JDBC-示例"><a href="#存在漏洞的代码-Java-JDBC-示例" class="headerlink" title="存在漏洞的代码 (Java + JDBC 示例):"></a><strong>存在漏洞的代码 (Java + JDBC 示例):</strong></h5><p>这里的关键问题是<strong>使用字符串拼接 <code>+</code> 来构造 SQL 语句</strong>。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">login</span><span class="params">(String username, String password)</span> &#123;</span><br><span class="line">    <span class="comment">// 危险：直接将用户输入拼接到 SQL 语句中</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;SELECT * FROM users WHERE username = &#x27;&quot;</span> + username + <span class="string">&quot;&#x27; AND password = &#x27;&quot;</span> + password + <span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> dataSource.getConnection();</span><br><span class="line">         <span class="type">Statement</span> <span class="variable">stmt</span> <span class="operator">=</span> conn.createStatement();</span><br><span class="line">         <span class="type">ResultSet</span> <span class="variable">rs</span> <span class="operator">=</span> stmt.executeQuery(sql)) &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 如果能查到记录，说明用户名和密码匹配</span></span><br><span class="line">        <span class="keyword">return</span> rs.next();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">        <span class="comment">// ... 异常处理</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -7708,7 +7671,7 @@
 </li>
 </ol>
 <hr>
-<h4 id="3-3-4-如何防止-SQL-注入？-核心防御手段"><a href="#3-3-4-如何防止-SQL-注入？-核心防御手段" class="headerlink" title="3.3.4 如何防止 SQL 注入？(核心防御手段)"></a>3.3.4 如何防止 SQL 注入？(核心防御手段)</h4><p>防御 SQL 注入的根本方法是<strong>确保用户输入永远被当作“数据”处理，而不是被当作“SQL指令”的一部分来执行。</strong></p>
+<h4 id="3-2-4-如何防止-SQL-注入？-核心防御手段"><a href="#3-2-4-如何防止-SQL-注入？-核心防御手段" class="headerlink" title="3.2.4 如何防止 SQL 注入？(核心防御手段)"></a>3.2.4 如何防止 SQL 注入？(核心防御手段)</h4><p>防御 SQL 注入的根本方法是<strong>确保用户输入永远被当作“数据”处理，而不是被当作“SQL指令”的一部分来执行。</strong></p>
 <h5 id="1-使用参数化查询-Parameterized-Queries-PreparedStatement"><a href="#1-使用参数化查询-Parameterized-Queries-PreparedStatement" class="headerlink" title="1. 使用参数化查询 (Parameterized Queries &#x2F; PreparedStatement)"></a><strong>1. 使用参数化查询 (Parameterized Queries &#x2F; PreparedStatement)</strong></h5><p>这是<strong>最有效、最推荐</strong>的防御方法。</p>
 <p><strong>原理</strong>：<br>它将 SQL 语句的“结构”和“数据”分离开来。</p>
 <ol>
