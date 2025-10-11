@@ -197,7 +197,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-10 14:14:05" itemprop="dateModified" datetime="2025-10-10T14:14:05+08:00">2025-10-10</time>
+      <time title="修改时间：2025-10-11 15:35:16" itemprop="dateModified" datetime="2025-10-11T15:35:16+08:00">2025-10-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -335,7 +335,40 @@
 <li>除了 Servlet，容器还负责管理和提供 JSP（JavaServer Pages）、Filter（过滤器）、Listener（监听器）等的运行环境。例如，它负责将 JSP 文件编译成 Servlet。</li>
 </ul>
 <hr>
-<h4 id="1-4-2-简要工作流程"><a href="#1-4-2-简要工作流程" class="headerlink" title="1.4.2 简要工作流程"></a>1.4.2 简要工作流程</h4><ol>
+<h4 id="1-4-2-简要工作流程"><a href="#1-4-2-简要工作流程" class="headerlink" title="1.4.2 简要工作流程"></a>1.4.2 简要工作流程</h4><pre><code class="highlight mermaid">sequenceDiagram
+    %% 1. 客户端发送请求
+    Client-&gt;&gt;Container: 1. 发送 HTTP 请求
+
+    %% 2-5. 容器处理请求并调用 Servlet
+    activate Container
+    Note over Container: 2. 接收到请求
+    Note over Container: 3. 根据 URL 在 web.xml/注解中查找 Servlet
+    Note over Container: 4. 封装 Request 和 Response 对象
+    
+    Container-&gt;&gt;ThreadPool: 5a. 从线程池获取线程
+    activate ThreadPool
+    ThreadPool--&gt;&gt;Container: 返回工作线程
+    deactivate ThreadPool
+    
+    Container-&gt;&gt;Servlet: 5b. 调用 service(request, response)
+    activate Servlet
+
+    %% 6. Servlet 执行业务逻辑
+    Note right of Servlet: 6. 执行业务逻辑，&lt;br/&gt;并将结果写入 Response 对象
+    
+    %% 7-8. Servlet 返回，容器发送响应
+    Servlet--&gt;&gt;Container: service() 方法执行完毕
+    deactivate Servlet
+    
+    Container-&gt;&gt;ThreadPool: 7. 将线程归还到线程池
+    activate ThreadPool
+    deactivate ThreadPool
+    
+    Note over Container: 8a. 从 Response 对象生成 HTTP 响应
+    Container--&gt;&gt;Client: 8b. 发送最终的 HTTP 响应
+    deactivate Container</code></pre>
+
+<ol>
 <li>客户端（浏览器）向服务器发送一个 HTTP 请求。</li>
 <li><strong>Servlet 容器</strong>（如 Tomcat）接收到这个请求。</li>
 <li>容器根据请求的 URL，在 <code>web.xml</code> 或注解中查找并确定应该由哪个 Servlet 来处理。</li>
@@ -353,7 +386,7 @@
 <li><strong>WildFly (原 JBoss):</strong> Red Hat 公司开发的开源应用服务器。</li>
 </ul>
 <hr>
-<h2 id="2-Servlet-生命周期"><a href="#2-Servlet-生命周期" class="headerlink" title="2. Servlet 生命周期"></a>2. Servlet 生命周期</h2><h3 id="2-1-加载与实例化"><a href="#2-1-加载与实例化" class="headerlink" title="2.1 加载与实例化"></a>2.1 加载与实例化</h3><p>这是 Servlet 生命周期的<strong>第一个阶段</strong>。在这个阶段，Servlet 容器会找到 Servlet 对应的 <code>.class</code> 文件，将其加载到 JVM 内存中，并创建一个 Servlet 实例（对象）。</p>
+<h2 id="2-Servlet-生命周期"><a href="#2-Servlet-生命周期" class="headerlink" title="2. Servlet 生命周期"></a>2. Servlet 生命周期</h2><h3 id="2-1-加载与实例化"><a href="#2-1-加载与实例化" class="headerlink" title="2.1 加载与实例化"></a>2.1 加载与实例化</h3><p>这是 Servlet 生命周期的<strong>第一个阶段</strong>。在这个阶段，Servlet 容器会找到 Servlet 对应的 <code>.class</code> 文件，将其加载到 JVM 内存中，并创建一个 Servlet 实例。</p>
 <p><strong>核心要点：</strong></p>
 <ul>
 <li><strong>执行时机：</strong> 加载和实例化的动作<strong>只会发生一次</strong>。</li>
@@ -371,7 +404,7 @@
 </li>
 <li><p><strong>Web 应用启动时</strong></p>
 <ul>
-<li><p>开发者可以配置 Servlet 在 Web 应用启动时就立即被加载和实例化，也称为<strong>立即加载 (Eager Loading)</strong>。</p>
+<li><p>我们可以配置 Servlet 在 Web 应用启动时就立即被加载和实例化，也称为<strong>立即加载 (Eager Loading)</strong>。</p>
 </li>
 <li><p><strong>优点：</strong></p>
 <ul>
@@ -397,7 +430,7 @@
 </ul>
 </li>
 </ol>
-<p><strong>过程简述：<strong>Servlet 容器通过 Java 的反射机制，调用 Servlet 类的</strong>公共无参构造方法</strong> (<code>public no-arg constructor</code>) 来创建实例。因此，我们自定义的 Servlet 必须提供一个公共的无参构造函数（通常我们不写，Java 会提供一个默认的）。</p>
+<p><strong>过程简述：<strong>Servlet 容器通过 Java 的反射机制，调用 Servlet 类的</strong>公共无参构造方法</strong>来创建实例。因此，我们自定义的 Servlet 必须提供一个公共的无参构造函数（通常我们不写，Java 会提供一个默认的）。</p>
 <hr>
 <h3 id="2-2-初始化"><a href="#2-2-初始化" class="headerlink" title="2.2 初始化"></a>2.2 初始化</h3><p>这是 Servlet 生命周期的<strong>第二个阶段</strong>，紧跟在加载与实例化之后。在这个阶段，Servlet 容器会调用 Servlet 实例的 <code>init()</code> 方法。</p>
 <p><strong>核心要点：</strong></p>
@@ -1411,7 +1444,7 @@
 </li>
 </ul>
 <hr>
-<h2 id="3-Servlet-配置"><a href="#3-Servlet-配置" class="headerlink" title="3. Servlet 配置"></a>3. Servlet 配置</h2><h3 id="3-1-传统方式：web-xml-部署描述符"><a href="#3-1-传统方式：web-xml-部署描述符" class="headerlink" title="3.1 传统方式：web.xml (部署描述符)"></a>3.1 传统方式：<code>web.xml</code> (部署描述符)</h3><p>在 Servlet 3.0 规范之前，<strong><code>web.xml</code> 文件是唯一</strong>的配置方式。这个文件位于 Web 应用的 <code>WEB-INF</code> 目录下，是整个应用的部署描述符 (Deployment Descriptor)。</p>
+<h2 id="3-Servlet-配置"><a href="#3-Servlet-配置" class="headerlink" title="3. Servlet 配置"></a>3. Servlet 配置</h2><h3 id="3-1-传统方式：web-xml-部署描述符"><a href="#3-1-传统方式：web-xml-部署描述符" class="headerlink" title="3.1 传统方式：web.xml (部署描述符)"></a>3.1 传统方式：<code>web.xml</code> (部署描述符)</h3><p>在 Servlet 3.0 规范之前，<strong><code>web.xml</code> 文件是唯一</strong>的配置方式。这个文件位于 Web 应用的 <code>WEB-INF</code> 目录下，是整个应用的部署描述符 。</p>
 <p>配置一个 Servlet 通常需要两个核心标签：<code>&lt;servlet&gt;</code> 和 <code>&lt;servlet-mapping&gt;</code>。</p>
 <ol>
 <li><strong><code>&lt;servlet&gt;</code> 标签：声明一个 Servlet</strong><ul>
@@ -1814,22 +1847,23 @@
 <li><strong>响应返回：</strong> JSP 生成的最终 HTML 页面作为响应被发送回用户的浏览器。</li>
 </ol>
 <hr>
-<h2 id="2-文件上传与下载"><a href="#2-文件上传与下载" class="headerlink" title="2. 文件上传与下载"></a>2. 文件上传与下载</h2><h3 id="2-1-文件上传"><a href="#2-1-文件上传" class="headerlink" title="2.1 文件上传"></a>2.1 文件上传</h3><h4 id="1-前端准备：HTML-表单"><a href="#1-前端准备：HTML-表单" class="headerlink" title="1. 前端准备：HTML 表单"></a>1. 前端准备：HTML 表单</h4><p>要实现文件上传，HTML <code>&lt;form&gt;</code> 必须满足以下<strong>三个条件</strong>：</p>
+<h2 id="2-文件上传与下载"><a href="#2-文件上传与下载" class="headerlink" title="2. 文件上传与下载"></a>2. 文件上传与下载</h2><h3 id="2-1-文件上传"><a href="#2-1-文件上传" class="headerlink" title="2.1 文件上传"></a>2.1 文件上传</h3><h4 id="2-1-1-前端准备：HTML-表单"><a href="#2-1-1-前端准备：HTML-表单" class="headerlink" title="2.1.1 前端准备：HTML 表单"></a>2.1.1 前端准备：HTML 表单</h4><p>要实现文件上传，HTML <code>&lt;form&gt;</code> 必须满足以下<strong>三个条件</strong>：</p>
 <ol>
 <li><code>method</code> 必须为 <strong><code>post</code></strong>。</li>
 <li><code>enctype</code> (encoding type) 必须设置为 <strong><code>multipart/form-data</code></strong>。这告诉服务器请求体将被分割成多个部分，每个部分代表一个表单字段或一个文件。</li>
 <li>必须包含一个 <code>&lt;input type=&quot;file&quot;&gt;</code> 标签。</li>
 </ol>
 <p><strong>HTML 示例 (<code>upload.html</code>):</strong></p>
-<p>HTML</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;File Upload&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h1&gt;Upload a File&lt;/h1&gt;</span><br><span class="line">    &lt;form action=&quot;upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">        Description: &lt;input type=&quot;text&quot; name=&quot;description&quot;&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        Select file: &lt;input type=&quot;file&quot; name=&quot;uploadFile&quot;&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;input type=&quot;submit&quot; value=&quot;Upload&quot;&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>File Upload<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Upload a File<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;upload&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">        Description: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;description&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        Select file: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;uploadFile&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Upload&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="2-后端处理：Servlet"><a href="#2-后端处理：Servlet" class="headerlink" title="2. 后端处理：Servlet"></a>2. 后端处理：Servlet</h4><p>后端的 Servlet 需要做两件事来启用文件上传处理：</p>
+<hr>
+<h4 id="2-1-2-后端处理：Servlet"><a href="#2-1-2-后端处理：Servlet" class="headerlink" title="2.1.2 后端处理：Servlet"></a>2.1.2 后端处理：Servlet</h4><p>后端的 Servlet 需要做两件事来启用文件上传处理：</p>
 <ol>
 <li>在 Servlet 类上添加 <strong><code>@MultipartConfig</code></strong> 注解。这个注解会通知 Servlet 容器，该 Servlet 将会处理 <code>multipart/form-data</code> 类型的请求，容器需要预先解析好请求体，以便我们通过 API 获取文件部分。</li>
 <li>使用 <code>request.getPart(String name)</code> 方法来获取上传的文件以及其他表单字段。这个方法返回一个 <code>Part</code> 对象。</li>
 </ol>
-<h4 id="Part-接口的核心方法："><a href="#Part-接口的核心方法：" class="headerlink" title="Part 接口的核心方法："></a><code>Part</code> 接口的核心方法：</h4><ul>
+<p><strong><code>Part</code> 接口的核心方法：</strong></p>
+<ul>
 <li><code>InputStream getInputStream()</code>: 获取上传文件的输入流，用于读取文件内容。</li>
 <li><code>String getSubmittedFileName()</code>: 获取客户端上传的原始文件名。</li>
 <li><code>long getSize()</code>: 获取文件的大小（字节）。</li>
@@ -1842,7 +1876,7 @@
 <hr>
 <h3 id="2-2-文件下载"><a href="#2-2-文件下载" class="headerlink" title="2.2 文件下载"></a>2.2 文件下载</h3><p>文件下载指的是服务器将一个文件以<strong>附件 (attachment)</strong> 的形式发送给客户端，触发浏览器的下载对话框，而不是直接在浏览器中打开。</p>
 <p>核心技术是设置两个关键的 <strong>HTTP 响应头</strong>：<code>Content-Type</code> 和 <code>Content-Disposition</code>。</p>
-<h4 id="实现步骤："><a href="#实现步骤：" class="headerlink" title="实现步骤："></a>实现步骤：</h4><ol>
+<h4 id="2-2-1-实现步骤"><a href="#2-2-1-实现步骤" class="headerlink" title="2.2.1 实现步骤"></a>2.2.1 实现步骤</h4><ol>
 <li><strong>确定要下载的文件：</strong> 通常通过请求参数（如 <code>?fileName=report.pdf</code>）来指定。</li>
 <li><strong>设置 <code>Content-Type</code>:</strong> 告诉浏览器文件的 MIME 类型。可以使用 <code>getServletContext().getMimeType(fileName)</code> 来动态获取，如果无法确定，可以设置为通用的 <code>application/octet-stream</code>。</li>
 <li><strong>设置 <code>Content-Disposition</code> (最关键):</strong><ul>
@@ -2027,12 +2061,12 @@
 </ol>
 <p>在这个过程中，Servlet API（如 <code>HttpServletRequest</code>, <code>HttpServletResponse</code>, <code>Filter</code>）是这一切的<strong>底层基础</strong>，而 Spring Boot 和 Spring MVC 在其上构建了<strong>高层抽象</strong>（<code>@Controller</code>, <code>@GetMapping</code>, <code>@RequestBody</code> 等）。</p>
 <hr>
-<h3 id="5-4-当你需要“手动挡”时：直接与-Servlet-API-交互"><a href="#5-4-当你需要“手动挡”时：直接与-Servlet-API-交互" class="headerlink" title="5.4 当你需要“手动挡”时：直接与 Servlet API 交互"></a>5.4 当你需要“手动挡”时：直接与 Servlet API 交互</h3><p>虽然 Spring Boot 自动化了绝大部分工作，但它<strong>从未阻止</strong>你使用原生的 Servlet API。当你需要进行一些非常底层的、自定义的操作时，Spring Boot 提供了优雅的方式来实现。</p>
+<h3 id="5-4-直接与-Servlet-API-交互"><a href="#5-4-直接与-Servlet-API-交互" class="headerlink" title="5.4 直接与 Servlet API 交互"></a>5.4 直接与 Servlet API 交互</h3><p>虽然 Spring Boot 自动化了绝大部分工作，但它<strong>从未阻止</strong>你使用原生的 Servlet API。当你需要进行一些非常底层的、自定义的操作时，Spring Boot 提供了优雅的方式来实现。</p>
 <h4 id="方式一：在-Controller-方法中直接注入"><a href="#方式一：在-Controller-方法中直接注入" class="headerlink" title="方式一：在 Controller 方法中直接注入"></a>方式一：在 Controller 方法中直接注入</h4><p>你可以直接在你的 Controller 方法参数中声明 <code>HttpServletRequest</code> 或 <code>HttpServletResponse</code>，Spring 会自动将它们注入进来。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/some/path&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleRequest</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">userAgent</span> <span class="operator">=</span> request.getHeader(<span class="string">&quot;User-Agent&quot;</span>);</span><br><span class="line">        <span class="comment">// 手动操作 response</span></span><br><span class="line">        response.setContentType(<span class="string">&quot;text/plain&quot;</span>);</span><br><span class="line">        response.getWriter().write(<span class="string">&quot;User-Agent is: &quot;</span> + userAgent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h4 id="方式二：注册自定义的-Filter-Servlet-Listener"><a href="#方式二：注册自定义的-Filter-Servlet-Listener" class="headerlink" title="方式二：注册自定义的 Filter, Servlet, Listener"></a>方式二：注册自定义的 <code>Filter</code>, <code>Servlet</code>, <code>Listener</code></h4><p>如果你想添加自定义的过滤器（比如一个记录请求耗时的 Filter），不需要 <code>web.xml</code>，只需要将它们声明为 Spring 的 <code>@Bean</code> 即可。</p>
+<h4 id="方式二：注册自定义的-Filter-Servlet-Listener"><a href="#方式二：注册自定义的-Filter-Servlet-Listener" class="headerlink" title="方式二：注册自定义的 Filter, Servlet, Listener"></a>方式二：注册自定义的 <code>Filter</code>, <code>Servlet</code>, <code>Listener</code></h4><p>如果你想添加自定义的过滤器，不需要 <code>web.xml</code>，只需要将它们声明为 Spring 的 <code>@Bean</code> 即可。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 注册一个自定义的 Filter</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> FilterRegistrationBean&lt;MyCustomFilter&gt; <span class="title function_">customFilter</span><span class="params">()</span> &#123;</span><br><span class="line">        FilterRegistrationBean&lt;MyCustomFilter&gt; registrationBean = <span class="keyword">new</span> <span class="title class_">FilterRegistrationBean</span>&lt;&gt;();</span><br><span class="line">        </span><br><span class="line">        registrationBean.setFilter(<span class="keyword">new</span> <span class="title class_">MyCustomFilter</span>());</span><br><span class="line">        registrationBean.addUrlPatterns(<span class="string">&quot;/api/*&quot;</span>); <span class="comment">// 只对 /api/* 路径下的请求生效</span></span><br><span class="line">        registrationBean.setOrder(<span class="number">1</span>); <span class="comment">// 设置过滤器的顺序</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> registrationBean;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义的 Filter 实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyCustomFilter</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> </span><br><span class="line">            <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">startTime</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">&quot;Request processing started...&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        chain.doFilter(request, response); <span class="comment">// 让请求继续向下传递</span></span><br><span class="line">        </span><br><span class="line">        <span class="type">long</span> <span class="variable">duration</span> <span class="operator">=</span> System.currentTimeMillis() - startTime;</span><br><span class="line">        System.out.println(<span class="string">&quot;Request processing finished in &quot;</span> + duration + <span class="string">&quot;ms.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>同样的方式也适用于注册自定义的 <code>Servlet</code> (<code>ServletRegistrationBean</code>) 和 <code>Listener</code> (<code>ServletListenerRegistrationBean</code>)。</p>
