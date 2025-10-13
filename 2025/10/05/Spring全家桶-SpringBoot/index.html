@@ -27,7 +27,7 @@
 <meta property="og:description" content="二、SpringBootSpring Boot 是一个用来简化 Spring 应用创建和开发的框架，让你能快速地搭建和运行独立的、生产级别的 Java 应用程序。 1. SpringBoot核心1.1 四大核心特性1.1.1 起步依赖1. 问题背景：没有Starter的“黑暗时代”在 Spring Boot 出现之前，如果我们想用 Spring Framework 构建一个 Web 应用，需要经历">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-05T06:24:40.000Z">
-<meta property="article:modified_time" content="2025-10-13T06:08:01.409Z">
+<meta property="article:modified_time" content="2025-10-13T11:33:02.367Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
@@ -203,7 +203,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-13 14:08:01" itemprop="dateModified" datetime="2025-10-13T14:08:01+08:00">2025-10-13</time>
+      <time title="修改时间：2025-10-13 19:33:02" itemprop="dateModified" datetime="2025-10-13T19:33:02+08:00">2025-10-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -782,20 +782,21 @@
 <ol>
 <li><strong>确定应用类型 (Deduce Web Application Type)</strong>:<ul>
 <li>Spring Boot 会检查类路径中是否存在特定的类来判断当前应用的类型。</li>
-<li>如果存在 <code>Servlet</code> 和 <code>ConfigurableWebApplicationContext</code>，则应用类型为 <strong><code>SERVLET</code></strong> (传统Spring MVC)。</li>
-<li>如果存在 <code>DispatcherHandler</code> 并且不是 <code>SERVLET</code> 类型，则为 <strong><code>REACTIVE</code></strong> (Spring WebFlux)。</li>
-<li>如果两者都不存在，则为 <strong><code>NONE</code></strong> (非Web应用)。</li>
+<li>如果 classpath 中存在 <code>DispatcherHandler</code> 并且不存在 <code>DispatcherServlet</code>，则应用类型为 <strong><code>REACTIVE</code></strong> (响应式Web应用)。</li>
+<li>如果两者都不存在，则应用类型为 <strong><code>NONE</code></strong> (非Web应用)。</li>
+<li>否则，默认类型为 <strong><code>SERVLET</code></strong> (基于Servlet的传统Web应用)。</li>
 <li>这个判断结果会决定后续是启动内嵌的Tomcat&#x2F;Jetty还是Netty，或者不启动任何Web服务器。</li>
 </ul>
 </li>
-<li><strong>加载 <code>ApplicationContextInitializer</code></strong>:<ul>
+<li><strong>加载 <code>ApplicationContextInitializer</code>(应用上下文初始化器)</strong><ul>
 <li>从 <code>META-INF/spring.factories</code> 文件中加载所有 <code>ApplicationContextInitializer</code> 的实现类。</li>
-<li><code>ApplicationContextInitializer</code> 允许我们在 <code>ApplicationContext</code> <strong>刷新（refresh）之前</strong>，对其进行一些编程方式的初始化操作，是一个非常早期的扩展点。</li>
+<li><code>ApplicationContextInitializer</code> 允许我们在 <code>ApplicationContext</code> <strong>刷新（refresh）之前</strong>，对其进行一些编程方式的初始化操作，是一个非常早期的扩展点。例如，注册额外的属性源。</li>
 </ul>
 </li>
-<li><strong>加载 <code>ApplicationListener</code></strong>:<ul>
+<li><strong>加载 <code>ApplicationListener</code>(应用监听器)</strong><ul>
 <li>同样从 <code>META-INF/spring.factories</code> 文件中加载所有 <code>ApplicationListener</code> 的实现类。</li>
 <li><code>ApplicationListener</code> 用于监听 <code>SpringApplication</code> 在启动过程中发布的各种事件（如 <code>ApplicationStartingEvent</code>, <code>ApplicationReadyEvent</code> 等），从而在特定阶段执行自定义逻辑。</li>
+<li>这些加载到的 Initializer 和 Listener 会被缓存到 <code>SpringApplication</code> 实例的成员变量中，等待后续在 <code>run</code> 阶段被调用。</li>
 </ul>
 </li>
 <li><strong>确定主启动类 (Deduce Main Application Class)</strong>:<ul>
@@ -812,19 +813,31 @@
 </ul>
 <p><strong>Step 2: 准备 <code>SpringApplicationRunListeners</code></strong></p>
 <ul>
-<li>这是一个关键的事件发布机制。</li>
-<li>Spring Boot会再次读取 <code>spring.factories</code>，加载所有 <code>SpringApplicationRunListener</code> 的实现类（默认是 <code>EventPublishingRunListener</code>）。</li>
-<li>这个 <code>listener</code> 负责在启动过程的<strong>每一个关键节点</strong>发布对应的生命周期事件。</li>
-<li>紧接着，<strong>发布 <code>ApplicationStartingEvent</code> 事件</strong>，标志着应用正式开始启动（但环境还未准备好）。</li>
+<li>这是一个关键的事件发布机制，它允许我们在启动过程的各个生命周期节点发布事件。</li>
+<li>首先从<code>spring.factories</code>，加载所有 <code>SpringApplicationRunListener</code> 的实现类（默认是 <code>EventPublishingRunListener</code>）。</li>
+<li><code>EventPublishingRunListener</code> 的作用就是将 Spring Boot 内部事件转化为标准的 Spring <code>ApplicationEvent</code>，并广播给所有在第一阶段注册的 <code>ApplicationListener</code>。</li>
+<li>调用所有 <code>RunListener</code> 的 <code>starting()</code> 方法，标志着启动流程正式开始，<strong>发布 <code>ApplicationStartingEvent</code> 事件</strong>（但环境还未准备好）。</li>
 </ul>
 <p><strong>Step 3: 准备环境 (<code>Environment</code>)</strong></p>
 <ul>
-<li>创建一个 <code>ConfigurableEnvironment</code> 实例，它包含了应用的配置信息（系统属性、环境变量、配置文件等）。</li>
-<li><strong>发布 <code>ApplicationEnvironmentPreparedEvent</code> 事件</strong>，通知监听者环境已经准备就绪，可以进行一些基于环境的调整了。</li>
+<li>根据之前推断的应用类型，创建一个合适的 <code>Environment</code> 对象（例如，<code>StandardServletEnvironment</code>）。</li>
+<li><strong>配置加载</strong>：<code>Environment</code> 负责管理应用的配置信息。它会加载和合并来自各种属性源（PropertySource）的配置，包括：<ol>
+<li>命令行参数 (<code>--server.port=9090</code>)。</li>
+<li>JVM 系统属性 (<code>-D...</code>)。</li>
+<li>操作系统环境变量。</li>
+<li><code>application-{profile}.properties</code> 或 <code>.yml</code> 文件。</li>
+<li><code>application.properties</code> 或 <code>.yml</code> 文件。</li>
+<li><code>@PropertySource</code> 注解指定的配置文件。</li>
+<li>默认属性。<br>（注意：优先级从上到下依次降低）</li>
+</ol>
+</li>
+<li><strong>后处理</strong>：调用从 <code>spring.factories</code> 中加载的 <code>EnvironmentPostProcessor</code>，允许对 <code>Environment</code> 进行进一步的编程化修改。</li>
+<li>将准备好的 <code>Environment</code> 绑定到 <code>SpringApplication</code> 实例。</li>
+<li>调用 <code>RunListener</code> 的 <code>environmentPrepared()</code> 方法，并发布 <strong><code>ApplicationEnvironmentPreparedEvent</code></strong> 事件，通知监听者环境已经准备就绪，可以进行一些基于环境的调整了。</li>
 </ul>
 <p><strong>Step 4: 打印 Banner</strong></p>
 <ul>
-<li>在控制台打印出我们熟悉的 Spring Boot 图标和版本号。这个 Banner 是可以自定义的。</li>
+<li>读取 classpath 下的 <code>banner.txt</code> 文件（如果存在），并将 Spring Boot 的横幅打印到控制台。可以通过 <code>spring.main.banner-mode</code> 配置来控制其行为（<code>console</code>, <code>log</code>, <code>off</code>）。</li>
 </ul>
 <p><strong>Step 5: 创建 <code>ApplicationContext</code> (应用上下文)</strong></p>
 <ul>
@@ -835,27 +848,30 @@
 </ul>
 </li>
 </ul>
-<p><strong>Step 6: 准备 <code>ApplicationContext</code></strong></p>
+<p><strong>Step 6: <code>prepareContext</code> - 上下文预处理</strong></p>
+<p>在刷新上下文之前，进行一系列准备工作：</p>
 <ul>
-<li>这是一个非常重要的“预处理”步骤，在 <code>refresh</code> 之前完成。</li>
-<li>将之前准备好的 <code>Environment</code> 设置到 <code>Context</code> 中。</li>
-<li>执行所有之前加载的 <code>ApplicationContextInitializer</code>。</li>
-<li><strong>发布 <code>ApplicationContextInitializedEvent</code> 事件</strong>。</li>
-<li>将启动类（<code>primarySources</code>）加载到 <code>Context</code> 中，这是Bean定义的主要来源。</li>
+<li>将前面创建好的 <code>Environment</code> 设置到 <code>ApplicationContext</code> 中。</li>
+<li>调用所有在第一阶段加载的 <strong><code>ApplicationContextInitializer</code></strong> 的 <code>initialize</code> 方法，对上下文进行定制化处理。</li>
+<li>调用 <code>RunListener</code> 的 <code>contextPrepared()</code> 方法，并发布 <strong><code>ApplicationContextInitializedEvent</code></strong> 事件。</li>
+<li>将主启动类（如 <code>MyApplication.class</code>）加载到 <code>ApplicationContext</code> 中，这是配置的入口点。</li>
+<li>调用 <code>RunListener</code> 的 <code>contextLoaded()</code> 方法，并发布 <strong><code>ApplicationPreparedEvent</code></strong> 事件。</li>
 </ul>
-<p><strong>Step 7: 刷新 <code>ApplicationContext</code> (<code>refreshContext</code>) - 启动的“引爆点”</strong></p>
+<p><strong>Step 7: <code>refreshContext</code> - 刷新上下文</strong></p>
 <ul>
-<li>这是整个启动流程<strong>最核心、最耗时</strong>的一步。它会调用 <code>context.refresh()</code> 方法。</li>
-<li><code>refresh()</code> 方法是Spring框架本身的核心，它会触发以下一系列复杂的操作：<ul>
-<li><strong>创建 <code>BeanFactory</code></strong>。</li>
-<li><strong>执行 <code>BeanFactoryPostProcessor</code></strong> (包括解析<code>@Configuration</code>类，执行自动配置等)。</li>
-<li><strong>注册 <code>BeanPostProcessor</code></strong>。</li>
-<li><strong>初始化所有非懒加载的单例Bean</strong> (实例化、依赖注入、初始化回调)。</li>
-<li>…</li>
-<li>（如果是Web应用）<strong>创建并启动嵌入式Web服务器</strong> (Tomcat&#x2F;Jetty&#x2F;Undertow)。</li>
-</ul>
-</li>
-<li>当 <code>refresh()</code> 方法执行完毕，意味着IoC容器已经完全就绪，所有的Bean都已创建并配置好，Web服务器也已启动并监听端口。</li>
+<li>这是整个启动流程<strong>最核心、最耗时</strong>的一步。它会调用 <code>ApplicationContext.refresh()</code> 方法。</li>
+<li><strong><code>prepareRefresh()</code></strong>: 准备刷新，设置上下文状态。</li>
+<li><strong><code>obtainFreshBeanFactory()</code></strong>: 创建 <code>DefaultListableBeanFactory</code>，也就是 Bean 工厂，用于管理所有的 Bean 定义和实例。</li>
+<li><strong><code>prepareBeanFactory()</code></strong>: 对 Bean 工厂进行配置，比如设置类加载器、添加默认的 <code>BeanPostProcessor</code> 等。</li>
+<li><strong><code>postProcessBeanFactory()</code></strong>: 子类扩展点。对于 Web 应用，这里会添加与 Web 相关的 <code>BeanPostProcessor</code>。</li>
+<li><strong><code>invokeBeanFactoryPostProcessors()</code></strong>: <strong>【关键】</strong> 调用所有注册的 <code>BeanFactoryPostProcessor</code>。这是自动配置的核心，<code>@Configuration</code> 注解的解析、<code>@ComponentScan</code> 的扫描、<code>@Bean</code> 方法的定义、<code>@EnableAutoConfiguration</code> 的触发都在这一步完成。Spring Boot 的自动配置类就是通过这个机制生效的。</li>
+<li><strong><code>registerBeanPostProcessors()</code></strong>: <strong>【关键】</strong> 注册所有 <code>BeanPostProcessor</code>。这些处理器会在 Bean 初始化前、后对 Bean 实例进行干预，例如处理 <code>@Autowired</code> 依赖注入、AOP 代理的创建等。</li>
+<li><strong><code>initMessageSource()</code></strong>: 初始化国际化消息源。</li>
+<li><strong><code>initApplicationEventMulticaster()</code></strong>: 初始化事件广播器。</li>
+<li><strong><code>onRefresh()</code></strong>: <strong>【关键】</strong> 子类扩展点。对于 Web 应用 (<code>ServletWebServerApplicationContext</code>)，这一步会 <strong>创建并启动内嵌的 Web 服务器</strong> (如 Tomcat, Jetty)。</li>
+<li><strong><code>registerListeners()</code></strong>: 注册 <code>ApplicationListener</code> 监听器。</li>
+<li><strong><code>finishBeanFactoryInitialization()</code></strong>: <strong>【关键】</strong> 实例化所有剩余的非懒加载单例 Bean。此时，IoC 容器中定义的绝大部分 Bean 都会被创建和初始化，依赖注入也在这里完成。</li>
+<li><strong><code>finishRefresh()</code></strong>: 完成刷新过程，发布 <strong><code>ContextRefreshedEvent</code></strong> 事件，标志着 IoC 容器已经准备就绪。</li>
 </ul>
 <p><strong>Step 8: <code>afterRefresh</code> 回调</strong></p>
 <ul>
@@ -863,16 +879,17 @@
 </ul>
 <p><strong>Step 9: 发布 <code>ApplicationStartedEvent</code> 事件</strong></p>
 <ul>
-<li>通知监听者 <code>ApplicationContext</code> 已经刷新完毕，但 <code>CommandLineRunner</code> 和 <code>ApplicationRunner</code> 还没执行。</li>
+<li>调用 <code>RunListener</code> 的 <code>started()</code> 方法，并发布 <strong><code>ApplicationStartedEvent</code></strong> 事件。</li>
 </ul>
 <p><strong>Step 10: 调用 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code></strong></p>
 <ul>
-<li>从 <code>ApplicationContext</code> 中找出所有实现了 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 接口的Bean。</li>
-<li>按顺序调用它们的 <code>run()</code> 方法。这提供了一个在应用完全启动后，执行一些自定义初始化业务逻辑的绝佳时机（如加载初始数据、启动定时任务等）。</li>
+<li>从 <code>ApplicationContext</code> 中获取所有 <code>ApplicationRunner</code> 和 <code>CommandLineRunner</code> 类型的 Bean。</li>
+<li>对它们进行排序（<code>@Order</code>）。</li>
+<li>依次调用它们的 <code>run</code> 方法。这通常用于执行应用启动后需要立即运行的一些自定义任务（如加载初始数据、启动定时任务等）。</li>
 </ul>
 <p><strong>Step 11: 发布 <code>ApplicationReadyEvent</code> 事件</strong></p>
 <ul>
-<li>这是启动流程中<strong>最后一个发布的事件</strong>，标志着应用程序已完全准备就绪，可以开始接收和处理请求了。</li>
+<li>调用 <code>RunListener</code> 的 <code>ready()</code> 方法 (在 Spring Boot 2.5 及以后版本中，原 <code>running</code> 方法被重命名为 <code>ready</code>)，并发布 <strong><code>ApplicationReadyEvent</code></strong> 事件。这标志着应用已完全启动，并准备好接收请求。</li>
 <li>如果启动过程中出现异常，则会发布 <code>ApplicationFailedEvent</code> 事件。</li>
 </ul>
 <p><strong>Step 12: 返回 <code>ApplicationContext</code></strong></p>
@@ -880,64 +897,60 @@
 <li><code>run()</code> 方法执行结束，返回创建并刷新好的 <code>ApplicationContext</code> 实例。</li>
 </ul>
 <hr>
-<h4 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h4><pre><code class="highlight mermaid">graph TD
-    subgraph &quot;第二阶段: SpringApplication.run() 核心流程&quot;
+<h4 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h4><pre><code class="highlight mermaid">flowchart TD
+    subgraph 第一阶段: SpringApplication 构造函数
         direction TB
-
-        Start(&quot;run() 方法开始&quot;) --&gt; S1[&quot;Step 1: 创建并启动 StopWatch (计时器)&quot;];
-        
-        S1 --&gt; S2[&quot;Step 2: 准备 SpringApplicationRunListeners&quot;];
-        S2 --&gt; E1(&quot;发布 ApplicationStartingEvent&quot;);
-        
-        E1 --&gt; S3[&quot;Step 3: 准备 Environment (环境)&quot;];
-        S3 --&gt; E2(&quot;发布 ApplicationEnvironmentPreparedEvent&quot;);
-        
-        E2 --&gt; S4[&quot;Step 4: 打印 Banner&quot;];
-        
-        S4 --&gt; S5&#123;&quot;Step 5: 判断应用类型&lt;br&gt;创建 ApplicationContext&quot;&#125;;
-        S5 -- SERVLET --&gt; S5_Servlet[&quot;创建 AnnotationConfigServletWebServerApplicationContext&quot;];
-        S5 -- REACTIVE --&gt; S5_Reactive[&quot;创建 AnnotationConfigReactiveWebServerApplicationContext&quot;];
-        S5 -- NONE --&gt; S5_None[&quot;创建 AnnotationConfigApplicationContext&quot;];
-        
-        S5_Servlet --&gt; S6;
-        S5_Reactive --&gt; S6;
-        S5_None --&gt; S6;
-        
-        S6[&quot;Step 6: 准备 ApplicationContext (预处理)&lt;br&gt;- 设置Environment&lt;br&gt;- 执行Initializers&lt;br&gt;- 加载启动类&quot;];
-        S6 --&gt; E3(&quot;发布 ApplicationContextInitializedEvent&quot;);
-        
-        E3 --&gt; S7_Refresh[&quot;Step 7: 刷新 ApplicationContext (引爆点)&lt;br&gt;&lt;b&gt;调用 context.refresh()&lt;/b&gt;&lt;br&gt;- 创建 BeanFactory&lt;br&gt;- 自动配置&lt;br&gt;- 实例化所有单例Bean&lt;br&gt;- 启动嵌入式Web服务器 (如Tomcat)&quot;];
-        
-        S7_Refresh --&gt; S8[&quot;Step 8: afterRefresh 回调 (扩展点)&quot;];
-        
-        S8 --&gt; E4(&quot;发布 ApplicationStartedEvent&quot;);
-        
-        E4 --&gt; S10[&quot;Step 10: 调用所有&lt;br&gt;ApplicationRunner 和 CommandLineRunner&quot;];
-        
-        S10 --&gt; CheckSuccess&#123;&quot;启动是否成功?&quot;&#125;;
-        
-        CheckSuccess -- Yes --&gt; E5(&quot;Step 11: 发布 ApplicationReadyEvent&quot;);
-        CheckSuccess -- No --&gt; E_Fail(&quot;发布 ApplicationFailedEvent&quot;);
-        
-        E5 --&gt; FinalSuccess(&quot;✅ 应用已就绪，可以处理请求&quot;);
-        E_Fail --&gt; FinalFail(&quot;❌ 应用启动失败&quot;);
+        A_Start(new SpringApplication) --&gt; A1[&quot;1.确定Web应用类型&lt;br&gt;(SERVLET/REACTIVE/NONE)&quot;];
+        A1 --&gt; A2[&quot;2.从 spring.factories 加载&lt;br/&gt;ApplicationContextInitializer&quot;];
+        A2 --&gt; A3[&quot;3.从 spring.factories 加载&lt;br/&gt;ApplicationListener&quot;];
+        A3 --&gt; A4[&quot;4.推断主启动类 (main class)&quot;];
     end
 
+    subgraph &quot;第二阶段: run() 方法核心流程&quot;
+        direction TB
+        B_Run(&quot;SpringApplication.run()&quot;) --&gt; B1[Step 1: 启动StopWatch计时];
+        B1 --&gt; B2&#123;&quot;Step 2: 准备 SpringApplicationRunListeners&quot;&#125;;
+        B2 --&gt; B2_Event(发布 ApplicationStartingEvent):::event;
+        
+        B2_Event --&gt; B3[&quot;Step 3: 准备 Environment&lt;br/&gt;加载各级配置文件(yml/properties等)&quot;];
+        B3 --&gt; B3_Event(发布 ApplicationEnvironmentPreparedEvent):::event;
+
+        B3_Event --&gt; B4[Step 4: 打印 Banner];
+        B4 --&gt; B5&#123;Step 5: 根据应用类型&lt;br&gt;创建 ApplicationContext&#125;;
+        
+        subgraph &quot;Step 6: prepareContext - 上下文预处理&quot;
+            B5 -- SERVLET/REACTIVE/NONE --&gt; B6_1[设置Environment];
+            B6_1 --&gt; B6_2[调用所有 ApplicationContextInitializer];
+            B6_2 --&gt; B6_2_Event(发布 ApplicationContextInitializedEvent):::event;
+            B6_2_Event --&gt; B6_3[加载主启动类等配置源];
+            B6_3 --&gt; B6_3_Event(发布 ApplicationPreparedEvent):::event;
+        end
+        
+        subgraph &quot;Step 7: refreshContext - 刷新上下文 (最核心)&quot;
+            B6_3_Event --&gt; B7_1[&quot;invokeBeanFactoryPostProcessors&lt;br/&gt;&lt;b&gt;@EnableAutoConfiguration 生效&lt;/b&gt;&quot;]:::critical;
+            B7_1 --&gt; B7_2[&quot;registerBeanPostProcessors&lt;br/&gt;&lt;b&gt;处理 @Autowired, AOP代理&lt;/b&gt;&quot;]:::critical;
+            B7_2 --&gt; B7_3[&quot;onRefresh&lt;br/&gt;&lt;b&gt;启动内嵌Web服务器 (Tomcat)&lt;/b&gt;&quot;]:::critical;
+            B7_3 --&gt; B7_4[&quot;finishBeanFactoryInitialization&lt;br/&gt;&lt;b&gt;实例化所有单例Bean&lt;/b&gt;&quot;]:::critical;
+            B7_4 --&gt; B7_4_Event(发布 ContextRefreshedEvent):::event;
+        end
+
+        B7_4_Event --&gt; B8[Step 8: afterRefresh 回调];
+        B8 --&gt; B9_Event(Step 9: 发布 ApplicationStartedEvent):::event;
+        
+        B9_Event --&gt; B10[&quot;Step 10: 调用所有&lt;br/&gt;ApplicationRunner 和 CommandLineRunner&quot;];
+        B10 --&gt; B11_Event(Step 11: 发布 ApplicationReadyEvent&lt;br/&gt;&lt;b&gt;应用启动完成，准备接收请求&lt;/b&gt;):::event;
+        
+        B11_Event --&gt; B12_End(&quot;run()方法结束&lt;br&gt;返回ConfigurableApplicationContext&quot;);
+        
+        B_Run -- 启动异常 --&gt; B_Failed_Event(发布 ApplicationFailedEvent):::event_fail;
+    end
+    
+    A4 --&gt; B_Run;
+
     %% 样式定义
-    classDef event fill:#BDEFFF,stroke:#333,stroke-width:2px;
-    class E1,E2,E3,E4,E5,E_Fail event;
-    
-    classDef core fill:#FFADAD,stroke:#D9534F,stroke-width:2px,font-weight:bold;
-    class S7_Refresh core;
-    
-    classDef runner fill:#D4EDDA,stroke:#155724,stroke-width:2px;
-    class S10 runner;
-    
-    classDef success fill:#c3e6cb,stroke:#155724;
-    class FinalSuccess success;
-    
-    classDef fail fill:#f5c6cb,stroke:#721c24;
-    class FinalFail fail;</code></pre>
+    classDef event fill:#d4edda,stroke:#155724,stroke-width:2px;
+    classDef event_fail fill:#f8d7da,stroke:#721c24,stroke-width:2px;
+    classDef critical fill:#fff3cd,stroke:#856404,stroke-width:2px,font-weight:bold;</code></pre>
 
 <hr>
 <h2 id="2-配置文件详解"><a href="#2-配置文件详解" class="headerlink" title="2. 配置文件详解"></a>2. 配置文件详解</h2><h3 id="2-1-application-properties-vs-application-yml"><a href="#2-1-application-properties-vs-application-yml" class="headerlink" title="2.1 application.properties vs application.yml"></a>2.1 <code>application.properties</code> vs <code>application.yml</code></h3><p>Spring Boot 允许开发者使用两种主流的格式来编写配置文件：传统的 <code>.properties</code> 文件和更现代的 <code>.yml</code> (或 <code>.yaml</code>) 文件。两者在功能上是等价的，都可以用来定义应用的配置属性，但它们在<strong>语法、可读性和结构化数据表达</strong>方面存在显著差异。</p>
