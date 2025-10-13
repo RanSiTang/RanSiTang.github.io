@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="二、SpringBoot1. SpringBoot核心1.1 四大核心特性1.1.1 起步依赖1. 问题背景：没有Starter的“黑暗时代”在 Spring Boot 出现之前，如果我们想用 Spring Framework 构建一个 Web 应用，需要经历一个繁琐且易错的过程：  手动添加大量依赖：我们需要在 pom.xml (Maven) 或 build.gradle (Gradle) 中手">
+    <meta name="description" content="二、SpringBootSpring Boot 是一个用来简化 Spring 应用创建和开发的框架，让你能快速地搭建和运行独立的、生产级别的 Java 应用程序。 1. SpringBoot核心1.1 四大核心特性1.1.1 起步依赖1. 问题背景：没有Starter的“黑暗时代”在 Spring Boot 出现之前，如果我们想用 Spring Framework 构建一个 Web 应用，需要经历">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring全家桶-SpringBoot">
 <meta property="og:url" content="http://example.com/2025/10/05/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6-SpringBoot/index.html">
 <meta property="og:site_name" content="冉的技术宝典">
-<meta property="og:description" content="二、SpringBoot1. SpringBoot核心1.1 四大核心特性1.1.1 起步依赖1. 问题背景：没有Starter的“黑暗时代”在 Spring Boot 出现之前，如果我们想用 Spring Framework 构建一个 Web 应用，需要经历一个繁琐且易错的过程：  手动添加大量依赖：我们需要在 pom.xml (Maven) 或 build.gradle (Gradle) 中手">
+<meta property="og:description" content="二、SpringBootSpring Boot 是一个用来简化 Spring 应用创建和开发的框架，让你能快速地搭建和运行独立的、生产级别的 Java 应用程序。 1. SpringBoot核心1.1 四大核心特性1.1.1 起步依赖1. 问题背景：没有Starter的“黑暗时代”在 Spring Boot 出现之前，如果我们想用 Spring Framework 构建一个 Web 应用，需要经历">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-05T06:24:40.000Z">
-<meta property="article:modified_time" content="2025-10-05T06:26:33.050Z">
+<meta property="article:modified_time" content="2025-10-13T06:08:01.409Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
@@ -195,9 +195,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-10-05 14:24:40 / 修改时间：14:26:33" itemprop="dateCreated datePublished" datetime="2025-10-05T14:24:40+08:00">2025-10-05</time>
+      <time title="创建时间：2025-10-05 14:24:40" itemprop="dateCreated datePublished" datetime="2025-10-05T14:24:40+08:00">2025-10-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-13 14:08:01" itemprop="dateModified" datetime="2025-10-13T14:08:01+08:00">2025-10-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -218,7 +224,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="二、SpringBoot"><a href="#二、SpringBoot" class="headerlink" title="二、SpringBoot"></a>二、SpringBoot</h1><h2 id="1-SpringBoot核心"><a href="#1-SpringBoot核心" class="headerlink" title="1. SpringBoot核心"></a>1. SpringBoot核心</h2><h3 id="1-1-四大核心特性"><a href="#1-1-四大核心特性" class="headerlink" title="1.1 四大核心特性"></a>1.1 四大核心特性</h3><h4 id="1-1-1-起步依赖"><a href="#1-1-1-起步依赖" class="headerlink" title="1.1.1 起步依赖"></a>1.1.1 起步依赖</h4><h5 id="1-问题背景：没有Starter的“黑暗时代”"><a href="#1-问题背景：没有Starter的“黑暗时代”" class="headerlink" title="1. 问题背景：没有Starter的“黑暗时代”"></a>1. 问题背景：没有Starter的“黑暗时代”</h5><p>在 Spring Boot 出现之前，如果我们想用 Spring Framework 构建一个 Web 应用，需要经历一个繁琐且易错的过程：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="二、SpringBoot"><a href="#二、SpringBoot" class="headerlink" title="二、SpringBoot"></a>二、SpringBoot</h1><p><strong>Spring Boot 是一个用来简化 Spring 应用创建和开发的框架，让你能快速地搭建和运行独立的、生产级别的 Java 应用程序。</strong></p>
+<h2 id="1-SpringBoot核心"><a href="#1-SpringBoot核心" class="headerlink" title="1. SpringBoot核心"></a>1. SpringBoot核心</h2><h3 id="1-1-四大核心特性"><a href="#1-1-四大核心特性" class="headerlink" title="1.1 四大核心特性"></a>1.1 四大核心特性</h3><h4 id="1-1-1-起步依赖"><a href="#1-1-1-起步依赖" class="headerlink" title="1.1.1 起步依赖"></a>1.1.1 起步依赖</h4><h5 id="1-问题背景：没有Starter的“黑暗时代”"><a href="#1-问题背景：没有Starter的“黑暗时代”" class="headerlink" title="1. 问题背景：没有Starter的“黑暗时代”"></a>1. 问题背景：没有Starter的“黑暗时代”</h5><p>在 Spring Boot 出现之前，如果我们想用 Spring Framework 构建一个 Web 应用，需要经历一个繁琐且易错的过程：</p>
 <ol>
 <li><strong>手动添加大量依赖</strong>：我们需要在 <code>pom.xml</code> (Maven) 或 <code>build.gradle</code> (Gradle) 中手动添加一长串的依赖项，例如：<ul>
 <li>核心Spring框架：<code>spring-core</code>, <code>spring-beans</code>, <code>spring-context</code></li>
@@ -775,19 +782,19 @@
 <ol>
 <li><strong>确定应用类型 (Deduce Web Application Type)</strong>:<ul>
 <li>Spring Boot 会检查类路径中是否存在特定的类来判断当前应用的类型。</li>
-<li>如果存在 <code>javax.servlet.Servlet</code> 和 <code>org.springframework.web.context.ConfigurableWebApplicationContext</code>，则应用类型为 <strong><code>SERVLET</code></strong> (传统Spring MVC)。</li>
-<li>如果存在 <code>org.springframework.web.reactive.DispatcherHandler</code> 并且不是 <code>SERVLET</code> 类型，则为 <strong><code>REACTIVE</code></strong> (Spring WebFlux)。</li>
+<li>如果存在 <code>Servlet</code> 和 <code>ConfigurableWebApplicationContext</code>，则应用类型为 <strong><code>SERVLET</code></strong> (传统Spring MVC)。</li>
+<li>如果存在 <code>DispatcherHandler</code> 并且不是 <code>SERVLET</code> 类型，则为 <strong><code>REACTIVE</code></strong> (Spring WebFlux)。</li>
 <li>如果两者都不存在，则为 <strong><code>NONE</code></strong> (非Web应用)。</li>
 <li>这个判断结果会决定后续是启动内嵌的Tomcat&#x2F;Jetty还是Netty，或者不启动任何Web服务器。</li>
 </ul>
 </li>
 <li><strong>加载 <code>ApplicationContextInitializer</code></strong>:<ul>
-<li>从 <code>META-INF/spring.factories</code> 文件中加载所有 <code>org.springframework.context.ApplicationContextInitializer</code> 的实现类。</li>
+<li>从 <code>META-INF/spring.factories</code> 文件中加载所有 <code>ApplicationContextInitializer</code> 的实现类。</li>
 <li><code>ApplicationContextInitializer</code> 允许我们在 <code>ApplicationContext</code> <strong>刷新（refresh）之前</strong>，对其进行一些编程方式的初始化操作，是一个非常早期的扩展点。</li>
 </ul>
 </li>
 <li><strong>加载 <code>ApplicationListener</code></strong>:<ul>
-<li>同样从 <code>META-INF/spring.factories</code> 文件中加载所有 <code>org.springframework.context.ApplicationListener</code> 的实现类。</li>
+<li>同样从 <code>META-INF/spring.factories</code> 文件中加载所有 <code>ApplicationListener</code> 的实现类。</li>
 <li><code>ApplicationListener</code> 用于监听 <code>SpringApplication</code> 在启动过程中发布的各种事件（如 <code>ApplicationStartingEvent</code>, <code>ApplicationReadyEvent</code> 等），从而在特定阶段执行自定义逻辑。</li>
 </ul>
 </li>
@@ -797,7 +804,7 @@
 </li>
 </ol>
 <hr>
-<h4 id="第二阶段：run-方法执行流程-核心"><a href="#第二阶段：run-方法执行流程-核心" class="headerlink" title="第二阶段：run() 方法执行流程 (核心)"></a><strong>第二阶段：<code>run()</code> 方法执行流程 (核心)</strong></h4><p><code>run()</code> 方法是整个启动过程的核心，它 orchestration（编排）了所有步骤，最终返回一个完全配置好的 <code>ApplicationContext</code>。</p>
+<h4 id="第二阶段：run-方法执行流程-核心"><a href="#第二阶段：run-方法执行流程-核心" class="headerlink" title="第二阶段：run() 方法执行流程 (核心)"></a><strong>第二阶段：<code>run()</code> 方法执行流程 (核心)</strong></h4><p><code>run()</code> 方法是整个启动过程的核心，它编排了所有步骤，最终返回一个完全配置好的 <code>ApplicationContext</code>。</p>
 <p>我们可以将其核心步骤概括为以下几点：</p>
 <p><strong>Step 1: 创建并启动 <code>StopWatch</code></strong></p>
 <ul>
@@ -874,30 +881,63 @@
 </ul>
 <hr>
 <h4 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h4><pre><code class="highlight mermaid">graph TD
-    A[&quot;main() -&gt; SpringApplication.run()&quot;] --&gt; B&#123;&quot;1.创建SpringApplication实例&quot;&#125;;
-    
-    B --&gt; C&#123;&quot;2.准备并发布&lt;br&gt;ApplicationStartingEvent&quot;&#125;;
-    C --&gt; D&#123;&quot;3.准备Environment环境&lt;br&gt;(加载配置)&quot;&#125;;
-    D --&gt; E&#123;&quot;4.打印Banner&quot;&#125;;
-    E --&gt; F&#123;&quot;5.创建ApplicationContext&lt;br&gt;(含BeanFactory)&quot;&#125;;
-    F --&gt; G&#123;&quot;6.准备Context&lt;br&gt;(执行Initializer,&lt;br&gt;加载BeanDefinition)&quot;&#125;;
-    G --&gt; H[&quot;7.刷新Context (refresh)&lt;br&gt;- 核心步骤&quot;];
+    subgraph &quot;第二阶段: SpringApplication.run() 核心流程&quot;
+        direction TB
 
-    H --&gt; H1;
-    
-    subgraph 7.refresh 内部 - 核心生命周期
-        H1(准备/配置 BeanFactory) --&gt; H2(执行&lt;br&gt;BeanFactoryPostProcessor);
-        H2 --&gt; H3(注册 BeanPostProcessor);
-        H3 --&gt; H4(初始化事件广播器等);
-        H4 --&gt; H5(实例化所有&lt;br&gt;剩余的单例Bean);
-        H5 --&gt; H6(完成刷新, 发布&lt;br&gt;ContextRefreshedEvent);
+        Start(&quot;run() 方法开始&quot;) --&gt; S1[&quot;Step 1: 创建并启动 StopWatch (计时器)&quot;];
+        
+        S1 --&gt; S2[&quot;Step 2: 准备 SpringApplicationRunListeners&quot;];
+        S2 --&gt; E1(&quot;发布 ApplicationStartingEvent&quot;);
+        
+        E1 --&gt; S3[&quot;Step 3: 准备 Environment (环境)&quot;];
+        S3 --&gt; E2(&quot;发布 ApplicationEnvironmentPreparedEvent&quot;);
+        
+        E2 --&gt; S4[&quot;Step 4: 打印 Banner&quot;];
+        
+        S4 --&gt; S5&#123;&quot;Step 5: 判断应用类型&lt;br&gt;创建 ApplicationContext&quot;&#125;;
+        S5 -- SERVLET --&gt; S5_Servlet[&quot;创建 AnnotationConfigServletWebServerApplicationContext&quot;];
+        S5 -- REACTIVE --&gt; S5_Reactive[&quot;创建 AnnotationConfigReactiveWebServerApplicationContext&quot;];
+        S5 -- NONE --&gt; S5_None[&quot;创建 AnnotationConfigApplicationContext&quot;];
+        
+        S5_Servlet --&gt; S6;
+        S5_Reactive --&gt; S6;
+        S5_None --&gt; S6;
+        
+        S6[&quot;Step 6: 准备 ApplicationContext (预处理)&lt;br&gt;- 设置Environment&lt;br&gt;- 执行Initializers&lt;br&gt;- 加载启动类&quot;];
+        S6 --&gt; E3(&quot;发布 ApplicationContextInitializedEvent&quot;);
+        
+        E3 --&gt; S7_Refresh[&quot;Step 7: 刷新 ApplicationContext (引爆点)&lt;br&gt;&lt;b&gt;调用 context.refresh()&lt;/b&gt;&lt;br&gt;- 创建 BeanFactory&lt;br&gt;- 自动配置&lt;br&gt;- 实例化所有单例Bean&lt;br&gt;- 启动嵌入式Web服务器 (如Tomcat)&quot;];
+        
+        S7_Refresh --&gt; S8[&quot;Step 8: afterRefresh 回调 (扩展点)&quot;];
+        
+        S8 --&gt; E4(&quot;发布 ApplicationStartedEvent&quot;);
+        
+        E4 --&gt; S10[&quot;Step 10: 调用所有&lt;br&gt;ApplicationRunner 和 CommandLineRunner&quot;];
+        
+        S10 --&gt; CheckSuccess&#123;&quot;启动是否成功?&quot;&#125;;
+        
+        CheckSuccess -- Yes --&gt; E5(&quot;Step 11: 发布 ApplicationReadyEvent&quot;);
+        CheckSuccess -- No --&gt; E_Fail(&quot;发布 ApplicationFailedEvent&quot;);
+        
+        E5 --&gt; FinalSuccess(&quot;✅ 应用已就绪，可以处理请求&quot;);
+        E_Fail --&gt; FinalFail(&quot;❌ 应用启动失败&quot;);
     end
 
-    H6 --&gt; I;   
-    I&#123;8.发布&lt;br&gt;ApplicationStartedEvent&#125;;
-    I --&gt; J&#123;&quot;9.调用 Runners&lt;br&gt;(ApplicationRunner&lt;br&gt;/CommandLineRunner)&quot;&#125;;
-    J --&gt; K&#123;10.发布&lt;br&gt;ApplicationReadyEvent&#125;;
-    K --&gt; L[应用启动完成&lt;br&gt;开始服务];</code></pre>
+    %% 样式定义
+    classDef event fill:#BDEFFF,stroke:#333,stroke-width:2px;
+    class E1,E2,E3,E4,E5,E_Fail event;
+    
+    classDef core fill:#FFADAD,stroke:#D9534F,stroke-width:2px,font-weight:bold;
+    class S7_Refresh core;
+    
+    classDef runner fill:#D4EDDA,stroke:#155724,stroke-width:2px;
+    class S10 runner;
+    
+    classDef success fill:#c3e6cb,stroke:#155724;
+    class FinalSuccess success;
+    
+    classDef fail fill:#f5c6cb,stroke:#721c24;
+    class FinalFail fail;</code></pre>
 
 <hr>
 <h2 id="2-配置文件详解"><a href="#2-配置文件详解" class="headerlink" title="2. 配置文件详解"></a>2. 配置文件详解</h2><h3 id="2-1-application-properties-vs-application-yml"><a href="#2-1-application-properties-vs-application-yml" class="headerlink" title="2.1 application.properties vs application.yml"></a>2.1 <code>application.properties</code> vs <code>application.yml</code></h3><p>Spring Boot 允许开发者使用两种主流的格式来编写配置文件：传统的 <code>.properties</code> 文件和更现代的 <code>.yml</code> (或 <code>.yaml</code>) 文件。两者在功能上是等价的，都可以用来定义应用的配置属性，但它们在<strong>语法、可读性和结构化数据表达</strong>方面存在显著差异。</p>
