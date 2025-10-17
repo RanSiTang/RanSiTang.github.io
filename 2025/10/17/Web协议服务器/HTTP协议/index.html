@@ -27,7 +27,7 @@
 <meta property="og:description" content="一、HTTP 基础入门1. 什么是 HTTP？1.1 协议的定义：计算机之间的沟通语言在深入 HTTP 之前，先要明白**“协议 (Protocol)”**是什么。  现实世界中的类比：  语言：想象一下，一个说中文的人和一个说英语的人，如果他们之间没有一个共同的语言（比如都说英语）或者一个翻译，他们就无法沟通。这个“共同的语言”就是一种协议。 交通规则：红灯停，绿灯行。这是一个所有司机都必须遵守">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-17T08:09:23.000Z">
-<meta property="article:modified_time" content="2025-10-17T09:15:27.278Z">
+<meta property="article:modified_time" content="2025-10-17T12:52:41.750Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
@@ -129,7 +129,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81HTTP-%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">一、HTTP 基础入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-HTTP%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">1. 什么是 HTTP？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%AE%9A%E4%B9%89%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%8B%E9%97%B4%E7%9A%84%E6%B2%9F%E9%80%9A%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 协议的定义：计算机之间的沟通语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-HTTP-%E7%9A%84%E5%85%A8%E7%A7%B0%EF%BC%9AHyperText-Transfer-Protocol"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2. HTTP 的全称：HyperText Transfer Protocol</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-HTTP-%E7%9A%84%E8%AF%9E%E7%94%9F%E4%B8%8E%E4%BD%BF%E5%91%BD%EF%BC%9A%E4%B8%BA-Web-%E8%80%8C%E7%94%9F"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3. HTTP 的诞生与使命：为 Web 而生</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-HTTP-%E5%9C%A8%E7%BD%91%E7%BB%9C%E4%B8%96%E7%95%8C%E4%B8%AD%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.2.</span> <span class="nav-text">2. HTTP 在网络世界中的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-TCP-IP-%E5%8D%8F%E8%AE%AE%E6%97%8F%E7%AE%80%E4%BB%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1. TCP&#x2F;IP 协议族简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E8%A7%92%E8%89%B2"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 应用层协议的角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-HTTP-%E4%B8%8E-TCP%E3%80%81DNS-%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%AE%8C%E6%95%B4%E7%9A%84%E7%BD%91%E9%A1%B5%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 HTTP 与 TCP、DNS 的关系：一次完整的网页请求过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HTTP-%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">3. HTTP 的核心特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-C-S-%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 C&#x2F;S 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%AE%80%E5%8D%95%E5%8F%AF%E6%89%A9%E5%B1%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 简单可扩展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%97%A0%E7%8A%B6%E6%80%81"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 无状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 可靠传输</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81HTTP-%E6%8A%A5%E6%96%87%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">二、HTTP 报文结构详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86-URL-%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E5%AE%9A%E4%BD%8D%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text">1. 认识 URL (统一资源定位符)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-URL-%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 URL 的组成部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-URI-URL-URN-%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2 URI, URL, URN 的区别与联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87-Request-Message"><span class="nav-number">2.2.</span> <span class="nav-text">2. 请求报文 (Request Message)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87-Response-Message"><span class="nav-number">2.3.</span> <span class="nav-text">3. 响应报文 (Response Message)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81HTTP-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95%E4%B8%8E%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">三、HTTP 请求方法与状态码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95-Methods"><span class="nav-number">3.1.</span> <span class="nav-text">1. 请求方法 (Methods)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%8A%B6%E6%80%81%E7%A0%81-Status-Codes"><span class="nav-number">3.2.</span> <span class="nav-text">2. 状态码 (Status Codes)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81HTTP-%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6%E4%B8%8E%E7%89%B9%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">四、HTTP 核心机制与特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text">1. 连接管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%EF%BC%9ACookie-%E4%B8%8E-Session"><span class="nav-number">4.2.</span> <span class="nav-text">2. 状态管理：Cookie 与 Session</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BC%93%E5%AD%98%E6%8E%A7%E5%88%B6"><span class="nav-number">4.3.</span> <span class="nav-text">3. 缓存控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86"><span class="nav-number">4.4.</span> <span class="nav-text">4. 内容协商</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81HTTP-%E5%AE%89%E5%85%A8%EF%BC%9A%E4%BB%8E-HTTP-%E5%88%B0-HTTPS-Security"><span class="nav-number">5.</span> <span class="nav-text">五、HTTP 安全：从 HTTP 到 HTTPS (Security)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HTTP-%E7%9A%84%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9"><span class="nav-number">5.1.</span> <span class="nav-text">1. HTTP 的安全风险</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-HTTPS-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.2.</span> <span class="nav-text">2. HTTPS 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-SSL-TLS-%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B"><span class="nav-number">5.3.</span> <span class="nav-text">3. SSL&#x2F;TLS 握手过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B8%B8%E8%A7%81%E7%9A%84-Web-%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81%E4%B8%8E-HTTP"><span class="nav-number">5.4.</span> <span class="nav-text">4. 常见的 Web 安全威胁与 HTTP</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81HTTP-%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">一、HTTP 基础入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-HTTP%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">1. 什么是 HTTP？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%AE%9A%E4%B9%89%EF%BC%9A%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%8B%E9%97%B4%E7%9A%84%E6%B2%9F%E9%80%9A%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 协议的定义：计算机之间的沟通语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-HTTP-%E7%9A%84%E5%85%A8%E7%A7%B0%EF%BC%9AHyperText-Transfer-Protocol"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2. HTTP 的全称：HyperText Transfer Protocol</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-HTTP-%E7%9A%84%E8%AF%9E%E7%94%9F%E4%B8%8E%E4%BD%BF%E5%91%BD%EF%BC%9A%E4%B8%BA-Web-%E8%80%8C%E7%94%9F"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3. HTTP 的诞生与使命：为 Web 而生</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-HTTP-%E5%9C%A8%E7%BD%91%E7%BB%9C%E4%B8%96%E7%95%8C%E4%B8%AD%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.2.</span> <span class="nav-text">2. HTTP 在网络世界中的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-TCP-IP-%E5%8D%8F%E8%AE%AE%E6%97%8F%E7%AE%80%E4%BB%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1. TCP&#x2F;IP 协议族简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE%E7%9A%84%E8%A7%92%E8%89%B2"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 应用层协议的角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-HTTP-%E4%B8%8E-TCP%E3%80%81DNS-%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%AE%8C%E6%95%B4%E7%9A%84%E7%BD%91%E9%A1%B5%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 HTTP 与 TCP、DNS 的关系：一次完整的网页请求过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HTTP-%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">3. HTTP 的核心特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-C-S-%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 C&#x2F;S 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%AE%80%E5%8D%95%E5%8F%AF%E6%89%A9%E5%B1%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 简单可扩展</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%97%A0%E7%8A%B6%E6%80%81"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 无状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%8F%AF%E9%9D%A0%E4%BC%A0%E8%BE%93"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 可靠传输</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81HTTP-%E6%8A%A5%E6%96%87%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">二、HTTP 报文结构详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86-URL-%E7%BB%9F%E4%B8%80%E8%B5%84%E6%BA%90%E5%AE%9A%E4%BD%8D%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text">1. 认识 URL (统一资源定位符)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-URL-%E7%9A%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 URL 的组成部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-URI-URL-URN-%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E8%81%94%E7%B3%BB"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2 URI, URL, URN 的区别与联系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87-Request-Message"><span class="nav-number">2.2.</span> <span class="nav-text">2. 请求报文 (Request Message)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E8%AF%B7%E6%B1%82%E8%A1%8C-Request-Line"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 请求行 (Request Line)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E8%AF%B7%E6%B1%82%E5%A4%B4-Request-Headers"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 请求头 (Request Headers)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%AF%B7%E6%B1%82%E4%BD%93-Request-Body"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 请求体 (Request Body)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87-Response-Message"><span class="nav-number">2.3.</span> <span class="nav-text">3. 响应报文 (Response Message)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-%E7%8A%B6%E6%80%81%E8%A1%8C-Status-Line"><span class="nav-number">2.3.0.0.1.</span> <span class="nav-text">3.1. 状态行 (Status Line)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-%E5%93%8D%E5%BA%94%E5%A4%B4-Response-Headers"><span class="nav-number">2.3.0.0.2.</span> <span class="nav-text">3.2. 响应头 (Response Headers)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-%E5%93%8D%E5%BA%94%E4%BD%93-Response-Body"><span class="nav-number">2.3.0.0.3.</span> <span class="nav-text">3.3. 响应体 (Response Body)</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81HTTP-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95%E4%B8%8E%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">三、HTTP 请求方法与状态码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95-Methods"><span class="nav-number">3.1.</span> <span class="nav-text">1. 请求方法 (Methods)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-GET-%E8%8E%B7%E5%8F%96%E8%B5%84%E6%BA%90"><span class="nav-number">3.1.0.0.1.</span> <span class="nav-text">1.1. GET: 获取资源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-POST-%E5%88%9B%E5%BB%BA-%E6%8F%90%E4%BA%A4%E8%B5%84%E6%BA%90"><span class="nav-number">3.1.0.0.2.</span> <span class="nav-text">1.2. POST: 创建&#x2F;提交资源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-PUT-%E5%AE%8C%E6%95%B4%E6%9B%B4%E6%96%B0%E8%B5%84%E6%BA%90"><span class="nav-number">3.1.0.0.3.</span> <span class="nav-text">1.3. PUT: 完整更新资源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-4-DELETE-%E5%88%A0%E9%99%A4%E8%B5%84%E6%BA%90"><span class="nav-number">3.1.0.0.4.</span> <span class="nav-text">1.4. DELETE: 删除资源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-5-HEAD-%E8%8E%B7%E5%8F%96%E8%B5%84%E6%BA%90%E7%9A%84%E5%85%83%E4%BF%A1%E6%81%AF"><span class="nav-number">3.1.0.0.5.</span> <span class="nav-text">1.5. HEAD: 获取资源的元信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-6-OPTIONS-%E6%9F%A5%E8%AF%A2%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%94%AF%E6%8C%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.0.0.6.</span> <span class="nav-text">1.6. OPTIONS: 查询服务器支持的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-7-PATCH-%E9%83%A8%E5%88%86%E6%9B%B4%E6%96%B0%E8%B5%84%E6%BA%90"><span class="nav-number">3.1.0.0.7.</span> <span class="nav-text">1.7. PATCH: 部分更新资源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-8-%E5%AE%89%E5%85%A8%E4%B8%8E%E5%B9%82%E7%AD%89%E6%80%A7-Safety-and-Idempotence"><span class="nav-number">3.1.0.0.8.</span> <span class="nav-text">1.8. 安全与幂等性 (Safety and Idempotence)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%8A%B6%E6%80%81%E7%A0%81-Status-Codes"><span class="nav-number">3.2.</span> <span class="nav-text">2. 状态码 (Status Codes)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1xx-%E4%BF%A1%E6%81%AF%E6%80%A7-Informational"><span class="nav-number">3.2.1.</span> <span class="nav-text">2.1 1xx (信息性) - Informational</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2xx-%E6%88%90%E5%8A%9F-Success"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.2 2xx (成功) - Success</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3xx-%E9%87%8D%E5%AE%9A%E5%90%91-Redirection"><span class="nav-number">3.2.3.</span> <span class="nav-text">2.3 3xx (重定向) - Redirection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-4xx-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%94%99%E8%AF%AF-Client-Error"><span class="nav-number">3.2.4.</span> <span class="nav-text">2.4 4xx (客户端错误) - Client Error</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-5xx-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%94%99%E8%AF%AF-Server-Error"><span class="nav-number">3.2.5.</span> <span class="nav-text">2.5 5xx (服务器错误) - Server Error</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81HTTP-%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6%E4%B8%8E%E7%89%B9%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">四、HTTP 核心机制与特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text">1. 连接管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E7%9F%AD%E8%BF%9E%E6%8E%A5-vs-%E9%95%BF%E8%BF%9E%E6%8E%A5-Persistent-Connection-Keep-Alive"><span class="nav-number">4.1.0.1.</span> <span class="nav-text">1.1 短连接 vs 长连接 (Persistent Connection &#x2F; Keep-Alive)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-%E7%9F%AD%E8%BF%9E%E6%8E%A5-Short-lived-Connections-HTTP-1-0-%E9%BB%98%E8%AE%A4%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.1.0.2.</span> <span class="nav-text">1.1.1 短连接 (Short-lived Connections) - HTTP&#x2F;1.0 默认模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-%E9%95%BF%E8%BF%9E%E6%8E%A5-Persistent-Connections-Keep-Alive-HTTP-1-1-%E9%BB%98%E8%AE%A4%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.1.0.3.</span> <span class="nav-text">1.1.2 长连接 (Persistent Connections &#x2F; Keep-Alive) - HTTP&#x2F;1.1 默认模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Connection-%E5%A4%B4%E9%83%A8%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">4.1.1.</span> <span class="nav-text">1.2 Connection 头部的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E9%98%9F%E5%A4%B4%E9%98%BB%E5%A1%9E%E9%97%AE%E9%A2%98-Head-of-Line-Blocking-HOL-Blocking"><span class="nav-number">4.1.2.</span> <span class="nav-text">1.3 队头阻塞问题 (Head-of-Line Blocking, HOL Blocking)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%EF%BC%9ACookie-%E4%B8%8E-Session"><span class="nav-number">4.2.</span> <span class="nav-text">2. 状态管理：Cookie 与 Session</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%EF%BC%9F-%E5%BC%A5%E8%A1%A5-HTTP-%E6%97%A0%E7%8A%B6%E6%80%81%E7%89%B9%E6%80%A7"><span class="nav-number">4.2.1.</span> <span class="nav-text">2.1. 为什么需要状态管理？(弥补 HTTP 无状态特性)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Cookie%EF%BC%9A%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">4.2.2.</span> <span class="nav-text">2.2. Cookie：工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Cookie-%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="nav-number">4.2.3.</span> <span class="nav-text">2.3. Cookie 的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Session%EF%BC%9A%E5%9F%BA%E4%BA%8E-Cookie-%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6"><span class="nav-number">4.2.4.</span> <span class="nav-text">2.4. Session：基于 Cookie 的服务端状态管理机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BC%93%E5%AD%98%E6%8E%A7%E5%88%B6"><span class="nav-number">4.3.</span> <span class="nav-text">3. 缓存控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E7%BC%93%E5%AD%98%E7%9A%84%E4%BB%B7%E5%80%BC"><span class="nav-number">4.3.1.</span> <span class="nav-text">3.1 缓存的价值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%BC%BA%E5%88%B6%E7%BC%93%E5%AD%98"><span class="nav-number">4.3.2.</span> <span class="nav-text">3.2 强制缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98"><span class="nav-number">4.3.3.</span> <span class="nav-text">3.3 协商缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E7%94%A8%E6%88%B7%E6%93%8D%E4%BD%9C%E5%AF%B9%E7%BC%93%E5%AD%98%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">4.3.4.</span> <span class="nav-text">3.4 用户操作对缓存的影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86"><span class="nav-number">4.4.</span> <span class="nav-text">4. 内容协商</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%80%9A%E8%BF%87-Accept-%E7%B3%BB%E5%88%97%E5%A4%B4%E9%83%A8%E5%A3%B0%E6%98%8E%E6%9C%9F%E6%9C%9B%E6%A0%BC%E5%BC%8F"><span class="nav-number">4.4.1.</span> <span class="nav-text">4.1 客户端通过 Accept-\* 系列头部声明期望格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%A6%82%E4%BD%95%E6%A0%B9%E6%8D%AE%E8%AF%B7%E6%B1%82%E5%A4%B4%E9%80%89%E6%8B%A9%E6%9C%80%E4%BD%B3%E8%A1%A8%E7%A4%BA"><span class="nav-number">4.4.2.</span> <span class="nav-text">4.2 服务器如何根据请求头选择最佳表示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81HTTP-%E5%AE%89%E5%85%A8%EF%BC%9A%E4%BB%8E-HTTP-%E5%88%B0-HTTPS-Security"><span class="nav-number">5.</span> <span class="nav-text">五、HTTP 安全：从 HTTP 到 HTTPS (Security)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HTTP-%E7%9A%84%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9"><span class="nav-number">5.1.</span> <span class="nav-text">1. HTTP 的安全风险</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-%E7%AA%83%E5%90%AC%E9%A3%8E%E9%99%A9-Eavesdropping-%EF%BC%9A%E9%80%9A%E4%BF%A1%E5%86%85%E5%AE%B9%E4%B8%BA%E6%98%8E%E6%96%87"><span class="nav-number">5.1.0.0.1.</span> <span class="nav-text">1.1. 窃听风险 (Eavesdropping)：通信内容为明文</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-%E7%AF%A1%E6%94%B9%E9%A3%8E%E9%99%A9-Tampering-%EF%BC%9A%E5%86%85%E5%AE%B9%E5%8F%AF%E8%A2%AB%E4%B8%AD%E9%97%B4%E4%BA%BA%E4%BF%AE%E6%94%B9"><span class="nav-number">5.1.0.0.2.</span> <span class="nav-text">1.2. 篡改风险 (Tampering)：内容可被中间人修改</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-%E5%86%92%E5%85%85%E9%A3%8E%E9%99%A9-Impersonation-%EF%BC%9A%E6%97%A0%E6%B3%95%E9%AA%8C%E8%AF%81%E9%80%9A%E4%BF%A1%E5%8F%8C%E6%96%B9%E8%BA%AB%E4%BB%BD"><span class="nav-number">5.1.0.0.3.</span> <span class="nav-text">1.3. 冒充风险 (Impersonation)：无法验证通信双方身份</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-HTTPS-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.2.</span> <span class="nav-text">2. HTTPS 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-HTTPS-HTTP-SSL-TLS"><span class="nav-number">5.2.1.</span> <span class="nav-text">2.1 HTTPS &#x3D; HTTP + SSL&#x2F;TLS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-SSL-TLS-%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%9A%E5%8A%A0%E5%AF%86%E3%80%81%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E3%80%81%E6%95%B0%E6%8D%AE%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="nav-number">5.2.2.</span> <span class="nav-text">2.2 SSL&#x2F;TLS 的作用：加密、身份验证、数据完整性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86-Confidentiality-%E8%A7%A3%E5%86%B3%E7%AA%83%E5%90%AC%E9%A3%8E%E9%99%A9"><span class="nav-number">5.2.2.1.</span> <span class="nav-text">2.2.1 数据加密 (Confidentiality) - 解决窃听风险</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81-Authentication-%E8%A7%A3%E5%86%B3%E5%86%92%E5%85%85%E9%A3%8E%E9%99%A9"><span class="nav-number">5.2.2.2.</span> <span class="nav-text">2.2.2 身份验证 (Authentication) - 解决冒充风险</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-%E6%95%B0%E6%8D%AE%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C-Integrity-%E8%A7%A3%E5%86%B3%E7%AF%A1%E6%94%B9%E9%A3%8E%E9%99%A9"><span class="nav-number">5.2.2.3.</span> <span class="nav-text">2.2.3 数据完整性校验 (Integrity) - 解决篡改风险</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-SSL-TLS-%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B"><span class="nav-number">5.3.</span> <span class="nav-text">3. SSL&#x2F;TLS 握手过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%98%B6%E6%AE%B5%E4%B8%80%EF%BC%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E8%B5%B7%E8%AF%B7%E6%B1%82-Client-Hello"><span class="nav-number">5.3.1.</span> <span class="nav-text">3.1 阶段一：客户端发起请求 (Client Hello)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E9%98%B6%E6%AE%B5%E4%BA%8C%EF%BC%9A%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%93%8D%E5%BA%94%E4%B8%8E%E8%AF%81%E4%B9%A6%E4%B8%8B%E5%8F%91"><span class="nav-number">5.3.2.</span> <span class="nav-text">3.2 阶段二：服务器响应与证书下发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E9%98%B6%E6%AE%B5%E4%B8%89%EF%BC%9A%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%AA%8C%E8%AF%81%E8%AF%81%E4%B9%A6%E3%80%81%E7%94%9F%E6%88%90%E5%AF%86%E9%92%A5"><span class="nav-number">5.3.3.</span> <span class="nav-text">3.3 阶段三：客户端验证证书、生成密钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E9%98%B6%E6%AE%B5%E5%9B%9B%EF%BC%9A%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A1%AE%E8%AE%A4%EF%BC%8C%E5%BB%BA%E7%AB%8B%E5%AE%89%E5%85%A8%E9%80%9A%E9%81%93"><span class="nav-number">5.3.4.</span> <span class="nav-text">3.4 阶段四：服务器确认，建立安全通道</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B8%B8%E8%A7%81%E7%9A%84-Web-%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81"><span class="nav-number">5.4.</span> <span class="nav-text">4. 常见的 Web 安全威胁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC-XSS-Cross-Site-Scripting"><span class="nav-number">5.4.1.</span> <span class="nav-text">4.1 跨站脚本 (XSS - Cross-Site Scripting)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0-CSRF-Cross-Site-Request-Forgery"><span class="nav-number">5.4.2.</span> <span class="nav-text">4.2 跨站请求伪造 (CSRF - Cross-Site Request Forgery)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-CORS-%E8%B7%A8%E6%BA%90%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB"><span class="nav-number">5.4.3.</span> <span class="nav-text">4.3 CORS (跨源资源共享)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81HTTP-%E7%9A%84%E6%BC%94%E8%BF%9B"><span class="nav-number">6.</span> <span class="nav-text">六、HTTP 的演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HTTP-1-0-%E7%9A%84%E6%97%B6%E4%BB%A3"><span class="nav-number">6.1.</span> <span class="nav-text">1. HTTP&#x2F;1.0 的时代</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7%E4%B8%8E%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">6.1.1.</span> <span class="nav-text">1.1 核心特性与局限性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-%E7%9F%AD%E8%BF%9E%E6%8E%A5-Short-lived-Connections"><span class="nav-number">6.1.1.1.</span> <span class="nav-text">1.1.1 短连接 (Short-lived Connections)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-%E6%97%A0-Host-%E5%A4%B4%E9%83%A8-No-Host-Header"><span class="nav-number">6.1.1.2.</span> <span class="nav-text">1.1.2 无 Host 头部 (No Host Header)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-3-%E6%9C%89%E9%99%90%E7%9A%84%E7%BC%93%E5%AD%98%E8%83%BD%E5%8A%9B"><span class="nav-number">6.1.1.3.</span> <span class="nav-text">1.1.3 有限的缓存能力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-4-%E7%AE%80%E5%8D%95%E7%9A%84%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-number">6.1.1.4.</span> <span class="nav-text">1.1.4 简单的请求方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-HTTP-1-0-%E7%9A%84%E2%80%9C%E6%94%B9%E8%BF%9B%E2%80%9D%E4%B8%8E%E8%BF%87%E6%B8%A1"><span class="nav-number">6.1.2.</span> <span class="nav-text">1.2 HTTP&#x2F;1.0 的“改进”与过渡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-HTTP-1-1-%E8%87%B3%E4%BB%8A%E4%BB%8D%E6%98%AF%E4%B8%BB%E6%B5%81"><span class="nav-number">6.2.</span> <span class="nav-text">2. HTTP&#x2F;1.1 (至今仍是主流)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%B8%BB%E8%A6%81%E6%94%B9%E8%BF%9B"><span class="nav-number">6.2.1.</span> <span class="nav-text">2.1 主要改进</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-%E9%BB%98%E8%AE%A4%E9%95%BF%E8%BF%9E%E6%8E%A5-Persistent-Connections"><span class="nav-number">6.2.1.1.</span> <span class="nav-text">2.1.1 默认长连接 (Persistent Connections)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-%E7%AE%A1%E9%81%93%E5%8C%96-Pipelining"><span class="nav-number">6.2.1.2.</span> <span class="nav-text">2.1.2 管道化 (Pipelining)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-3-Host-%E5%A4%B4%E9%83%A8%E6%88%90%E4%B8%BA%E5%BF%85%E9%9C%80"><span class="nav-number">6.2.1.3.</span> <span class="nav-text">2.1.3 Host 头部成为必需</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-4-%E6%9B%B4%E4%B8%B0%E5%AF%8C%E5%92%8C%E5%BC%BA%E5%A4%A7%E7%9A%84%E7%BC%93%E5%AD%98%E6%8E%A7%E5%88%B6"><span class="nav-number">6.2.1.4.</span> <span class="nav-text">2.1.4 更丰富和强大的缓存控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-5-%E5%A2%9E%E5%8A%A0%E6%96%B0%E7%9A%84%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95%E5%92%8C%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">6.2.1.5.</span> <span class="nav-text">2.1.5 增加新的请求方法和状态码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-6-%E6%94%AF%E6%8C%81%E5%88%86%E5%9D%97%E4%BC%A0%E8%BE%93%E7%BC%96%E7%A0%81-Chunked-Transfer-Encoding"><span class="nav-number">6.2.1.6.</span> <span class="nav-text">2.1.6 支持分块传输编码 (Chunked Transfer Encoding)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%B8%E5%BF%83%E7%93%B6%E9%A2%88%EF%BC%9A%E9%98%9F%E5%A4%B4%E9%98%BB%E5%A1%9E-HOL-Blocking"><span class="nav-number">6.2.2.</span> <span class="nav-text">2.2 核心瓶颈：队头阻塞 (HOL Blocking)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HTTP-2%EF%BC%9A%E6%80%A7%E8%83%BD%E7%9A%84%E5%B7%A8%E5%A4%A7%E9%A3%9E%E8%B7%83"><span class="nav-number">6.3.</span> <span class="nav-text">3. HTTP&#x2F;2：性能的巨大飞跃</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%86%E5%B8%A7-Binary-Framing"><span class="nav-number">6.3.1.</span> <span class="nav-text">3.1 二进制分帧 (Binary Framing)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8-Multiplexing"><span class="nav-number">6.3.2.</span> <span class="nav-text">3.2 多路复用 (Multiplexing)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%A4%B4%E9%83%A8%E5%8E%8B%E7%BC%A9-Header-Compression-HPACK"><span class="nav-number">6.3.3.</span> <span class="nav-text">3.3 头部压缩 (Header Compression - HPACK)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A8%E9%80%81-Server-Push"><span class="nav-number">6.3.4.</span> <span class="nav-text">3.4 服务器推送 (Server Push)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-HTTP-3%EF%BC%9A%E9%9D%A2%E5%90%91%E6%9C%AA%E6%9D%A5%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="nav-number">6.4.</span> <span class="nav-text">4. HTTP&#x2F;3：面向未来的协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-HTTP-3%EF%BC%9F-TCP-%E5%B1%82%E7%9A%84%E9%98%9F%E5%A4%B4%E9%98%BB%E5%A1%9E"><span class="nav-number">6.4.1.</span> <span class="nav-text">4.1. 为什么需要 HTTP&#x2F;3？(TCP 层的队头阻塞)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%9F%BA%E4%BA%8E-QUIC-%E5%8D%8F%E8%AE%AE-%E6%9E%84%E5%BB%BA%E4%BA%8E-UDP-%E4%B9%8B%E4%B8%8A"><span class="nav-number">6.4.2.</span> <span class="nav-text">4.2. 基于 QUIC 协议 (构建于 UDP 之上)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-QUIC-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">6.4.3.</span> <span class="nav-text">4.3. QUIC 的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E5%BD%93%E5%89%8D%E7%8E%B0%E7%8A%B6%E4%B8%8E%E6%9C%AA%E6%9D%A5%E5%B1%95%E6%9C%9B"><span class="nav-number">6.4.4.</span> <span class="nav-text">4.4. 当前现状与未来展望</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -205,7 +205,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-10-17 16:09:23 / 修改时间：17:15:27" itemprop="dateCreated datePublished" datetime="2025-10-17T16:09:23+08:00">2025-10-17</time>
+      <time title="创建时间：2025-10-17 16:09:23 / 修改时间：20:52:41" itemprop="dateCreated datePublished" datetime="2025-10-17T16:09:23+08:00">2025-10-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -625,132 +625,1944 @@
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">      +------------------+</span><br><span class="line">      |       URI        |  (标识符总称)</span><br><span class="line">      |  (Identifier)    |</span><br><span class="line">      +------------------+</span><br><span class="line">             /      \</span><br><span class="line">            /        \</span><br><span class="line">+----------------+  +----------------+</span><br><span class="line">|      URL       |  |      URN       | (名称)</span><br><span class="line">|  (Locator)     |  |     (Name)     |</span><br><span class="line">+----------------+  +----------------+</span><br><span class="line">(标识 + 定位)       (标识，但无定位)</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="2-请求报文-Request-Message"><a href="#2-请求报文-Request-Message" class="headerlink" title="2. 请求报文 (Request Message)"></a>2. 请求报文 (Request Message)</h2><ul>
-<li>2.1. <strong>请求行 (Request Line)</strong><ul>
-<li>请求方法 (Method)</li>
-<li>请求目标 (Request Target &#x2F; URI)</li>
-<li>HTTP 版本 (Version)</li>
+<h2 id="2-请求报文-Request-Message"><a href="#2-请求报文-Request-Message" class="headerlink" title="2. 请求报文 (Request Message)"></a>2. 请求报文 (Request Message)</h2><p>当客户端（如浏览器）想要从服务器获取资源或向其提交数据时，它会构造并发送一个<strong>请求报文</strong>。这个报文就像一封格式化的信件，详细说明了客户端的意图。</p>
+<p>一个完整的 HTTP 请求报文由三部分组成：<strong>请求行 (Request Line)</strong>、<strong>请求头 (Request Headers)</strong> 和 <strong>请求体 (Request Body)</strong>。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;method&gt; &lt;request-target&gt; &lt;http-version&gt;  \r\n   &lt;-- 请求行</span><br><span class="line">&lt;header-key1&gt;: &lt;header-value1&gt;             \r\n   &lt;-- 请求头</span><br><span class="line">&lt;header-key2&gt;: &lt;header-value2&gt;             \r\n</span><br><span class="line">...</span><br><span class="line">&lt;header-keyN&gt;: &lt;header-valueN&gt;             \r\n</span><br><span class="line">                                          \r\n   &lt;-- 标志头部结束的空行</span><br><span class="line">&lt;request-body-data&gt;                              &lt;-- 请求体 (可选)</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：每一行的末尾都有一个回车换行符 <code>\r\n</code> (CRLF)，并且头部区域和请求体之间必须有一个<strong>空行</strong> (<code>\r\n</code>)。这个空行是强制性的，用来区分头部和主体。</p>
+<hr>
+<h3 id="2-1-请求行-Request-Line"><a href="#2-1-请求行-Request-Line" class="headerlink" title="2.1 请求行 (Request Line)"></a>2.1 请求行 (Request Line)</h3><p>请求行是请求报文的<strong>第一行</strong>，永远位于最开始，它简明扼要地概括了本次请求的核心信息。它由三个部分组成，以空格分隔。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/index.html</span> <span class="meta">HTTP/1.1</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>请求方法 (Method)</strong><ul>
+<li><strong>作用</strong>：表明客户端希望对资源执行的操作。</li>
+<li><strong>示例</strong>：<code>GET</code></li>
+<li><strong>常见方法</strong>：<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>HEAD</code>, <code>OPTIONS</code> 等。<ul>
+<li><code>GET</code>: 获取资源。</li>
+<li><code>POST</code>: 创建或提交数据。</li>
 </ul>
 </li>
-<li>2.2. <strong>请求头 (Request Headers)</strong><ul>
-<li>通用头 (General Headers)</li>
-<li>请求头 (Request Headers)</li>
-<li>实体头 (Entity Headers)</li>
-<li><strong>常用请求头详解</strong>：<code>Host</code>, <code>User-Agent</code>, <code>Accept</code>, <code>Content-Type</code>, <code>Content-Length</code>, <code>Connection</code> 等</li>
+<li>方法是大小写敏感的，通常使用大写。</li>
 </ul>
 </li>
-<li>2.3. <strong>请求体 (Request Body)</strong><ul>
-<li>什么情况下会有请求体？ (如 POST, PUT)</li>
-<li>常见的数据格式：<code>application/x-www-form-urlencoded</code>, <code>multipart/form-data</code>, <code>application/json</code></li>
+<li><strong>请求目标 (Request Target &#x2F; URI)</strong><ul>
+<li><strong>作用</strong>：指定了所请求资源的位置，通常是 URL 的路径和查询参数部分。</li>
+<li><strong>示例</strong>：<code>/index.html</code></li>
+<li><strong>不同形式</strong>：<ul>
+<li><strong>源格式 (origin-form)</strong>：最常见的形式，只包含路径和查询字符串。例如 <code>/path/to/file.html?key=value</code>。这是发送给源服务器的标准形式。</li>
+<li><strong>绝对格式 (absolute-form)</strong>：包含完整的 URL。主要在请求代理服务器时使用，例如 <code>GET http://www.example.com/index.html HTTP/1.1</code>。</li>
+<li><strong>星号格式 (asterisk-form)</strong>：一个星号 <code>*</code>，用于 <code>OPTIONS</code> 方法，询问服务器的整体能力，而不是特定资源。</li>
 </ul>
 </li>
 </ul>
-<h2 id="3-响应报文-Response-Message"><a href="#3-响应报文-Response-Message" class="headerlink" title="3. 响应报文 (Response Message)"></a>3. 响应报文 (Response Message)</h2><ul>
-<li>3.1. <strong>状态行 (Status Line)</strong><ul>
-<li>HTTP 版本 (Version)</li>
-<li>状态码 (Status Code)</li>
-<li>原因短语 (Reason Phrase)</li>
+</li>
+<li><strong>HTTP 版本 (Version)</strong><ul>
+<li><strong>作用</strong>：指明客户端使用的 HTTP 协议版本。</li>
+<li><strong>示例</strong>：<code>HTTP/1.1</code></li>
+<li>服务器会根据这个版本来决定如何处理请求以及使用哪个版本的协议进行响应。常见的有 <code>HTTP/1.0</code>, <code>HTTP/1.1</code>, <code>HTTP/2</code>。</li>
 </ul>
 </li>
-<li>3.2. <strong>响应头 (Response Headers)</strong><ul>
-<li><strong>常用响应头详解</strong>：<code>Content-Type</code>, <code>Content-Length</code>, <code>Content-Encoding</code>, <code>Server</code>, <code>Date</code>, <code>Location</code>, <code>Set-Cookie</code> 等</li>
+</ol>
+<hr>
+<h3 id="2-2-请求头-Request-Headers"><a href="#2-2-请求头-Request-Headers" class="headerlink" title="2.2 请求头 (Request Headers)"></a>2.2 请求头 (Request Headers)</h3><p>请求头紧跟在请求行之后，由一系列的键值对 (<code>Key: Value</code>) 组成，每对占一行。它们向服务器提供了关于请求的更多上下文信息，例如客户端的类型、期望接收的数据格式等。</p>
+<p>请求头可以分为几类（这是一个概念上的划分，实际报文中它们混在一起）：</p>
+<ul>
+<li><strong>通用头 (General Headers)</strong>：请求和响应报文中都可以出现，如 <code>Date</code>, <code>Connection</code>。</li>
+<li><strong>请求头 (Request Headers)</strong>：专用于请求报文，包含更多关于要获取的资源或客户端本身的信息，如 <code>Host</code>, <code>User-Agent</code>, <code>Accept</code>。</li>
+<li><strong>实体头 (Entity Headers)</strong>：描述请求体（或响应体）的元数据，如 <code>Content-Type</code>, <code>Content-Length</code>。</li>
+</ul>
+<p><strong>常用请求头详解：</strong></p>
+<table>
+<thead>
+<tr>
+<th>头部 (Header)</th>
+<th>示例值</th>
+<th>解释说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>Host</code></strong></td>
+<td><code>www.example.com</code></td>
+<td><strong>HTTP&#x2F;1.1 必需</strong>。指定了服务器的域名。这使得一台服务器可以托管多个网站（虚拟主机）。</td>
+</tr>
+<tr>
+<td><strong><code>User-Agent</code></strong></td>
+<td><code>Mozilla/5.0 (Windows NT 10.0; ...)</code></td>
+<td>包含了发起请求的客户端（浏览器、爬虫等）的信息。服务器可以据此返回不同的内容或进行统计。</td>
+</tr>
+<tr>
+<td><strong><code>Accept</code></strong></td>
+<td><code>text/html,application/xhtml+xml,...</code></td>
+<td>告诉服务器客户端能够理解和处理的内容类型（MIME 类型）。服务器会据此进行内容协商。</td>
+</tr>
+<tr>
+<td><strong><code>Accept-Language</code></strong></td>
+<td><code>en-US,en;q=0.9,zh-CN;q=0.8</code></td>
+<td>告诉服务器客户端偏好的自然语言。<code>q</code> 是权重因子，表示偏好程度。</td>
+</tr>
+<tr>
+<td><strong><code>Accept-Encoding</code></strong></td>
+<td><code>gzip, deflate, br</code></td>
+<td>告诉服务器客户端支持的内容压缩算法。服务器可以使用其中一种算法压缩响应体，以减少传输大小。</td>
+</tr>
+<tr>
+<td><strong><code>Connection</code></strong></td>
+<td><code>keep-alive</code> &#x2F; <code>close</code></td>
+<td>控制 TCP 连接在请求完成后是否保持打开状态。<code>keep-alive</code> 表示长连接，<code>close</code> 表示短连接。</td>
+</tr>
+<tr>
+<td><strong><code>Content-Type</code></strong></td>
+<td><code>application/json</code></td>
+<td><strong>当有请求体时非常重要</strong>。说明请求体中的数据格式。</td>
+</tr>
+<tr>
+<td><strong><code>Content-Length</code></strong></td>
+<td><code>348</code></td>
+<td><strong>当有请求体时非常重要</strong>。表示请求体的字节长度。</td>
+</tr>
+<tr>
+<td><strong><code>Cookie</code></strong></td>
+<td><code>name=value; name2=value2</code></td>
+<td>客户端向服务器发送之前由服务器通过 <code>Set-Cookie</code> 设置的 Cookie。用于维持用户状态。</td>
+</tr>
+<tr>
+<td><strong><code>Referer</code></strong></td>
+<td><code>https://www.google.com/</code></td>
+<td>表示当前请求是从哪个页面跳转过来的。可用于分析用户来源。注意：单词拼写错误 <code>Referer</code> 是历史遗留问题。</td>
+</tr>
+<tr>
+<td><strong><code>Authorization</code></strong></td>
+<td><code>Bearer &lt;token&gt;</code></td>
+<td>包含了用于身份验证的凭证信息。</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="2-3-请求体-Request-Body"><a href="#2-3-请求体-Request-Body" class="headerlink" title="2.3 请求体 (Request Body)"></a>2.3 请求体 (Request Body)</h3><p>请求体是<strong>可选的</strong>。它用于承载需要提交给服务器的数据。</p>
+<ul>
+<li><strong>什么情况下会有请求体？</strong><ul>
+<li><code>GET</code>, <code>HEAD</code>, <code>DELETE</code>, <code>OPTIONS</code> 等方法通常<strong>没有</strong>请求体，因为它们的操作目标由 URL 指定。</li>
+<li><code>POST</code>, <code>PUT</code>, <code>PATCH</code> 等方法通常<strong>有</strong>请求体，因为它们需要向服务器发送数据（如创建新用户、更新文章内容等）。</li>
 </ul>
 </li>
-<li>3.3. <strong>响应体 (Response Body)</strong><ul>
-<li>服务器返回的实际资源内容 (HTML, CSS, JS, 图片, JSON 数据等)</li>
+<li><strong>常见的数据格式 (由 <code>Content-Type</code> 头部指定)：</strong><ol>
+<li><strong><code>application/x-www-form-urlencoded</code></strong><ul>
+<li>这是 HTML 表单提交的默认格式。</li>
+<li>数据被编码成 <code>key1=value1&amp;key2=value2</code> 的形式，和 URL 查询参数的格式一样。</li>
+<li>特殊字符（如空格）会被 URL 编码（空格变为 <code>+</code> 或 <code>%20</code>）。</li>
+</ul>
+</li>
+<li><strong><code>multipart/form-data</code></strong><ul>
+<li>当表单中包含文件上传（<code>&lt;input type=&quot;file&quot;&gt;</code>）时，必须使用这种格式。</li>
+<li>它将表单数据分割成多个部分（part），每个部分都有自己的描述头。这种格式可以同时传输文本数据和二进制文件数据。</li>
+<li>请求体会包含一个 <code>boundary</code> 字符串，用于分隔不同的数据部分。</li>
+</ul>
+</li>
+<li><strong><code>application/json</code></strong><ul>
+<li>现代 Web API（尤其是 RESTful API）最常用的格式。</li>
+<li>请求体是一个 JSON 格式的字符串。</li>
+<li>例如：<code>{&quot;username&quot;: &quot;alice&quot;, &quot;email&quot;: &quot;alice@example.com&quot;}</code></li>
+</ul>
+</li>
+<li><strong><code>text/xml</code> 或 <code>application/xml</code></strong><ul>
+<li>用于传输 XML 格式的数据，在早期的 Web Services (SOAP) 中很常见。</li>
+</ul>
+</li>
+<li><strong><code>text/plain</code></strong><ul>
+<li>纯文本格式。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>请求报文示例 (一个典型的 POST 请求)</strong></p>
+<p>这个例子模拟了一个用户登录的场景，提交的数据是 JSON 格式。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/api/login</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.example.com</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>54</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>MyCoolApiClient/1.0</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>application/json</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"></span><br><span class="line"><span class="language-json"><span class="punctuation">&#123;</span><span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;testuser&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SuperSecret123&quot;</span><span class="punctuation">&#125;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>请求行</strong>: <code>POST /api/login HTTP/1.1</code> -&gt; 使用 POST 方法，请求 <code>/api/login</code> 资源，协议版本是 HTTP&#x2F;1.1。</li>
+<li><strong>请求头</strong>:<ul>
+<li><code>Host</code>: 目标服务器是 <code>api.example.com</code>。</li>
+<li><code>Content-Type</code>: 告诉服务器，我发送的数据是 JSON 格式。</li>
+<li><code>Content-Length</code>: 告诉服务器，请求体的大小是 54 字节。</li>
+<li>其他头部提供了客户端信息和期望的响应格式。</li>
+</ul>
+</li>
+<li><strong>空行</strong>: 分隔头部和主体。</li>
+<li><strong>请求体</strong>: 包含了实际的登录凭证，是一个 JSON 对象。</li>
+</ul>
+<hr>
+<h2 id="3-响应报文-Response-Message"><a href="#3-响应报文-Response-Message" class="headerlink" title="3. 响应报文 (Response Message)"></a>3. 响应报文 (Response Message)</h2><p>当服务器成功接收并处理了客户端的请求后，它会构建并发送一个<strong>响应报文</strong>。这个报文包含了请求的处理结果（成功、失败、重定向等）以及客户端请求的资源（如果适用）。</p>
+<p>与请求报文类似，一个 HTTP 响应报文也由三部分组成：<strong>状态行 (Status Line)</strong>、<strong>响应头 (Response Headers)</strong> 和 <strong>响应体 (Response Body)</strong>。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;http-version&gt; &lt;status-code&gt; &lt;reason-phrase&gt; \r\n   &lt;-- 状态行</span><br><span class="line">&lt;header-key1&gt;: &lt;header-value1&gt;              \r\n   &lt;-- 响应头</span><br><span class="line">&lt;header-key2&gt;: &lt;header-value2&gt;              \r\n</span><br><span class="line">...</span><br><span class="line">&lt;header-keyN&gt;: &lt;header-valueN&gt;              \r\n</span><br><span class="line">                                           \r\n   &lt;-- 标志头部结束的空行</span><br><span class="line">&lt;response-body-data&gt;                               &lt;-- 响应体 (可选)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="3-1-状态行-Status-Line"><a href="#3-1-状态行-Status-Line" class="headerlink" title="3.1. 状态行 (Status Line)"></a><strong>3.1. 状态行 (Status Line)</strong></h5><p>状态行是响应报文的<strong>第一行</strong>，它用最简洁的方式总结了服务器对请求的处理结果。它也由三个部分组成，以空格分隔。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>HTTP 版本 (Version)</strong><ul>
+<li><strong>作用</strong>：指明服务器使用的 HTTP 协议版本。通常与客户端请求的版本相匹配。</li>
+<li><strong>示例</strong>：<code>HTTP/1.1</code></li>
+</ul>
+</li>
+<li><strong>状态码 (Status Code)</strong><ul>
+<li><strong>作用</strong>：这是一个<strong>三位数的数字</strong>，是响应报文中最核心的部分。它用标准化的代码告诉客户端请求的结果。</li>
+<li><strong>示例</strong>：<code>200</code></li>
+<li>状态码按其第一位数字分为五大类，每一类代表一种响应状态（我们将在第三章详细讲解）：<ul>
+<li><strong>1xx</strong>: 信息性 - 请求已接收，正在处理。</li>
+<li><strong>2xx</strong>: 成功 - 请求已成功被接收、理解、并接受。</li>
+<li><strong>3xx</strong>: 重定向 - 需要采取进一步操作才能完成请求。</li>
+<li><strong>4xx</strong>: 客户端错误 - 请求有语法错误或无法实现。</li>
+<li><strong>5xx</strong>: 服务器错误 - 服务器未能实现合法的请求。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>原因短语 (Reason Phrase)</strong><ul>
+<li><strong>作用</strong>：这是对状态码的一个简短的、人类可读的文本描述。</li>
+<li><strong>示例</strong>：<code>OK</code></li>
+<li>原因短语的主要目的是为了方便人类阅读和调试，<strong>程序不应该依赖原因短语来判断结果</strong>，而应严格依赖状态码。例如，即使服务器返回 <code>HTTP/1.1 200 All is well</code>，客户端也应将其视为 <code>200 OK</code>。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h5 id="3-2-响应头-Response-Headers"><a href="#3-2-响应头-Response-Headers" class="headerlink" title="3.2. 响应头 (Response Headers)"></a><strong>3.2. 响应头 (Response Headers)</strong></h5><p>响应头紧跟在状态行之后，同样是一系列的键值对 (<code>Key: Value</code>)。它们提供了关于响应的更多信息，例如响应内容的类型、长度、服务器信息、缓存策略等。</p>
+<p><strong>常用响应头详解：</strong></p>
+<table>
+<thead>
+<tr>
+<th>头部 (Header)</th>
+<th>示例值</th>
+<th>解释说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>Content-Type</code></strong></td>
+<td><code>text/html; charset=utf-8</code></td>
+<td><strong>极其重要</strong>。告诉客户端响应体中的数据是什么类型（MIME 类型），以及其字符编码。浏览器据此决定如何渲染内容。</td>
+</tr>
+<tr>
+<td><strong><code>Content-Length</code></strong></td>
+<td><code>1256</code></td>
+<td>表示响应体的字节长度。浏览器可以据此判断响应是否已接收完整。对于长连接，这是区分报文边界的关键。</td>
+</tr>
+<tr>
+<td><strong><code>Content-Encoding</code></strong></td>
+<td><code>gzip</code></td>
+<td>表明响应体使用了哪种压缩算法（如 <code>gzip</code>, <code>br</code>）。浏览器收到后需要先解压缩，才能得到原始数据。</td>
+</tr>
+<tr>
+<td><strong><code>Server</code></strong></td>
+<td><code>nginx/1.18.0</code></td>
+<td>包含了处理请求的 Web 服务器软件的信息。出于安全考虑，有些服务器会隐藏或修改此信息。</td>
+</tr>
+<tr>
+<td><strong><code>Date</code></strong></td>
+<td><code>Wed, 21 Oct 2023 07:28:00 GMT</code></td>
+<td>服务器生成并发送该响应的日期和时间（格林尼治标准时间）。</td>
+</tr>
+<tr>
+<td><strong><code>Location</code></strong></td>
+<td><code>https://www.example.com/new-page</code></td>
+<td><strong>在 3xx 重定向响应中必需</strong>。告诉客户端应该自动跳转到这个新的 URL 去获取资源。</td>
+</tr>
+<tr>
+<td><strong><code>Set-Cookie</code></strong></td>
+<td><code>session_id=abcde12345; HttpOnly; Secure</code></td>
+<td>指示客户端保存一个 Cookie。浏览器会在后续对该域名的请求中自动带上这个 Cookie。</td>
+</tr>
+<tr>
+<td><strong><code>Cache-Control</code></strong></td>
+<td><code>max-age=3600</code></td>
+<td>指示客户端和代理服务器如何缓存此响应。<code>max-age=3600</code> 表示此响应可以被缓存 3600 秒。</td>
+</tr>
+<tr>
+<td><strong><code>Expires</code></strong></td>
+<td><code>Wed, 21 Oct 2023 08:28:00 GMT</code></td>
+<td>(HTTP&#x2F;1.0) 提供一个绝对的过期时间，作用与 <code>Cache-Control</code> 类似，但优先级较低。</td>
+</tr>
+<tr>
+<td><strong><code>ETag</code></strong></td>
+<td><code>W/&quot;xyz...abc&quot;</code></td>
+<td>资源的唯一标识符，像文件的“指纹”。用于协商缓存。</td>
+</tr>
+<tr>
+<td><strong><code>Last-Modified</code></strong></td>
+<td><code>Tue, 15 Nov 2022 12:45:26 GMT</code></td>
+<td>资源在服务器上最后被修改的时间。也用于协商缓存。</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="3-3-响应体-Response-Body"><a href="#3-3-响应体-Response-Body" class="headerlink" title="3.3. 响应体 (Response Body)"></a><strong>3.3. 响应体 (Response Body)</strong></h5><p>响应体是响应报文的<strong>可选</strong>部分，包含了服务器返回给客户端的实际资源内容。</p>
+<ul>
+<li><strong>什么情况下会有响应体？</strong><ul>
+<li>对于成功的 <code>GET</code> 请求，响应体通常就是请求的资源本身，如 HTML 文档、图片文件、JSON 数据等。</li>
+<li>对于成功的 <code>POST</code> 请求，响应体可能包含了操作成功后的结果信息，比如新建资源的信息。</li>
+</ul>
+</li>
+<li><strong>什么情况下可能没有响应体？</strong><ul>
+<li><strong><code>204 No Content</code></strong>: 请求成功，但服务器没有新的信息要发送，响应中不包含响应体。</li>
+<li><strong><code>301 Moved Permanently</code> &#x2F; <code>302 Found</code></strong>: 重定向响应，客户端的关注点是 <code>Location</code> 头，通常不需要响应体。</li>
+<li><strong><code>304 Not Modified</code></strong>: 协商缓存命中，告诉客户端可以使用本地缓存的副本，因此不需要再次发送资源，响应中没有响应体。</li>
+<li><strong><code>HEAD</code> 请求</strong>：客户端只请求资源的元信息（头部），服务器的响应与 <code>GET</code> 请求完全相同，但<strong>没有响应体</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>响应报文示例 (一个典型的成功响应)</strong></p>
+<p>这个例子是对一个 <code>GET</code> 请求的响应，返回了一个 HTML 页面。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html; charset=UTF-8</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>1354</span><br><span class="line"><span class="attribute">Date</span><span class="punctuation">: </span>Wed, 21 Oct 2023 07:30:00 GMT</span><br><span class="line"><span class="attribute">Server</span><span class="punctuation">: </span>Apache/2.4.1 (Unix)</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>max-age=600</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>An Example Page<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>Hello World, this is a very simple HTML document.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>状态行</strong>: <code>HTTP/1.1 200 OK</code> -&gt; 表示请求成功。</li>
+<li><strong>响应头</strong>:<ul>
+<li><code>Content-Type</code>: 告诉浏览器，下面发送的是一个 UTF-8 编码的 HTML 文档。</li>
+<li><code>Content-Length</code>: 浏览器可以预期接收 1354 字节的 HTML 内容。</li>
+<li>其他头部提供了服务器信息、时间和缓存指令。</li>
+</ul>
+</li>
+<li><strong>空行</strong>: 分隔头部和主体。</li>
+<li><strong>响应体</strong>: 包含了完整的 HTML 文档内容，浏览器将解析并渲染它。</li>
+</ul>
+<hr>
+<h1 id="三、HTTP-请求方法与状态码"><a href="#三、HTTP-请求方法与状态码" class="headerlink" title="三、HTTP 请求方法与状态码"></a>三、HTTP 请求方法与状态码</h1><h2 id="1-请求方法-Methods"><a href="#1-请求方法-Methods" class="headerlink" title="1. 请求方法 (Methods)"></a>1. 请求方法 (Methods)</h2><p>HTTP 请求方法，也常被称为“HTTP 动词 (Verbs)”，是位于请求行开头的命令。它告诉服务器，客户端期望执行的具体操作类型。可以将其理解为一句话中的“动词”，指定了对“宾语”（即 URL 所指向的资源）的行为。</p>
+<hr>
+<h5 id="1-1-GET-获取资源"><a href="#1-1-GET-获取资源" class="headerlink" title="1.1. GET: 获取资源"></a><strong>1.1. GET: 获取资源</strong></h5><ul>
+<li><p><strong>核心作用</strong>：从服务器<strong>获取 (Retrieve)</strong> 指定的资源。</p>
+</li>
+<li><p><strong>特性</strong>：</p>
+<ul>
+<li><code>GET</code> 请求<strong>不应包含请求体 (Request Body)</strong>，需要传递的参数通常附加在 URL 的查询字符串 (Query String) 中（例如 <code>?id=123</code>）。</li>
+<li>它是<strong>安全的 (Safe)</strong> 和<strong>幂等的 (Idempotent)</strong>。</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：</p>
+<ul>
+<li>浏览网页。</li>
+<li>查看文章、商品详情。</li>
+<li>请求图片、CSS、JavaScript 文件。</li>
+<li>调用一个只返回数据的 API。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/users/123</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.example.com</span><br></pre></td></tr></table></figure>
+
+<p>这个请求意图是获取 ID 为 123 的用户的信息。</p>
+</li>
+</ul>
+<hr>
+<h5 id="1-2-POST-创建-提交资源"><a href="#1-2-POST-创建-提交资源" class="headerlink" title="1.2. POST: 创建&#x2F;提交资源"></a><strong>1.2. POST: 创建&#x2F;提交资源</strong></h5><ul>
+<li><p><strong>核心作用</strong>：向服务器<strong>提交 (Submit)</strong> 数据，请求服务器进行处理，这可能导致<strong>创建新资源</strong>或<strong>更新现有资源</strong>。</p>
+</li>
+<li><p><strong>特性</strong>：</p>
+<ul>
+<li><code>POST</code> 请求<strong>通常包含请求体</strong>，用于携带要提交的数据。</li>
+<li>它是<strong>不安全的 (Not Safe)</strong>，因为它会改变服务器上的状态（例如，在数据库中创建一条新记录）。</li>
+<li>它<strong>不是幂等的 (Not Idempotent)</strong>。连续发送两次相同的 <code>POST</code> 请求，通常会导致创建两个不同的资源。</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：</p>
+<ul>
+<li>用户注册、登录。</li>
+<li>提交表单数据（如发布评论、创建文章）。</li>
+<li>下订单。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/users</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.example.com</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br><span class="line"></span><br><span class="line"><span class="language-perl">&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;Alice&quot;</span>, <span class="string">&quot;email&quot;</span>: <span class="string">&quot;alice<span class="variable">@example</span>.com&quot;</span>&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个请求意图是在服务器上创建一个新用户。</p>
+</li>
+</ul>
+<hr>
+<h5 id="1-3-PUT-完整更新资源"><a href="#1-3-PUT-完整更新资源" class="headerlink" title="1.3. PUT: 完整更新资源"></a><strong>1.3. PUT: 完整更新资源</strong></h5><ul>
+<li><p><strong>核心作用</strong>：用请求体中的数据<strong>替换 (Replace)</strong> 目标资源的所有当前表示。可以理解为“<strong>整体覆盖</strong>”。</p>
+</li>
+<li><p><strong>特性</strong>：</p>
+<ul>
+<li><code>PUT</code> 请求<strong>必须包含请求体</strong>，代表了该资源的最终完整状态。</li>
+<li>它是<strong>不安全的</strong>，因为它会修改资源。</li>
+<li>它<strong>是幂等的</strong>。多次发送同一个 <code>PUT</code> 请求，其效果与发送一次完全相同（最终资源的状态是一样的）。</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：</p>
+<ul>
+<li>更新一个用户的完整个人资料。</li>
+<li>替换一篇文章的全部内容。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">PUT</span> <span class="string">/users/123</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.example.com</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br><span class="line"></span><br><span class="line"><span class="language-perl">&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;Alice Smith&quot;</span>, <span class="string">&quot;email&quot;</span>: <span class="string">&quot;alice.smith<span class="variable">@example</span>.com&quot;</span>&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个请求意图是将 ID 为 123 的用户的全部信息替换为请求体中的新信息。</p>
+</li>
+</ul>
+<hr>
+<h5 id="1-4-DELETE-删除资源"><a href="#1-4-DELETE-删除资源" class="headerlink" title="1.4. DELETE: 删除资源"></a><strong>1.4. DELETE: 删除资源</strong></h5><ul>
+<li><p><strong>核心作用</strong>：<strong>删除 (Delete)</strong> 指定的资源。</p>
+</li>
+<li><p><strong>特性</strong>：</p>
+<ul>
+<li><code>DELETE</code> 请求通常<strong>不包含请求体</strong>。</li>
+<li>它是<strong>不安全的</strong>，因为它会删除资源。</li>
+<li>它<strong>是幂等的</strong>。删除一个已删除的资源，其最终状态（不存在）与第一次删除时相同。服务器可能会返回 <code>404 Not Found</code> 或 <code>204 No Content</code>。</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：</p>
+<ul>
+<li>删除一篇文章。</li>
+<li>删除用户的某个地址。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DELETE</span> <span class="string">/users/123</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.example.com</span><br></pre></td></tr></table></figure>
+
+<p>这个请求意图是删除 ID 为 123 的用户。</p>
+</li>
+</ul>
+<hr>
+<h5 id="1-5-HEAD-获取资源的元信息"><a href="#1-5-HEAD-获取资源的元信息" class="headerlink" title="1.5. HEAD: 获取资源的元信息"></a><strong>1.5. HEAD: 获取资源的元信息</strong></h5><ul>
+<li><p><strong>核心作用</strong>：与 <code>GET</code> 方法完全相同，但服务器的响应中<strong>只包含头部 (Headers)，不包含响应体 (Body)</strong>。</p>
+</li>
+<li><p><strong>特性</strong>：</p>
+<ul>
+<li>它是<strong>安全的</strong>和<strong>幂等的</strong>。</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：</p>
+<ul>
+<li>在下载大文件前，先用 <code>HEAD</code> 请求检查文件大小 (<code>Content-Length</code>)。</li>
+<li>检查资源的最后修改时间 (<code>Last-Modified</code>)，以判断是否需要重新下载。</li>
+<li>检查资源是否存在，而无需传输整个资源。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">HEAD</span> <span class="string">/large-video.mp4</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>media.example.com</span><br></pre></td></tr></table></figure>
+
+<p>服务器会返回 <code>200 OK</code> 以及 <code>Content-Length</code>, <code>Content-Type</code> 等头部，但不会传输视频数据。</p>
+</li>
+</ul>
+<hr>
+<h5 id="1-6-OPTIONS-查询服务器支持的方法"><a href="#1-6-OPTIONS-查询服务器支持的方法" class="headerlink" title="1.6. OPTIONS: 查询服务器支持的方法"></a><strong>1.6. OPTIONS: 查询服务器支持的方法</strong></h5><ul>
+<li><p><strong>核心作用</strong>：查询指定 URL 的服务器支持哪些 HTTP 请求方法。</p>
+</li>
+<li><p><strong>特性</strong>：</p>
+<ul>
+<li>它是<strong>安全的</strong>和<strong>幂等的</strong>。</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：</p>
+<ul>
+<li><strong>CORS (跨源资源共享)</strong> 中的“预检请求 (Preflight Request)”。在发送复杂的跨域请求（如 <code>PUT</code> 或带自定义头部的 <code>POST</code>）之前，浏览器会自动发送一个 <code>OPTIONS</code> 请求，以确认服务器是否允许该跨域操作。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">OPTIONS</span> <span class="string">/users/123</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.example.com</span><br></pre></td></tr></table></figure>
+
+<p>服务器的响应头中会包含 <code>Allow: GET, PUT, DELETE, HEAD, OPTIONS</code> 这样的字段。</p>
+</li>
+</ul>
+<hr>
+<h5 id="1-7-PATCH-部分更新资源"><a href="#1-7-PATCH-部分更新资源" class="headerlink" title="1.7. PATCH: 部分更新资源"></a><strong>1.7. PATCH: 部分更新资源</strong></h5><ul>
+<li><p><strong>核心作用</strong>：对资源进行<strong>局部修改 (Partial Modification)</strong>。</p>
+</li>
+<li><p><strong>特性</strong>：</p>
+<ul>
+<li><code>PATCH</code> 请求<strong>必须包含请求体</strong>，其中描述了要进行的更改（例如，要修改哪个字段，改成什么值）。</li>
+<li>它是<strong>不安全的</strong>。</li>
+<li>它<strong>不一定是幂等的</strong>。例如，一个“将商品价格加 10 元”的 <code>PATCH</code> 请求，执行多次效果就不同。但一个“将商品价格设为 100 元”的 <code>PATCH</code> 请求就是幂等的。</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：</p>
+<ul>
+<li>只修改用户的手机号，而无需上传用户的全部信息。</li>
+</ul>
+</li>
+<li><p><strong>示例</strong>：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">PATCH</span> <span class="string">/users/123</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>api.example.com</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json-patch+json</span><br><span class="line"></span><br><span class="line"><span class="language-css"><span class="selector-attr">[&#123;<span class="string">&quot;op&quot;</span>: <span class="string">&quot;replace&quot;</span>, <span class="string">&quot;path&quot;</span>: <span class="string">&quot;/email&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;new.email@example.com&quot;</span>&#125;]</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这个请求意图是只将 ID 为 123 的用户的 <code>email</code> 字段替换为新值。</p>
+</li>
+</ul>
+<hr>
+<h5 id="1-8-安全与幂等性-Safety-and-Idempotence"><a href="#1-8-安全与幂等性-Safety-and-Idempotence" class="headerlink" title="1.8. 安全与幂等性 (Safety and Idempotence)"></a><strong>1.8. 安全与幂等性 (Safety and Idempotence)</strong></h5><p>这两个概念是理解和正确使用 HTTP 方法的关键。</p>
+<ul>
+<li><strong>安全 (Safe)</strong><ul>
+<li><strong>定义</strong>：一个方法被称为“安全”的，是指执行它<strong>不会改变服务器上的资源状态</strong>。换句话说，它是“只读”的。</li>
+<li><strong>安全的方法</strong>：<code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>。</li>
+<li><strong>目的</strong>：客户端（包括搜索引擎爬虫）可以无顾虑地、自动地发起安全请求，因为它们知道这不会产生任何副作用。</li>
+</ul>
+</li>
+<li><strong>幂等 (Idempotent)</strong><ul>
+<li><strong>定义</strong>：一个方法被称为“幂等”的，是指<strong>对同一个资源执行一次或多次相同的请求，产生的最终效果是完全相同的</strong>。</li>
+<li><strong>幂等的方法</strong>：<code>GET</code>, <code>HEAD</code>, <code>PUT</code>, <code>DELETE</code>, <code>OPTIONS</code>。</li>
+<li><strong>不幂等的方法</strong>：<code>POST</code> (通常)，<code>PATCH</code> (可能)。</li>
+<li><strong>目的</strong>：幂等性在网络不稳定的情况下非常重要。如果一个请求超时，客户端不知道服务器是否已处理。如果方法是幂等的，客户端就可以<strong>安全地重试</strong>该请求，而不用担心会创建重复数据或产生意外的副作用。</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结表</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">核心作用</th>
+<th align="left">请求体</th>
+<th align="left">安全性</th>
+<th align="left">幂等性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>GET</strong></td>
+<td align="left">获取资源</td>
+<td align="left">无</td>
+<td align="left">安全</td>
+<td align="left"><strong>是</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>POST</strong></td>
+<td align="left">创建&#x2F;提交资源</td>
+<td align="left">有</td>
+<td align="left">不安全</td>
+<td align="left"><strong>否</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>PUT</strong></td>
+<td align="left">完整更新资源</td>
+<td align="left">有</td>
+<td align="left">不安全</td>
+<td align="left"><strong>是</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>DELETE</strong></td>
+<td align="left">删除资源</td>
+<td align="left">无</td>
+<td align="left">不安全</td>
+<td align="left"><strong>是</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>HEAD</strong></td>
+<td align="left">获取元信息</td>
+<td align="left">无</td>
+<td align="left">安全</td>
+<td align="left"><strong>是</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>PATCH</strong></td>
+<td align="left">部分更新资源</td>
+<td align="left">有</td>
+<td align="left">不安全</td>
+<td align="left"><strong>不一定</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>OPTIONS</strong></td>
+<td align="left">查询支持方法</td>
+<td align="left">无</td>
+<td align="left">安全</td>
+<td align="left"><strong>是</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="2-状态码-Status-Codes"><a href="#2-状态码-Status-Codes" class="headerlink" title="2. 状态码 (Status Codes)"></a>2. 状态码 (Status Codes)</h2><p>HTTP 状态码是包含在响应报文状态行中的一个三位数字代码。它的第一个数字定义了响应的类别，共有五大类。</p>
+<ul>
+<li><strong>1xx (信息性)</strong>: 表示请求已被接收，继续处理。</li>
+<li><strong>2xx (成功)</strong>: 表示请求已成功被服务器接收、理解、并接受。</li>
+<li><strong>3xx (重定向)</strong>: 表示需要客户端采取进一步的操作才能完成请求。</li>
+<li><strong>4xx (客户端错误)</strong>: 表示客户端的请求有错误，服务器无法处理。</li>
+<li><strong>5xx (服务器错误)</strong>: 表示服务器在处理一个看似有效的请求时发生了错误。</li>
+</ul>
+<hr>
+<h3 id="2-1-1xx-信息性-Informational"><a href="#2-1-1xx-信息性-Informational" class="headerlink" title="2.1 1xx (信息性) - Informational"></a>2.1 1xx (信息性) - Informational</h3><p>这类状态码表示服务器已收到请求的一部分，并告知客户端可以继续发送剩余部分，或者如果请求已经完成，就忽略这个响应。在日常开发中很少直接处理它们。</p>
+<ul>
+<li><strong><code>100 Continue</code></strong><ul>
+<li><strong>含义</strong>: 服务器已收到请求的头部，客户端应继续发送请求体。</li>
+<li><strong>使用场景</strong>: 当客户端需要发送一个很大的请求体（如上传大文件）时，它可以先发送一个带有 <code>Expect: 100-continue</code> 头部的请求。服务器如果愿意接收，就返回 <code>100 Continue</code>，客户端再开始传输数据。如果服务器不愿接收（如因权限不足），它可以直接返回一个 4xx 错误，从而避免了大量数据的无效传输。</li>
+<li><strong>类比</strong>: 你想给朋友一个大包裹，你先打电话问：“我准备好了一个大包裹要送给你，你方便收吗？” 朋友回答：“方便，你送过来吧！” (<code>100 Continue</code>)。</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h1 id="三、HTTP-请求方法与状态码"><a href="#三、HTTP-请求方法与状态码" class="headerlink" title="三、HTTP 请求方法与状态码"></a>三、HTTP 请求方法与状态码</h1><h2 id="1-请求方法-Methods"><a href="#1-请求方法-Methods" class="headerlink" title="1. 请求方法 (Methods)"></a>1. 请求方法 (Methods)</h2><ul>
-<li>1.1. <strong>GET</strong>: 获取资源</li>
-<li>1.2. <strong>POST</strong>: 创建&#x2F;提交资源</li>
-<li>1.3. <strong>PUT</strong>: 完整更新资源</li>
-<li>1.4. <strong>DELETE</strong>: 删除资源</li>
-<li>1.5. <strong>HEAD</strong>: 获取资源的元信息 (仅头部)</li>
-<li>1.6. <strong>OPTIONS</strong>: 查询服务器支持的方法</li>
-<li>1.7. <strong>PATCH</strong>: 部分更新资源</li>
-<li>1.8. <strong>安全与幂等性</strong>：理解这些方法的关键特性</li>
-</ul>
-<h2 id="2-状态码-Status-Codes"><a href="#2-状态码-Status-Codes" class="headerlink" title="2. 状态码 (Status Codes)"></a>2. 状态码 (Status Codes)</h2><ul>
-<li>2.1. <strong>1xx (信息性)</strong>：请求已接收，继续处理<ul>
-<li><code>100 Continue</code></li>
+<h3 id="2-2-2xx-成功-Success"><a href="#2-2-2xx-成功-Success" class="headerlink" title="2.2 2xx (成功) - Success"></a>2.2 2xx (成功) - Success</h3><p>这是我们最希望看到的响应，表示请求被成功处理。</p>
+<ul>
+<li><strong><code>200 OK</code></strong><ul>
+<li><strong>含义</strong>: 请求成功。这是最常见的成功状态码。</li>
+<li><strong>使用场景</strong>:<ul>
+<li>对于 <code>GET</code> 和 <code>HEAD</code> 请求，表示资源已成功获取，并在响应体中包含了该资源。</li>
+<li>对于 <code>POST</code> 请求，响应体中可能包含了操作的结果。</li>
 </ul>
 </li>
-<li>2.2. <strong>2xx (成功)</strong>：请求已成功被服务器接收、理解、并接受<ul>
-<li><code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code></li>
+<li><strong>类比</strong>: 你去餐厅点了一份“宫保鸡丁”，服务员成功地把“宫保鸡丁”端到了你的桌上。</li>
 </ul>
 </li>
-<li>2.3. <strong>3xx (重定向)</strong>：需要后续操作才能完成这一请求<ul>
-<li><code>301 Moved Permanently</code> (永久重定向)</li>
-<li><code>302 Found</code> (临时重定向)</li>
-<li><code>304 Not Modified</code> (与缓存相关)</li>
+<li><strong><code>201 Created</code></strong><ul>
+<li><strong>含义</strong>: 请求成功，并且服务器创建了一个新的资源。</li>
+<li><strong>使用场景</strong>: 通常是 <code>POST</code> 或 <code>PUT</code> 请求的结果。例如，通过 API <code>POST /users</code> 创建一个新用户后，服务器返回 <code>201 Created</code>。响应头中的 <code>Location</code> 字段通常会包含新资源的 URL，例如 <code>Location: /users/123</code>。</li>
+<li><strong>类比</strong>: 你在网上提交了自定义手机的订单，系统回复你：“订单已创建，您的订单号是 XXX”。</li>
 </ul>
 </li>
-<li>2.4. <strong>4xx (客户端错误)</strong>：请求含有词法错误或者无法被执行<ul>
-<li><code>400 Bad Request</code>, <code>401 Unauthorized</code>, <code>403 Forbidden</code>, <code>404 Not Found</code></li>
+<li><strong><code>204 No Content</code></strong><ul>
+<li><strong>含义</strong>: 服务器成功处理了请求，但没有返回任何内容。响应报文中不包含响应体。</li>
+<li><strong>使用场景</strong>:<ul>
+<li><code>DELETE</code> 请求成功删除资源后。资源已经没了，自然没有内容可返回。</li>
+<li>客户端通过 <code>PUT</code> 请求更新了资源，服务器只想确认操作已完成，而不想把整个资源再发回一遍。</li>
 </ul>
 </li>
-<li>2.5. <strong>5xx (服务器错误)</strong>：服务器在处理某个正确请求时发生内部错误<ul>
-<li><code>500 Internal Server Error</code>, <code>502 Bad Gateway</code>, <code>503 Service Unavailable</code></li>
+<li><strong>类比</strong>: 你让智能音箱“关灯”，它执行了操作，然后就安静了。任务完成，无需多言。</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h1 id="四、HTTP-核心机制与特性"><a href="#四、HTTP-核心机制与特性" class="headerlink" title="四、HTTP 核心机制与特性"></a>四、HTTP 核心机制与特性</h1><h2 id="1-连接管理"><a href="#1-连接管理" class="headerlink" title="1. 连接管理"></a>1. 连接管理</h2><ul>
-<li>1.1. 短连接 vs 长连接 (Persistent Connection &#x2F; Keep-Alive)</li>
-<li>1.2. <code>Connection</code> 头部的作用</li>
-<li>1.3. 队头阻塞问题 (Head-of-line blocking)</li>
-</ul>
-<h2 id="2-状态管理：Cookie-与-Session"><a href="#2-状态管理：Cookie-与-Session" class="headerlink" title="2. 状态管理：Cookie 与 Session"></a>2. 状态管理：Cookie 与 Session</h2><ul>
-<li>2.1. 为什么需要状态管理？(弥补 HTTP 无状态特性)</li>
-<li>2.2. <strong>Cookie</strong>：工作原理、<code>Set-Cookie</code> 与 <code>Cookie</code> 头部</li>
-<li>2.3. Cookie 的属性：<code>Expires</code>, <code>Max-Age</code>, <code>Domain</code>, <code>Path</code>, <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code></li>
-<li>2.4. <strong>Session</strong>：基于 Cookie 的服务端状态管理机制</li>
-</ul>
-<h2 id="3-缓存控制"><a href="#3-缓存控制" class="headerlink" title="3. 缓存控制"></a>3. 缓存控制</h2><ul>
-<li>3.1. 缓存的价值：提升性能、减少带宽</li>
-<li>3.2. <strong>强制缓存 (Strong Caching)</strong><ul>
-<li><code>Expires</code> (HTTP&#x2F;1.0)</li>
-<li><code>Cache-Control: max-age</code> (HTTP&#x2F;1.1)</li>
+<h3 id="2-3-3xx-重定向-Redirection"><a href="#2-3-3xx-重定向-Redirection" class="headerlink" title="2.3 3xx (重定向) - Redirection"></a>2.3 3xx (重定向) - Redirection</h3><p>这类状态码告诉客户端，为了完成请求，需要执行一些额外的操作，通常是跳转到另一个 URL。</p>
+<ul>
+<li><strong><code>301 Moved Permanently</code> (永久重定向)</strong><ul>
+<li><strong>含义</strong>: 请求的资源已被<strong>永久</strong>移动到 <code>Location</code> 头部指定的新 URL。</li>
+<li><strong>使用场景</strong>: 网站更换域名（<code>http://old.com</code> -&gt; <code>http://new.com</code>），或者 URL 结构重构。</li>
+<li><strong>客户端行为</strong>: 浏览器会自动跳转到新地址。搜索引擎会更新其索引，将权重从旧地址转移到新地址。</li>
+<li><strong>类比</strong>: 一家商店永久搬迁，在旧店门上贴了告示：“我们已搬至新街 1 号，请前往新址”。</li>
 </ul>
 </li>
-<li>3.3. <strong>协商缓存 (Conditional Caching)</strong><ul>
-<li><code>Last-Modified</code> &amp; <code>If-Modified-Since</code></li>
-<li><code>ETag</code> &amp; <code>If-None-Match</code></li>
+<li><strong><code>302 Found</code> (临时重定向)</strong><ul>
+<li><strong>含义</strong>: 请求的资源<strong>临时</strong>位于 <code>Location</code> 头部指定的新 URL。</li>
+<li><strong>使用场景</strong>:<ul>
+<li>未登录用户访问需要登录的页面，服务器将其重定向到登录页，登录成功后再跳回原页面。</li>
+<li>网站A&#x2F;B测试，临时将部分用户导向不同版本的页面。</li>
 </ul>
 </li>
-<li>3.4. 用户操作对缓存的影响 (F5 刷新 vs Ctrl+F5 强制刷新)</li>
-</ul>
-<h2 id="4-内容协商"><a href="#4-内容协商" class="headerlink" title="4. 内容协商"></a>4. 内容协商</h2><ul>
-<li>4.1. 客户端通过 <code>Accept-*</code> 系列头部声明期望格式<ul>
-<li><code>Accept</code>: MIME 类型</li>
-<li><code>Accept-Language</code>: 语言</li>
-<li><code>Accept-Encoding</code>: 压缩编码 (gzip, deflate, br)</li>
+<li><strong>客户端行为</strong>: 浏览器会自动跳转到新地址，但搜索引擎不会更新索引，仍然会抓取原始 URL。</li>
+<li><strong>类比</strong>: 你常走的路因为临时施工被封了，交警指示你走旁边的绕行路线。你知道明天这条路可能就恢复通行了。</li>
 </ul>
 </li>
-<li>4.2. 服务器如何根据请求头选择最佳表示</li>
+<li><strong><code>304 Not Modified</code> (未修改)</strong><ul>
+<li><strong>含义</strong>: 资源未被修改，客户端可以使用本地缓存的版本。</li>
+<li><strong>使用场景</strong>: 这是<strong>协商缓存</strong>的核心。客户端在请求时带上 <code>If-None-Match</code> 或 <code>If-Modified-Since</code> 头部，服务器发现资源没有变化，就返回 <code>304</code>。这个响应<strong>不包含响应体</strong>，极大地节省了带宽。</li>
+<li><strong>类比</strong>: 你问朋友：“昨天跟你聊完之后，有啥新情况吗？” 朋友回答：“没，一切照旧。” (<code>304</code>)，于是你就不需要再听一遍同样的故事了。</li>
+</ul>
+</li>
 </ul>
 <hr>
-<h1 id="五、HTTP-安全：从-HTTP-到-HTTPS-Security"><a href="#五、HTTP-安全：从-HTTP-到-HTTPS-Security" class="headerlink" title="五、HTTP 安全：从 HTTP 到 HTTPS (Security)"></a>五、HTTP 安全：从 HTTP 到 HTTPS (Security)</h1><h2 id="1-HTTP-的安全风险"><a href="#1-HTTP-的安全风险" class="headerlink" title="1. HTTP 的安全风险"></a>1. HTTP 的安全风险</h2><ul>
-<li>1.1. <strong>窃听风险</strong>：通信内容为明文</li>
-<li>1.2. <strong>篡改风险</strong>：内容可被中间人修改</li>
-<li>1.3. <strong>冒充风险</strong>：无法验证通信双方身份</li>
+<h3 id="2-4-4xx-客户端错误-Client-Error"><a href="#2-4-4xx-客户端错误-Client-Error" class="headerlink" title="2.4 4xx (客户端错误) - Client Error"></a>2.4 4xx (客户端错误) - Client Error</h3><p>这类状态码表示错误是由客户端引起的。</p>
+<ul>
+<li><strong><code>400 Bad Request</code></strong><ul>
+<li><strong>含义</strong>: 服务器无法理解客户端的请求。这是一个通用的客户端错误。</li>
+<li><strong>使用场景</strong>: 请求的语法有误（如头部格式错误），或请求的参数无效（如 API 要求一个数字，你却传了字符串）。</li>
+<li><strong>类比</strong>: 你用含糊不清的语言点菜，服务员完全听不懂，只能说：“抱歉，您能再说一遍吗？”</li>
 </ul>
-<h2 id="2-HTTPS-是什么？"><a href="#2-HTTPS-是什么？" class="headerlink" title="2. HTTPS 是什么？"></a>2. HTTPS 是什么？</h2><ul>
-<li>2.1. HTTPS &#x3D; HTTP + SSL&#x2F;TLS</li>
-<li>2.2. SSL&#x2F;TLS 的作用：加密、身份验证、数据完整性</li>
+</li>
+<li><strong><code>401 Unauthorized</code> (未授权)</strong><ul>
+<li><strong>含义</strong>: 请求需要身份验证。客户端没有提供凭证，或者提供的凭证无效。</li>
+<li><strong>使用场景</strong>: 访问需要登录才能查看的页面或 API。</li>
+<li><strong>关键点</strong>: 它表示“<strong>你谁啊？请先登录&#x2F;证明你的身份</strong>”。</li>
+<li><strong>类比</strong>: 你想进一个会员制俱乐部，但门口的保安拦住了你，说：“请出示您的会员卡。”</li>
 </ul>
-<h2 id="3-SSL-TLS-握手过程"><a href="#3-SSL-TLS-握手过程" class="headerlink" title="3. SSL&#x2F;TLS 握手过程"></a>3. SSL&#x2F;TLS 握手过程</h2><ul>
-<li>3.1. 客户端发起请求 (Client Hello)</li>
-<li>3.2. 服务器响应与证书下发 (Server Hello, Certificate)</li>
-<li>3.3. 客户端验证证书、生成密钥</li>
-<li>3.4. 建立安全通道，开始加密通信</li>
+</li>
+<li><strong><code>403 Forbidden</code> (禁止访问)</strong><ul>
+<li><strong>含义</strong>: 服务器理解你的请求，但拒绝执行。与 <code>401</code> 不同，即使提供了身份验证，也无权访问。</li>
+<li><strong>使用场景</strong>: 一个普通用户尝试访问管理员才能进入的后台管理页面。服务器知道你是谁 (<code>401</code> 已通过)，但你的“权限”不够。</li>
+<li><strong>关键点</strong>: 它表示“<strong>我知道你是谁，但你没资格来这里</strong>”。</li>
+<li><strong>类比</strong>: 你出示了会员卡（通过了 <code>401</code>），但想进入“仅限白金会员”的区域，保安拦住你说：“抱歉，您的会员等级不够，不能进入此区域。”</li>
 </ul>
-<h2 id="4-常见的-Web-安全威胁与-HTTP"><a href="#4-常见的-Web-安全威胁与-HTTP" class="headerlink" title="4. 常见的 Web 安全威胁与 HTTP"></a>4. 常见的 Web 安全威胁与 HTTP</h2><ul>
-<li>4.1. <strong>跨站脚本 (XSS)</strong>：与 <code>Content-Type</code> 和 <code>Content-Security-Policy</code> 头相关</li>
-<li>4.2. <strong>跨站请求伪造 (CSRF)</strong>：与 Cookie 和 <code>SameSite</code> 属性相关</li>
-<li>4.3. <strong>CORS (跨源资源共享)</strong>：浏览器同源策略与 <code>Access-Control-Allow-*</code> 系列头部</li>
+</li>
+<li><strong><code>404 Not Found</code> (未找到)</strong><ul>
+<li><strong>含义</strong>: 服务器上没有找到请求的资源。这是互联网上最著名的状态码之一。</li>
+<li><strong>使用场景</strong>: 访问一个不存在的 URL。</li>
+<li><strong>类比</strong>: 你去图书馆按书号找一本书，但图书管理员告诉你：“对不起，我们馆里没有这本书。”</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-5-5xx-服务器错误-Server-Error"><a href="#2-5-5xx-服务器错误-Server-Error" class="headerlink" title="2.5 5xx (服务器错误) - Server Error"></a>2.5 5xx (服务器错误) - Server Error</h3><p>这类状态码表示服务器在处理请求的过程中发生了内部错误。</p>
+<ul>
+<li><strong><code>500 Internal Server Error</code> (内部服务器错误)</strong><ul>
+<li><strong>含义</strong>: 服务器遇到了一个未曾预料的状况，导致其无法完成请求。这是一个非常笼统的错误。</li>
+<li><strong>使用场景</strong>: 应用程序代码出现 Bug（如空指针、数据库异常未捕获等）。这是开发人员最不希望用户看到，但也最常用来捕获未知异常的状态码。</li>
+<li><strong>类比</strong>: 餐厅后厨突然着火了，一片混乱，你的菜肯定做不出来了。</li>
+</ul>
+</li>
+<li><strong><code>502 Bad Gateway</code> (错误网关)</strong><ul>
+<li><strong>含义</strong>: 服务器作为网关或代理，从上游服务器收到了无效的响应。</li>
+<li><strong>使用场景</strong>: 你的请求先到达一个 Nginx 反向代理，Nginx 再把请求转发给后端的应用服务器（如 Tomcat）。如果此时 Tomcat 应用崩溃了或没响应，Nginx 就会向客户端返回 <code>502</code>。</li>
+<li><strong>关键点</strong>: 问题出在“上游”，而不是当前的网关服务器本身。</li>
+<li><strong>类比</strong>: 你打电话给公司总机（网关），总机帮你转接到销售部（上游服务器），但销售部的电话是忙音或无人接听。总机只好告诉你：“抱歉，无法接通销售部。”</li>
+</ul>
+</li>
+<li><strong><code>503 Service Unavailable</code> (服务不可用)</strong><ul>
+<li><strong>含义</strong>: 服务器当前无法处理请求，通常是暂时的。</li>
+<li><strong>使用场景</strong>:<ul>
+<li>服务器因过载而无法处理更多请求（如双十一抢购）。</li>
+<li>服务器正在停机维护。</li>
+</ul>
+</li>
+<li><strong>关键点</strong>: 这是一个<strong>临时</strong>状态，稍后可能会恢复。响应中可能会包含 <code>Retry-After</code> 头部，建议客户端在多久之后再试。</li>
+<li><strong>类比</strong>: 你常去的餐厅因为今天客人太多，门口挂上了“今日客满，请稍后再来”的牌子。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="四、HTTP-核心机制与特性"><a href="#四、HTTP-核心机制与特性" class="headerlink" title="四、HTTP 核心机制与特性"></a>四、HTTP 核心机制与特性</h1><h2 id="1-连接管理"><a href="#1-连接管理" class="headerlink" title="1. 连接管理"></a>1. 连接管理</h2><p>HTTP 协议本身是无状态的，但它需要依赖下层有状态的 TCP 协议来传输报文。如何管理和使用这些 TCP 连接，对 Web 的性能有着决定性的影响。</p>
+<h4 id="1-1-短连接-vs-长连接-Persistent-Connection-Keep-Alive"><a href="#1-1-短连接-vs-长连接-Persistent-Connection-Keep-Alive" class="headerlink" title="1.1 短连接 vs 长连接 (Persistent Connection &#x2F; Keep-Alive)"></a>1.1 短连接 vs 长连接 (Persistent Connection &#x2F; Keep-Alive)</h4><p>这是 HTTP 连接管理的两种基本模式，代表了从 HTTP&#x2F;1.0 到 HTTP&#x2F;1.1 的一个重要演进。</p>
+<h4 id="1-1-1-短连接-Short-lived-Connections-HTTP-1-0-默认模式"><a href="#1-1-1-短连接-Short-lived-Connections-HTTP-1-0-默认模式" class="headerlink" title="1.1.1 短连接 (Short-lived Connections) - HTTP&#x2F;1.0 默认模式"></a>1.1.1 短连接 (Short-lived Connections) - HTTP&#x2F;1.0 默认模式</h4><ul>
+<li><p><strong>工作方式</strong>: 每次 HTTP 通信，客户端都需要与服务器建立一个新的 TCP 连接。通信结束后（即收到响应报文后），该 TCP 连接立即被关闭。</p>
+</li>
+<li><p><strong>流程</strong>:</p>
+<ol>
+<li>建立 TCP 连接（三次握手）。</li>
+<li>客户端发送 HTTP 请求。</li>
+<li>服务器发送 HTTP 响应。</li>
+<li>关闭 TCP 连接（四次挥手）。</li>
+</ol>
+<ul>
+<li><em>如果页面上还有其他资源（如图片、CSS），则对每个资源重复以上 4 个步骤。</em></li>
+</ul>
+</li>
+<li><p><strong>类比</strong>: <strong>“一锤子买卖”的购物</strong>。<br>你想买一个苹果，于是你走进商店（建立 TCP），拿到苹果并付款（HTTP 交互），然后立即走出商店（关闭 TCP）。接着你发现还想买一根香蕉，你必须重新排队进店、拿货、付款、再出店。</p>
+</li>
+<li><p><strong>缺点</strong>:</p>
+<ul>
+<li><strong>性能极差</strong>: 每个资源都需要一次完整的 TCP 连接建立和关闭过程。TCP 的三次握手本身就需要至少 1 个 RTT（Round-Trip Time，往返时间），这在请求大量小文件时会累积成巨大的延迟。</li>
+<li><strong>资源消耗</strong>: 频繁地创建和销毁连接，对客户端和服务器都造成了不小的 CPU 和内存开销。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-1-2-长连接-Persistent-Connections-Keep-Alive-HTTP-1-1-默认模式"><a href="#1-1-2-长连接-Persistent-Connections-Keep-Alive-HTTP-1-1-默认模式" class="headerlink" title="1.1.2 长连接 (Persistent Connections &#x2F; Keep-Alive) - HTTP&#x2F;1.1 默认模式"></a>1.1.2 长连接 (Persistent Connections &#x2F; Keep-Alive) - HTTP&#x2F;1.1 默认模式</h4><ul>
+<li><strong>工作方式</strong>: 在一次 HTTP 通信结束后，TCP 连接不会立即关闭，而是保持打开状态（“keep-alive”）。后续对该服务器的 HTTP 请求可以<strong>复用</strong>这条已经建立的 TCP 连接。</li>
+<li><strong>流程</strong>:<ol>
+<li>建立 TCP 连接（三次握手）。</li>
+<li>客户端发送请求 #1 (e.g., <code>index.html</code>)。</li>
+<li>服务器发送响应 #1。</li>
+<li>客户端在<strong>同一条连接上</strong>发送请求 #2 (e.g., <code>style.css</code>)。</li>
+<li>服务器发送响应 #2。</li>
+<li>…（重复4和5）…</li>
+<li>当一方决定关闭（如浏览器关闭页面）或连接空闲超时后，关闭 TCP 连接。</li>
+</ol>
+</li>
+<li><strong>类比</strong>: <strong>“超市购物车”式购物</strong>。<br>你走进超市一次（建立 TCP），然后把苹果、香蕉、牛奶等所有想买的东西都放进购物车（在同一连接上发送多个 HTTP 请求），最后在收银台一次性结账出门（关闭 TCP）。</li>
+<li><strong>优点</strong>:<ul>
+<li><strong>显著提升性能</strong>: 避免了多次 TCP 握手和慢启动的开销，大大降低了延迟。</li>
+<li><strong>减少资源消耗</strong>: 减少了服务器和客户端因建立和关闭连接而产生的负担。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="1-2-Connection-头部的作用"><a href="#1-2-Connection-头部的作用" class="headerlink" title="1.2 Connection 头部的作用"></a>1.2 <code>Connection</code> 头部的作用</h3><p><code>Connection</code> 头部是控制连接模式的核心开关。它是一个“逐跳 (hop-by-hop)”头部，只对单次 TCP 连接有效，不会被代理服务器转发。</p>
+<ul>
+<li><p><strong>在 HTTP&#x2F;1.0 中</strong>:</p>
+<ul>
+<li><p>默认是短连接。</p>
+</li>
+<li><p>如果客户端希望使用长连接，需要在请求头中明确指出：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果服务器也同意，它会在响应头中同样返回 <code>Connection: keep-alive</code>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>在 HTTP&#x2F;1.1 中</strong>:</p>
+<ul>
+<li><p><strong>默认就是长连接</strong>。因此，理论上不再需要发送 <code>Connection: keep-alive</code>（但为了兼容旧的代理，很多浏览器仍然会发送它）。</p>
+</li>
+<li><p>如果任何一方希望在本次通信后<strong>关闭连接</strong>，则需要明确声明：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>close</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当客户端或服务器在报文中包含了 <code>Connection: close</code>，就意味着本次响应发送完毕后，TCP 连接将被关闭。这通常用于客户端确定不再有请求，或服务器处于高负载希望释放连接时。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>HTTP 版本</th>
+<th>默认模式</th>
+<th>如何开启长连接</th>
+<th>如何关闭连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>HTTP&#x2F;1.0</strong></td>
+<td>短连接</td>
+<td><code>Connection: keep-alive</code></td>
+<td>(默认行为)</td>
+</tr>
+<tr>
+<td><strong>HTTP&#x2F;1.1</strong></td>
+<td>长连接</td>
+<td>(默认行为)</td>
+<td><code>Connection: close</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="1-3-队头阻塞问题-Head-of-Line-Blocking-HOL-Blocking"><a href="#1-3-队头阻塞问题-Head-of-Line-Blocking-HOL-Blocking" class="headerlink" title="1.3 队头阻塞问题 (Head-of-Line Blocking, HOL Blocking)"></a>1.3 队头阻塞问题 (Head-of-Line Blocking, HOL Blocking)</h3><p>长连接虽然极大地提升了性能，但也引入了一个新的、非常棘手的问题——<strong>队头阻塞</strong>。这是 HTTP&#x2F;1.1 时代最主要的性能瓶颈。</p>
+<ul>
+<li><strong>定义</strong>:<br>在一条长连接中，HTTP 请求和响应是<strong>严格的“先进先出” (FIFO) 管道模型</strong>。客户端发送请求 1、2、3，服务器必须按照顺序返回响应 1、2、3。如果响应 1 因为某种原因（如处理时间长、文件大）被阻塞，那么即使响应 2 和响应 3 已经准备好了，它们也必须排队等待，直到响应 1 发送完毕。</li>
+<li><strong>类比</strong>: <strong>单车道收费站</strong>。<ul>
+<li>一条 TCP 连接就像一个单车道。</li>
+<li>多辆车（多个 HTTP 请求）依次进入车道。</li>
+<li>如果第一辆车（请求 1）在收费口出了问题（比如司机在找零钱，处理时间很长），后面所有的车（请求 2、3、4…）即使都准备好了现金，也只能堵在后面，无法通过。整个车道都被“队头”的这辆慢车给阻塞了。</li>
+</ul>
+</li>
+<li><strong>HTTP Pipelining (管道化)</strong>:<ul>
+<li>HTTP&#x2F;1.1 曾试图通过“管道化”技术来缓解这个问题。它允许客户端在收到前一个响应之前，就连续发送多个请求。</li>
+<li>但这<strong>并没有解决根本问题</strong>，因为服务器仍然被强制要求<strong>按顺序返回响应</strong>。队头阻塞从“请求发送”端转移到了“响应接收”端。</li>
+<li>由于实现复杂且容易出错，管道化技术在实践中并未被广泛启用。</li>
+</ul>
+</li>
+<li><strong>HTTP&#x2F;1.1 时代的“变通”方案</strong>:<br>为了绕开队头阻塞，浏览器采取了一个简单粗暴的方法：<strong>同时对同一个域名建立多条 TCP 连接</strong>（通常是 6-8 条）。这就像在收费站旁边多开了几个收费窗口，一定程度上缓解了拥堵。但这种方式也带来了额外的开销，并且连接数有限，无法从根本上解决问题。</li>
+</ul>
+<p><strong>队头阻塞的最终解决</strong>：</p>
+<p>这个问题的根本解决，要等到 <strong>HTTP&#x2F;2</strong> 的出现。HTTP&#x2F;2 引入了<strong>多路复用 (Multiplexing)</strong> 技术，允许在一条 TCP 连接上同时、并行地传输多个请求和响应，彻底解决了 HTTP&#x2F;1.1 的队头阻塞问题。这我们将在第六章详细讨论。</p>
+<hr>
+<h2 id="2-状态管理：Cookie-与-Session"><a href="#2-状态管理：Cookie-与-Session" class="headerlink" title="2. 状态管理：Cookie 与 Session"></a>2. 状态管理：Cookie 与 Session</h2><h3 id="2-1-为什么需要状态管理？-弥补-HTTP-无状态特性"><a href="#2-1-为什么需要状态管理？-弥补-HTTP-无状态特性" class="headerlink" title="2.1. 为什么需要状态管理？(弥补 HTTP 无状态特性)"></a>2.1. 为什么需要状态管理？(弥补 HTTP 无状态特性)</h3><p>我们在第一章讲过，HTTP 的一个核心特点是<strong>无状态 (Stateless)</strong>。这意味着服务器不会记录任何关于客户端请求的历史信息。每一次请求对于服务器来说都是一个全新的、独立的事件。</p>
+<ul>
+<li><strong>无状态的优点</strong>: 简化服务器设计，易于实现负载均衡和横向扩展。</li>
+<li><strong>无状态的挑战</strong>: 现实世界的 Web 应用几乎都需要“状态”。比如：<ul>
+<li><strong>用户登录</strong>: 用户登录后，在网站的不同页面间跳转，服务器必须知道该用户仍然处于登录状态。</li>
+<li><strong>购物车</strong>: 用户将商品加入购物车，切换到其他页面，再返回时，购物车中的商品必须还在。</li>
+<li><strong>个性化推荐</strong>: 网站需要记住用户的偏好，为其推荐相关内容。</li>
+</ul>
+</li>
+</ul>
+<p>为了在无状态的 HTTP 协议之上构建有状态的应用，<strong>Cookie 和 Session</strong> 机制应运而生。它们就像是服务器发给客户端的“通行证”或“会员卡”，让服务器能够在一次次独立的请求中识别出同一个用户。</p>
+<hr>
+<h3 id="2-2-Cookie：工作原理"><a href="#2-2-Cookie：工作原理" class="headerlink" title="2.2. Cookie：工作原理"></a>2.2. Cookie：工作原理</h3><p>Cookie 是一种由服务器发送到客户端（浏览器），并由客户端保存在本地的一小段文本数据。之后，客户端每次向该服务器发送请求时，都会自动带上这段数据。</p>
+<p><strong>工作流程 (四步)</strong>：</p>
+<ol>
+<li><p><strong>首次请求</strong>: 客户端（浏览器）向服务器发起请求。此时，请求中不包含任何 Cookie 信息。</p>
+</li>
+<li><p><strong>服务器响应与 <code>Set-Cookie</code></strong>: 服务器处理完请求后，在响应报文的头部中加入一个 <code>Set-Cookie</code> 字段。这个字段包含了要设置的 Cookie 信息（一个键值对和一些属性）。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html</span><br><span class="line"><span class="attribute">Set-Cookie</span><span class="punctuation">: </span>user_id=12345</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>客户端存储 Cookie</strong>: 浏览器收到这个响应后，会解析 <code>Set-Cookie</code> 头部，并将 <code>user_id=12345</code> 这条信息与该服务器的域名（例如 <code>example.com</code>）关联起来，存储在本地。</p>
+</li>
+<li><p><strong>后续请求与 <code>Cookie</code></strong>: 当用户再次访问 <code>example.com</code> 上的任何页面时，浏览器会自动在请求报文的头部中加入一个 <code>Cookie</code> 字段，将之前存储的信息发送给服务器。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/profile</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>example.com</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>user_id=12345</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>通过这个流程，服务器就能在后续的请求中通过读取 <code>Cookie</code> 头部的 <code>user_id</code>，识别出这是 ID 为 12345 的用户，从而为其提供个性化的服务（如显示“欢迎回来！”）。</p>
+<hr>
+<h3 id="2-3-Cookie-的属性"><a href="#2-3-Cookie-的属性" class="headerlink" title="2.3. Cookie 的属性"></a>2.3. Cookie 的属性</h3><p><code>Set-Cookie</code> 头部不仅可以设置键值对，还可以附加多个属性来控制 Cookie 的行为。这些属性至关重要，直接影响到 Cookie 的生命周期、作用域和安全性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; Expires=&lt;date&gt;; Max-Age=&lt;seconds&gt;; Domain=&lt;domain&gt;; Path=&lt;path&gt;; Secure; HttpOnly; SameSite=&lt;Strict|Lax|None&gt;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">示例值</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>Expires</code></strong></td>
+<td align="left"><code>Wed, 21 Oct 2025 07:28:00 GMT</code></td>
+<td align="left">设置 Cookie 的<strong>绝对过期时间</strong>。到期后，浏览器会自动删除该 Cookie。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>Max-Age</code></strong></td>
+<td align="left"><code>3600</code></td>
+<td align="left">设置 Cookie 的<strong>相对存活时间</strong>（单位：秒）。<code>Max-Age</code> 的优先级高于 <code>Expires</code>。如果设为 0 或负数，Cookie 会立即失效。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>Domain</code></strong></td>
+<td align="left"><code>.example.com</code></td>
+<td align="left">指定 Cookie 所属的域名。浏览器在向该域名及其子域名（如 <code>api.example.com</code>）发送请求时都会带上此 Cookie。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>Path</code></strong></td>
+<td align="left"><code>/</code></td>
+<td align="left">指定 Cookie 生效的路径。只有当请求的路径是该路径或其子路径时，才会发送此 Cookie。<code>Path=/</code> 表示对整个域名都有效。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>Secure</code></strong></td>
+<td align="left">(无值)</td>
+<td align="left"><strong>安全标志</strong>。如果设置了此属性，浏览器只会在 HTTPS 连接中发送该 Cookie，在不安全的 HTTP 连接中则不会发送。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>HttpOnly</code></strong></td>
+<td align="left">(无值)</td>
+<td align="left"><strong>HTTP-Only 标志</strong>。如果设置了此属性，该 Cookie <strong>不能被客户端的 JavaScript 脚本访问</strong>（通过 <code>document.cookie</code>）。这是防止 XSS 攻击窃取 Cookie 的一道重要防线。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>SameSite</code></strong></td>
+<td align="left"><code>Strict</code>, <code>Lax</code>, <code>None</code></td>
+<td align="left">控制 Cookie 在<strong>跨站请求</strong>中的发送策略。这是防止 CSRF 攻击的关键机制。</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>Strict</code></td>
+<td align="left">完全禁止第三方 Cookie，只有在当前网站内部跳转时才会发送 Cookie。</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>Lax</code> (现代浏览器默认值)</td>
+<td align="left">允许在一些安全的顶级导航（如点击链接跳转）中发送 Cookie，但在表单提交、图片加载等场景下会限制。</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>None</code></td>
+<td align="left">允许在任何跨站请求中发送 Cookie。<strong>使用 <code>SameSite=None</code> 时必须同时设置 <code>Secure</code> 属性</strong>。</td>
+</tr>
+</tbody></table>
+<p><strong>会话 Cookie (Session Cookie)</strong> vs <strong>持久性 Cookie (Persistent Cookie)</strong>:</p>
+<ul>
+<li>如果一个 Cookie <strong>没有</strong>设置 <code>Expires</code> 或 <code>Max-Age</code> 属性，它就是一个<strong>会话 Cookie</strong>。它存储在内存中，当浏览器关闭时就会被删除。</li>
+<li>如果设置了 <code>Expires</code> 或 <code>Max-Age</code>，它就是一个<strong>持久性 Cookie</strong>，会被存储在硬盘上，直到过期或被手动删除。</li>
+</ul>
+<hr>
+<h3 id="2-4-Session：基于-Cookie-的服务端状态管理机制"><a href="#2-4-Session：基于-Cookie-的服务端状态管理机制" class="headerlink" title="2.4. Session：基于 Cookie 的服务端状态管理机制"></a>2.4. Session：基于 Cookie 的服务端状态管理机制</h3><p>虽然 Cookie 可以实现状态管理，但它有几个明显的缺点：</p>
+<ul>
+<li><strong>安全性差</strong>: Cookie 的内容直接存储在客户端，敏感信息（如用户权限、密码等）直接存在 Cookie 中容易被窃取或篡改。</li>
+<li><strong>大小受限</strong>: 浏览器对单个 Cookie 的大小（通常 4KB）和每个域名下的 Cookie 数量都有限制。</li>
+<li><strong>网络开销</strong>: 每次请求都需要携带 Cookie，如果 Cookie 内容过多，会增加网络传输的负担。</li>
+</ul>
+<p>为了解决这些问题，<strong>Session</strong> 机制应运而生。</p>
+<ul>
+<li><strong>核心思想</strong>: <strong>将核心的、敏感的用户状态数据存储在服务器端，而只在客户端的 Cookie 中存储一个唯一的、无意义的标识符（Session ID）。</strong></li>
+</ul>
+<p><strong>工作流程</strong>:</p>
+<ol>
+<li><p><strong>用户首次访问&#x2F;登录</strong>:</p>
+<ul>
+<li>客户端向服务器发送请求。</li>
+<li>服务器验证用户信息（如用户名密码）通过后，在<strong>服务器端</strong>创建一个 Session 对象（可以是一个内存中的哈希表、Redis 缓存等），用来存储该用户的具体信息（如用户ID、姓名、权限等）。</li>
+<li>服务器为这个 Session 对象生成一个<strong>唯一的 Session ID</strong>（一个随机字符串）。</li>
+<li>服务器通过 <code>Set-Cookie</code> 响应头，将这个 <strong>Session ID</strong> 发送给客户端。</li>
+</ul>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Set-Cookie</span><span class="punctuation">: </span>session_id=aBcDeFg12345; HttpOnly</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>客户端存储 Session ID</strong>: 浏览器收到响应后，将 <code>session_id=aBcDeFg12345</code> 这条 Cookie 存储起来。注意，这个 Cookie 里只有无意义的 ID，没有任何敏感数据。</p>
+</li>
+<li><p><strong>后续请求</strong>:</p>
+<ul>
+<li>客户端再次向服务器发起请求时，会自动带上这条包含 Session ID 的 Cookie。</li>
+<li>服务器收到请求后，从 Cookie 中读取 Session ID (<code>aBcDeFg12345</code>)。</li>
+<li>服务器用这个 Session ID 在自己的 Session 存储中进行查找，找到对应的 Session 对象。</li>
+<li>从 Session 对象中读取用户的状态信息（如“已登录”、“管理员权限”），然后进行相应的处理。</li>
+</ul>
+</li>
+</ol>
+<p><strong>Cookie 与 Session 的关系与区别</strong></p>
+<ul>
+<li><strong>关系</strong>: Session 通常是<strong>依赖于 Cookie</strong> 来实现的。Cookie 是承载 Session ID 的载体。</li>
+<li><strong>区别</strong>:<ul>
+<li><strong>存储位置</strong>: Cookie 数据存在<strong>客户端</strong>；Session 数据存在<strong>服务器端</strong>。</li>
+<li><strong>安全性</strong>: Session 比 Cookie <strong>更安全</strong>，因为敏感数据不离开服务器。</li>
+<li><strong>数据大小</strong>: Cookie 有大小限制；Session 理论上可以存储任意大小的数据（取决于服务器资源）。</li>
+<li><strong>服务器压力</strong>: Session 会增加服务器的存储和计算压力。每个在线用户都需要一个 Session 对象。</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>: Cookie 和 Session 是协同工作的，它们共同解决了 HTTP 无状态的问题，使得构建复杂的、有状态的 Web 应用成为可能。在现代 Web 开发中，通常将 Session ID 存储在设置为 <code>HttpOnly</code> 的 Cookie 中，以兼顾功能和安全性。</p>
+<hr>
+<h2 id="3-缓存控制"><a href="#3-缓存控制" class="headerlink" title="3. 缓存控制"></a>3. 缓存控制</h2><h3 id="3-1-缓存的价值"><a href="#3-1-缓存的价值" class="headerlink" title="3.1 缓存的价值"></a>3.1 缓存的价值</h3><p>HTTP 缓存是一种将已经获取过的资源副本存储起来，以便在下次请求相同资源时可以直接使用，而无需再次向源服务器请求的技术。</p>
+<ul>
+<li><strong>缓存的位置</strong>: 缓存可以存在于请求链路的多个环节，最常见的是<strong>浏览器缓存</strong>，此外还有代理服务器缓存、CDN 边缘节点缓存等。</li>
+<li><strong>核心价值</strong>:<ol>
+<li><strong>提升性能，加快加载速度</strong>: 直接从本地磁盘或内存中读取资源，速度远快于通过网络请求。这使得页面加载更快，用户体验更好。</li>
+<li><strong>减少网络带宽消耗</strong>: 对于未改变的资源，无需重复下载，节省了用户的流量，也减轻了服务器的带宽压力。</li>
+<li><strong>降低服务器负载</strong>: 减少了服务器需要处理的请求数量，让服务器可以更专注于处理动态请求。</li>
+</ol>
+</li>
+</ul>
+<p>HTTP 缓存主要分为两大类：<strong>强制缓存</strong>和<strong>协商缓存</strong>。浏览器在请求资源时，会按照以下流程来判断：</p>
+<ol>
+<li>先检查本地是否有该资源的<strong>强制缓存</strong>，并且缓存是否有效（未过期）。<ul>
+<li>如果<strong>有效</strong>，则直接使用缓存，不向服务器发送任何请求。这个过程非常快，HTTP 状态码是 <code>200 OK (from memory cache / from disk cache)</code>。</li>
+</ul>
+</li>
+<li>如果强制缓存<strong>无效</strong>（不存在或已过期），则进入<strong>协商缓存</strong>阶段。<ul>
+<li>浏览器向服务器发送一个包含特定验证头部的请求。</li>
+<li>服务器根据这些头部判断资源是否有更新。<ul>
+<li>如果<strong>无更新</strong>，服务器返回 <code>304 Not Modified</code> 响应，不包含响应体。浏览器使用本地的旧缓存。</li>
+<li>如果有<strong>更新</strong>，服务器返回 <code>200 OK</code> 响应，并附带全新的资源内容。浏览器使用新资源并更新本地缓存。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="3-2-强制缓存"><a href="#3-2-强制缓存" class="headerlink" title="3.2 强制缓存"></a>3.2 强制缓存</h3><p>强制缓存也叫强缓存，是当缓存有效时，浏览器<strong>无需向服务器发送任何请求</strong>，直接使用本地副本。控制强制缓存的主要是两个响应头：<code>Expires</code> 和 <code>Cache-Control</code>。</p>
+<ul>
+<li><strong><code>Expires</code> (HTTP&#x2F;1.0)</strong><ul>
+<li><strong>作用</strong>: 指定一个<strong>绝对的过期时间</strong>。</li>
+<li><strong>格式</strong>: <code>Expires: Wed, 21 Oct 2025 07:28:00 GMT</code></li>
+<li><strong>工作方式</strong>: 浏览器会将这个过期时间与客户端的当前时间进行比较。如果当前时间还没到过期时间，就命中强制缓存。</li>
+<li><strong>缺点</strong>:<ul>
+<li><strong>依赖客户端时间</strong>: 如果用户本地的系统时间不准确，可能会导致缓存提前失效或永远不失效。</li>
+<li>格式复杂，可读性差。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>Cache-Control: max-age=&lt;seconds&gt;</code> (HTTP&#x2F;1.1)</strong><ul>
+<li><strong>作用</strong>: 指定一个<strong>相对的存活时间</strong>，单位是秒。</li>
+<li><strong>格式</strong>: <code>Cache-Control: max-age=3600</code> (表示资源在被获取后的 3600 秒内有效)。</li>
+<li><strong>工作方式</strong>: 浏览器记录下资源被获取的时间点，之后每次判断时，只需检查 <code>(当前时间 - 获取时间)</code> 是否超过了 <code>max-age</code>。</li>
+<li><strong>优点</strong>: 不依赖客户端时间，更加精确可靠。</li>
+<li><strong>优先级</strong>: <strong>如果 <code>Cache-Control: max-age</code> 和 <code>Expires</code> 同时存在，<code>Cache-Control</code> 的优先级更高。</strong></li>
+</ul>
+</li>
+<li><strong><code>Cache-Control</code> 的其他常用指令</strong>:<ul>
+<li><code>public</code>: 表明响应可以被任何缓存（包括浏览器、代理服务器）缓存。</li>
+<li><code>private</code>: 表明响应只能被单个用户的浏览器缓存，不能被共享缓存（如代理服务器）缓存。</li>
+<li><code>no-cache</code>: <strong>不是不缓存！</strong> 它的意思是，你可以缓存这个资源，但每次使用前<strong>必须</strong>去服务器进行<strong>协商缓存</strong>验证，不能直接使用强制缓存。</li>
+<li><code>no-store</code>: <strong>这才是真正的不缓存！</strong> 指示浏览器和代理服务器完全不要缓存这个响应的任何内容。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-3-协商缓存"><a href="#3-3-协商缓存" class="headerlink" title="3.3 协商缓存"></a>3.3 协商缓存</h3><p>当强制缓存失效后（或被设置为 <code>no-cache</code>），浏览器会向服务器发起一个“条件请求”，由服务器来判断资源是否真的发生了变化。这个过程就是协商缓存。它通过两组成对的请求&#x2F;响应头来实现。</p>
+<p><strong>第一组：<code>Last-Modified</code> &amp; <code>If-Modified-Since</code></strong></p>
+<ol>
+<li><p><strong>首次响应</strong>: 服务器在响应头中包含 <code>Last-Modified</code> 字段，表示资源在服务器上的最后修改时间。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Last-Modified</span><span class="punctuation">: </span>Tue, 15 Nov 2022 12:45:26 GMT</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>后续请求</strong>: 浏览器在下次请求该资源时，会在请求头中带上 <code>If-Modified-Since</code> 字段，其值就是上次服务器返回的 <code>Last-Modified</code> 的值。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">If-Modified-Since</span><span class="punctuation">: </span>Tue, 15 Nov 2022 12:45:26 GMT</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>服务器判断</strong>:</p>
+<ul>
+<li>服务器比较 <code>If-Modified-Since</code> 的时间和资源的当前最后修改时间。</li>
+<li>如果时间<strong>一致</strong>，说明资源未变，返回 <code>304 Not Modified</code>。</li>
+<li>如果时间<strong>不一致</strong>，说明资源已更新，返回 <code>200 OK</code>，并附带新的资源和新的 <code>Last-Modified</code> 时间。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>缺点</strong>:<ul>
+<li><strong>时间精度问题</strong>: <code>Last-Modified</code> 只能精确到秒。如果一个文件在 1 秒内被多次修改，服务器无法感知到变化。</li>
+<li><strong>内容未变但时间变了</strong>: 有时文件内容没变，但元数据（如被重新保存）变了，<code>Last-Modified</code> 也会更新，导致不必要的传输。</li>
+</ul>
+</li>
+</ul>
+<p><strong>第二组：<code>ETag</code> &amp; <code>If-None-Match</code> (更优的方案)</strong></p>
+<p>为了解决 <code>Last-Modified</code> 的问题，HTTP&#x2F;1.1 引入了 ETag。</p>
+<ol>
+<li><p><strong>首次响应</strong>: 服务器在响应头中包含 <code>ETag</code> 字段。ETag 是资源的一个唯一标识符，像一个“指纹”或“版本号”。它可以是文件内容的哈希值、版本 ID 等。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">ETag</span><span class="punctuation">: </span>&quot;33a64df551425fcc55e4d42a148795d9f25f89d4&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>后续请求</strong>: 浏览器在下次请求时，会在请求头中带上 <code>If-None-Match</code> 字段，其值就是上次服务器返回的 <code>ETag</code> 的值。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">If-None-Match</span><span class="punctuation">: </span>&quot;33a64df551425fcc55e4d42a148795d9f25f89d4&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>服务器判断</strong>:</p>
+<ul>
+<li>服务器比较 <code>If-None-Match</code> 的值和资源当前的 ETag 值。</li>
+<li>如果值<strong>一致</strong>，说明资源未变，返回 <code>304 Not Modified</code>。</li>
+<li>如果值<strong>不一致</strong>，说明资源已更新，返回 <code>200 OK</code>，并附带新的资源和新的 <code>ETag</code> 值。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>优点</strong>:<ul>
+<li><strong>精度高</strong>: 只要资源内容有任何变化，ETag 就会改变。</li>
+<li><strong>解决了 <code>Last-Modified</code> 的所有问题</strong>。</li>
+</ul>
+</li>
+<li><strong>优先级</strong>: <strong>如果 <code>ETag</code> 和 <code>Last-Modified</code> 同时存在，<code>ETag</code> 的优先级更高。</strong></li>
+</ul>
+<hr>
+<h3 id="3-4-用户操作对缓存的影响"><a href="#3-4-用户操作对缓存的影响" class="headerlink" title="3.4 用户操作对缓存的影响"></a>3.4 用户操作对缓存的影响</h3><p>用户的不同刷新操作会向浏览器发送不同的缓存策略指令，从而影响缓存的行为。</p>
+<ol>
+<li><strong>地址栏回车 &#x2F; 点击链接 &#x2F; 前进后退按钮</strong><ul>
+<li><strong>行为</strong>: 这是最常规的页面访问方式。</li>
+<li><strong>缓存策略</strong>: 浏览器会严格按照上述流程，<strong>先检查强制缓存，再检查协商缓存</strong>。这是缓存机制最有效的场景。</li>
+</ul>
+</li>
+<li><strong>F5 刷新 &#x2F; 点击刷新按钮</strong><ul>
+<li><strong>行为</strong>: 用户希望看到页面的最新状态。</li>
+<li><strong>缓存策略</strong>: 浏览器会<strong>跳过强制缓存</strong>，直接发起协商缓存。</li>
+<li>具体表现是，请求头中会加入 <code>Cache-Control: max-age=0</code> 或 <code>Cache-Control: no-cache</code>。这意味着浏览器会向服务器发送 <code>If-Modified-Since</code> 或 <code>If-None-Match</code> 来验证资源是否过期。如果资源未变，服务器返回 <code>304</code>。</li>
+</ul>
+</li>
+<li><strong>Ctrl + F5 强制刷新 (或 Cmd+Shift+R)</strong><ul>
+<li><strong>行为</strong>: 用户希望彻底地、无条件地从服务器获取最新的资源，忽略所有本地缓存。</li>
+<li><strong>缓存策略</strong>: 浏览器会<strong>同时跳过强制缓存和协商缓存</strong>。</li>
+<li>具体表现是，请求头中<strong>不会包含</strong> <code>If-Modified-Since</code> 和 <code>If-None-Match</code> 字段。服务器无法进行协商，只能无条件地返回 <code>200 OK</code> 和完整的资源内容。</li>
+</ul>
+</li>
+</ol>
+<p><strong>总结表</strong></p>
+<table>
+<thead>
+<tr>
+<th>用户操作</th>
+<th>强制缓存检查</th>
+<th>协商缓存检查</th>
+<th>典型请求头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>地址栏回车&#x2F;链接跳转</strong></td>
+<td><strong>是</strong></td>
+<td><strong>是</strong></td>
+<td>(无特殊头部)</td>
+</tr>
+<tr>
+<td><strong>F5 刷新</strong></td>
+<td><strong>否</strong></td>
+<td><strong>是</strong></td>
+<td><code>Cache-Control: max-age=0</code>, <code>If-None-Match</code>, …</td>
+</tr>
+<tr>
+<td><strong>Ctrl+F5 强制刷新</strong></td>
+<td><strong>否</strong></td>
+<td><strong>否</strong></td>
+<td>(无 <code>If-None-Match</code> 等协商缓存头部)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-内容协商"><a href="#4-内容协商" class="headerlink" title="4. 内容协商"></a>4. 内容协商</h2><p>内容协商是指客户端和服务器之间就如何为给定资源选择最佳表示形式（representation）而进行“协商”的过程。同一个资源可以有多种不同的表示，例如：</p>
+<ul>
+<li><strong>不同语言的版本</strong>: 同一篇文章可以有英文版、中文版。</li>
+<li><strong>不同内容格式的版本</strong>: 同一份数据可以提供 HTML 格式（用于浏览器展示）和 JSON 格式（用于 API 调用）。</li>
+<li><strong>不同压缩格式的版本</strong>: 同一个文件可以用 <code>gzip</code> 压缩，也可以用 <code>br</code> 压缩。</li>
+</ul>
+<p>内容协商机制使得服务器可以根据客户端声明的能力和偏好，从这些版本中选择最合适的一个返回。</p>
+<hr>
+<h3 id="4-1-客户端通过-Accept-系列头部声明期望格式"><a href="#4-1-客户端通过-Accept-系列头部声明期望格式" class="headerlink" title="4.1 客户端通过 Accept-\* 系列头部声明期望格式"></a>4.1 客户端通过 <code>Accept-\*</code> 系列头部声明期望格式</h3><p>协商的发起方是客户端。客户端通过在 HTTP 请求中加入一系列 <code>Accept-*</code> 头部，来告知服务器它能理解和偏好哪些类型的资源表示。</p>
+<p>这些头部通常使用<strong>质量值 (quality value)</strong>，即 <code>q</code> 因子，来表示偏好程度。<code>q</code> 的取值范围是 0 到 1（0 表示不接受，1 表示最偏好），权重越高，代表客户端越希望得到该格式。如果不指定 <code>q</code> 值，默认为 1.0。</p>
+<p><strong>常用 <code>Accept-\*</code> 头部详解</strong></p>
+<table>
+<thead>
+<tr>
+<th>头部 (Header)</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>Accept</code></strong></td>
+<td>声明客户端可以理解的 <strong>MIME 类型</strong>。</td>
+<td><code>text/html, application/json;q=0.9, */*;q=0.8</code></td>
+</tr>
+<tr>
+<td><strong><code>Accept-Language</code></strong></td>
+<td>声明客户端偏好的<strong>自然语言</strong>。</td>
+<td><code>fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5</code></td>
+</tr>
+<tr>
+<td><strong><code>Accept-Encoding</code></strong></td>
+<td>声明客户端支持的<strong>内容压缩编码</strong>算法。</td>
+<td><code>gzip, deflate, br</code></td>
+</tr>
+</tbody></table>
+<p><strong>1. <code>Accept</code>: MIME 类型协商</strong></p>
+<ul>
+<li><strong>作用</strong>: 告诉服务器客户端能够处理哪些媒体类型（也称 MIME 类型）。</li>
+<li><strong>示例分析</strong>: <code>Accept: text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8</code><ul>
+<li><code>text/html</code>, <code>application/xhtml+xml</code>, <code>image/webp</code>: 客户端最希望接收这些类型（<code>q</code> 默认为 1.0）。</li>
+<li><code>application/xml</code>: 也能接受，但偏好度稍低（<code>q=0.9</code>）。</li>
+<li><code>*/*</code>: <code>*</code> 是通配符，<code>*/*</code> 表示能接受任何类型，但这是最后的选择，偏好度最低（<code>q=0.8</code>）。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>:<ul>
+<li>浏览器访问网页时，会优先请求 <code>text/html</code>。</li>
+<li>一个 AJAX 请求可能优先请求 <code>application/json</code>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. <code>Accept-Language</code>: 语言协商</strong></p>
+<ul>
+<li><strong>作用</strong>: 告诉服务器客户端偏好的语言。</li>
+<li><strong>示例分析</strong>: <code>Accept-Language: zh-CN, zh;q=0.9, en-US;q=0.8, en;q=0.7</code><ul>
+<li><code>zh-CN</code>: 客户端最偏好中国大陆的简体中文。</li>
+<li><code>zh;q=0.9</code>: 其次是任何种类的中文。</li>
+<li><code>en-US;q=0.8</code>: 再次是美式英语。</li>
+<li><code>en;q=0.7</code>: 最后是任何种类的英语。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>: 国际化网站（如 Google, Apple）会根据这个头部，自动为用户展示对应语言的页面。</li>
+</ul>
+<p><strong>3. <code>Accept-Encoding</code>: 压缩编码协商</strong></p>
+<ul>
+<li><strong>作用</strong>: 告诉服务器客户端支持哪些解压缩算法，以便服务器可以对响应体进行压缩，减少传输大小。</li>
+<li><strong>示例分析</strong>: <code>Accept-Encoding: gzip, deflate, br</code><ul>
+<li>客户端告诉服务器，它能解压 <code>gzip</code>, <code>deflate</code>, <code>br</code> 这三种格式的数据。</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>: 现代浏览器都支持多种压缩算法。服务器会选择其中一种（通常是压缩率最高的 <code>br</code> 或最通用的 <code>gzip</code>）来压缩响应，并通过 <code>Content-Encoding</code> 响应头告知客户端。</li>
+</ul>
+<hr>
+<h3 id="4-2-服务器如何根据请求头选择最佳表示"><a href="#4-2-服务器如何根据请求头选择最佳表示" class="headerlink" title="4.2 服务器如何根据请求头选择最佳表示"></a>4.2 服务器如何根据请求头选择最佳表示</h3><p>服务器在收到带有 <code>Accept-*</code> 头部的请求后，会执行以下逻辑来决定返回哪种表示：</p>
+<ol>
+<li><strong>解析 <code>Accept-\*</code> 头部</strong>: 服务器首先读取并解析客户端发送的所有内容协商相关的头部，了解客户端的能力和偏好（包括 <code>q</code> 值）。</li>
+<li><strong>检查可用表示</strong>: 服务器检查对于请求的 URL，它自己拥有哪些可用的资源表示。<ul>
+<li>例如，对于 <code>/article/123</code> 这个资源，服务器可能有：<ul>
+<li><code>article.en.html</code> (英文 HTML)</li>
+<li><code>article.fr.html</code> (法文 HTML)</li>
+<li><code>article.en.json</code> (英文 JSON)</li>
+<li>并且服务器配置了 <code>gzip</code> 和 <code>br</code> 压缩能力。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>匹配与选择</strong>: 服务器将客户端的偏好列表与自己的可用列表进行匹配，寻找<strong>质量值最高的最佳匹配项</strong>。<ul>
+<li>服务器会遍历 <code>Accept-Language</code>, <code>Accept</code>, <code>Accept-Encoding</code> 等头部。</li>
+<li>它会计算每个可用表示的“总得分”，并选择得分最高的那个。</li>
+<li>例如，如果客户端请求 <code>Accept-Language: fr;q=1.0, en;q=0.8</code>，服务器会优先选择法文版本。</li>
+</ul>
+</li>
+<li><strong>准备响应</strong>: 一旦确定了最佳表示，服务器就：<ul>
+<li>准备相应的资源内容。</li>
+<li>使用协商好的压缩算法（如果有）对响应体进行压缩。</li>
+<li>在<strong>响应头部</strong>中设置相应的 <code>Content-*</code> 字段，明确告知客户端它最终发送的是什么版本：<ul>
+<li><strong><code>Content-Type</code></strong>: 告知最终的 MIME 类型。</li>
+<li><strong><code>Content-Language</code></strong>: 告知最终的语言。</li>
+<li><strong><code>Content-Encoding</code></strong>: 告知使用的压缩算法。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>处理无法匹配的情况</strong>: 如果服务器没有任何表示能够满足客户端的 <code>Accept-*</code> 要求（例如，客户端只接受 <code>image/gif</code>，但服务器只有 <code>image/jpeg</code>），服务器会返回一个 <code>406 Not Acceptable</code> 状态码，表示无法提供可接受的表示。但在实际应用中，很多服务器会忽略 <code>Accept</code> 头，直接返回一个默认的表示（如 <code>text/html</code>），以避免给用户展示错误页面。</li>
+</ol>
+<p><strong>一个完整的例子</strong></p>
+<ol>
+<li><p><strong>客户端请求</strong> (一个希望看法文页面，支持 Brotli 压缩的浏览器)</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/news</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>example.com</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>fr, en;q=0.9</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>服务器的可用资源与能力</strong></p>
+<ul>
+<li>语言: 有 <code>fr</code> 和 <code>en</code> 两个版本的 <code>/news</code> 页面。</li>
+<li>MIME 类型: 只有 <code>text/html</code>。</li>
+<li>压缩: 支持 <code>gzip</code> 和 <code>br</code>。</li>
+</ul>
+</li>
+<li><p><strong>服务器的决策过程</strong></p>
+<ul>
+<li><strong>语言</strong>: 客户端最偏好 <code>fr</code> (q&#x3D;1.0)，服务器正好有，选择 <code>fr</code>。</li>
+<li><strong>MIME 类型</strong>: 客户端最偏好 <code>text/html</code> (q&#x3D;1.0)，服务器有，选择 <code>text/html</code>。</li>
+<li><strong>编码</strong>: 客户端支持 <code>br</code>，服务器也支持，<code>br</code> 通常效率更高，选择 <code>br</code>。</li>
+</ul>
+</li>
+<li><p><strong>服务器最终的响应</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">200</span> OK</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>text/html; charset=utf-8</span><br><span class="line"><span class="attribute">Content-Language</span><span class="punctuation">: </span>fr</span><br><span class="line"><span class="attribute">Content-Encoding</span><span class="punctuation">: </span>br</span><br><span class="line"><span class="attribute">Vary</span><span class="punctuation">: </span>Accept-Encoding, Accept-Language</span><br><span class="line"></span><br><span class="line"><span class="language-jboss-cli"><span class="string">...</span> <span class="params">(经过 br 压缩的、法文版的 HTML 内容)</span> <span class="string">...</span></span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong><code>Vary</code> 头部</strong></p>
+<p>注意上面响应中的 <code>Vary</code> 头部。这是一个非常重要的响应头，它告诉缓存服务器（如代理、CDN），对于同一个 URL，服务器的响应内容会<strong>因</strong>（Vary on）请求头中的 <code>Accept-Encoding</code> 和 <code>Accept-Language</code> 字段的不同而不同。缓存服务器必须将 URL 和这些请求头组合起来作为缓存的 key，以避免将法文版的页面错误地返回给一个请求英文版的用户。</p>
+<hr>
+<h1 id="五、HTTP-安全：从-HTTP-到-HTTPS-Security"><a href="#五、HTTP-安全：从-HTTP-到-HTTPS-Security" class="headerlink" title="五、HTTP 安全：从 HTTP 到 HTTPS (Security)"></a>五、HTTP 安全：从 HTTP 到 HTTPS (Security)</h1><h2 id="1-HTTP-的安全风险"><a href="#1-HTTP-的安全风险" class="headerlink" title="1. HTTP 的安全风险"></a>1. HTTP 的安全风险</h2><p>HTTP 协议以<strong>明文 (Plaintext)</strong> 的方式在客户端和服务器之间传输数据。这意味着，任何能够截获这条通信链路的中间方（如同一 Wi-Fi下的黑客、网络运营商、路由器等），都可以轻易地读取、修改甚至冒充通信内容。这主要带来了以下三大风险：</p>
+<hr>
+<h5 id="1-1-窃听风险-Eavesdropping-：通信内容为明文"><a href="#1-1-窃听风险-Eavesdropping-：通信内容为明文" class="headerlink" title="1.1. 窃听风险 (Eavesdropping)：通信内容为明文"></a><strong>1.1. 窃听风险 (Eavesdropping)：通信内容为明文</strong></h5><ul>
+<li><strong>核心问题</strong>: HTTP 报文（包括请求头、请求体、响应头、响应体）在网络中传输时，完全没有经过任何加密。它们就像一张张写满了内容的“明信片”。</li>
+<li><strong>工作原理</strong>: 当你通过一个公共 Wi-Fi（如咖啡馆、机场）访问一个 <code>http://</code> 网站时，你的数据包会经过多个网络节点才到达目标服务器。攻击者只需在其中任何一个节点上使用抓包工具（如 Wireshark），就能完整地截获并阅读你的所有通信内容。</li>
+<li><strong>类比</strong>: <strong>寄明信片</strong>。<br>你写了一张明信片寄给朋友，上面的所有文字——从问候语到你的秘密——对于邮递员、分拣中心的工作人员，以及任何能接触到这张明信片的人来说，都是一览无余的。</li>
+<li><strong>具体危害</strong>:<ul>
+<li><strong>密码泄露</strong>: 在非加密的登录页面输入用户名和密码，攻击者可以直接看到你的账号密码。</li>
+<li><strong>个人信息泄露</strong>: 提交包含姓名、身份证号、手机号、银行卡号的表单，这些信息都会被暴露。</li>
+<li><strong>会话劫持</strong>: 许多网站使用 Cookie 来维持登录状态。如果 Cookie 被窃听，攻击者就可以利用这个 Cookie 冒充你，直接访问你的账户，无需知道密码。</li>
+<li><strong>隐私暴露</strong>: 攻击者可以知道你正在浏览哪些网页、搜索了什么关键词、看了哪些商品。</li>
+</ul>
+</li>
+</ul>
+<p><strong>图解窃听风险</strong>:</p>
+<pre><code class="highlight mermaid">sequenceDiagram
+    participant 客户端 as 你的电脑
+    participant 攻击者
+    participant 服务器 as 网站服务器
+
+    rect rgb(255, 224, 224)
+        Note over 客户端,服务器: 传输通道: 不安全的网络 (如公共Wi-Fi)
+        客户端-&gt;&gt;服务器: 发送明文数据 (账号: user, 密码: 123)
+    end
+
+    Note right of 攻击者: 监听并轻易截获&lt;br&gt;明文数据 user/123</code></pre>
+
+<hr>
+<h5 id="1-2-篡改风险-Tampering-：内容可被中间人修改"><a href="#1-2-篡改风险-Tampering-：内容可被中间人修改" class="headerlink" title="1.2. 篡改风险 (Tampering)：内容可被中间人修改"></a><strong>1.2. 篡改风险 (Tampering)：内容可被中间人修改</strong></h5><ul>
+<li><strong>核心问题</strong>: 由于 HTTP 没有验证机制来确保数据的完整性，中间人不仅能窃听，还能在数据传输过程中<strong>任意修改</strong>内容，而通信的双方毫不知情。</li>
+<li><strong>工作原理</strong>: 攻击者截获你的 HTTP 报文后，可以先不转发，而是修改其中的内容，然后再发送给真正的目的地。例如，修改服务器返回给你的网页内容，或者修改你发送给服务器的请求数据。</li>
+<li><strong>类比</strong>: <strong>被涂改的明信片</strong>。<br>邮递员不仅看了你的明信片，还在上面添油加醋，把“我很好”改成“我不好”，然后再投递给你朋友。你的朋友收到的就是被篡改过的信息，并且以为这真的是你写的。</li>
+<li><strong>具体危害</strong>:<ul>
+<li><strong>植入广告&#x2F;恶意软件</strong>: 这是最常见的篡改。攻击者可以在你正常浏览的网页中强行插入弹窗广告、色情内容，甚至下载恶意软件的 JavaScript 脚本，导致你的电脑中毒。</li>
+<li><strong>篡改下载文件</strong>: 你从一个官方网站下载软件，攻击者在传输途中将其替换为带病毒的版本。</li>
+<li><strong>钓鱼攻击</strong>: 将你访问银行网站的请求，不知不觉地重定向到一个假的银行网站，或者在真实的网页上把登录表单的目标地址改成攻击者的服务器。</li>
+<li><strong>修改交易信息</strong>: 修改你向服务器发送的转账请求，将收款人账号改成攻击者自己的账号。</li>
+</ul>
+</li>
+</ul>
+<p><strong>图解篡改风险</strong>:</p>
+<pre><code class="highlight mermaid">sequenceDiagram
+    participant 客户端 as 你的电脑
+    participant 攻击者
+    participant 服务器 as 网站服务器
+
+    Note over 客户端,服务器: 用户发起正常的网页请求
+    客户端-&gt;&gt;服务器: 请求网页 (GET /)
+
+    rect rgb(255, 224, 224)
+        Note over 攻击者: 攻击者位于通信链路中间
+        服务器--&gt;&gt;攻击者: 1. 发送真实的网页
+        Note over 攻击者: 截获并篡改内容&lt;br&gt;(插入广告/病毒脚本)
+        攻击者--&gt;&gt;客户端: 2. 发送伪造的网页
+    end
+
+    Note over 客户端: 用户收到并渲染了被篡改的页面，&lt;br&gt;可能导致信息泄露或电脑中毒。</code></pre>
+
+<hr>
+<h5 id="1-3-冒充风险-Impersonation-：无法验证通信双方身份"><a href="#1-3-冒充风险-Impersonation-：无法验证通信双方身份" class="headerlink" title="1.3. 冒充风险 (Impersonation)：无法验证通信双方身份"></a><strong>1.3. 冒充风险 (Impersonation)：无法验证通信双方身份</strong></h5><ul>
+<li><strong>核心问题</strong>: HTTP 协议中没有任何机制来验证通信对方的身份。客户端无法确认它正在对话的服务器就是它想访问的那个；同样，服务器也无法确认发起请求的客户端就是它所声称的那个。</li>
+<li><strong>工作原理</strong>: 攻击者可以搭建一个伪装的服务器，并冒充成一个合法的网站（如银行网站）。通过 DNS 劫持等手段，当你尝试访问真正的银行网站时，你的请求被导向了这个假冒的服务器。由于界面一模一样，你很难分辨真伪。</li>
+<li><strong>类比</strong>: <strong>电信诈骗</strong>。<br>你接到一个电话，对方声称是银行客服，要求你提供银行卡号和密码。你无法确认电话那头的人是否真的是银行客服，他很可能是一个冒充的骗子。</li>
+<li><strong>具体危害</strong>:<ul>
+<li><strong>钓鱼网站 (Phishing)</strong>: 这是冒充风险最直接、最危险的应用。用户在假冒的网站上输入敏感信息（如账号密码、支付信息），这些信息会直接被攻击者获取。这是前面两种风险的综合体现：攻击者<strong>冒充</strong>了服务器，然后对你输入的信息进行<strong>窃听</strong>。</li>
+<li><strong>恶意服务器</strong>: 客户端（如一个 App）可能会被引导连接到一个恶意服务器，该服务器可以下发错误的指令或窃取 App 发送的数据。</li>
+</ul>
+</li>
+</ul>
+<p><strong>图解冒充风险 (钓鱼攻击)</strong>:</p>
+<pre><code class="highlight mermaid">graph TD
+    subgraph &quot;用户视角&quot;
+        C[&quot;客户端&lt;br&gt;(你的电脑)&quot;]
+    end
+
+    subgraph &quot;攻击者的陷阱&quot;
+        style FakeBank fill:#ffcccc,stroke:#333,stroke-width:2px
+        FakeBank[&quot;假·银行服务器&lt;br&gt;fakebank.com&lt;br&gt;界面与真银行一模一样&quot;] --&gt; Attacker&#123;攻击者&lt;br&gt;获取账号密码&#125;
+    end
+
+    subgraph &quot;真实世界&quot;
+        style RealBank fill:#cceeff,stroke:#333,stroke-width:2px
+        RealBank[(&quot;真·银行服务器&lt;br&gt;realbank.com&quot;)]
+        Note(用户本想访问这里) --&gt; RealBank
+    end
+
+    C -- &quot;以为在访问真银行...&quot; --&gt; FakeBank
+    C -- &quot;DNS劫持/点击钓鱼链接&quot; --&gt; FakeBank</code></pre>
+
+<p><strong>总结</strong>:</p>
+<p>这三大风险——<strong>窃听、篡改、冒充</strong>——是环环相扣的。正是因为 HTTP 的明文、无校验、无身份认证的特性，才使得互联网早期充满了不安全感。为了解决这三大问题，<strong>HTTPS (HTTP Secure)</strong> 应运而生，它通过引入 SSL&#x2F;TLS 协议层，提供了<strong>加密、完整性校验和身份认证</strong>三大核心能力，从根本上保障了网络通信的安全。</p>
+<hr>
+<h2 id="2-HTTPS-是什么？"><a href="#2-HTTPS-是什么？" class="headerlink" title="2. HTTPS 是什么？"></a>2. HTTPS 是什么？</h2><p>在理解了 HTTP 的三大安全风险（窃听、篡改、冒充）之后，解决方案便呼之欲出——我们需要一个能够加密数据、防止篡改并能验证身份的协议。这个解决方案就是 <strong>HTTPS</strong>。</p>
+<hr>
+<h3 id="2-1-HTTPS-HTTP-SSL-TLS"><a href="#2-1-HTTPS-HTTP-SSL-TLS" class="headerlink" title="2.1 HTTPS &#x3D; HTTP + SSL&#x2F;TLS"></a>2.1 HTTPS &#x3D; HTTP + SSL&#x2F;TLS</h3><p>HTTPS 的全称是 <strong>Hypertext Transfer Protocol Secure</strong>，即“<strong>安全超文本传输协议</strong>”。</p>
+<p>从字面意思上看，它就是 HTTP 的“安全版”。但它并不是一个全新的应用层协议，而是在原有的 HTTP 协议基础上，增加了一层安全层。这个安全层就是 <strong>SSL&#x2F;TLS</strong> 协议。</p>
+<p>我们可以用一个简单的公式来理解它的结构：</p>
+<p><strong>HTTPS &#x3D; HTTP + SSL&#x2F;TLS</strong></p>
+<p>这个公式揭示了 HTTPS 的工作模式：</p>
+<ul>
+<li><strong>HTTP 协议本身没有改变</strong>: 请求行、请求头、请求体，以及响应行、响应头、响应体的格式和语义都和原来一样。</li>
+<li><strong>增加了一个“安全壳”</strong>: HTTP 报文在发送前，不再是直接交给 TCP 层，而是先经过 SSL&#x2F;TLS 协议层进行“加密”和“打包”。</li>
+<li><strong>通信过程</strong>:<ol>
+<li><strong>应用层 (HTTP)</strong>: 浏览器准备好一个标准的 HTTP 请求报文。</li>
+<li><strong>表示层&#x2F;安全层 (SSL&#x2F;TLS)</strong>: 这个 HTTP 报文被完整地交给 SSL&#x2F;TLS 协议处理。SSL&#x2F;TLS 会对整个报文进行加密，并附加一些用于验证完整性的信息（如 MAC 值）。</li>
+<li><strong>传输层 (TCP)</strong>: SSL&#x2F;TLS 将加密后的数据包交给 TCP 层进行分段和传输。</li>
+</ol>
+</li>
+</ul>
+<p><strong>网络协议栈中的位置</strong>：</p>
+<p>如果说 HTTP 直接运行在 TCP 之上，那么 HTTPS 就是运行在 SSL&#x2F;TLS 之上，而 SSL&#x2F;TLS 又运行在 TCP 之上。SSL&#x2F;TLS 就像一个插入到 HTTP 和 TCP 之间的“安全中间件”。</p>
+<p><strong>HTTP 的通信模型</strong>:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+---------------+</span><br><span class="line">|   HTTP        | (应用层)</span><br><span class="line">+---------------+</span><br><span class="line">|   TCP         | (传输层)</span><br><span class="line">+---------------+</span><br><span class="line">|   IP          | (网络层)</span><br><span class="line">+---------------+</span><br><span class="line">|   Data Link   | (数据链路层)</span><br><span class="line">+---------------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>HTTPS 的通信模型</strong>:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+---------------+</span><br><span class="line">|   HTTP        | (应用层)</span><br><span class="line">+---------------+</span><br><span class="line">|   SSL/TLS     | (安全层) &lt;-- 新增的安全层</span><br><span class="line">+---------------+</span><br><span class="line">|   TCP         | (传输层)</span><br><span class="line">+---------------+</span><br><span class="line">|   IP          | (网络层)</span><br><span class="line">+---------------+</span><br><span class="line">|   Data Link   | (数据链路层)</span><br><span class="line">+---------------+</span><br></pre></td></tr></table></figure>
+
+<p><strong>SSL (Secure Sockets Layer)</strong> 和 <strong>TLS (Transport Layer Security)</strong> 的关系:</p>
+<ul>
+<li>SSL 是由网景公司 (Netscape) 在 1990 年代发明的。</li>
+<li>TLS 是 SSL 的标准化和升级版本。</li>
+<li>SSL 3.0 之后，IETF 接管并发布了 TLS 1.0。目前，SSL 协议已因安全漏洞被弃用，我们现在所说的 SSL&#x2F;TLS 通常指的就是 TLS 协议 (目前主流版本是 TLS 1.2 和 1.3)。</li>
+</ul>
+<hr>
+<h3 id="2-2-SSL-TLS-的作用：加密、身份验证、数据完整性"><a href="#2-2-SSL-TLS-的作用：加密、身份验证、数据完整性" class="headerlink" title="2.2 SSL&#x2F;TLS 的作用：加密、身份验证、数据完整性"></a>2.2 SSL&#x2F;TLS 的作用：加密、身份验证、数据完整性</h3><p>SSL&#x2F;TLS 协议通过一套复杂的握手流程和加密算法，精准地解决了 HTTP 的三大安全风险。它提供了以下三个核心安全保证：</p>
+<h4 id="2-2-1-数据加密-Confidentiality-解决窃听风险"><a href="#2-2-1-数据加密-Confidentiality-解决窃听风险" class="headerlink" title="2.2.1 数据加密 (Confidentiality) - 解决窃听风险"></a>2.2.1 数据加密 (Confidentiality) - 解决窃听风险</h4><ul>
+<li><strong>作用</strong>: 将应用层（HTTP）传输的数据进行加密，使得中间人即使截获了数据，也无法读懂其内容。</li>
+<li><strong>实现方式</strong>: SSL&#x2F;TLS 采用<strong>混合加密 (Hybrid Encryption)</strong> 的方式。<ul>
+<li>在<strong>握手阶段</strong>，使用<strong>非对称加密</strong>（如 RSA, ECDHE）来安全地协商出一个<strong>对称密钥</strong>。这个过程慢但安全。</li>
+<li>在<strong>握手结束后的通信阶段</strong>，使用这个对称密钥和<strong>对称加密</strong>算法（如 AES, ChaCha20）来加密所有的 HTTP 报文。这个过程快而高效。</li>
+</ul>
+</li>
+<li><strong>类比</strong>: 你想和朋友说悄悄话（对称加密），但需要先商量一个只有你们俩知道的“暗号”（对称密钥）。为了防止别人偷听你们商量暗号的过程，你们使用了一个“密码箱”（非对称加密的公钥），你把暗号写在纸上放进密码箱锁好，只有拥有钥匙（私钥）的朋友才能打开。之后你们就可以用这个暗号愉快地交流了。</li>
+</ul>
+<hr>
+<h4 id="2-2-2-身份验证-Authentication-解决冒充风险"><a href="#2-2-2-身份验证-Authentication-解决冒充风险" class="headerlink" title="2.2.2 身份验证 (Authentication) - 解决冒充风险"></a>2.2.2 身份验证 (Authentication) - 解决冒充风险</h4><ul>
+<li><strong>作用</strong>: 验证通信对方的身份，确保你正在访问的确实是你想访问的服务器（如真正的银行网站），而不是一个假冒的钓鱼网站。</li>
+<li><strong>实现方式</strong>: 主要通过 <strong>数字证书 (Digital Certificate)</strong> 和 <strong>数字签名 (Digital Signature)</strong> 实现。<ul>
+<li>服务器会持有一个由权威的 <strong>证书颁发机构 (Certificate Authority, CA)</strong> 签发的数字证书。</li>
+<li>这个证书包含了服务器的公钥、域名信息，以及 CA 对这些信息真实性的<strong>数字签名</strong>。</li>
+<li>客户端（浏览器）内置了所有受信任的 CA 的根证书。当收到服务器证书时，浏览器会用对应的 CA 根证书来验证该证书的签名是否有效，以及证书中的域名是否与当前访问的域名匹配。如果验证通过，就证明服务器的身份是可信的。</li>
+</ul>
+</li>
+<li><strong>类比</strong>: <strong>身份证验证</strong>。<br>警察要查验你的身份，他不会只听你说“我叫张三”，他会要求你出示身份证。这张身份证（数字证书）是由公安局（CA）颁发的，上面有你的照片和信息（服务器公钥和域名），还有公安局的公章（CA 的数字签名）。警察（浏览器）通过检验公章的真伪，就能确认这张身份证的合法性，从而确认你的身份。</li>
+</ul>
+<hr>
+<h4 id="2-2-3-数据完整性校验-Integrity-解决篡改风险"><a href="#2-2-3-数据完整性校验-Integrity-解决篡改风险" class="headerlink" title="2.2.3 数据完整性校验 (Integrity) - 解决篡改风险"></a>2.2.3 数据完整性校验 (Integrity) - 解决篡改风险</h4><ul>
+<li><strong>作用</strong>: 确保数据在传输过程中没有被中间人篡改。</li>
+<li><strong>实现方式</strong>: 通过 <strong>消息认证码 (Message Authentication Code, MAC)</strong> 实现。<ul>
+<li>发送方在发送数据时，会使用协商好的对称密钥和哈希算法（如 SHA-256）对原始数据计算出一个 MAC 值，并将其附加在加密数据包的末尾。</li>
+<li>接收方收到数据后，先解密得到原始数据，然后用同样的方法独立计算出一个 MAC 值。</li>
+<li>最后，比较自己计算出的 MAC 值和接收到的 MAC 值是否完全一致。<ul>
+<li>如果一致，说明数据在传输过程中是完整的，未被篡改。</li>
+<li>如果不一致，说明数据已被篡改，接收方会立即丢弃该数据包并中止连接。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>类比</strong>: <strong>快递封条</strong>。<br>你寄送一个贵重物品，在包裹封口处贴上一个带有特殊标记的封条（MAC）。收件人收到包裹后，第一件事就是检查封条是否完好无损。如果封条完好，说明包裹在运输途中没有被打开过。如果封条破损或被替换，说明包裹可能被动过手脚。</li>
+</ul>
+<p><strong>总结</strong>: HTTPS 通过在 HTTP 和 TCP 之间增加 SSL&#x2F;TLS 安全层，利用<strong>加密</strong>技术对抗<strong>窃听</strong>，利用<strong>身份验证</strong>技术对抗<strong>冒充</strong>，利用<strong>完整性校验</strong>技术对抗<strong>篡改</strong>，从而为我们的网络通信构建起一道坚实的安全防线。</p>
+<hr>
+<h2 id="3-SSL-TLS-握手过程"><a href="#3-SSL-TLS-握手过程" class="headerlink" title="3. SSL&#x2F;TLS 握手过程"></a>3. SSL&#x2F;TLS 握手过程</h2><p>SSL&#x2F;TLS 握手过程可以看作是通信双方在正式“加密对话”前的一系列“暗号对接”和“身份确认”步骤。整个过程涉及多次往返通信，主要可以分为以下四个阶段。</p>
+<hr>
+<h3 id="3-1-阶段一：客户端发起请求-Client-Hello"><a href="#3-1-阶段一：客户端发起请求-Client-Hello" class="headerlink" title="3.1 阶段一：客户端发起请求 (Client Hello)"></a>3.1 阶段一：客户端发起请求 (Client Hello)</h3><p>这是握手的开始。当你在浏览器地址栏输入 <code>https://www.google.com</code> 并回车时，浏览器（客户端）会向服务器的 443 端口发起一个 TCP 连接，连接建立后，立即发送第一个 TLS 报文，即 <strong><code>Client Hello</code></strong>。</p>
+<p><code>Client Hello</code> 报文中包含了客户端希望与服务器沟通所需的所有信息，主要内容如下：</p>
+<ul>
+<li><strong>支持的 TLS 版本号</strong>: 客户端告诉服务器它最高支持哪个版本的 TLS 协议（如 TLS 1.2, TLS 1.3）。</li>
+<li><strong>一个客户端生成的随机数 (Client Random)</strong>: 这是一个 32 字节的随机数，稍后将用于生成最终的会话密钥。</li>
+<li><strong>支持的密码套件 (Cipher Suites) 列表</strong>: 这是<strong>最关键</strong>的信息之一。密码套件定义了一整套加密方案，包括：<ul>
+<li>密钥交换算法 (如 <code>RSA</code>, <code>ECDHE</code>)</li>
+<li>对称加密算法 (如 <code>AES_128_GCM</code>, <code>CHACHA20_POLY1305</code>)</li>
+<li>哈希算法 (如 <code>SHA256</code>)<br>客户端会把自己支持的所有套件按偏好顺序列出来，让服务器从中选择一个。</li>
+</ul>
+</li>
+<li><strong>支持的压缩算法列表</strong>: 客户端告诉服务器它支持哪些压缩方法（现在通常不使用）。</li>
+</ul>
+<p><strong>类比</strong>: 你来到一个国际会议的接待处，对接待员说：</p>
+<blockquote>
+<p>“你好！我会说英语和法语（TLS 版本），我的名字是‘小明’（Client Random），我习惯用方案A、B、C来交流（密码套件列表）。”</p>
+</blockquote>
+<hr>
+<h3 id="3-2-阶段二：服务器响应与证书下发"><a href="#3-2-阶段二：服务器响应与证书下发" class="headerlink" title="3.2 阶段二：服务器响应与证书下发"></a>3.2 阶段二：服务器响应与证书下发</h3><p>服务器收到 <code>Client Hello</code> 后，会从中选择一套双方都支持的加密方案，并准备好自己的身份证明，然后向客户端发回一系列报文。</p>
+<p>这一阶段通常包含三个报文：</p>
+<ol>
+<li><strong><code>Server Hello</code></strong>:<ul>
+<li><strong>确认的 TLS 版本号</strong>: 服务器从客户端支持的版本中选择一个自己也支持的最高版本。</li>
+<li><strong>一个服务器生成的随机数 (Server Random)</strong>: 同样是一个 32 字节的随机数，也用于生成会话密钥。</li>
+<li><strong>确认的密码套件</strong>: 服务器从客户端的列表中选择一个自己也支持且安全性较高的密码套件。</li>
+</ul>
+</li>
+<li><strong><code>Certificate</code></strong>:<ul>
+<li><strong>服务器的数字证书</strong>: 这是<strong>服务器身份的证明</strong>。服务器会将其证书（或证书链）发送给客户端。这个证书中包含了<strong>服务器的公钥</strong>、域名信息以及 CA 的签名。</li>
+</ul>
+</li>
+<li><strong><code>Server Hello Done</code></strong>:<ul>
+<li>一个简单的通知报文，告诉客户端：“好了，我这边该说的都说完了，该你了。”</li>
+</ul>
+</li>
+</ol>
+<p><strong>类比</strong>: 接待员听完你的话，回答说：</p>
+<blockquote>
+<p>“好的，小明。那我们就用英语（确认 TLS 版本）交流吧，我的名字是‘小红’（Server Random），我们用方案B（确认密码套件）沟通。这是我的工作证（Certificate），上面有我的照片（公钥）和机构盖的章（CA 签名），你可以验证一下。我说完了（Server Hello Done）。”</p>
+</blockquote>
+<hr>
+<h3 id="3-3-阶段三：客户端验证证书、生成密钥"><a href="#3-3-阶段三：客户端验证证书、生成密钥" class="headerlink" title="3.3 阶段三：客户端验证证书、生成密钥"></a>3.3 阶段三：客户端验证证书、生成密钥</h3><p>客户端收到服务器的响应后，会执行一系列关键操作：</p>
+<ol>
+<li><strong>验证证书 (Authentication)</strong>:<ul>
+<li>客户端会检查证书的<strong>有效期</strong>是否过期。</li>
+<li>检查证书中的<strong>域名</strong>是否与当前正在访问的域名一致。</li>
+<li>最重要的是，使用操作系统或浏览器内置的<strong>受信任的 CA 根证书</strong>，来验证服务器证书的数字签名是否真实有效。如果证书链中的任何一环验证失败，浏览器就会弹出“不安全”的警告。</li>
+<li>如果证书验证通过，客户端就确认了服务器的身份是可信的，并从证书中<strong>取出了服务器的公钥</strong>。</li>
+</ul>
+</li>
+<li><strong>生成预主密钥 (Pre-Master Secret)</strong>:<ul>
+<li>客户端再生成一个<strong>第三个随机数</strong>，称为“<strong>预主密钥 (Pre-Master Secret)</strong>”。这个随机数是后续对称密钥的“种子”。</li>
+</ul>
+</li>
+<li><strong>用服务器公钥加密预主密钥</strong>:<ul>
+<li>为了安全地把这个预主密钥告诉服务器，客户端会使用刚刚从证书中获取的<strong>服务器公钥</strong>，对这个预主密钥进行<strong>非对称加密</strong>。</li>
+<li>加密后的结果，只有持有<strong>服务器私钥</strong>的服务器才能解开。这就保证了即使被中间人截获，也无法得到预主密钥。</li>
+</ul>
+</li>
+<li><strong>发送 <code>Client Key Exchange</code></strong>:<ul>
+<li>客户端将这个<strong>加密后的预主密钥</strong>放在 <code>Client Key Exchange</code> 报文中发送给服务器。</li>
+</ul>
+</li>
+<li><strong>生成会话密钥与发送 <code>Change Cipher Spec</code> 和 <code>Finished</code></strong>:<ul>
+<li>此时，客户端同时拥有了三个关键的随机数：<strong>Client Random</strong>, <strong>Server Random</strong>, <strong>Pre-Master Secret</strong>。</li>
+<li>客户端使用这三个随机数，通过一个<strong>伪随机函数 (PRF)</strong>，“计算”出本次会话所使用的<strong>对称密钥（也称会话密钥，Session Key）</strong>。</li>
+<li>然后，客户端发送一个 <strong><code>Change Cipher Spec</code></strong> 报文，通知服务器：“我准备好了，从现在开始，我们都用刚算出来的对称密钥来加密通信了！”</li>
+<li>紧接着，客户端会发送一个 <strong><code>Finished</code></strong> 报文。这个报文是<strong>第一个使用新生成的对称密钥加密</strong>的报文，它包含了之前所有握手消息的哈希值。服务器可以用它来验证握手过程是否被篡改。</li>
+</ul>
+</li>
+</ol>
+<p><strong>类比</strong>: 你检查了接待员小红的工作证，确认是真的。然后：</p>
+<blockquote>
+<ul>
+<li>你在纸上写了一个暗号“芝麻开门”（Pre-Master Secret）。</li>
+<li>你把这张纸放进一个只有小红能打开的密码箱（用服务器公钥加密）。</li>
+<li>你把密码箱递给小红（<code>Client Key Exchange</code>）。</li>
+<li>你自己也根据“小明”、“小红”和“芝麻开门”这三个信息，算出了今天的最终通讯密码（生成会话密钥）。</li>
+<li>你对小红说：“我们开始用新密码交流吧！”（<code>Change Cipher Spec</code>）。</li>
+<li>你用新密码加密了一句话：“我们刚才的对话没问题吧？”并发给小红（<code>Finished</code>）。</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="3-4-阶段四：服务器确认，建立安全通道"><a href="#3-4-阶段四：服务器确认，建立安全通道" class="headerlink" title="3.4 阶段四：服务器确认，建立安全通道"></a>3.4 阶段四：服务器确认，建立安全通道</h3><p>服务器收到客户端发来的一系列报文后，进行最后的工作：</p>
+<ol>
+<li><strong>解密预主密钥</strong>:<ul>
+<li>服务器收到 <code>Client Key Exchange</code> 报文后，使用自己的<strong>私钥</strong>解密，得到客户端发送的<strong>预主密钥 (Pre-Master Secret)</strong>。</li>
+</ul>
+</li>
+<li><strong>生成会话密钥</strong>:<ul>
+<li>此时，服务器也拥有了 <strong>Client Random</strong>, <strong>Server Random</strong>, <strong>Pre-Master Secret</strong> 这三个相同的随机数。</li>
+<li>服务器使用<strong>完全相同</strong>的伪随机函数，计算出与客户端一模一样的<strong>会话密钥</strong>。</li>
+</ul>
+</li>
+<li><strong>验证与回应</strong>:<ul>
+<li>服务器收到客户端的 <code>Change Cipher Spec</code> 后，也切换到使用新的会话密钥进行加密和解密。</li>
+<li>服务器使用新的会话密钥解密客户端发来的 <code>Finished</code> 报文，并验证其中的哈希值是否正确。如果正确，说明握手过程未被篡改。</li>
+<li>验证通过后，服务器也发送一个 <strong><code>Change Cipher Spec</code></strong> 和一个用新密钥加密的 <strong><code>Finished</code></strong> 报文给客户端，作为最终的确认。</li>
+</ul>
+</li>
+</ol>
+<p><strong>握手结束，加密通信开始</strong>:</p>
+<p>客户端收到服务器的 <code>Finished</code> 报文并成功解密验证后，TLS 握手过程正式完成。此时，双方都已经拥有了相同的、安全的会话密钥。后续的所有 HTTP 请求和响应，都会使用这个会话密钥进行对称加密，从而建立起一条<strong>安全的数据通道</strong>。</p>
+<p><strong>图解总结 (TLS 1.2 RSA 握手)</strong>:</p>
+<pre><code class="highlight mermaid">sequenceDiagram
+    participant Client as 客户端
+    participant Server as 服务器
+
+    %% 1. Client Hello
+    Client-&gt;&gt;Server: Client Hello
+    note right of Client: TLS版本, ClientRandom, 密码套件
+
+    %% 2. Server Hello &amp; Certificate
+    Server-&gt;&gt;Client: Server Hello, Certificate, Server Hello Done
+    note left of Server: 确认版本, ServerRandom, 确认套件, 服务器证书+公钥
+
+    %% 3. 客户端处理并发送密钥
+    activate Client
+    note over Client: 1. 验证证书，取出公钥&lt;br/&gt;2. 生成 Pre-Master Secret&lt;br/&gt;3. 用公钥加密 Pre-Master Secret&lt;br/&gt;4. 根据三个随机数生成会话密钥
+    
+    Client-&gt;&gt;Server: Client Key Exchange (加密后的 Pre-Master Secret)
+    Client-&gt;&gt;Server: Change Cipher Spec
+    Client-&gt;&gt;Server: Finished (Encrypted)
+    deactivate Client
+
+    %% 4. 服务器处理并确认
+    activate Server
+    note over Server: 1. 用私钥解密，得到 Pre-Master Secret&lt;br/&gt;2. 根据三个随机数生成会话密钥&lt;br/&gt;3. 解密并验证 Finished
+
+    Server-&gt;&gt;Client: Change Cipher Spec
+    Server-&gt;&gt;Client: Finished (Encrypted)
+    deactivate Server
+
+    %% 5. 握手结束
+    Note over Client,Server: 握手结束
+
+    %% 6. 加密通信
+    Client-&gt;&gt;Server: Encrypted Application Data (HTTP)
+    Server-&gt;&gt;Client: Encrypted Application Data (HTTP)</code></pre>
+
+
+
+<p><strong>关于 TLS 1.3 的简化</strong>:</p>
+<p>TLS 1.3 对握手过程进行了大幅简化和优化，将握手时间从 2-RTT（两次往返）减少到了 1-RTT，甚至在某些情况下可以实现 0-RTT，极大地提升了 HTTPS 的性能。但其核心思想——安全地协商密钥和验证身份——依然不变。</p>
+<hr>
+<h2 id="4-常见的-Web-安全威胁"><a href="#4-常见的-Web-安全威胁" class="headerlink" title="4. 常见的 Web 安全威胁"></a>4. 常见的 Web 安全威胁</h2><p>即使使用了 HTTPS 确保了传输层的安全，应用层的漏洞依然可能导致严重的安全问题。以下是三种最常见且与 HTTP 机制紧密相关的 Web 安全威胁。</p>
+<hr>
+<h3 id="4-1-跨站脚本-XSS-Cross-Site-Scripting"><a href="#4-1-跨站脚本-XSS-Cross-Site-Scripting" class="headerlink" title="4.1 跨站脚本 (XSS - Cross-Site Scripting)"></a>4.1 跨站脚本 (XSS - Cross-Site Scripting)</h3><ul>
+<li><strong>攻击原理</strong>:<br>XSS 攻击的核心是<strong>将恶意的 JavaScript 脚本注入到受信任的网页中</strong>，当其他用户访问这个网页时，这些恶意脚本就会在他们的浏览器中执行。攻击者利用的是网站对用户输入内容的<strong>盲目信任和未充分过滤</strong>。</li>
+<li><strong>类比</strong>: <strong>在公共留言板上贴小广告</strong>。<br>一个网站有一个留言板，正常用户会在上面写下“今天天气真好”。攻击者却在留言内容中偷偷夹带了一段恶意脚本，比如 <code>&lt;script&gt;alert(&#39;你被攻击了！&#39;)&lt;/script&gt;</code>。当网站展示这条留言时，没有对 <code>&lt;script&gt;</code> 标签进行处理，直接将其作为 HTML 的一部分输出。其他用户浏览器在渲染页面时，就会执行这段脚本。</li>
+<li><strong>攻击类型</strong>:<ol>
+<li><strong>存储型 XSS</strong>: 恶意脚本被<strong>永久存储</strong>在服务器的数据库中（如文章、评论、用户资料）。每当有用户请求包含该内容的页面时，攻击就会发生。危害最大。</li>
+<li><strong>反射型 XSS</strong>: 恶意脚本包含在 URL 的参数中。攻击者通常会诱骗用户点击一个构造好的恶意链接，例如 <code>http://example.com/search?q=&lt;script&gt;...&lt;/script&gt;</code>。服务器将 URL 中的参数直接反射到响应页面中，导致脚本执行。这种攻击是一次性的。</li>
+<li><strong>DOM 型 XSS</strong>: 攻击不经过服务器，完全在客户端发生。恶意脚本通过修改页面的 DOM（文档对象模型）结构来触发，例如通过 URL 的片段标识符（<code>#</code>）注入。</li>
+</ol>
+</li>
+<li><strong>危害</strong>:<ul>
+<li><strong>窃取 Cookie</strong>: <code>document.cookie</code> 可以获取用户的 Cookie，攻击者可以利用它劫持用户会话，冒充用户身份。</li>
+<li><strong>键盘记录</strong>: 监听用户的键盘输入，窃取密码、银行卡等敏感信息。</li>
+<li><strong>页面篡改</strong>: 修改网页内容，植入广告、钓鱼表单。</li>
+<li><strong>发起恶意请求</strong>: 利用用户的身份向网站发送恶意请求（如删除文章、转账）。</li>
+</ul>
+</li>
+<li><strong>HTTP 相关的防御手段</strong>:<ol>
+<li><strong><code>Content-Type</code> 响应头</strong>:<ul>
+<li>正确设置 <code>Content-Type</code>（如 <code>application/json</code>, <code>text/plain</code>）并配合 <code>X-Content-Type-Options: nosniff</code> 头部，可以防止浏览器错误地将本应是数据的响应解析为 HTML，从而执行其中的脚本。</li>
+</ul>
+</li>
+<li><strong><code>Content-Security-Policy</code> (CSP) 响应头</strong>:<ul>
+<li>这是<strong>防御 XSS 最强大、最现代的手段</strong>。CSP 允许网站管理员定义一个“白名单”，明确告知浏览器哪些来源的脚本、样式、图片等资源是可信的，可以被加载和执行。</li>
+<li><strong>示例</strong>: <code>Content-Security-Policy: script-src &#39;self&#39; https://apis.google.com</code></li>
+<li>这条策略告诉浏览器：只允许执行来自<strong>同源</strong>（<code>&#39;self&#39;</code>）和 <code>httpsis.google.com</code> 的脚本。任何来自其他地方的脚本（包括内联脚本和 <code>eval</code>）都会被直接阻止。</li>
+<li>CSP 能够有效地从根本上杜绝大部分 XSS 攻击。</li>
+</ul>
+</li>
+<li><strong><code>HttpOnly</code> Cookie 属性</strong>:<ul>
+<li>在 <code>Set-Cookie</code> 时加上 <code>HttpOnly</code> 标志，可以防止客户端 JavaScript 访问该 Cookie。这使得即使 XSS 攻击成功，攻击者也无法通过 <code>document.cookie</code> 窃取用于会话管理的敏感 Cookie。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="4-2-跨站请求伪造-CSRF-Cross-Site-Request-Forgery"><a href="#4-2-跨站请求伪造-CSRF-Cross-Site-Request-Forgery" class="headerlink" title="4.2 跨站请求伪造 (CSRF - Cross-Site Request Forgery)"></a>4.2 跨站请求伪造 (CSRF - Cross-Site Request Forgery)</h3><ul>
+<li><strong>攻击原理</strong>:<br>CSRF 攻击的核心是<strong>利用用户已登录的身份，在用户毫不知情的情况下，以用户的名义发送恶意的 HTTP 请求</strong>。攻击者并不窃取信息，而是<strong>伪造请求</strong>去执行某些操作（如转账、修改密码、发帖）。</li>
+<li><strong>类比</strong>: <strong>冒用你的名义写信</strong>。<br>你（用户）已经登录了你的银行网站 (<code>bank.com</code>)，你的浏览器保存了 <code>bank.com</code> 的登录 Cookie。这时，你收到了一个邮件，里面有一个诱人的链接：“点击查看可爱猫咪图片”。你点击后，进入了一个恶意网站 <code>evil.com</code>。这个网站的页面中隐藏了一个自动提交的表单，其目标地址是银行的转账接口，例如：<br><code>&lt;form action=&quot;https://bank.com/transfer&quot; method=&quot;POST&quot;&gt; &lt;input type=&quot;hidden&quot; name=&quot;to&quot; value=&quot;attacker_account&quot;&gt; ... &lt;/form&gt;</code><br>当你的浏览器加载这个页面时，会自动提交这个表单。因为请求的目标是 <code>bank.com</code>，浏览器会<strong>自动带上</strong>你之前保存的 <code>bank.com</code> 的 <strong>Cookie</strong>。银行服务器收到这个请求后，检查 Cookie，发现你是合法的登录用户，于是执行了转账操作。整个过程你完全不知情。</li>
+<li><strong>关键前提</strong>:<ol>
+<li>用户已登录目标网站，且浏览器存有该网站的 Cookie。</li>
+<li>用户访问了攻击者构造的恶意页面。</li>
+<li>目标网站的敏感操作接口没有对请求来源进行充分验证。</li>
+</ol>
+</li>
+<li><strong>HTTP 相关的防御手段</strong>:<ol>
+<li><strong><code>SameSite</code> Cookie 属性</strong>:<ul>
+<li>这是<strong>防御 CSRF 最有效、最简单的现代方法</strong>。通过在 <code>Set-Cookie</code> 头部设置 <code>SameSite</code> 属性，可以控制 Cookie 在跨站请求中的发送行为。</li>
+<li><code>SameSite=Strict</code>: 完全禁止第三方请求携带 Cookie。在任何从外部网站发起的请求中，Cookie 都不会被发送。防御效果最好，但可能影响某些正常的跨站跳转体验。</li>
+<li><code>SameSite=Lax</code>: (现代浏览器默认值) 在大多数跨站请求中（如 <code>POST</code> 表单、<code>&lt;img&gt;</code>、AJAX），不发送 Cookie。但在一些顶层导航（如点击链接 <code>&lt;a&gt;</code>）的 <code>GET</code> 请求中会发送。能防御绝大多数 CSRF 攻击。</li>
+<li><code>SameSite=None</code>: 允许在任何跨站请求中发送 Cookie。必须配合 <code>Secure</code> 属性使用。</li>
+</ul>
+</li>
+<li><strong>验证 <code>Origin</code> 和 <code>Referer</code> 请求头</strong>:<ul>
+<li>服务器可以检查请求头中的 <code>Origin</code> (指示请求的来源域) 或 <code>Referer</code> (指示请求来源的完整 URL)。如果这些值不是来自可信的域名列表，就拒绝该请求。这是一种简单有效的补充手段。</li>
+</ul>
+</li>
+<li><strong>使用 CSRF Token</strong>:<ul>
+<li>在 <code>SameSite</code> 属性普及之前，这是最主流的防御方式。服务器在用户访问表单页面时，生成一个随机的、一次性的 Token，并将其隐藏在表单中。当用户提交表单时，这个 Token 会一起发送到服务器。服务器在处理请求前，会验证这个 Token 是否与自己之前下发的一致。由于攻击者无法获取这个随机 Token，他构造的恶意请求中就不包含合法的 Token，从而被服务器拒绝。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="4-3-CORS-跨源资源共享"><a href="#4-3-CORS-跨源资源共享" class="headerlink" title="4.3 CORS (跨源资源共享)"></a>4.3 CORS (跨源资源共享)</h3><p>CORS 本身不是一种攻击，而是一种<strong>安全机制</strong>，用于解决浏览器的<strong>同源策略 (Same-Origin Policy, SOP)</strong> 带来的限制。</p>
+<ul>
+<li><strong>同源策略 (SOP)</strong>:<ul>
+<li>这是浏览器最核心、最重要的安全策略。它规定，一个源（<code>origin</code>）的网页脚本，在没有明确授权的情况下，不能访问来自另一个源的资源。</li>
+<li><strong>源 (Origin)</strong> 由 <strong>协议 (Scheme) + 主机 (Host) + 端口 (Port)</strong> 三者共同定义。只要有一个不同，就是<strong>跨源 (Cross-Origin)</strong>。</li>
+<li>SOP 主要限制的是<strong>脚本发起的 HTTP 请求</strong>（如 AJAX），而像 <code>&lt;img&gt;</code>, <code>&lt;script&gt;</code>, <code>&lt;iframe&gt;</code> 等标签的资源加载不受此限制（但脚本也无法读取这些标签加载的跨源内容）。</li>
+</ul>
+</li>
+<li><strong>为什么需要 CORS?</strong>:<br>随着 Web 应用的发展（尤其是前后端分离架构和 API 的兴起），跨源请求变得非常普遍（例如，<code>app.com</code> 的前端代码需要请求 <code>api.com</code> 的数据）。为了在保证安全的前提下实现这种合法的跨源访问，CORS 机制应运而生。</li>
+<li><strong>CORS 工作原理</strong>:<br>CORS 是一种基于 <strong>HTTP 头部</strong>的机制，它允许服务器声明哪些源站有权限访问其资源。它将跨源请求分为两类：<ol>
+<li><strong>简单请求 (Simple Requests)</strong>:<ul>
+<li>满足一定条件的请求（如 <code>GET</code>, <code>HEAD</code>, <code>POST</code> 方法，且 <code>Content-Type</code> 为特定值等）被视为简单请求。</li>
+<li>浏览器直接发送请求，并在请求头中自动加入 <code>Origin</code> 字段，表明请求来源。</li>
+<li>服务器收到请求后，检查 <code>Origin</code> 值。如果该来源被允许，服务器就在响应头中加入 <code>Access-Control-Allow-Origin: &lt;origin&gt;</code> 或 <code>*</code>。</li>
+<li>浏览器检查响应头，如果 <code>Access-Control-Allow-Origin</code> 存在且匹配，就将响应数据交给 JavaScript 处理；否则，就拦截响应，并在控制台报错。</li>
+</ul>
+</li>
+<li><strong>非简单请求 (Preflighted Requests)</strong>:<ul>
+<li>不满足简单请求条件的请求（如 <code>PUT</code>, <code>DELETE</code> 方法，或带有自定义请求头），在发送实际请求之前，浏览器会先自动发送一个<strong>预检请求 (Preflight Request)</strong>。</li>
+<li><strong>预检请求</strong>使用 <code>OPTIONS</code> 方法，并包含 <code>Access-Control-Request-Method</code> (实际请求的方法) 和 <code>Access-Control-Request-Headers</code> (实际请求的自定义头部) 等头部。</li>
+<li>服务器收到预检请求后，根据其策略决定是否允许接下来的实际请求，并通过一系列 <code>Access-Control-Allow-*</code> 响应头（如 <code>Access-Control-Allow-Origin</code>, <code>Access-Control-Allow-Methods</code>, <code>Access-Control-Allow-Headers</code>）来告知浏览器。</li>
+<li>如果预检通过，浏览器才会发送真正的、包含业务数据的实际请求。如果预检失败，则实际请求不会被发送。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><strong>核心 CORS 响应头</strong>:<ul>
+<li><code>Access-Control-Allow-Origin</code>: <strong>必需</strong>。指定允许访问的源。</li>
+<li><code>Access-Control-Allow-Methods</code>: 在预检响应中使用，指定允许的 HTTP 方法。</li>
+<li><code>Access-control-Allow-Headers</code>: 在预检响应中使用，指定允许的自定义请求头。</li>
+<li><code>Access-Control-Allow-Credentials</code>: <code>true</code> 或 <code>false</code>。指示是否允许跨域请求携带 Cookie。</li>
+<li><code>Access-Control-Max-Age</code>: 指定预检请求结果的缓存时间（秒）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="六、HTTP-的演进"><a href="#六、HTTP-的演进" class="headerlink" title="六、HTTP 的演进"></a>六、HTTP 的演进</h1><h2 id="1-HTTP-1-0-的时代"><a href="#1-HTTP-1-0-的时代" class="headerlink" title="1. HTTP&#x2F;1.0 的时代"></a>1. HTTP&#x2F;1.0 的时代</h2><p>HTTP&#x2F;1.0 在 1996 年通过 RFC 1945 正式发布，它是第一个被广泛应用的 HTTP 版本。这个版本的协议设计相对简单，主要目标是满足当时以“图文”为主的网页浏览需求。其核心设计理念是“一次请求-一次响应”，反映了早期 Web 的简单交互模式。</p>
+<hr>
+<h3 id="1-1-核心特性与局限性"><a href="#1-1-核心特性与局限性" class="headerlink" title="1.1 核心特性与局限性"></a>1.1 核心特性与局限性</h3><h4 id="1-1-1-短连接-Short-lived-Connections"><a href="#1-1-1-短连接-Short-lived-Connections" class="headerlink" title="1.1.1 短连接 (Short-lived Connections)"></a>1.1.1 短连接 (Short-lived Connections)</h4><ul>
+<li><strong>特性</strong>: 这是 HTTP&#x2F;1.0 最显著的特点。默认情况下，每一个 HTTP 请求都需要建立一个新的 TCP 连接。在服务器返回响应后，该 TCP 连接会立即关闭。</li>
+<li><strong>流程</strong>:<ol>
+<li>浏览器请求 <code>index.html</code> -&gt; 建立 TCP 连接 -&gt; 请求 -&gt; 响应 -&gt; <strong>关闭 TCP 连接</strong>。</li>
+<li>页面中有一张图片 <code>image.jpg</code> -&gt; 建立新的 TCP 连接 -&gt; 请求 -&gt; 响应 -&gt; <strong>关闭 TCP 连接</strong>。</li>
+<li>页面中有一个 CSS 文件 <code>style.css</code> -&gt; 建立新的 TCP 连接 -&gt; 请求 -&gt; 响应 -&gt; <strong>关闭 TCP 连接</strong>。</li>
+</ol>
+</li>
+<li><strong>局限性 (性能瓶颈)</strong>:<ul>
+<li><strong>高延迟</strong>: TCP 连接的建立（三次握手）和关闭（四次挥手）本身就需要消耗网络往返时间 (RTT)。对于一个包含大量小文件（图片、脚本）的网页，这种开销会迅速累积，导致页面加载速度非常慢。</li>
+<li><strong>服务器压力大</strong>: 频繁地创建和销毁连接，对服务器的 CPU 和内存资源造成了巨大压力。</li>
+<li><strong>慢启动惩罚</strong>: TCP 协议有一个“慢启动”机制，即新建立的连接会从一个较低的传输速率开始，然后逐渐提升。短连接意味着每个请求都必须重新经历这个慢启动过程，无法利用已经“热身”完毕的连接，传输效率低下。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-1-2-无-Host-头部-No-Host-Header"><a href="#1-1-2-无-Host-头部-No-Host-Header" class="headerlink" title="1.1.2 无 Host 头部 (No Host Header)"></a>1.1.2 无 Host 头部 (No Host Header)</h4><ul>
+<li><p><strong>特性</strong>: 在最初的 HTTP&#x2F;1.0 设计中，请求报文中并<strong>没有 <code>Host</code> 头部</strong>。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 一个典型的 HTTP/1.0 请求</span><br><span class="line"><span class="keyword">GET</span> <span class="string">/index.html</span> <span class="meta">HTTP/1.0</span></span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>NCSA_Mosaic/2.0</span><br></pre></td></tr></table></figure>
+
+<p>请求行中的路径 <code>/index.html</code> 是相对路径，没有指明目标服务器的域名。</p>
+</li>
+<li><p><strong>局限性</strong>:</p>
+<ul>
+<li><strong>无法实现虚拟主机 (Virtual Hosting)</strong>: 这意味着<strong>一台服务器（一个 IP 地址）只能托管一个网站</strong>。因为当服务器收到一个请求时，它无法知道客户端想要访问的是哪个域名下的资源。这在 IP 地址资源日益紧张的背景下，是极大的浪费。</li>
+<li><strong>背景</strong>: 在互联网早期，域名和 IP 地址几乎是一一对应的，所以这个问题并不突出。但随着 Web 的发展，一个 IP 托管多个网站的需求变得非常迫切。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-1-3-有限的缓存能力"><a href="#1-1-3-有限的缓存能力" class="headerlink" title="1.1.3 有限的缓存能力"></a>1.1.3 有限的缓存能力</h4><ul>
+<li><strong>特性</strong>: HTTP&#x2F;1.0 引入了初步的缓存控制机制，主要通过以下两个头部：<ul>
+<li><strong><code>Expires</code> (响应头)</strong>: 服务器通过一个绝对的过期时间来告诉浏览器缓存的有效期。</li>
+<li><strong><code>If-Modified-Since</code> (请求头) &#x2F; <code>Last-Modified</code> (响应头)</strong>: 用于实现协商缓存。</li>
+</ul>
+</li>
+<li><strong>局限性</strong>:<ul>
+<li><code>Expires</code> 依赖于客户端本地时间，如果客户端时间不准，缓存策略就会出错。</li>
+<li><code>Last-Modified</code> 的时间精度只能到秒，并且对于内容没变但元数据变动的情况无法正确处理。</li>
+<li>缓存控制的指令不够丰富和灵活。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-1-4-简单的请求方法"><a href="#1-1-4-简单的请求方法" class="headerlink" title="1.1.4 简单的请求方法"></a>1.1.4 简单的请求方法</h4><ul>
+<li><strong>特性</strong>: HTTP&#x2F;1.0 主要定义了三个请求方法：<ul>
+<li><code>GET</code>: 获取资源。</li>
+<li><code>POST</code>: 提交数据。</li>
+<li><code>HEAD</code>: 获取资源的元信息（头部）。</li>
+</ul>
+</li>
+<li><strong>局限性</strong>: 缺少 <code>PUT</code>, <code>DELETE</code>, <code>PATCH</code>, <code>OPTIONS</code> 等更精细化的操作方法，这使得通过 HTTP 实现符合 RESTful 风格的 API 变得困难。开发者常常需要通过 <code>POST</code> 请求来模拟更新和删除操作。</li>
+</ul>
+<hr>
+<h3 id="1-2-HTTP-1-0-的“改进”与过渡"><a href="#1-2-HTTP-1-0-的“改进”与过渡" class="headerlink" title="1.2 HTTP&#x2F;1.0 的“改进”与过渡"></a>1.2 HTTP&#x2F;1.0 的“改进”与过渡</h3><p>面对上述种种局限，特别是由短连接和无 Host 头带来的严重问题，社区和浏览器厂商在 HTTP&#x2F;1.0 的后期进行了一些非正式的扩展，为向 HTTP&#x2F;1.1 过渡铺平了道路。</p>
+<ul>
+<li><p><strong><code>Connection: Keep-Alive</code></strong>:</p>
+<ul>
+<li>一些浏览器和服务器开始支持一个非官方的 <code>Connection: Keep-Alive</code> 头部。</li>
+<li>如果客户端在请求中加入这个头部，并且服务器也支持，那么服务器在响应后就不会立即关闭 TCP 连接，从而实现了<strong>长连接（或称持久连接）</strong>。</li>
+<li>这大大缓解了短连接带来的性能问题，是 HTTP 性能优化的一个里程碑。</li>
+</ul>
+</li>
+<li><p><strong><code>Host</code> 头部的引入</strong>:</p>
+<ul>
+<li>为了解决虚拟主机的问题，<code>Host</code> 头部被作为 HTTP&#x2F;1.0 的一个扩展引入，并最终在 HTTP&#x2F;1.1 中成为<strong>必需</strong>的头部。</li>
+<li>有了 <code>Host</code> 头部，客户端可以在请求中明确指出要访问的域名，服务器便可以根据这个域名将请求分发到对应的网站。</li>
+</ul>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 一个带 Host 头的 HTTP/1.0 请求</span><br><span class="line"><span class="keyword">GET</span> <span class="string">/index.html</span> <span class="meta">HTTP/1.0</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>www.example.com</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>NCSA_Mosaic/2.0</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="2-HTTP-1-1-至今仍是主流"><a href="#2-HTTP-1-1-至今仍是主流" class="headerlink" title="2. HTTP&#x2F;1.1 (至今仍是主流)"></a>2. HTTP&#x2F;1.1 (至今仍是主流)</h2><p>HTTP&#x2F;1.1 并非对 HTTP&#x2F;1.0 的推倒重来，而是一次意义重大的<strong>增强和完善</strong>。它的设计目标非常明确：<strong>在保持协议简单性的同时，大幅提升性能、可扩展性和功能性</strong>。</p>
+<hr>
+<h3 id="2-1-主要改进"><a href="#2-1-主要改进" class="headerlink" title="2.1 主要改进"></a>2.1 主要改进</h3><p>HTTP&#x2F;1.1 的核心改进可以概括为以下几点，它们几乎都是针对 HTTP&#x2F;1.0 的痛点进行优化的。</p>
+<h4 id="2-1-1-默认长连接-Persistent-Connections"><a href="#2-1-1-默认长连接-Persistent-Connections" class="headerlink" title="2.1.1 默认长连接 (Persistent Connections)"></a>2.1.1 默认长连接 (Persistent Connections)</h4><ul>
+<li><strong>改进点</strong>: 这是 HTTP&#x2F;1.1 <strong>最重要的性能改进</strong>。它将 HTTP&#x2F;1.0 中需要手动开启的 <code>Keep-Alive</code> 机制，变为了<strong>默认行为</strong>。</li>
+<li><strong>工作方式</strong>: 除非在请求或响应中明确包含 <code>Connection: close</code> 头部，否则 TCP 连接在一次请求-响应周期后会保持打开状态，以便后续的请求可以<strong>复用</strong>这条连接。</li>
+<li><strong>带来的好处</strong>:<ul>
+<li><strong>减少延迟</strong>: 避免了为每个资源都重新进行 TCP 三次握手的开销。</li>
+<li><strong>提升效率</strong>: 允许 TCP 连接进入“热身”状态，利用 TCP 慢启动结束后的高速传输阶段。</li>
+<li><strong>降低资源消耗</strong>: 减少了客户端和服务器因频繁创建和销毁连接而产生的 CPU 和内存负担。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-1-2-管道化-Pipelining"><a href="#2-1-2-管道化-Pipelining" class="headerlink" title="2.1.2 管道化 (Pipelining)"></a>2.1.2 管道化 (Pipelining)</h4><ul>
+<li><strong>改进点</strong>: 在长连接的基础上，HTTP&#x2F;1.1 引入了“管道化”技术，试图进一步提升效率。</li>
+<li><strong>工作方式</strong>: 允许客户端在<strong>收到上一个响应之前</strong>，就连续发送多个 HTTP 请求。这就像把多个请求一次性“塞进”TCP 连接这个管道里，减少了等待响应所浪费的往返时间。<ul>
+<li><strong>HTTP&#x2F;1.0 (无管道)</strong>: 请求1 -&gt; 响应1 -&gt; 请求2 -&gt; 响应2 …</li>
+<li><strong>HTTP&#x2F;1.1 (管道化)</strong>: 请求1, 请求2, 请求3 -&gt; 响应1, 响应2, 响应3 …</li>
+</ul>
+</li>
+<li><strong>致命缺陷 (队头阻塞)</strong>:<ul>
+<li>虽然请求可以一起发送，但服务器<strong>必须严格按照接收请求的顺序来返回响应</strong>。</li>
+<li>如果第一个请求（如一个复杂的 API 调用）的处理时间很长，那么即使后续请求（如请求一个小图标）已经处理完毕，也必须排队等待第一个响应发送完成。这就是<strong>队头阻塞 (Head-of-Line Blocking)</strong>。</li>
+<li>由于队头阻塞问题以及在代理服务器中实现的复杂性，<strong>现代浏览器默认都禁用了管道化</strong>。所以，管道化在理论上是一个进步，但在实践中几乎没有被成功应用。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-1-3-Host-头部成为必需"><a href="#2-1-3-Host-头部成为必需" class="headerlink" title="2.1.3 Host 头部成为必需"></a>2.1.3 <code>Host</code> 头部成为必需</h4><ul>
+<li><p><strong>改进点</strong>: HTTP&#x2F;1.1 强制要求所有请求报文中<strong>必须包含 <code>Host</code> 头部</strong>。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/index.html</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>www.example.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>带来的好处</strong>:</p>
+<ul>
+<li><strong>正式支持虚拟主机</strong>: 允许多个不同域名的网站托管在同一台服务器（同一个 IP 地址）上。服务器通过检查 <code>Host</code> 头部，就能知道请求是发往哪个网站的，从而返回正确的内容。这极大地节省了宝贵的 IPv4 地址资源，是现代网站托管服务的基石。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-1-4-更丰富和强大的缓存控制"><a href="#2-1-4-更丰富和强大的缓存控制" class="headerlink" title="2.1.4 更丰富和强大的缓存控制"></a>2.1.4 更丰富和强大的缓存控制</h4><ul>
+<li><strong>改进点</strong>: 引入了全新的 <code>Cache-Control</code> 头部，提供了比 HTTP&#x2F;1.0 的 <code>Expires</code> 更加灵活和强大的缓存控制能力。</li>
+<li><strong><code>Cache-Control</code> 的优势</strong>:<ul>
+<li><strong>相对时间 (<code>max-age</code>)</strong>: 使用相对时间（如 <code>max-age=3600</code>）代替 <code>Expires</code> 的绝对时间，避免了客户端与服务器时间不一致的问题。</li>
+<li><strong>丰富的指令</strong>: 提供了 <code>public</code>, <code>private</code>, <code>no-cache</code>, <code>no-store</code>, <code>must-revalidate</code> 等多种指令，让开发者可以对缓存策略进行精细化控制。</li>
+</ul>
+</li>
+<li><strong><code>ETag</code> 的引入</strong>:<ul>
+<li>引入 <code>ETag</code> &#x2F; <code>If-None-Match</code> 这一对头部，作为对 <code>Last-Modified</code> &#x2F; <code>If-Modified-Since</code> 的补充和改进。</li>
+<li><code>ETag</code> 基于资源内容的“指纹”，能够更精确地判断资源是否发生变化，解决了 <code>Last-Modified</code> 的时间精度和元数据变动问题。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-1-5-增加新的请求方法和状态码"><a href="#2-1-5-增加新的请求方法和状态码" class="headerlink" title="2.1.5 增加新的请求方法和状态码"></a>2.1.5 增加新的请求方法和状态码</h4><ul>
+<li><strong>请求方法</strong>: 新增了 <code>PUT</code>, <code>DELETE</code>, <code>OPTIONS</code>, <code>PATCH</code>, <code>TRACE</code>, <code>CONNECT</code> 等方法，使得 HTTP 协议的功能更加完善，能够更好地支持 RESTful API 等应用场景。</li>
+<li><strong>状态码</strong>: 增加了更多状态码，如 <code>201 Created</code>, <code>204 No Content</code> 等用于 API 交互，<code>307 Temporary Redirect</code> 对 <code>302</code> 进行了细化，以及 <code>409 Conflict</code>, <code>410 Gone</code> 等更丰富的错误表示。</li>
+</ul>
+<hr>
+<h4 id="2-1-6-支持分块传输编码-Chunked-Transfer-Encoding"><a href="#2-1-6-支持分块传输编码-Chunked-Transfer-Encoding" class="headerlink" title="2.1.6 支持分块传输编码 (Chunked Transfer Encoding)"></a>2.1.6 支持分块传输编码 (Chunked Transfer Encoding)</h4><ul>
+<li><strong>改进点</strong>: 允许服务器在<strong>响应生成的同时</strong>，将内容分成一个个“块 (chunk)”来发送，而无需在发送前知道响应体的总大小。</li>
+<li><strong>工作方式</strong>: 通过在响应头中加入 <code>Transfer-Encoding: chunked</code> 来启用。每个块包含块大小和块内容，最后一个块是大小为 0 的“结束块”。</li>
+<li><strong>带来的好处</strong>:<ul>
+<li><strong>支持动态内容</strong>: 对于那些需要服务器实时生成、无法预知最终大小的内容（如数据库查询结果、直播流），可以立即开始传输，提升首字节时间 (TTFB)，改善用户体验。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-2-核心瓶颈：队头阻塞-HOL-Blocking"><a href="#2-2-核心瓶颈：队头阻塞-HOL-Blocking" class="headerlink" title="2.2 核心瓶颈：队头阻塞 (HOL Blocking)"></a>2.2 核心瓶颈：队头阻塞 (HOL Blocking)</h3><p>尽管 HTTP&#x2F;1.1 带来了巨大的进步，但它的核心模型——<strong>一个 TCP 连接在同一时间只能处理一个请求-响应</strong>——并未改变。这导致了其最主要的性能瓶颈：</p>
+<ol>
+<li><strong>协议层面的队头阻塞</strong>: 如前所述，管道化技术因服务器必须按序响应而失效。</li>
+<li><strong>浏览器层面的变通与限制</strong>: 为了缓解队头阻塞，浏览器通常会为每个域名<strong>并发建立多条（通常是 6-8 条）TCP 连接</strong>。这在一定程度上实现了并行请求，但：<ul>
+<li><strong>连接数有限</strong>: 浏览器对同域名的并发连接数有限制，超过限制的请求仍然需要排队。</li>
+<li><strong>资源浪费</strong>: 建立和维护这些额外的 TCP 连接本身就是一种开销。</li>
+<li><strong>竞争带宽</strong>: 多条 TCP 连接之间会相互竞争网络带宽，可能导致整体效率下降。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="3-HTTP-2：性能的巨大飞跃"><a href="#3-HTTP-2：性能的巨大飞跃" class="headerlink" title="3. HTTP&#x2F;2：性能的巨大飞跃"></a>3. HTTP&#x2F;2：性能的巨大飞跃</h2><p>HTTP&#x2F;2 的诞生，源于 Google 在 2009 年推出的实验性协议 <strong>SPDY</strong> (读作 “speedy”)。SPDY 的成功实践证明了其核心思想的有效性，最终被采纳为 HTTP&#x2F;2 标准的基础。HTTP&#x2F;2 引入了几个革命性的新特性，从根本上解决了 HTTP&#x2F;1.1 的性能瓶颈。</p>
+<hr>
+<h3 id="3-1-二进制分帧-Binary-Framing"><a href="#3-1-二进制分帧-Binary-Framing" class="headerlink" title="3.1 二进制分帧 (Binary Framing)"></a>3.1 二进制分帧 (Binary Framing)</h3><ul>
+<li><p><strong>核心变革</strong>: 这是 HTTP&#x2F;2 所有其他性能改进的<strong>基础</strong>。HTTP&#x2F;2 不再使用 HTTP&#x2F;1.1 的纯文本格式报文，而是将所有传输的信息分割为更小的<strong>消息 (Message)</strong> 和<strong>帧 (Frame)</strong>，并采用<strong>二进制格式</strong>进行编码。</p>
+</li>
+<li><p><strong>HTTP&#x2F;1.1 的文本格式</strong>:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /resource HTTP/1.1\r\n</span><br><span class="line">Host: example.com\r\n</span><br><span class="line">\r\n</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>优点</strong>: 人类可读，调试方便。</li>
+<li><strong>缺点</strong>: 格式不紧凑，解析复杂且容易出错（如需要处理空格、换行符等）。</li>
+</ul>
+</li>
+<li><p><strong>HTTP&#x2F;2 的二进制分帧层</strong>:</p>
+<ul>
+<li><strong>帧 (Frame)</strong>: HTTP&#x2F;2 中数据传输的<strong>最小单位</strong>。每种帧都有不同的类型，承载不同类型的信息，如 <code>HEADERS</code> 帧用于传输头部，<code>DATA</code> 帧用于传输请求&#x2F;响应体。所有帧都共享一个通用的 9 字节帧头，其中包含了帧长度、类型、流标识符等信息。</li>
+<li><strong>消息 (Message)</strong>: 逻辑上的 HTTP 请求或响应，由一个或多个帧组成。例如，一个 HTTP 请求消息可以由一个 <code>HEADERS</code> 帧和多个 <code>DATA</code> 帧组成。</li>
+<li><strong>流 (Stream)</strong>: 一个存在于 TCP 连接内的<strong>虚拟双向通道</strong>，用于承载一次完整的请求-响应交换。每个流都有一个唯一的 ID。</li>
+</ul>
+</li>
+<li><p><strong>带来的好处</strong>:</p>
+<ul>
+<li><strong>解析高效且不易出错</strong>: 二进制格式的解析是确定性的，计算机处理起来更快、更简单，不再有解析纯文本时的歧义。</li>
+<li><strong>为多路复用铺平道路</strong>: 将数据分解为独立的、带标识的帧，使得在同一连接上交错发送来自不同流的数据成为可能。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-2-多路复用-Multiplexing"><a href="#3-2-多路复用-Multiplexing" class="headerlink" title="3.2 多路复用 (Multiplexing)"></a>3.2 多路复用 (Multiplexing)</h3><ul>
+<li><strong>核心变革</strong>: 这是 HTTP&#x2F;2 <strong>最重要的特性</strong>，它从根本上<strong>解决了 HTTP&#x2F;1.1 的队头阻塞问题</strong>。</li>
+<li><strong>工作方式</strong>:<ol>
+<li><strong>单一 TCP 连接</strong>: 客户端与服务器之间只需要建立<strong>一条 TCP 连接</strong>，就可以处理所有并发的请求。</li>
+<li><strong>并发的流</strong>: 在这条 TCP 连接上，可以同时存在<strong>多个并行的流 (Stream)</strong>。每个流对应一个 HTTP 请求-响应对。</li>
+<li><strong>帧的交错传输</strong>: 来自不同流的帧可以<strong>被打乱顺序、交错地</strong>在同一条 TCP 连接中传输。</li>
+<li><strong>按流 ID 重组</strong>: 接收方根据帧头中的<strong>流 ID</strong>，将这些乱序的帧重新组合成完整的请求或响应消息。</li>
+</ol>
+</li>
+<li><strong>类比</strong>: <strong>多车道高速公路 vs 单车道</strong>。<ul>
+<li><strong>HTTP&#x2F;1.1</strong>: 像一条单车道，一辆慢车（一个慢响应）会堵住后面所有车。</li>
+<li><strong>HTTP&#x2F;2</strong>: 像一条拥有多个车道的高速公路。即使某个车道（某个流）上的卡车（大响应）行驶缓慢，其他车道的小汽车（小响应）依然可以畅通无阻地并行前进。所有车辆共享同一条高速公路（同一条 TCP 连接），但互不阻塞。</li>
+</ul>
+</li>
+<li><strong>带来的好处</strong>:<ul>
+<li><strong>彻底解决队头阻塞</strong>: 一个请求的阻塞不会影响其他请求的传输。</li>
+<li><strong>更高的连接利用率</strong>: 只需一条 TCP 连接即可实现高并发，避免了 HTTP&#x2F;1.1 时代开启多条连接的开销。</li>
+<li><strong>性能提升</strong>: 降低了延迟，加快了页面加载速度，尤其是在加载大量小资源的场景下效果显著。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-3-头部压缩-Header-Compression-HPACK"><a href="#3-3-头部压缩-Header-Compression-HPACK" class="headerlink" title="3.3 头部压缩 (Header Compression - HPACK)"></a>3.3 头部压缩 (Header Compression - HPACK)</h3><ul>
+<li><strong>核心变革</strong>: 针对 HTTP&#x2F;1.1 中头部信息冗余的问题，HTTP&#x2F;2 引入了专门的 <strong>HPACK 算法</strong>来压缩请求和响应的头部。</li>
+<li><strong>HTTP&#x2F;1.1 的问题</strong>:<ul>
+<li>在同一连接上，连续的多个请求通常包含大量重复的头部字段（如 <code>Host</code>, <code>User-Agent</code>, <code>Accept</code> 等）。</li>
+<li>这些头部以纯文本形式传输，未经压缩，在请求数量多时会带来不小的网络开销，尤其是在上行带宽有限的移动网络中。</li>
+</ul>
+</li>
+<li><strong>HPACK 的工作原理</strong>:<ol>
+<li><strong>动态维护共享字典</strong>: 客户端和服务器共同维护一个“头部字典”。</li>
+<li><strong>索引化传输</strong>: 对于字典中已有的头部字段（如 <code>User-Agent</code>），后续请求只需发送其<strong>索引号</strong>即可，而无需重复发送完整的字符串。</li>
+<li><strong>哈夫曼编码</strong>: 对于新的或不常见的头部值，使用哈夫曼编码进行压缩，进一步减小体积。</li>
+</ol>
+</li>
+<li><strong>带来的好处</strong>:<ul>
+<li><strong>大幅减少头部大小</strong>: 显著降低了因头部传输而产生的网络开销，从而降低延迟。</li>
+<li><strong>增强安全性</strong>: 由于压缩上下文是与特定连接相关的，这在一定程度上也增加了防范某些头部注入攻击的难度。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-4-服务器推送-Server-Push"><a href="#3-4-服务器推送-Server-Push" class="headerlink" title="3.4 服务器推送 (Server Push)"></a>3.4 服务器推送 (Server Push)</h3><ul>
+<li><strong>核心变革</strong>: 允许服务器在<strong>客户端明确请求之前</strong>，就<strong>主动地</strong>将它认为客户端即将需要的资源推送给客户端。</li>
+<li><strong>HTTP&#x2F;1.1 的请求模型</strong>: <strong>“拉 (Pull)”</strong> 模型。<br>浏览器必须先请求并解析 <code>index.html</code>，然后才能发现其中引用了 <code>style.css</code> 和 <code>script.js</code>，再发起对这些资源的请求。这个过程至少需要 2 个 RTT 的延迟。</li>
+<li><strong>HTTP&#x2F;2 的推送模型</strong>: <strong>“推 (Push)”</strong> 模型。<ol>
+<li>客户端请求 <code>index.html</code>。</li>
+<li>服务器在返回 <code>index.html</code> 的同时，<strong>预见到</strong>客户端肯定会需要 <code>style.css</code> 和 <code>script.js</code>。</li>
+<li>服务器不等客户端请求，就<strong>主动地</strong>将 <code>style.css</code> 和 <code>script.js</code> 的内容通过新的流推送给客户端。</li>
+<li>当客户端解析完 <code>index.html</code> 并准备请求这些资源时，发现它们已经存在于本地缓存中了，可以直接使用。</li>
+</ol>
+</li>
+<li><strong>带来的好处</strong>:<ul>
+<li><strong>减少关键渲染路径的延迟</strong>: 避免了浏览器解析 HTML 后再发起请求的往返延迟，理论上可以提升页面加载速度。</li>
+</ul>
+</li>
+<li><strong>实践中的挑战</strong>:<ul>
+<li>服务器推送在实践中被证明<strong>难以有效利用</strong>。服务器很难精确判断哪些资源是客户端真正需要且本地没有缓存的。如果推送了不必要的资源，反而会浪费带宽。</li>
+<li>由于这些复杂性，服务器推送功能并未被广泛采用，甚至在 <strong>HTTP&#x2F;3 中已被提议废弃</strong>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="4-HTTP-3：面向未来的协议"><a href="#4-HTTP-3：面向未来的协议" class="headerlink" title="4. HTTP&#x2F;3：面向未来的协议"></a>4. HTTP&#x2F;3：面向未来的协议</h2><p>HTTP&#x2F;3 (发布于 2022 年，RFC 9114) 是 HTTP 协议的最新一代。它最大的变革是<strong>放弃了 TCP，转而使用一个全新的、基于 UDP 的传输层协议——QUIC</strong>。</p>
+<hr>
+<h3 id="4-1-为什么需要-HTTP-3？-TCP-层的队头阻塞"><a href="#4-1-为什么需要-HTTP-3？-TCP-层的队头阻塞" class="headerlink" title="4.1. 为什么需要 HTTP&#x2F;3？(TCP 层的队头阻塞)"></a>4.1. 为什么需要 HTTP&#x2F;3？(TCP 层的队头阻塞)</h3><p>HTTP&#x2F;2 通过多路复用技术，完美地解决了 <strong>HTTP 应用层</strong>的队头阻塞问题。在一条 HTTP&#x2F;2 连接上，一个流的阻塞不会影响其他流。</p>
+<p>然而，一个新的、更深层次的瓶颈暴露了出来——<strong>TCP 层的队头阻塞</strong>。</p>
+<ul>
+<li><strong>问题根源</strong>: HTTP&#x2F;2 的所有流都运行在<strong>一条 TCP 连接</strong>之上。而 TCP 协议本身是一个<strong>可靠的、按序传输</strong>的协议。这意味着，TCP 必须保证所有数据包（Segment）都按顺序到达。</li>
+<li><strong>阻塞发生</strong>: 如果在网络传输过程中，一个 TCP 数据包<strong>丢失</strong>了，那么 TCP 协议会启动其重传机制，等待这个丢失的数据包被重新传回。在此期间，即使后续的数据包已经到达了接收端，TCP 的接收缓冲区也<strong>必须等待</strong>，不能将这些数据包交付给上层（HTTP&#x2F;2）。</li>
+<li><strong>影响</strong>: 这一个丢失的数据包，就<strong>阻塞了该 TCP 连接上承载的所有 HTTP&#x2F;2 流</strong>。即使丢失的数据包只属于流 A，但流 B、流 C、流 D 的数据也都被卡在了 TCP 层，无法被 HTTP&#x2F;2 层解析。</li>
+<li><strong>类比</strong>: <strong>所有货物装在同一辆卡车上</strong>。<ul>
+<li>HTTP&#x2F;2 的多路复用，就像是把不同客户的货物（不同的 HTTP 流）都打包好，放进了<strong>同一辆大卡车</strong>（一条 TCP 连接）里运输。</li>
+<li>如果这辆卡车在路上因为一个轮胎爆了（一个 TCP 包丢失）而停下修理，那么车上<strong>所有客户的货物</strong>都会被延误，无论他们的货物在车厢的哪个位置。</li>
+</ul>
+</li>
+</ul>
+<p>这个问题在网络状况良好时并不明显，但在<strong>高延迟、高丢包率</strong>的网络环境（如移动网络、跨境网络）下，TCP 层的队头阻塞会严重影响 HTTP&#x2F;2 的性能优势。</p>
+<hr>
+<h3 id="4-2-基于-QUIC-协议-构建于-UDP-之上"><a href="#4-2-基于-QUIC-协议-构建于-UDP-之上" class="headerlink" title="4.2. 基于 QUIC 协议 (构建于 UDP 之上)"></a>4.2. 基于 QUIC 协议 (构建于 UDP 之上)</h3><p>为了从根本上解决 TCP 层的队头阻塞，HTTP&#x2F;3 做出了一个大胆的决定：<strong>将传输层从 TCP 换成 QUIC</strong>。</p>
+<ul>
+<li><p><strong>QUIC (Quick UDP Internet Connections)</strong>:</p>
+<ul>
+<li>QUIC 是由 Google 开发的一个全新的传输层协议，它“站在了 UDP 的肩膀上”。</li>
+<li><strong>UDP (User Datagram Protocol)</strong> 是一个非常基础、“不靠谱”的传输协议。它不保证数据包的顺序，也不保证数据包一定能到达（会丢包），没有重传机制。</li>
+<li>QUIC 的巧妙之处在于，它利用了 UDP 的“简单”特性（没有 TCP 那些固有的限制），然后在<strong>应用层（QUIC 自己的协议栈内）</strong>，重新实现了 TCP 的那些可靠性功能，如<strong>流量控制、拥塞控制、可靠传输</strong>等，并且做得更好。</li>
+</ul>
+</li>
+<li><p><strong>HTTP&#x2F;3 的新架构</strong>:<br><code>HTTP/3 = HTTP/2 的语义 + QUIC</code></p>
+<p><strong>协议栈对比</strong>:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1          HTTP/2            HTTP/3</span><br><span class="line">+---------+         +---------+         +---------+</span><br><span class="line">|  HTTP   |         |  HTTP   |         |  HTTP   |  (应用层)</span><br><span class="line">+---------+         +---------+         +---------+</span><br><span class="line">|   TCP   |         |   TCP   |         |  QUIC   |  (传输层)</span><br><span class="line">+---------+         +---------+         +---------+</span><br><span class="line">|   IP    |         |   IP    |         |   UDP   |</span><br><span class="line">+---------+         +---------+         +---------+</span><br><span class="line">|  ...    |         |  ...    |         |   IP    |</span><br><span class="line">                                        +---------+</span><br><span class="line">                                        |  ...    |</span><br></pre></td></tr></table></figure>
+
+<p>QUIC 实际上将原本属于操作系统内核实现的 TCP 功能，转移到了用户空间的应用程序（如浏览器、服务器软件）中去实现，这使得协议的迭代和优化变得更加快速和灵活。</p>
+</li>
+</ul>
+<hr>
+<h3 id="4-3-QUIC-的优势"><a href="#4-3-QUIC-的优势" class="headerlink" title="4.3. QUIC 的优势"></a>4.3. QUIC 的优势</h3><p>QUIC 作为 HTTP&#x2F;3 的基石，带来了几项超越 TCP 的革命性优势：</p>
+<p><strong>1. 真正的多路复用，无队头阻塞</strong></p>
+<ul>
+<li><strong>优势</strong>: 这是 QUIC <strong>最核心的优势</strong>。QUIC 连接上也可以承载多个独立的流，但与 HTTP&#x2F;2 不同，这些流在 QUIC 层面是<strong>完全独立</strong>的。</li>
+<li><strong>工作方式</strong>: 如果一个流中的某个数据包丢失，<strong>只有那一个流会受到影响</strong>，需要等待数据重传。其他流的数据包，即使在 UDP 层是后到的，也可以被 QUIC 层正常处理并交付给上层的 HTTP&#x2F;3，不会被阻塞。</li>
+<li><strong>类比</strong>: <strong>各自开自己的小货车</strong>。<br>每个客户的货物（每个 HTTP 流）都由一辆独立的小货车（一个 QUIC 流）运输。即使其中一辆小货车在路上抛锚了，也完全不影响其他小货车继续前进。</li>
+</ul>
+<p><strong>2. 更少的 RTT，连接建立更快 (0-RTT &amp; 1-RTT)</strong></p>
+<ul>
+<li><strong>TCP+TLS 的握手</strong>: 建立一个安全的 HTTPS 连接，需要先进行 TCP 的三次握手（1-RTT），然后再进行 TLS 的握手（1-2 RTT），总共需要 2-3 次网络往返。</li>
+<li><strong>QUIC 的握手</strong>: QUIC 将<strong>传输层握手 (类似 TCP) 和加密握手 (TLS) 合二为一</strong>。<ul>
+<li><strong>首次连接</strong>: 只需要 <strong>1-RTT</strong> 即可完成连接建立和密钥协商。</li>
+<li><strong>后续连接 (0-RTT)</strong>: 如果客户端之前连接过该服务器，QUIC 允许客户端在发送第一个包时就携带加密的应用数据，从而实现 <strong>0-RTT</strong> 的连接恢复。这极大地降低了移动设备在网络切换后重新建立连接的延迟。</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. 连接迁移 (Connection Migration)</strong></p>
+<ul>
+<li><strong>TCP 的问题</strong>: TCP 连接是通过一个<strong>四元组</strong>（源IP, 源端口, 目的IP, 目的端口）来唯一标识的。当你的网络环境发生变化时（如手机从 Wi-Fi 切换到 4G），你的 IP 地址和端口会改变，<strong>TCP 连接就会中断</strong>，必须重新建立。</li>
+<li><strong>QUIC 的优势</strong>: QUIC 连接不依赖于 IP 地址和端口，而是通过一个<strong>唯一的 64 位连接 ID (Connection ID)</strong> 来标识。</li>
+<li><strong>工作方式</strong>: 当网络切换时，客户端只需用新的 IP 地址和端口，继续向服务器发送带有相同连接 ID 的数据包即可。服务器收到后，通过连接 ID 就能识别出这是之前的那个连接，从而<strong>无缝地维持连接</strong>，无需重新握手。这对于移动设备的用户体验是颠覆性的提升。</li>
+</ul>
+<hr>
+<h3 id="4-4-当前现状与未来展望"><a href="#4-4-当前现状与未来展望" class="headerlink" title="4.4. 当前现状与未来展望"></a>4.4. 当前现状与未来展望</h3><ul>
+<li><strong>当前现状</strong>:<ul>
+<li>HTTP&#x2F;3 已经成为正式标准 (RFC 9114)。</li>
+<li>主流的浏览器（Chrome, Firefox, Safari）和 Web 服务器（Nginx, Caddy, Litespeed）以及大型 CDN 服务商（Cloudflare, Akamai）都已经提供了对 HTTP&#x2F;3 和 QUIC 的广泛支持。</li>
+<li>根据 W3Techs 的数据，截至 2023 年，全球已有超过 25% 的网站支持 HTTP&#x2F;3。这个数字还在快速增长，尤其是在大型互联网公司和对性能要求高的网站中。</li>
+</ul>
+</li>
+<li><strong>挑战</strong>:<ul>
+<li><strong>中间设备僵化</strong>: 许多网络中的防火墙、NAT 设备等只对 TCP 和 UDP 的常见端口（如 80, 443）进行优化或放行，可能会对运行在 UDP 上的 QUIC 流量进行限制或丢弃。</li>
+<li><strong>协议栈在用户空间</strong>: 虽然带来了灵活性，但也增加了 CPU 的消耗，因为部分原本由硬件和操作系统内核处理的工作转移到了应用层面。</li>
+</ul>
+</li>
+<li><strong>未来展望</strong>:<br>HTTP&#x2F;3 代表了 Web 协议演进的明确方向：<strong>更低的延迟、更高的可靠性和更好的移动性</strong>。随着网络设备对 QUIC 的支持不断完善和 CPU 性能的提升，HTTP&#x2F;3 必将逐步取代 HTTP&#x2F;2，成为下一代互联网的核心通信协议。它为物联网 (IoT)、实时通信 (WebRTC)、在线游戏以及未来更多对网络延迟和稳定性有极致要求的应用场景，奠定了坚实的基础。</li>
 </ul>
 
     </div>
