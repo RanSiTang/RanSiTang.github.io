@@ -19,26 +19,22 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="一、Java语法基础1. 注释1.1 单行注释使用 &#x2F;&#x2F; 进行标记，通常用于对单行代码进行简短说明 规范：  位置：通常放在要注释代码的上一行 内容：简洁明了，说明“为什么”这么做，而不是“做什么”（代码本身能说明做什么） 空格：&#x2F;&#x2F; 后应有一个空格  12&#x2F;&#x2F; 计算两项之和int result &#x3D; a + b;    1.2 多行注释使用 &#x2F;* ... *&#x2F; 进行标记，用于对一段代码进行较详细的">
-<meta property="og:type" content="article">
-<meta property="og:title" content="一、Java语法基础">
-<meta property="og:url" content="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%B8%80%E3%80%81Java%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/index.html">
+    <meta property="og:type" content="website">
+<meta property="og:title" content="冉的技术宝典">
+<meta property="og:url" content="http://example.com/page/3/index.html">
 <meta property="og:site_name" content="冉的技术宝典">
-<meta property="og:description" content="一、Java语法基础1. 注释1.1 单行注释使用 &#x2F;&#x2F; 进行标记，通常用于对单行代码进行简短说明 规范：  位置：通常放在要注释代码的上一行 内容：简洁明了，说明“为什么”这么做，而不是“做什么”（代码本身能说明做什么） 空格：&#x2F;&#x2F; 后应有一个空格  12&#x2F;&#x2F; 计算两项之和int result &#x3D; a + b;    1.2 多行注释使用 &#x2F;* ... *&#x2F; 进行标记，用于对一段代码进行较详细的">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-09-06T10:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-17T03:08:05.285Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%B8%80%E3%80%81Java%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+<link rel="canonical" href="http://example.com/page/3/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%B8%80%E3%80%81Java%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/","path":"2025/09/06/基础核心层/Java/一、Java基础语法/","title":"一、Java语法基础"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/3/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>一、Java语法基础 | 冉的技术宝典</title>
+<title>冉的技术宝典</title>
   
 
 
@@ -90,7 +86,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">冉的技术宝典</p>
+      <h1 class="site-title">冉的技术宝典</h1>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -116,7 +112,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -129,7 +125,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Java%E8%AF%AD%E6%B3%95%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">一、Java语法基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.</span> <span class="nav-text">1. 注释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%8D%95%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 单行注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%A4%9A%E8%A1%8C%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 多行注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 文档注释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A%E5%B8%B8%E7%94%A8%E7%9A%84javadoc%E6%A0%87%E7%AD%BE"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">文档注释常用的javadoc标签</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%8E%9F%E5%88%99"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 最佳实践与原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">2. 数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-%E6%95%B4%E6%95%B0%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">2.1.1 整数类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-%E6%B5%AE%E7%82%B9%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">2.1.2 浮点类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8D%95%E7%B2%BE%E5%BA%A6%E4%B8%8E%E5%8F%8C%E7%B2%BE%E5%BA%A6"><span class="nav-number">1.2.1.2.1.</span> <span class="nav-text">单精度与双精度</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-3-%E5%AD%97%E7%AC%A6%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">2.1.3 字符类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-4-%E5%B8%83%E5%B0%94%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">2.1.4 布尔类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%BC%95%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 引用数据类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%8C%85%E8%A3%85%E5%99%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 包装器类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">2.3.1 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B%EF%BC%9A%E8%AF%81%E6%98%8E%E5%AE%83%E6%98%AF%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.3.1.1.</span> <span class="nav-text">代码示例：证明它是引用类型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E4%B8%8E%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1"><span class="nav-number">1.2.3.1.2.</span> <span class="nav-text">自动装箱与自动拆箱</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.3.1.3.</span> <span class="nav-text">缓存机制</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-%E6%A0%B8%E5%BF%83%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%EF%BC%88%E7%94%A8%E4%BA%8E%E8%BD%AC%E6%8D%A2%E5%92%8C%E5%88%9B%E5%BB%BA%EF%BC%89"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">2.3.2 核心静态方法（用于转换和创建）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E8%A7%A3%E6%9E%90%E6%96%B9%E6%B3%95%EF%BC%9A%E5%B0%86-String-%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1%E6%88%96%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.3.2.1.</span> <span class="nav-text">1. 解析方法：将 String 转换为包装器对象或基本类型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.3.2.2.</span> <span class="nav-text">2. 创建方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-3-%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95%EF%BC%88%E9%9C%80%E8%A6%81%E5%AF%B9%E8%B1%A1%E8%B0%83%E7%94%A8%EF%BC%89"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">2.3.3 实例方法（需要对象调用）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E8%BD%AC%E6%8D%A2%E6%96%B9%E6%B3%95%EF%BC%9A%E5%B0%86%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.3.3.1.</span> <span class="nav-text">1. 转换方法：将包装器对象转换为基本类型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E6%AF%94%E8%BE%83%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.3.3.2.</span> <span class="nav-text">2. 比较方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.2.3.3.3.</span> <span class="nav-text">3. 转换为字符串</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-4-%E6%9C%89%E7%94%A8%E7%9A%84%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E5%92%8C%E5%B7%A5%E5%85%B7%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">2.3.4 有用的静态常量和工具方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%B8%B8%E7%94%A8%E5%B8%B8%E9%87%8F"><span class="nav-number">1.2.3.4.1.</span> <span class="nav-text">1. 常用常量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B7%A5%E5%85%B7%E6%96%B9%E6%B3%95%EF%BC%88%E5%88%A4%E6%96%AD%E5%AD%97%E7%AC%A6%E5%B1%9E%E6%80%A7-Character-%E7%B1%BB%E7%89%B9%E6%9C%89%EF%BC%89"><span class="nav-number">1.2.3.4.2.</span> <span class="nav-text">2. 工具方法（判断字符属性 - Character 类特有）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 数据类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-1-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">2.4.1 基本数据类型之间的转换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E8%87%AA%E5%8A%A8%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%EF%BC%88%E9%9A%90%E5%BC%8F%E8%BD%AC%E6%8D%A2%EF%BC%89"><span class="nav-number">1.2.4.1.1.</span> <span class="nav-text">1. 自动类型转换（隐式转换）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%EF%BC%88%E6%98%BE%E5%BC%8F%E8%BD%AC%E6%8D%A2%EF%BC%89"><span class="nav-number">1.2.4.1.2.</span> <span class="nav-text">2. 强制类型转换（显式转换）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-2-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%8C%85%E8%A3%85%E7%B1%BB%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">2.4.2 基本数据类型与包装类之间的转换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1"><span class="nav-number">1.2.4.2.1.</span> <span class="nav-text">1. 自动装箱</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1"><span class="nav-number">1.2.4.2.2.</span> <span class="nav-text">2. 自动拆箱</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-3-%E5%BC%95%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2%EF%BC%88%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%89%B9%E6%80%A7%EF%BC%89"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">2.4.3 引用数据类型之间的转换（面向对象特性）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%90%91%E4%B8%8A%E8%BD%AC%E5%9E%8B"><span class="nav-number">1.2.4.3.1.</span> <span class="nav-text">1. 向上转型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B"><span class="nav-number">1.2.4.3.2.</span> <span class="nav-text">2. 向下转型</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-4-%E4%B8%8E-String-%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">1.2.4.4.</span> <span class="nav-text">2.4.4 与 String 类型的转换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B-String"><span class="nav-number">1.2.4.4.1.</span> <span class="nav-text">1. 其他类型 -&gt; String</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-String-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.4.4.2.</span> <span class="nav-text">2. String -&gt; 其他类型</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-5-%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.2.4.5.</span> <span class="nav-text">2.4.5 总结与建议</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.</span> <span class="nav-text">3. 运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E7%AE%97%E6%95%B0%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 算数运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%85%B3%E7%B3%BB%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 关系运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 位运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 逻辑运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 赋值运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-%E4%B8%89%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.6.</span> <span class="nav-text">3.6 三元运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-instanceof-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.3.7.</span> <span class="nav-text">3.7 instanceof 运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-%E8%BF%90%E7%AE%97%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">1.3.8.</span> <span class="nav-text">3.8 运算符优先级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.</span> <span class="nav-text">4. 流程控制语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF%E8%AF%AD%E5%8F%A5-Conditional-Branching-Statements"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 条件分支语句 (Conditional Branching Statements)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-1-if-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">4.1.1 if 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-2-if-else-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">4.1.2 if...else 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-3-if-else-if-else-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">4.1.3 if...else if...else 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-4-switch-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">4.1.4 switch 语句</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5-Loop-Statements"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 循环语句 (Loop Statements)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-1-for-%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">4.2.1 for 循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-2-while-%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">4.2.2 while 循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-3-do-while-%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">4.2.3 do...while 循环</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E8%B7%B3%E8%BD%AC%E8%AF%AD%E5%8F%A5-Branching-Statements-Control-Transfer-Statements"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 跳转语句 (Branching Statements &#x2F; Control Transfer Statements)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-1-break-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">4.3.1 break 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-2-continue-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">4.3.2 continue 语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-3-return-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">4.3.3 return 语句</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4 实际应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-1-if%E4%B8%8ESwitch"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">4.4.1 if与Switch</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E4%BD%95%E6%97%B6%E9%80%89%E6%8B%A9-if-else%EF%BC%9F"><span class="nav-number">1.4.4.1.1.</span> <span class="nav-text">1. 何时选择 if-else？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E4%BD%95%E6%97%B6%E9%80%89%E6%8B%A9-switch%EF%BC%9F"><span class="nav-number">1.4.4.1.2.</span> <span class="nav-text">2. 何时选择 switch？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E7%9B%B8%E7%BB%93%E5%90%88"><span class="nav-number">1.4.4.1.3.</span> <span class="nav-text">3.  相结合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.4.4.1.4.</span> <span class="nav-text">总结与最佳实践</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -164,17 +159,16 @@
 
     </div>
 
-    <div class="main-inner post posts-expand">
+    <div class="main-inner index posts-expand">
 
-
-  
+    
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%B8%80%E3%80%81Java%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -188,13 +182,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="一、Java语法基础 | 冉的技术宝典">
+      <meta itemprop="name" content=" | 冉的技术宝典">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          一、Java语法基础
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%B8%80%E3%80%81Java%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="url">一、Java语法基础</a>
+        </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -236,7 +230,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="一、Java语法基础"><a href="#一、Java语法基础" class="headerlink" title="一、Java语法基础"></a>一、Java语法基础</h1><h2 id="1-注释"><a href="#1-注释" class="headerlink" title="1. 注释"></a>1. 注释</h2><h3 id="1-1-单行注释"><a href="#1-1-单行注释" class="headerlink" title="1.1 单行注释"></a>1.1 单行注释</h3><p>使用 <code>//</code> 进行标记，通常用于对单行代码进行简短说明</p>
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="一、Java语法基础"><a href="#一、Java语法基础" class="headerlink" title="一、Java语法基础"></a>一、Java语法基础</h1><h2 id="1-注释"><a href="#1-注释" class="headerlink" title="1. 注释"></a>1. 注释</h2><h3 id="1-1-单行注释"><a href="#1-1-单行注释" class="headerlink" title="1.1 单行注释"></a>1.1 单行注释</h3><p>使用 <code>//</code> 进行标记，通常用于对单行代码进行简短说明</p>
 <p><strong>规范：</strong></p>
 <ul>
 <li><strong>位置</strong>：通常放在要注释代码的上一行</li>
@@ -1200,6 +1195,7 @@
 <li><strong>可读性是终极目标</strong>：写代码不仅要让机器能执行，更要让人能轻松读懂。<code>switch</code> 在处理多路分支时，结构化的列表远比一长串 <code>if-else if</code> 更具可读性。</li>
 </ol>
 
+      
     </div>
 
     
@@ -1207,18 +1203,8 @@
     
 
     <footer class="post-footer">
-
-        
-
-          <div class="post-nav">
-            <div class="post-nav-item">
-            </div>
-            <div class="post-nav-item">
-                <a href="/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2&%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" rel="next" title="二、数组&amp;字符串&amp;内存分配">
-                  二、数组&字符串&内存分配 <i class="fa fa-angle-right"></i>
-                </a>
-            </div>
-          </div>
+        <div class="post-eof"></div>
+      
     </footer>
   </article>
 </div>
@@ -1226,7 +1212,9 @@
 
 
 
-
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
 
 </div>
   </main>
