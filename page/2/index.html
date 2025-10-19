@@ -11376,7 +11376,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-17 11:08:35" itemprop="dateModified" datetime="2025-10-17T11:08:35+08:00">2025-10-17</time>
+      <time title="修改时间：2025-10-19 10:59:37" itemprop="dateModified" datetime="2025-10-19T10:59:37+08:00">2025-10-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -11419,7 +11419,7 @@
 <p><strong>格式</strong>：采用128位地址长度，格式为<code>A:B:C:D:E:F:G</code>（冒分十六进制表示,如果中间有多个连续的0使用0位压缩表示法）</p>
 <hr>
 <h4 id="1-1-3-特殊IP地址"><a href="#1-1-3-特殊IP地址" class="headerlink" title="1.1.3 特殊IP地址"></a>1.1.3 特殊IP地址</h4><p><code>127.0.0.1</code> (或 <code>localhost</code>): 本地回环地址，指向本机。常用于本地测试。</p>
-<p><code>192.168</code>开头的就是私有地址，范围位<code>192.168.0.0</code>-<code>192.168.255.255</code>，专门位组织机构内部使用，节省IP</p>
+<p><code>192.168</code>开头的就是私有地址，范围位<code>192.168.0.0</code>-<code>192.168.255.255</code>，专门为了组织机构内部使用，节省IP</p>
 <p><code>0.0.0.0</code>: 代表本机上的所有IP地址。当服务器监听<code>0.0.0.0</code>时，意味着它可以接受来自本机任何网卡接口的连接请求。</p>
 <hr>
 <h4 id="1-1-4-Java中的体现"><a href="#1-1-4-Java中的体现" class="headerlink" title="1.1.4  Java中的体现"></a>1.1.4  Java中的体现</h4><p><code>InetAddress</code>类是Java对IP地址的封装。它没有公共构造函数，只能通过静态方法获取实例。</p>
@@ -11442,10 +11442,26 @@
 <li><strong>动态&#x2F;私有端口 (Dynamic&#x2F;Private Ports)</strong>: <code>49152</code> ~ <code>65535</code>。通常由客户端在建立连接时动态分配。</li>
 </ul>
 <hr>
-<h3 id="1-3-协议"><a href="#1-3-协议" class="headerlink" title="1.3 协议"></a>1.3 协议</h3><h4 id="1-3-1-定义与作用"><a href="#1-3-1-定义与作用" class="headerlink" title="1.3.1 定义与作用"></a>1.3.1 定义与作用</h4><p><strong>定义</strong>: 协议是网络通信中各方必须共同遵守的一套规则、标准或约定。它规定了数据的格式、传输的顺序、错误处理等。没有协议，数据交换将是混乱且无法解析的。</p>
+<h3 id="1-3-协议"><a href="#1-3-协议" class="headerlink" title="1.3 协议"></a>1.3 协议</h3><p><strong>定义：</strong></p>
+<ul>
+<li><p><strong>现实世界中的类比</strong>：</p>
+<ul>
+<li><strong>语言</strong>：想象一下，一个说中文的人和一个说英语的人，如果他们之间没有一个共同的语言（比如都说英语）或者一个翻译，他们就无法沟通。这个“共同的语言”就是一种协议。</li>
+<li><strong>交通规则</strong>：红灯停，绿灯行。这是一个所有司机都必须遵守的规则，它确保了交通的有序和安全。这个“交通规则”也是一种协议。</li>
+</ul>
+</li>
+<li><p><strong>计算机世界中的定义</strong>：<br>在计算机网络中，<strong>协议就是一套双方或多方都必须共同遵守的规则、标准或约定</strong>。它规定了计算机之间如何建立连接、如何交换信息。</p>
+<p>协议通常定义了以下内容：</p>
+<ul>
+<li><strong>数据格式 (Syntax)</strong>：信息的结构和格式是怎样的？（比如，先发送什么，后发送什么，用什么编码？）</li>
+<li><strong>语义 (Semantics)</strong>：信息中各个部分的具体含义是什么？（比如，某个代码 <code>200</code> 代表“成功”，<code>404</code> 代表“找不到”。）</li>
+<li><strong>时序 (Timing)</strong>：通信的先后顺序是怎样的？（比如，谁先发起请求？收到请求后应该做什么？）</li>
+</ul>
+</li>
+</ul>
 <p><strong>核心作用</strong>: 确保数据能够被正确地发送、接收和理解。</p>
 <hr>
-<h4 id="1-3-2-DNS-Domain-Name-System-域名系统"><a href="#1-3-2-DNS-Domain-Name-System-域名系统" class="headerlink" title="1.3.2 DNS (Domain Name System - 域名系统)"></a>1.3.2 DNS (Domain Name System - 域名系统)</h4><h5 id="1-定义与作用"><a href="#1-定义与作用" class="headerlink" title="1. 定义与作用"></a>1. 定义与作用</h5><p>DNS 是一个<strong>分层的、分布式的命名系统</strong>，用于将<strong>域名 (Domain Name)</strong>（如 <code>www.google.com</code>）解析成计算机网络能够理解的 <strong>IP 地址</strong>（如 <code>172.217.160.68</code>）。</p>
+<h3 id="1-4-DNS-Domain-Name-System-域名系统"><a href="#1-4-DNS-Domain-Name-System-域名系统" class="headerlink" title="1.4 DNS (Domain Name System - 域名系统)"></a>1.4 DNS (Domain Name System - 域名系统)</h3><h4 id="1-4-1-定义与作用"><a href="#1-4-1-定义与作用" class="headerlink" title="1.4.1 定义与作用"></a>1.4.1 定义与作用</h4><p>DNS 是一个<strong>分层的、分布式的命名系统</strong>，用于将<strong>域名 (Domain Name)</strong>（如 <code>www.google.com</code>）解析成计算机网络能够理解的 <strong>IP 地址</strong>（如 <code>172.217.160.68</code>）。</p>
 <ul>
 <li><strong>核心作用</strong>：解决了IP地址难于记忆的问题。如果没有DNS，我们访问网站就必须记住一长串数字，这几乎是不可能的。DNS 就像一本互联网的电话簿，我们提供一个名字（域名），它告诉我们对应的电话号码（IP地址）。</li>
 <li><strong>为何是“分层”和“分布式”</strong>：<ul>
@@ -11455,7 +11471,7 @@
 </li>
 </ul>
 <hr>
-<h5 id="2-DNS-查询过程（域名解析过程）"><a href="#2-DNS-查询过程（域名解析过程）" class="headerlink" title="2. DNS 查询过程（域名解析过程）"></a>2. DNS 查询过程（域名解析过程）</h5><p>当你在浏览器输入 <code>www.google.com</code> 并回车时，一个复杂的查询过程在毫秒间完成：</p>
+<h4 id="1-4-2-DNS-查询过程（域名解析过程）"><a href="#1-4-2-DNS-查询过程（域名解析过程）" class="headerlink" title="1.4.2 DNS 查询过程（域名解析过程）"></a>1.4.2 DNS 查询过程（域名解析过程）</h4><p>当你在浏览器输入 <code>www.google.com</code> 并回车时，一个复杂的查询过程在毫秒间完成：</p>
 <ol>
 <li><strong>检查本地缓存</strong>：<ul>
 <li><strong>浏览器缓存</strong>：浏览器首先检查自己的缓存中是否有该域名的记录。</li>
@@ -11483,7 +11499,7 @@
 <li><strong>建立连接</strong>：浏览器使用获取到的IP地址，与目标服务器（端口通常是80或443）建立TCP连接，开始HTTP通信。</li>
 </ol>
 <hr>
-<h5 id="3-常见的DNS记录类型"><a href="#3-常见的DNS记录类型" class="headerlink" title="3. 常见的DNS记录类型"></a>3. 常见的DNS记录类型</h5><p>DNS服务器中存储的不仅仅是IP地址，还包括多种类型的记录：</p>
+<h4 id="1-4-3-常见的DNS记录类型"><a href="#1-4-3-常见的DNS记录类型" class="headerlink" title="1.4.3 常见的DNS记录类型"></a>1.4.3 常见的DNS记录类型</h4><p>DNS服务器中存储的不仅仅是IP地址，还包括多种类型的记录：</p>
 <ul>
 <li><strong>A 记录 (Address Record)</strong>：最常见的记录，用于将域名指向一个IPv4地址。</li>
 <li><strong>AAAA 记录 (IPv6 Address Record)</strong>：用于将域名指向一个IPv6地址。</li>
@@ -11492,13 +11508,124 @@
 <li><strong>NS 记录 (Name Server Record)</strong>：域名服务器记录。指定该域由哪些权威域名服务器来解析。</li>
 </ul>
 <hr>
-<h5 id="4-Java中的体现与实践"><a href="#4-Java中的体现与实践" class="headerlink" title="4. Java中的体现与实践"></a>4. Java中的体现与实践</h5><p>在Java网络编程中，DNS解析通常是<strong>隐式</strong>发生的。当你创建一个 <code>Socket</code> 或 <code>URL</code> 对象时，Java的底层网络库会自动为你完成DNS查询。</p>
+<h4 id="1-4-4-Java中的体现与实践"><a href="#1-4-4-Java中的体现与实践" class="headerlink" title="1.4.4 Java中的体现与实践"></a>1.4.4 Java中的体现与实践</h4><p>在Java网络编程中，DNS解析通常是<strong>隐式</strong>发生的。当你创建一个 <code>Socket</code> 或 <code>URL</code> 对象时，Java的底层网络库会自动为你完成DNS查询。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当执行这行代码时，JVM会自动进行DNS查询，将 &quot;www.google.com&quot; 解析为IP地址</span></span><br><span class="line"><span class="comment">// 然后再用该IP地址和80端口发起TCP连接。</span></span><br><span class="line"><span class="type">Socket</span> <span class="variable">socket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Socket</span>(<span class="string">&quot;www.google.com&quot;</span>, <span class="number">80</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;成功连接到 Google, 远程IP: &quot;</span> + socket.getInetAddress().getHostAddress());</span><br></pre></td></tr></table></figure>
 
 <p><strong>JVM的DNS缓存</strong>：</p>
 <p>值得注意的是，JVM自身也会对DNS查询结果进行缓存，以提高性能。这个缓存的有效期可以通过JVM启动参数或Java安全策略文件进行配置。例如，<code>-Dnetworkaddress.cache.ttl=60</code> 可以将DNS缓存的有效期设置为60秒。了解这一点对于处理域名IP变更后服务不生效等问题非常重要。</p>
 <hr>
-<h4 id="1-3-3-URL与URI"><a href="#1-3-3-URL与URI" class="headerlink" title="1.3.3 URL与URI"></a>1.3.3 URL与URI</h4><h5 id="1-定义与关系"><a href="#1-定义与关系" class="headerlink" title="1. 定义与关系"></a>1. 定义与关系</h5><p><strong>URI (Uniform Resource Identifier - 统一资源标识符)</strong></p>
+<h3 id="1-5-认识-URL-统一资源定位符"><a href="#1-5-认识-URL-统一资源定位符" class="headerlink" title="1.5 认识 URL (统一资源定位符)"></a>1.5 认识 URL (统一资源定位符)</h3><p>URL，全称 <strong>Uniform Resource Locator</strong>，即“<strong>统一资源定位符</strong>”。它的作用非常直观：为互联网上的每一个资源提供一个独一无二的“地址”。就像现实世界中每家每户都有一个唯一的门牌号一样，有了 URL，浏览器才能准确地找到并访问你想要的任何资源（网页、图片、视频、API 等）。</p>
+<h4 id="1-5-1-URL-的组成部分"><a href="#1-5-1-URL-的组成部分" class="headerlink" title="1.5.1 URL 的组成部分"></a>1.5.1 URL 的组成部分</h4><p>一个完整的 URL 结构看起来可能很复杂，但我们可以把它拆解成几个核心部分。以这个常见的 URL 为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.example.com:443/path/to/resource?query1=value1&amp;query2=value2#section1</span><br></pre></td></tr></table></figure>
+
+<p>下面我们逐一解析它的构成：</p>
+<table>
+<thead>
+<tr>
+<th>部分 (Part)</th>
+<th>示例值</th>
+<th>英文名</th>
+<th>解释说明</th>
+<th>是否必需</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>协议 (Scheme)</strong></td>
+<td><code>https</code></td>
+<td>Scheme &#x2F; Protocol</td>
+<td>定义了客户端应该使用哪种协议来访问资源。常见的有 <code>http</code>, <code>https</code>, <code>ftp</code>, <code>file</code> 等。它必须以 <code>:</code> 结尾。</td>
+<td>是</td>
+</tr>
+<tr>
+<td><strong>分隔符</strong></td>
+<td><code>://</code></td>
+<td>Delimiter</td>
+<td>用于分隔协议和后面的主机部分。</td>
+<td>是</td>
+</tr>
+<tr>
+<td><strong>主机 (Host)</strong></td>
+<td><code>www.example.com</code></td>
+<td>Host &#x2F; Domain Name</td>
+<td>标识了资源所在的服务器的域名或 IP 地址。这是网络上的“门牌号”。</td>
+<td>是</td>
+</tr>
+<tr>
+<td><strong>端口 (Port)</strong></td>
+<td><code>:443</code></td>
+<td>Port</td>
+<td>指定了服务器上用于监听请求的“窗口”或“服务台”。每个网络服务都与一个端口号关联。</td>
+<td>否 (可选)</td>
+</tr>
+<tr>
+<td><strong>路径 (Path)</strong></td>
+<td><code>/path/to/resource</code></td>
+<td>Path</td>
+<td>描述了资源在服务器上的具体位置，类似电脑文件系统中的文件路径。以 <code>/</code> 开头。</td>
+<td>否 (可选)</td>
+</tr>
+<tr>
+<td><strong>查询 (Query)</strong></td>
+<td><code>?query1=value1&amp;query2=value2</code></td>
+<td>Query &#x2F; Search</td>
+<td>提供给服务器的额外参数，通常用于过滤、分页或搜索。以 <code>?</code> 开始，多个参数之间用 <code>&amp;</code> 分隔。</td>
+<td>否 (可选)</td>
+</tr>
+<tr>
+<td><strong>片段 (Fragment)</strong></td>
+<td><code>#section1</code></td>
+<td>Fragment</td>
+<td>也称为“锚点 (Anchor)”，用于定位到资源内部的某个特定部分（如网页中的某个标题）。以 <code>#</code> 开始。</td>
+<td>否 (可选)</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>各部分的详细说明：</strong></p>
+<ol>
+<li><strong>协议 (Scheme)</strong><ul>
+<li>它告诉浏览器用什么“语言”去和服务器沟通。</li>
+<li><code>http</code>: 超文本传输协议，是 Web 的基础协议，默认端口 80。</li>
+<li><code>https</code>: 安全的超文本传输协议，在 HTTP 的基础上加入了 SSL&#x2F;TLS 加密，默认端口 443。</li>
+<li><code>ftp</code>: 文件传输协议，用于文件上传下载。</li>
+<li><code>file</code>: 用于访问本地计算机上的文件。</li>
+</ul>
+</li>
+<li><strong>主机 (Host)</strong><ul>
+<li>可以是<strong>域名</strong>（如 <code>www.google.com</code>），域名最终会通过 DNS 解析成 IP 地址。</li>
+<li>也可以直接是 <strong>IP 地址</strong>（如 <code>192.168.1.1</code>）。</li>
+</ul>
+</li>
+<li><strong>端口 (Port)</strong><ul>
+<li>端口号是一个 16 位的数字（0-65535）。</li>
+<li>如果 URL 中<strong>省略了端口号</strong>，浏览器会使用该协议的<strong>默认端口</strong>。<ul>
+<li><code>http</code> 的默认端口是 <strong>80</strong>。</li>
+<li><code>httpss</code> 的默认端口是 <strong>443</strong>。</li>
+</ul>
+</li>
+<li>因此，<code>http://example.com</code> 等价于 <code>http://example.com:80</code>。</li>
+</ul>
+</li>
+<li><strong>路径 (Path)</strong><ul>
+<li>路径部分是大小写敏感的（除非服务器特殊配置）。</li>
+<li>如果 URL 中只有主机名而没有路径（如 <code>https://www.example.com</code>），那么路径默认为根路径 <code>/</code>。</li>
+</ul>
+</li>
+<li><strong>查询 (Query)</strong><ul>
+<li>这是客户端向服务器传递动态数据的主要方式，尤其是在 <code>GET</code> 请求中。</li>
+<li>格式是 <code>key=value</code> 的键值对，多个键值对用 <code>&amp;</code> 连接。</li>
+<li>例如，在搜索引擎中搜索“http”，URL 可能是 <code>https://www.google.com/search?q=http</code>。这里的 <code>q=http</code> 就是查询参数。</li>
+</ul>
+</li>
+<li><strong>片段 (Fragment)</strong><ul>
+<li><strong>一个非常重要的特性是：片段部分完全由客户端（浏览器）处理，它不会被发送到服务器。</strong></li>
+<li>当浏览器加载完页面后，它会查找 ID 为 <code>section1</code> 的元素，并将页面滚动到该位置。</li>
+<li>这在单页应用 (SPA) 中被广泛用于实现前端路由。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h4 id="1-5-2-URI-URL-URN-的区别与联系"><a href="#1-5-2-URI-URL-URN-的区别与联系" class="headerlink" title="1.5.2 URI, URL, URN 的区别与联系"></a>1.5.2 URI, URL, URN 的区别与联系</h4><p>在技术文档中，可能还会遇到 URI 和 URN两个术语。它们的关系如下：</p>
+<p><strong>URI (Uniform Resource Identifier - 统一资源标识符)</strong></p>
 <ul>
 <li><strong>定义</strong>：URI是一个用于<strong>唯一标识</strong>互联网上任何资源（如网页、图片、视频、文件等）的字符串。它的核心作用是“标识”，就像每个公民都有一个独一无二的身份证号一样。</li>
 <li><strong>目的</strong>：提供一种统一的、标准的方式来识别资源，而不关心如何访问它或它在哪里。</li>
@@ -11515,53 +11642,12 @@
 <li><strong>现状</strong>：URN在实际应用中不如URL普遍。</li>
 </ul>
 <p><strong>三者关系总结</strong></p>
-<p>一个简单的比喻可以帮助理解：</p>
-<ul>
-<li><strong>URI (身份证号)</strong>：一个抽象的、唯一的标识。</li>
-<li><strong>URL (家庭住址)</strong>：一种具体的URI，告诉你资源在哪里以及如何找到它。</li>
-<li><strong>URN (书籍ISBN号)</strong>：另一种具体的URI，给资源一个永久不变的名字，不关心位置。</li>
-</ul>
-<p><strong>核心关系</strong>：<strong>所有URL都是URI，但并非所有URI都是URL。</strong> 在绝大多数Web开发场景中，我们打交 -道的都是URL。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">      +------------------+</span><br><span class="line">      |       URI        |  (标识符总称)</span><br><span class="line">      |  (Identifier)    |</span><br><span class="line">      +------------------+</span><br><span class="line">             /      \</span><br><span class="line">            /        \</span><br><span class="line">+----------------+  +----------------+</span><br><span class="line">|      URL       |  |      URN       | (名称)</span><br><span class="line">|  (Locator)     |  |     (Name)     |</span><br><span class="line">+----------------+  +----------------+</span><br><span class="line">(标识 + 定位)       (标识，但无定位)</span><br></pre></td></tr></table></figure>
+
+<p><strong>核心关系</strong>：<strong>所有URL都是URI，但并非所有URI都是URL。</strong> 在绝大多数Web开发场景中，我们打交道的都是URL。</p>
 <hr>
-<h5 id="2-URL的结构解析"><a href="#2-URL的结构解析" class="headerlink" title="2. URL的结构解析"></a>2. URL的结构解析</h5><p>一个标准的URL结构通常包含以下几个部分，有些部分是可选的：</p>
-<p><strong><code>scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]</code></strong></p>
-<p>我们以一个常见的URL为例进行分解：</p>
-<p><code>https://www.example.com:8080/path/to/myfile?key1=value1#section1</code></p>
-<ul>
-<li><strong>Scheme (协议)</strong><ul>
-<li><code>https://</code></li>
-<li>定义了访问资源所使用的协议，如 <code>http</code>, <code>https</code>, <code>ftp</code>, <code>file</code>等。浏览器或客户端根据这个协议来决定如何与服务器通信。</li>
-</ul>
-</li>
-<li><strong>Authority (主机信息)</strong><ul>
-<li><code>www.example.com:8080</code></li>
-<li>这部分包含了定位服务器所需的所有信息，它又可以细分为：<ul>
-<li><strong>Host (主机名)</strong>: <code>www.example.com</code> - 服务器的域名或IP地址。</li>
-<li><strong>Port (端口号)</strong>: <code>8080</code> - 服务器上监听请求的特定端口。如果省略，则使用协议的默认端口（例如，<code>http</code>默认80，<code>https</code>默认443）。</li>
-<li><strong>User Info (用户信息)</strong>: <code>user:password@</code> (可选) - 用于身份验证的用户名和密码，现在已不推荐在URL中直接使用，因为存在严重的安全风险。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>Path (路径)</strong><ul>
-<li><code>/path/to/myfile</code></li>
-<li>指定了资源在服务器上的具体位置，类似于文件系统中的路径。</li>
-</ul>
-</li>
-<li><strong>Query (查询字符串)</strong><ul>
-<li><code>?key1=value1</code></li>
-<li>以 <code>?</code> 开始，由 <code>&amp;</code> 分隔的键值对 (<code>key=value</code>)。通常用于向服务器传递参数，例如搜索关键词、分页信息等。这部分数据会被服务器端接收和处理。</li>
-</ul>
-</li>
-<li><strong>Fragment (片段&#x2F;锚点)</strong><ul>
-<li><code>#section1</code></li>
-<li>以 <code>#</code> 开始，用于指向资源内部的一个特定部分（书签）。<strong>这部分信息仅由客户端（如浏览器）处理，不会发送给服务器</strong>。例如，浏览器会根据<code>#section1</code>自动滚动到页面中ID为<code>section1</code>的元素位置。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="3-Java中的体现与实践"><a href="#3-Java中的体现与实践" class="headerlink" title="3. Java中的体现与实践"></a>3. Java中的体现与实践</h4><p>Java在 <code>java.net</code> 包中提供了两个核心类来处理URI和URL：<code>URI</code> 和 <code>URL</code>。</p>
-<h5 id="java-net-URI-类"><a href="#java-net-URI-类" class="headerlink" title="java.net.URI 类"></a><code>java.net.URI</code> 类</h5><ul>
+<h4 id="1-5-3-Java中的体现与实践"><a href="#1-5-3-Java中的体现与实践" class="headerlink" title="1.5.3 Java中的体现与实践"></a>1.5.3 Java中的体现与实践</h4><p>Java在 <code>java.net</code> 包中提供了两个核心类来处理URI和URL：<code>URI</code> 和 <code>URL</code>。</p>
+<h5 id="1-java-net-URI-类"><a href="#1-java-net-URI-类" class="headerlink" title="1. java.net.URI 类"></a>1. <code>java.net.URI</code> 类</h5><ul>
 <li><strong>特点</strong>：<ul>
 <li>它是一个纯粹的<strong>标识符</strong>的抽象表示，严格遵守 RFC 2396 规范。</li>
 <li>它只负责解析和操作URI字符串的各个部分（scheme, host, path等），<strong>不包含任何用于网络访问的方法</strong>。</li>
@@ -11569,7 +11655,8 @@
 </ul>
 </li>
 </ul>
-<h5 id="java-net-URL-类"><a href="#java-net-URL-类" class="headerlink" title="java.net.URL 类"></a><code>java.net.URL</code> 类</h5><ul>
+<hr>
+<h5 id="2-java-net-URL-类"><a href="#2-java-net-URL-类" class="headerlink" title="2. java.net.URL 类"></a>2. <code>java.net.URL</code> 类</h5><ul>
 <li><strong>特点</strong>：<ul>
 <li>它代表了一个指向网络资源的<strong>定位符</strong>。</li>
 <li>除了包含URI的解析功能外，它的核心能力在于<strong>与资源进行交互</strong>。它提供了如 <code>openConnection()</code>, <code>openStream()</code> 等方法来获取资源内容。</li>
@@ -11577,7 +11664,8 @@
 </ul>
 </li>
 </ul>
-<h5 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a><strong>代码示例</strong></h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> HuangJinCheng</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2025/9/15</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UriUrlDemo</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 使用URI类进行解析</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">URI</span> <span class="variable">uri</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URI</span>(<span class="string">&quot;https://www.example.com:8080/path/to/myfile?key1=value1#section1&quot;</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;--- URI 解析 ---&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;Scheme: &quot;</span> + uri.getScheme());       <span class="comment">// 输出: https</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Host: &quot;</span> + uri.getHost());           <span class="comment">// 输出: www.example.com</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Port: &quot;</span> + uri.getPort());           <span class="comment">// 输出: 8080</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Path: &quot;</span> + uri.getPath());           <span class="comment">// 输出: /path/to/myfile</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Query: &quot;</span> + uri.getQuery());         <span class="comment">// 输出: key1=value1</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Fragment: &quot;</span> + uri.getFragment());   <span class="comment">// 输出: section1</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Authority: &quot;</span> + uri.getAuthority()); <span class="comment">// 输出: www.example.com:8080</span></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (URISyntaxException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;URI 语法错误: &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;\n=====================================\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 使用URL类进行资源访问</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 创建一个URL对象</span></span><br><span class="line">            <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;https://www.baidu.com&quot;</span>);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;--- URL 访问 ---&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;Protocol: &quot;</span> + url.getProtocol()); <span class="comment">// 输出: https</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Host: &quot;</span> + url.getHost());         <span class="comment">// 输出: www.baidu.com</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Default Port: &quot;</span> + url.getDefaultPort()); <span class="comment">// 输出: 443 (https的默认端口)</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 通过URL打开一个输入流，读取网页内容</span></span><br><span class="line">            <span class="keyword">try</span> (<span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> url.openStream();</span><br><span class="line">                 <span class="type">InputStreamReader</span> <span class="variable">isr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(is);</span><br><span class="line">                 <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(isr)) &#123;</span><br><span class="line">                </span><br><span class="line">                System.out.println(<span class="string">&quot;\n正在读取 &quot;</span> + url + <span class="string">&quot; 的内容...&quot;</span>);</span><br><span class="line">                String line;</span><br><span class="line">                <span class="comment">// 只读取前5行作为演示</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span> &amp;&amp; (line = br.readLine()) != <span class="literal">null</span>; i++) &#123;</span><br><span class="line">                    System.out.println(line);</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(<span class="string">&quot;...内容读取完毕(仅演示部分)...&quot;</span>);</span><br><span class="line">                </span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                System.err.println(<span class="string">&quot;读取URL内容失败: &quot;</span> + e.getMessage());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;URL 格式错误: &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h5 id="3-代码示例"><a href="#3-代码示例" class="headerlink" title="3. 代码示例"></a>3. 代码示例</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> HuangJinCheng</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2025/9/15</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UriUrlDemo</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 使用URI类进行解析</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">URI</span> <span class="variable">uri</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URI</span>(<span class="string">&quot;https://www.example.com:8080/path/to/myfile?key1=value1#section1&quot;</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">&quot;--- URI 解析 ---&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;Scheme: &quot;</span> + uri.getScheme());       <span class="comment">// 输出: https</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Host: &quot;</span> + uri.getHost());           <span class="comment">// 输出: www.example.com</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Port: &quot;</span> + uri.getPort());           <span class="comment">// 输出: 8080</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Path: &quot;</span> + uri.getPath());           <span class="comment">// 输出: /path/to/myfile</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Query: &quot;</span> + uri.getQuery());         <span class="comment">// 输出: key1=value1</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Fragment: &quot;</span> + uri.getFragment());   <span class="comment">// 输出: section1</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Authority: &quot;</span> + uri.getAuthority()); <span class="comment">// 输出: www.example.com:8080</span></span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (URISyntaxException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;URI 语法错误: &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;\n=====================================\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 使用URL类进行资源访问</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 创建一个URL对象</span></span><br><span class="line">            <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(<span class="string">&quot;https://www.baidu.com&quot;</span>);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;--- URL 访问 ---&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;Protocol: &quot;</span> + url.getProtocol()); <span class="comment">// 输出: https</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Host: &quot;</span> + url.getHost());         <span class="comment">// 输出: www.baidu.com</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Default Port: &quot;</span> + url.getDefaultPort()); <span class="comment">// 输出: 443 (https的默认端口)</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 通过URL打开一个输入流，读取网页内容</span></span><br><span class="line">            <span class="keyword">try</span> (<span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> url.openStream();</span><br><span class="line">                 <span class="type">InputStreamReader</span> <span class="variable">isr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(is);</span><br><span class="line">                 <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(isr)) &#123;</span><br><span class="line">                </span><br><span class="line">                System.out.println(<span class="string">&quot;\n正在读取 &quot;</span> + url + <span class="string">&quot; 的内容...&quot;</span>);</span><br><span class="line">                String line;</span><br><span class="line">                <span class="comment">// 只读取前5行作为演示</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span> &amp;&amp; (line = br.readLine()) != <span class="literal">null</span>; i++) &#123;</span><br><span class="line">                    System.out.println(line);</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(<span class="string">&quot;...内容读取完毕(仅演示部分)...&quot;</span>);</span><br><span class="line">                </span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                System.err.println(<span class="string">&quot;读取URL内容失败: &quot;</span> + e.getMessage());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">            System.err.println(<span class="string">&quot;URL 格式错误: &quot;</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>总结：</strong> 在Java中，如果你只是需要解析或构建一个标识符字符串，<code>URI</code>是更合适、更严格的选择。如果你需要实际地去连接并获取该标识符指向的网络资源，那么就必须使用 <code>URL</code> 类。</p>
 <hr>
