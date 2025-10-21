@@ -27,7 +27,7 @@
 <meta property="og:description" content="一、 实时通信的演进1. HTTP 的无状态性我们在”HTTP协议“这一笔  记中介绍了HTTP的核心特点无状态，这里简单回顾一下  定义：“无状态”指的是协议本身对于事务处理没有记忆能力。每一次 HTTP 请求都是完全独立的，服务器不会保留前一次请求的任何信息。 **优点 **： 简化服务器设计：服务器不需要花费额外的资源（如内存）来存储海量的客户端状态信息。 提升服务器的可伸缩性：由于服务器不">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-18T03:22:31.000Z">
-<meta property="article:modified_time" content="2025-10-20T05:30:56.294Z">
+<meta property="article:modified_time" content="2025-10-21T01:38:51.529Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
@@ -142,7 +142,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -211,7 +211,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-20 13:30:56" itemprop="dateModified" datetime="2025-10-20T13:30:56+08:00">2025-10-20</time>
+      <time title="修改时间：2025-10-21 09:38:51" itemprop="dateModified" datetime="2025-10-21T09:38:51+08:00">2025-10-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -532,7 +532,7 @@
 <li><strong>控制帧 (Control Frames)</strong><ul>
 <li>控制帧用于处理 WebSocket 连接本身的状态，它们 <strong>不能被分片</strong>（即 <code>FIN</code> 位必须为 <code>1</code>），且其载荷长度不能超过 125 字节。</li>
 <li><code>%x8</code> (<strong>Close Frame</strong>): 关闭帧。用于发起一个“优雅的”关闭握手。发送方可以包含一个状态码和关闭原因，接收方收到后应回复一个关闭帧，然后双方关闭连接。</li>
-<li><code>%x9</code> (<strong>Ping Frame</strong>): Ping 帧。主要用于心跳检测，以确认连接仍然存活。发送方可以包含任意载荷数据，接收方收到 Ping 帧后，<strong>必须</strong> 尽快回复一个 Pong 帧，并将 Ping 帧的载aho’d’a一模一样地返回。</li>
+<li><code>%x9</code> (<strong>Ping Frame</strong>): Ping 帧。主要用于心跳检测，以确认连接仍然存活。发送方可以包含任意载荷数据，接收方收到 Ping 帧后，<strong>必须</strong> 尽快回复一个 Pong 帧，并将 Ping 帧的载荷数据一模一样地返回。</li>
 <li><code>%xA</code> (<strong>Pong Frame</strong>): Pong 帧。是对 Ping 帧的响应。也可以由任意一方主动发送，作为一种单向的心跳。</li>
 </ul>
 </li>
@@ -560,7 +560,7 @@
 <li><strong>工作方式</strong>：<ul>
 <li>它并非一个全新的协议，而是将标准的 WebSocket 协议运行在 <strong>TLS (Transport Layer Security)</strong> 层之上。TLS 是 <code>https://</code> 使用的同一种加密协议。</li>
 <li>连接过程如下：<ol>
-<li>首先，客户端和服务器之间会建立一个标准的 <strong>TLS 握手</strong>，创建一个安全的加密通道。这个过程与访问一个 <code>https://</code> 网站完全相同，服务器需要提供一个有效的 SSL&#x2F;TLS 证书。</li>
+<li>首先，客户端和服务之间会建立一个标准的 <strong>TLS 握手</strong>，创建一个安全的加密通道。这个过程与访问一个 <code>https://</code> 网站完全相同，服务器需要提供一个有效的 SSL&#x2F;TLS 证书。</li>
 <li>然后，在这个已经建立的加密通道内，再进行标准的 WebSocket HTTP Upgrade 握手。</li>
 <li>握手成功后，所有后续的 WebSocket 数据帧都会在发送前被 TLS 层加密，在接收后被 TLS 层解密。</li>
 </ol>
@@ -2214,6 +2214,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/10/20/Web%E5%8D%8F%E8%AE%AE%E6%9C%8D%E5%8A%A1%E5%99%A8/HTTP%E5%AE%A2%E6%88%B7%E7%AB%AF/" rel="next" title="HTTP客户端">
+                  HTTP客户端 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
