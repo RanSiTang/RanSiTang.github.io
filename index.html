@@ -205,7 +205,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-26 13:42:01" itemprop="dateModified" datetime="2025-10-26T13:42:01+08:00">2025-10-26</time>
+      <time title="修改时间：2025-10-26 20:02:44" itemprop="dateModified" datetime="2025-10-26T20:02:44+08:00">2025-10-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,7 +321,7 @@
 <p><strong>典型架构组合</strong>：</p>
 <p>在Java后端应用中，最常见的组合是 <strong>MySQL + Redis</strong>。MySQL作为最终的数据存储（Source of Truth），Redis作为其前端的高性能缓存和功能扩展。用户的请求优先访问Redis，如果Redis中没有数据（Cache Miss），再去查询MySQL，并将结果写回Redis，以便下次快速访问。</p>
 <hr>
-<h2 id="2-Redis的典型应用场景"><a href="#2-Redis的典型应用场景" class="headerlink" title="2. Redis的典型应用场景"></a>2. Redis的典型应用场景</h2><h4 id="2-1-缓存"><a href="#2-1-缓存" class="headerlink" title="2.1 缓存"></a>2.1 缓存</h4><ul>
+<h2 id="2-Redis的典型应用场景"><a href="#2-Redis的典型应用场景" class="headerlink" title="2. Redis的典型应用场景"></a>2. Redis的典型应用场景</h2><h3 id="2-1-缓存"><a href="#2-1-缓存" class="headerlink" title="2.1 缓存"></a>2.1 缓存</h3><ul>
 <li><strong>场景描述</strong>：当应用的用户量和并发量上来后，数据库往往成为性能瓶颈。频繁地读取相同的数据（如热点新闻、商品详情）会给数据库带来巨大压力。</li>
 <li><strong>Redis解决方案</strong>：将热点数据存储在Redis中（作为缓存层），绝大部分请求将直接从Redis获取数据，而无需访问后端数据库。这大大降低了数据库的压力，并极大地提升了应用的响应速度。<ul>
 <li><strong>数据缓存</strong>：缓存数据库中的记录，通常以JSON格式存储。</li>
@@ -330,33 +330,33 @@
 </li>
 </ul>
 <hr>
-<h4 id="2-2-分布式会话（Session-Sharing）"><a href="#2-2-分布式会话（Session-Sharing）" class="headerlink" title="2.2 分布式会话（Session Sharing）"></a>2.2 分布式会话（Session Sharing）</h4><ul>
+<h3 id="2-2-分布式会话（Session-Sharing）"><a href="#2-2-分布式会话（Session-Sharing）" class="headerlink" title="2.2 分布式会话（Session Sharing）"></a>2.2 分布式会话（Session Sharing）</h3><ul>
 <li><strong>场景描述</strong>：在分布式或集群环境下，应用被部署在多台服务器上。如果Session存储在单台服务器的内存中，负载均衡器将用户的下一个请求转发到另一台服务器时，就会导致Session丢失，用户需要重新登录。</li>
 <li><strong>Redis解决方案</strong>：将所有服务器的Session数据集中存储在Redis中。无论用户的请求被哪台服务器处理，都可以通过同一个Session ID从Redis中获取到一致的会话信息。</li>
 </ul>
 <hr>
-<h4 id="2-3-计数器、排行榜"><a href="#2-3-计数器、排行榜" class="headerlink" title="2.3 计数器、排行榜"></a>2.3 计数器、排行榜</h4><ul>
+<h3 id="2-3-计数器、排行榜"><a href="#2-3-计数器、排行榜" class="headerlink" title="2.3 计数器、排行榜"></a>2.3 计数器、排行榜</h3><ul>
 <li><strong>场景描述</strong>：需要实时统计和展示一些动态变化的数字，如文章阅读量、视频点赞数、商品销量榜、游戏积分榜等。关系型数据库在应对高并发的计数更新时，行锁的开销很大，性能较差。</li>
 <li><strong>Redis解决方案</strong>：利用Redis原子性的、纳秒级的内存操作来实现。</li>
 </ul>
 <hr>
-<h4 id="2-4-社交网络（粉丝、关注、共同好友）"><a href="#2-4-社交网络（粉丝、关注、共同好友）" class="headerlink" title="2.4 社交网络（粉丝、关注、共同好友）"></a>2.4 社交网络（粉丝、关注、共同好友）</h4><ul>
+<h3 id="2-4-社交网络（粉丝、关注、共同好友）"><a href="#2-4-社交网络（粉丝、关注、共同好友）" class="headerlink" title="2.4 社交网络（粉丝、关注、共同好友）"></a>2.4 社交网络（粉丝、关注、共同好友）</h3><ul>
 <li><strong>场景描述</strong>：在社交应用中，需要快速计算用户之间的关系，如A关注了B，A和C的共同关注是谁等。在关系型数据库中，这些操作通常需要复杂的<code>JOIN</code>查询，效率低下。</li>
 <li><strong>Redis解决方案</strong>：利用Set集合的特性（无序、唯一）可以非常自然地模拟用户关系。</li>
 </ul>
 <hr>
-<h4 id="2-5-消息队列（Pub-Sub、Stream）"><a href="#2-5-消息队列（Pub-Sub、Stream）" class="headerlink" title="2.5 消息队列（Pub&#x2F;Sub、Stream）"></a>2.5 消息队列（Pub&#x2F;Sub、Stream）</h4><ul>
+<h3 id="2-5-消息队列（Pub-Sub、Stream）"><a href="#2-5-消息队列（Pub-Sub、Stream）" class="headerlink" title="2.5 消息队列（Pub&#x2F;Sub、Stream）"></a>2.5 消息队列（Pub&#x2F;Sub、Stream）</h3><ul>
 <li><strong>场景描述</strong>：在系统架构中，为了解耦和异步处理，常常需要消息队列。例如，用户下单后，需要触发发送邮件、更新库存、通知物流等一系列后续操作，这些操作可以异步执行，从而快速响应用户。</li>
 <li><strong>Redis解决方案</strong>：Redis提供了多种实现消息队列的机制，可以满足从简单到复杂的不同需求。</li>
 </ul>
 <hr>
-<h4 id="2-6-分布式锁"><a href="#2-6-分布式锁" class="headerlink" title="2.6 分布式锁"></a>2.6 分布式锁</h4><ul>
+<h3 id="2-6-分布式锁"><a href="#2-6-分布式锁" class="headerlink" title="2.6 分布式锁"></a>2.6 分布式锁</h3><ul>
 <li><strong>场景描述</strong>：在分布式系统中，多个服务实例需要竞争访问同一个共享资源（如秒杀场景下的商品库存）。需要一种机制来保证同一时刻只有一个实例能够操作该资源，防止数据不一致。</li>
 <li><strong>Redis解决方案</strong>：利用Redis命令的原子性（如<code>SETNX</code>）来模拟锁的获取和释放。</li>
 </ul>
 <hr>
 <h2 id="3-Redis的底层模型"><a href="#3-Redis的底层模型" class="headerlink" title="3. Redis的底层模型"></a>3. Redis的底层模型</h2><p>Redis的核心网络模型在版本6.0之前一直以<strong>单线程</strong>著称。这个设计选择常常让人疑惑：在一个多核CPU普及的时代，为什么一个高性能的数据库会选择单线程？</p>
-<h4 id="3-1-单线程模型：为什么这么快？"><a href="#3-1-单线程模型：为什么这么快？" class="headerlink" title="3.1 单线程模型：为什么这么快？"></a>3.1 单线程模型：为什么这么快？</h4><p>Redis的“单线程”指的是其<strong>处理网络请求和执行命令的核心模块是单线程的</strong>。而像持久化（RDB、AOF）、异步删除等耗时操作，Redis会使用后台线程（background threads）或子进程来处理，以避免阻塞主线程。</p>
+<h3 id="3-1-单线程模型：为什么这么快？"><a href="#3-1-单线程模型：为什么这么快？" class="headerlink" title="3.1 单线程模型：为什么这么快？"></a>3.1 单线程模型：为什么这么快？</h3><p>Redis的“单线程”指的是其<strong>处理网络请求和执行命令的核心模块是单线程的</strong>。而像持久化（RDB、AOF）、异步删除等耗时操作，Redis会使用后台线程（background threads）或子进程来处理，以避免阻塞主线程。</p>
 <p>Redis单线程模型之所以能达到极高的性能，主要归功于以下三点：</p>
 <p><strong>1. 纯内存操作 (Pure In-Memory Operations)</strong></p>
 <ul>
@@ -385,14 +385,14 @@
 <p><strong>小结</strong>：Redis的快，是因为它<strong>扬长避短</strong>。它将所有操作都放在了速度飞快的内存里，并用I&#x2F;O多路复用技术让它的单线程专注于处理实际的计算任务，而不是把时间浪费在等待I&#x2F;O和线程切换上。</p>
 </blockquote>
 <hr>
-<h4 id="3-2-单线程模型的优缺点"><a href="#3-2-单线程模型的优缺点" class="headerlink" title="3.2 单线程模型的优缺点"></a>3.2 单线程模型的优缺点</h4><p><strong>优点 (Advantages):</strong></p>
+<h3 id="3-2-单线程模型的优缺点"><a href="#3-2-单线程模型的优缺点" class="headerlink" title="3.2 单线程模型的优缺点"></a>3.2 单线程模型的优缺点</h3><p><strong>优点 :</strong></p>
 <ol>
 <li><strong>实现简单，易于维护</strong>：代码逻辑清晰，避免了处理复杂的线程同步和死锁问题。</li>
 <li><strong>天然的原子性</strong>：由于所有命令串行执行，单个命令的操作是原子性的，无需担心并发导致的数据错乱。</li>
 <li><strong>高性能</strong>：没有锁竞争和上下文切换的开销。</li>
 <li><strong>可预测性</strong>：执行顺序是确定的，便于排查问题。</li>
 </ol>
-<p><strong>缺点 (Disadvantages):</strong></p>
+<p><strong>缺点 :</strong></p>
 <ol>
 <li><strong>无法利用多核CPU</strong>：这是最主要的缺点。单线程意味着Redis实例只能利用一个CPU核心来进行命令处理。对于计算密集型的操作，无法通过增加CPU核心来提升性能。<ul>
 <li><strong>解决方案</strong>：在单台服务器上部署多个Redis实例（每个实例绑定一个CPU核心），或者直接使用Redis集群（Cluster）来横向扩展。</li>
@@ -405,7 +405,7 @@
 <li><strong>单点性能瓶颈</strong>：单个线程的QPS（每秒查询率）终究是有上限的，它受限于CPU主频。</li>
 </ol>
 <hr>
-<h4 id="3-3-Redis-6-0之后的多线程"><a href="#3-3-Redis-6-0之后的多线程" class="headerlink" title="3.3 Redis 6.0之后的多线程"></a>3.3 Redis 6.0之后的多线程</h4><p>为了改进单线程模型无法利用多核CPU的缺点，Redis从<strong>6.0版本</strong>开始引入了<strong>多线程</strong>。</p>
+<h3 id="3-3-Redis-6-0之后的多线程"><a href="#3-3-Redis-6-0之后的多线程" class="headerlink" title="3.3 Redis 6.0之后的多线程"></a>3.3 Redis 6.0之后的多线程</h3><p>为了改进单线程模型无法利用多核CPU的缺点，Redis从<strong>6.0版本</strong>开始引入了<strong>多线程</strong>。</p>
 <ul>
 <li><strong>但请注意</strong>：Redis的多线程<strong>并非</strong>用于执行命令，而是用于<strong>处理网络I&#x2F;O</strong>（读取请求和写回响应）。</li>
 <li><strong>工作流程</strong>：<ol>
@@ -726,7 +726,7 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; MSET user:1:name &quot;Tom&quot; user:2:name &quot;Jerry&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; MGET user:1:name user:2:name</span><br><span class="line">1) &quot;Tom&quot;</span><br><span class="line">2) &quot;Jerry&quot;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><strong><code>SETEX key seconds value</code></strong>: <code>SET</code> + <code>EXPIRE</code>的原子组合，设置key的值并指定其过期时间（单位：秒）。非常适合用于缓存。</p>
+<li><p><strong><code>SETEX key seconds value</code></strong>: <code>SET</code> + <code>EXPIRE</code>的原子组合，设置key的值并指定其过期时间（单位：秒），但没有<code>SET</code>灵活常用，<code>SETEX</code>主要是为了向后兼容保留的。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SETEX verification_code:138xxxx1234 60 &quot;9527&quot;</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; TTL verification_code:138xxxx1234  # TTL命令查看剩余生存时间</span><br><span class="line">(integer) 58 </span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong><code>SETNX key value</code></strong>: <code>SET if Not eXists</code>的缩写。只有在key不存在时，才设置key的值。<strong>是实现分布式锁的基础</strong>。</p>
