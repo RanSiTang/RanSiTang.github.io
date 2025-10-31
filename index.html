@@ -205,7 +205,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-30 10:53:59" itemprop="dateModified" datetime="2025-10-30T10:53:59+08:00">2025-10-30</time>
+      <time title="修改时间：2025-10-31 11:48:32" itemprop="dateModified" datetime="2025-10-31T11:48:32+08:00">2025-10-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -384,18 +384,70 @@
 <li><strong>产物</strong>：所有这些信息——包括类信息、方法、字段、以及方法的字节码指令——最终被打包成一个严格遵循规范的二进制文件，即 <strong><code>.class</code> 文件</strong>。</li>
 </ul>
 <hr>
-<h3 id="2-2-class-文件结构初探-魔数、版本号、常量池等"><a href="#2-2-class-文件结构初探-魔数、版本号、常量池等" class="headerlink" title="2.2 .class 文件结构初探 (魔数、版本号、常量池等)"></a>2.2 <code>.class</code> 文件结构初探 (魔数、版本号、常量池等)</h3><p><code>.class</code> 文件不是给人阅读的，它是一个高度结构化的二进制文件，是JVM的“说明书”。我们可以通过 <code>javap -v HelloWorld.class</code> 命令来窥探它的内部结构。主要包含以下部分：</p>
+<h3 id="2-2-class-文件结构探析"><a href="#2-2-class-文件结构探析" class="headerlink" title="2.2 .class 文件结构探析"></a>2.2 <code>.class</code> 文件结构探析</h3><p><code>.class</code> 文件不是给人阅读的，它是一个高度结构化的二进制文件，是JVM的“说明书”。可以通过 <code>javap -v HelloWorld.class</code> 命令来窥探它的内部结构。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">E:\Development\IdeaProjects\HelloWorld\target\classes&gt;javap -v HelloWorld.class</span><br><span class="line"></span><br><span class="line">Classfile /E:/Development/IdeaProjects/HelloWorld/target/classes/HelloWorld.class</span><br><span class="line">  Last modified 2025年10月30日; size 534 bytes</span><br><span class="line">  SHA-256 checksum 561b0b99c252d3e7443ab86ba0cb84c47bf6afb013ccd7377c6809b3cab82dbf</span><br><span class="line">  Compiled from &quot;HelloWorld.java&quot;</span><br><span class="line">public class HelloWorld</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 65</span><br><span class="line">  flags: (0x0021) ACC_PUBLIC, ACC_SUPER</span><br><span class="line">  this_class: #21                         // HelloWorld</span><br><span class="line">  super_class: #2                         // java/lang/Object</span><br><span class="line">  interfaces: 0, fields: 0, methods: 2, attributes: 1</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #2.#3          // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 = Class              #4             // java/lang/Object</span><br><span class="line">   #3 = NameAndType        #5:#6          // &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #4 = Utf8               java/lang/Object</span><br><span class="line">   #5 = Utf8               &lt;init&gt;</span><br><span class="line">   #6 = Utf8               ()V</span><br><span class="line">   #7 = Fieldref           #8.#9          // java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">   #8 = Class              #10            // java/lang/System</span><br><span class="line">   #9 = NameAndType        #11:#12        // out:Ljava/io/PrintStream;</span><br><span class="line">  #10 = Utf8               java/lang/System</span><br><span class="line">  #11 = Utf8               out</span><br><span class="line">  #12 = Utf8               Ljava/io/PrintStream;</span><br><span class="line">  #13 = String             #14            // Hello World!</span><br><span class="line">  #14 = Utf8               Hello World!</span><br><span class="line">  #15 = Methodref          #16.#17        // java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">  #16 = Class              #18            // java/io/PrintStream</span><br><span class="line">  #17 = NameAndType        #19:#20        // println:(Ljava/lang/String;)V</span><br><span class="line">  #18 = Utf8               java/io/PrintStream</span><br><span class="line">  #19 = Utf8               println</span><br><span class="line">  #20 = Utf8               (Ljava/lang/String;)V</span><br><span class="line">  #21 = Class              #22            // HelloWorld</span><br><span class="line">  #22 = Utf8               HelloWorld</span><br><span class="line">  #23 = Utf8               Code</span><br><span class="line">  #24 = Utf8               LineNumberTable</span><br><span class="line">  #25 = Utf8               LocalVariableTable</span><br><span class="line">  #26 = Utf8               this</span><br><span class="line">  #27 = Utf8               LHelloWorld;</span><br><span class="line">  #28 = Utf8               main</span><br><span class="line">  #29 = Utf8               ([Ljava/lang/String;)V</span><br><span class="line">  #30 = Utf8               args</span><br><span class="line">  #31 = Utf8               [Ljava/lang/String;</span><br><span class="line">  #32 = Utf8               SourceFile</span><br><span class="line">  #33 = Utf8               HelloWorld.java</span><br><span class="line">&#123;</span><br><span class="line">  public HelloWorld();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: (0x0001) ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 5: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   LHelloWorld;</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: (0x0009) ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=1, args_size=1</span><br><span class="line">         0: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">         3: ldc           #13                 // String Hello World!</span><br><span class="line">         5: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">         8: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 7: 0</span><br><span class="line">        line 8: 8</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       9     0  args   [Ljava/lang/String;</span><br><span class="line">&#125;</span><br><span class="line">SourceFile: &quot;HelloWorld.java&quot;</span><br></pre></td></tr></table></figure>
+
 <h4 id="2-2-1-魔数-Magic-Number"><a href="#2-2-1-魔数-Magic-Number" class="headerlink" title="2.2.1 魔数 (Magic Number)"></a>2.2.1 魔数 (Magic Number)</h4><ul>
 <li><strong>内容</strong>：每个<code>.class</code>文件的<strong>头4个字节</strong>都是一个固定的十六进制值：<code>0xCAFEBABE</code>。</li>
 <li><strong>作用</strong>：这是一个快速的身份标识。JVM在加载任何文件时，首先检   查这4个字节。如果不是<code>0xCAFEBABE</code>，JVM会直接拒绝加载，并抛出 <code>java.lang.ClassFormatError</code>。这个设计可以防止JVM错误地加载非<code>.class</code>文件。</li>
 </ul>
 <hr>
-<h4 id="2-2-2-版本号-Version"><a href="#2-2-2-版本号-Version" class="headerlink" title="2.2.2 版本号 (Version)"></a>2.2.2 版本号 (Version)</h4><ul>
-<li><strong>内容</strong>：紧跟在魔数之后的4个字节，分别是次版本号（Minor Version）和主版本号（Major Version）。</li>
-<li><strong>作用</strong>：标识这个<code>.class</code>文件是由哪个版本的JDK编译器生成的。例如，JDK 8编译的主版本号是52.0。这个版本号用于<strong>向后兼容</strong>：高版本的JVM可以执行低版本编译器生成的<code>.class</code>文件，但低版本的JVM尝试执行高版本的<code>.class</code>文件时，会抛出 <code>java.lang.UnsupportedClassVersionError</code>。</li>
+<h4 id="2-2-2-类文件头（Classfile-Header）"><a href="#2-2-2-类文件头（Classfile-Header）" class="headerlink" title="2.2.2 类文件头（Classfile Header）"></a>2.2.2 类文件头（Classfile Header）</h4><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Classfile /E:/Development/IdeaProjects/HelloWorld/target/classes/HelloWorld.class</span><br><span class="line">  Last modified 2025年10月30日; size 534 bytes</span><br><span class="line">  SHA-256 checksum 561b0b99c252d3e7443ab86ba0cb84c47bf6afb013ccd7377c6809b3cab82dbf</span><br><span class="line">  Compiled from &quot;HelloWorld.java&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>关键信息</strong>：<ul>
+<li><strong>最后修改时间</strong>：文件生成时间（用于版本控制和缓存）。</li>
+<li><strong>文件大小</strong>：534 字节（小类文件，说明类简单）。</li>
+<li><strong>SHA-256校验和</strong>：验证文件完整性，防止篡改。</li>
+<li><strong>编译源文件</strong>：<code>HelloWorld.java</code>（确认源文件路径）。</li>
 </ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>关注点</strong>：</p>
+<ul>
+<li>确保编译时间与源码一致（避免使用过期类文件）。</li>
+<li>校验和用于检测文件损坏或恶意修改。</li>
+</ul>
+</blockquote>
 <hr>
-<h4 id="2-2-3-常量池-Constant-Pool"><a href="#2-2-3-常量池-Constant-Pool" class="headerlink" title="2.2.3 常量池 (Constant Pool)"></a>2.2.3 常量池 (Constant Pool)</h4><ul>
+<h4 id="2-2-3-类元数据（Class-Metadata）"><a href="#2-2-3-类元数据（Class-Metadata）" class="headerlink" title="2.2.3 类元数据（Class Metadata）"></a>2.2.3 类元数据（Class Metadata）</h4><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class HelloWorld</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 65</span><br><span class="line">  flags: (0x0021) ACC_PUBLIC, ACC_SUPER</span><br><span class="line">  this_class: #21                         // HelloWorld</span><br><span class="line">  super_class: #2                         // java/lang/Object</span><br><span class="line">  interfaces: 0, fields: 0, methods: 2, attributes: 1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>关键信息</strong>：<ul>
+<li><strong>版本号</strong>：<ul>
+<li>次版本号：<code>minor version: 0</code></li>
+<li>主版本号：<code>major version: 65</code> → <strong>JDK 21</strong>（Class 文件版本号映射：<br><code>JDK 8 = 52</code>, <code>JDK 11 = 55</code>, <code>JDK 17 = 61</code>, <code>JDK 21 = 65</code>）。</li>
+<li><strong>作用</strong>：标识这个<code>.class</code>文件是由哪个版本的JDK编译器生成的。这个版本号用于<strong>向后兼容</strong>：高版本的JVM可以执行低版本编译器生成的<code>.class</code>文件，但低版本的JVM尝试执行高版本的<code>.class</code>文件时，会抛出 <code>java.lang.UnsupportedClassVersionError</code>。</li>
+</ul>
+</li>
+<li><strong>标志（Flags）</strong>：<ul>
+<li><code>ACC_PUBLIC</code>：类是公有的（可被其他类访问）。</li>
+<li><code>ACC_SUPER</code>：类支持 <code>super</code> 调用（非最终类，可被继承）。</li>
+</ul>
+</li>
+<li><strong>类关系</strong>：<ul>
+<li><code>this_class: #21</code> → 类名 <code>HelloWorld</code>（常量池索引 #21）。</li>
+<li><code>super_class: #2</code> → 父类 <code>java.lang.Object</code>（所有类默认继承 <code>Object</code>）。</li>
+<li><code>interfaces: 0</code> → 没有实现接口。</li>
+</ul>
+</li>
+<li><strong>成员统计</strong>：<code>fields: 0</code>（无字段），<code>methods: 2</code>（构造方法 + <code>main</code> 方法）。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>关注点</strong>：</p>
+<ul>
+<li><strong>JDK 版本兼容性</strong>：确保运行环境（JVM）支持 <code>major version</code>（如 JDK 21 需要 JVM 21+）。</li>
+<li><strong>访问控制</strong>：<code>ACC_PUBLIC</code> 确认类可被外部调用；<code>ACC_SUPER</code> 影响继承行为。</li>
+<li><strong>继承关系</strong>：<code>super_class</code> 显示父类，用于理解类层次结构。</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="2-2-3-常量池-Constant-Pool"><a href="#2-2-3-常量池-Constant-Pool" class="headerlink" title="2.2.3 常量池 (Constant Pool)"></a>2.2.3 常量池 (Constant Pool)</h4><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #2.#3          // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 = Class              #4             // java/lang/Object</span><br><span class="line">   #3 = NameAndType        #5:#6          // &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #4 = Utf8               java/lang/Object</span><br><span class="line">   #5 = Utf8               &lt;init&gt;</span><br><span class="line">   #6 = Utf8               ()V</span><br><span class="line">   #7 = Fieldref           #8.#9          // java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">   #8 = Class              #10            // java/lang/System</span><br><span class="line">   #9 = NameAndType        #11:#12        // out:Ljava/io/PrintStream;</span><br><span class="line">  #10 = Utf8               java/lang/System</span><br><span class="line">  #11 = Utf8               out</span><br><span class="line">  #12 = Utf8               Ljava/io/PrintStream;</span><br><span class="line">  #13 = String             #14            // Hello World!</span><br><span class="line">  #14 = Utf8               Hello World!</span><br><span class="line">  #15 = Methodref          #16.#17        // java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">  #16 = Class              #18            // java/io/PrintStream</span><br><span class="line">  #17 = NameAndType        #19:#20        // println:(Ljava/lang/String;)V</span><br><span class="line">  #18 = Utf8               java/io/PrintStream</span><br><span class="line">  #19 = Utf8               println</span><br><span class="line">  #20 = Utf8               (Ljava/lang/String;)V</span><br><span class="line">  #21 = Class              #22            // HelloWorld</span><br><span class="line">  #22 = Utf8               HelloWorld</span><br><span class="line">  ...（其他属性）</span><br></pre></td></tr></table></figure>
+
+<ul>
 <li><strong>地位</strong>：<code>.class</code>文件中<strong>最核心、最庞大的数据集合</strong>，可以理解为这个类的“资源仓库”或“符号表”。</li>
 <li><strong>内容</strong>：它存储了两大类常量：<ul>
 <li><strong>字面量 (Literals)</strong>：如文本字符串（<code>&quot;Hello, JVM!&quot;</code>）、被声明为<code>final</code>的常量值等。</li>
@@ -408,19 +460,112 @@
 </ul>
 </li>
 <li><strong>作用</strong>：当JVM运行时，需要将这些符号引用动态地解析和链接为实际内存中的直接引用（内存地址或偏移量）。这种设计实现了动态链接，使得代码在编译时无需知道其依赖项在内存中的具体位置。</li>
+<li><strong>关键常量</strong>：<ul>
+<li><strong>类引用</strong>：<br><code>#2</code> &#x3D; <code>java.lang.Object</code>，<code>#8</code> &#x3D; <code>java.lang.System</code>，<code>#16</code> &#x3D; <code>java.io.PrintStream</code>，<code>#21</code> &#x3D; <code>HelloWorld</code>。</li>
+<li><strong>方法&#x2F;构造方法引用</strong>：<br><code>#1</code> &#x3D; <code>Object.&lt;init&gt;</code>（构造方法），<code>#15</code> &#x3D; <code>PrintStream.println(String)</code>。</li>
+<li><strong>字符串常量</strong>：<br><code>#13</code> &#x3D; <code>&quot;Hello World!&quot;</code>（字符串字面量）。</li>
+<li><strong>描述符</strong>：<br><code>#20</code> &#x3D; <code>(Ljava/lang/String;)V</code> → 方法 <code>println</code> 的参数类型（<code>String</code>）和返回值（<code>void</code>）。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>关注点</strong>：</p>
+<ul>
+<li><strong>依赖类&#x2F;方法</strong>：常量池显示类依赖的其他类（如 <code>System.out</code>、<code>PrintStream</code>），用于理解依赖关系。</li>
+<li><strong>字符串常量</strong>：查看硬编码字符串（如 <code>#13</code> 的 <code>&quot;Hello World!&quot;</code>），用于调试或安全审计（避免敏感信息泄露）。</li>
+<li><strong>方法描述符</strong>：<br>- <code>(Ljava/lang/String;)V</code> 解读为：<strong>参数</strong> <code>String</code>，<strong>返回值</strong> <code>void</code>。<br>- 了解方法签名，验证调用是否匹配（如 <code>println</code> 需要 <code>String</code> 参数）。</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="2-2-4-方法（Methods）"><a href="#2-2-4-方法（Methods）" class="headerlink" title="2.2.4 方法（Methods）"></a>2.2.4 方法（Methods）</h4><h5 id="1-构造方法-HelloWorld"><a href="#1-构造方法-HelloWorld" class="headerlink" title="1. 构造方法 HelloWorld()"></a>1. 构造方法 <code>HelloWorld()</code></h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public HelloWorld();</span><br><span class="line">  descriptor: ()V</span><br><span class="line">  flags: (0x0001) ACC_PUBLIC</span><br><span class="line">  Code:</span><br><span class="line">    stack=1, locals=1, args_size=1</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       4: return</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>关键信息</strong>：<ul>
+<li><strong>描述符 <code>()V</code></strong>：无参数，无返回值（构造方法）。</li>
+<li><strong>字节码</strong>：<ul>
+<li><code>aload_0</code>：将 <code>this</code> 压入操作数栈。</li>
+<li><code>invokespecial #1</code>：调用父类构造方法 <code>Object.&lt;init&gt;</code>。</li>
+<li><code>return</code>：退出方法。</li>
+</ul>
+</li>
+<li><strong>标志</strong>：<code>ACC_PUBLIC</code>（公有构造方法）。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>关注点</strong>：</p>
+<ul>
+<li>构造方法是否调用了 <code>super()</code>（这里是 <code>invokespecial #1</code>）。</li>
+<li>字节码操作数栈深度（<code>stack=1</code>）和局部变量表（<code>locals=1</code> → <code>this</code>）。</li>
+</ul>
+</blockquote>
+<hr>
+<h5 id="2-main-方法"><a href="#2-main-方法" class="headerlink" title="2. main 方法"></a>2. <code>main</code> 方法</h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">  descriptor: ([Ljava/lang/String;)V</span><br><span class="line">  flags: (0x0009) ACC_PUBLIC, ACC_STATIC</span><br><span class="line">  Code:</span><br><span class="line">    stack=2, locals=1, args_size=1</span><br><span class="line">       0: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       3: ldc           #13                 // String Hello World!</span><br><span class="line">       5: invokevirtual #15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">       8: return</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>关键信息</strong>：<ul>
+<li><strong>描述符 <code>([Ljava/lang/String;)V</code></strong>：<br>参数：<code>String[] args</code>，返回值 <code>void</code>。</li>
+<li><strong>标志</strong>：<code>ACC_PUBLIC, ACC_STATIC</code>（公有静态方法，是程序入口）。</li>
+<li><strong>字节码</strong>：<ul>
+<li><code>getstatic #7</code>：获取 <code>System.out</code>（静态字段）。</li>
+<li><code>ldc #13</code>：加载字符串常量 <code>&quot;Hello World!&quot;</code>。</li>
+<li><code>invokevirtual #15</code>：调用 <code>PrintStream.println(String)</code>。</li>
+<li><code>return</code>：退出 <code>main</code> 方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>关注点</strong>：</p>
+<ul>
+<li><strong>入口点</strong>：<code>main</code> 方法必须是 <code>public static void</code>。</li>
+<li><strong>参数类型</strong>：<code>[Ljava/lang/String;</code> 表示 <code>String[]</code>。</li>
+<li><strong>关键操作</strong>：<br>- <code>getstatic</code> 获取静态字段（<code>System.out</code>）。<br>- <code>invokevirtual</code> 调用实例方法（<code>println</code>）。</li>
+<li><strong>操作数栈</strong>：<code>stack=2</code>（最多同时有 2 个元素：<code>System.out</code> 和字符串）。</li>
+</ul>
+</blockquote>
+<hr>
+<h4 id="5-属性（Attributes）"><a href="#5-属性（Attributes）" class="headerlink" title="5. 属性（Attributes）"></a><strong>5. 属性（Attributes）</strong></h4><h5 id="1-SourceFile"><a href="#1-SourceFile" class="headerlink" title="1. SourceFile"></a>1. <code>SourceFile</code></h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SourceFile: &quot;HelloWorld.java&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>指明源文件路径，用于调试器定位源代码。</li>
 </ul>
 <hr>
-<h4 id="2-2-4-其他关键部分"><a href="#2-2-4-其他关键部分" class="headerlink" title="2.2.4 其他关键部分"></a>2.2.4 其他关键部分</h4><ul>
-<li><strong>访问标志 (Access Flags)</strong>：一个标志位，用于表示这个类是<code>public</code>还是<code>private</code>，是否是<code>abstract</code>或<code>final</code>等。</li>
-<li><strong>类索引、父类索引、接口索引集合 (this_class, super_class, interfaces)</strong>：都指向常量池中的符号引用，用以确定这个类的继承和实现关系。</li>
-<li><strong>字段表集合 (Fields)</strong>：描述类中声明的所有字段（成员变量），包括字段的作用域、类型、名称等。</li>
-<li><strong>方法表集合 (Methods)</strong>：描述类中声明的所有方法，包括方法的访问权限、返回类型、参数列表。<ul>
-<li><strong>Code属性</strong>：对于非抽象方法，方法表中会有一个<code>Code</code>属性，这里存放着该方法<strong>真正的字节码指令流</strong>，以及操作数栈的最大深度、局部变量表大小等信息。</li>
+<h5 id="2-Code-属性（方法体）"><a href="#2-Code-属性（方法体）" class="headerlink" title="2. Code 属性（方法体）"></a>2. <code>Code</code> 属性（方法体）</h5><p>每个方法都有 <code>Code</code> 属性，包含：</p>
+<ul>
+<li><strong>操作码（Opcodes）</strong>：<code>aload_0</code>, <code>invokespecial</code>, <code>getstatic</code> 等。</li>
+<li><strong>栈深度（stack）</strong>：操作数栈所需的最大深度（<code>stack=2</code> 表示最多 2 个元素）。</li>
+<li><strong>局部变量（locals）</strong>：需要的局部变量数量（<code>locals=1</code> 表示 <code>this</code>）。</li>
+</ul>
+<hr>
+<h5 id="3-LineNumberTable"><a href="#3-LineNumberTable" class="headerlink" title="3. LineNumberTable"></a>3. <code>LineNumberTable</code></h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LineNumberTable:</span><br><span class="line">  line 7: 0</span><br><span class="line">  line 8: 8</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>映射字节码偏移量到源代码行号，用于 <strong>调试</strong>。<ul>
+<li>字节码偏移 <code>0</code> 对应源码第 7 行（<code>System.out.println(...)</code>）。</li>
+<li>字节码偏移 <code>8</code> 对应源码第 8 行（<code>}</code>）。</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h3 id="2-3-java-命令执行后，JVM的启动流程概览"><a href="#2-3-java-命令执行后，JVM的启动流程概览" class="headerlink" title="2.3 java 命令执行后，JVM的启动流程概览"></a>2.3 <code>java</code> 命令执行后，JVM的启动流程概览</h3><p>当你敲下 <code>java HelloWorld</code> 并回车后，一场大戏在操作系统和JVM内部上演：</p>
+<h5 id="4-LocalVariableTable"><a href="#4-LocalVariableTable" class="headerlink" title="4. LocalVariableTable"></a>4. <code>LocalVariableTable</code></h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LocalVariableTable:</span><br><span class="line">  Start  Length  Slot  Name   Signature</span><br><span class="line">      0       9     0  args   [Ljava/lang/String;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>描述局部变量：<ul>
+<li><code>args</code>（类型 <code>String[]</code>）在字节码偏移 <code>0</code> 到 <code>9</code> 作用域内，存储在slot <code>0</code>。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>关注点</strong>：</p>
+<ul>
+<li><strong>调试信息</strong>：<code>LineNumberTable</code> 和 <code>LocalVariableTable</code> 用于 IDE 调试，关联字节码与源代码行。</li>
+<li><strong>移除调试信息</strong>：生产环境可用 <code>-g:none</code> 编译选项减少类文件大小（但无法调试）。</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="2-3-java-命令执行后，JVM的启动流程概览"><a href="#2-3-java-命令执行后，JVM的启动流程概览" class="headerlink" title="2.3 java 命令执行后，JVM的启动流程概览"></a>2.3 <code>java</code> 命令执行后，JVM的启动流程概览</h3><p>当敲下 <code>java HelloWorld</code> 并回车后，一场大戏在操作系统和JVM内部上演：</p>
 <h4 id="2-3-1-创建JVM实例"><a href="#2-3-1-创建JVM实例" class="headerlink" title="2.3.1 创建JVM实例"></a>2.3.1 创建JVM实例</h4><ul>
 <li><code>java.exe</code> (或<code>java</code>在Linux&#x2F;macOS上) 是一个本地可执行程序（启动器）。它的首要任务是找到并加载JVM的核心动态链接库（如Windows上的<code>jvm.dll</code>）。</li>
 <li>然后，它在当前进程中初始化JVM，并创建一个C++层面的<code>JavaVM</code>实例。此时，JVM的各种内部结构（如垃圾回收器、执行引擎等）开始准备就绪。</li>
@@ -604,15 +749,6 @@
 <li><strong>相关概念与异常</strong><ul>
 <li><strong>TLAB (Thread Local Allocation Buffer)</strong>：线程本地分配缓冲区。虽然堆是线程共享的，但为了提高对象分配的效率，避免多线程同时在Eden区分配对象时需要加锁竞争，JVM会为每个新创建的线程在Eden区分配一小块私有区域——TLAB。线程创建新对象时，优先在自己的TLAB中分配，只有当TLAB用完或对象太大放不下时，才需要通过加锁在共享的Eden区中分配。这是一种**“私有化共享区域”**的优化手段。</li>
 <li><strong><code>OutOfMemoryError: Java heap space</code></strong>：如果堆中没有足够内存来完成实例分配，并且堆也无法再扩展时，就会抛出这个最常见的OOM错误。</li>
-</ul>
-</li>
-<li><strong>形象比喻</strong><br>可以把Java堆想象成一个<strong>城市</strong>。<ul>
-<li><strong>新生代</strong>是**“青年公寓区”**，大部分年轻人（新对象）都住在这里，人员流动非常快（频繁GC）。<ul>
-<li><strong>Eden区</strong>是**“接待大厅”**，所有新来的人先在这里落脚。</li>
-<li><strong>Survivor区</strong>是两个**“中转宿舍”**，经历过一次人口普查（Minor GC）还没搬走的人会在这里暂住。</li>
-</ul>
-</li>
-<li><strong>老年代</strong>是**“长寿社区”**，在青年公寓区住久了的老人（长寿对象）会搬到这里，环境稳定，不轻易动迁（不常GC）。</li>
 </ul>
 </li>
 </ul>
@@ -899,18 +1035,12 @@
         A[&quot;[Java Code: new Person()]&quot;]
     end
 
-    A --&gt; B[(&quot;1&quot;)];
-
     subgraph &quot;JVM内部流程&quot;
-        B --- B_desc[&quot;&lt;strong&gt;1. 类加载检查&lt;/strong&gt;&lt;br/&gt;JVM遇到new指令，检查Person类是否已加载、解析、初始化？&lt;br/&gt;(是) -&gt; 继续&lt;br/&gt;(否) -&gt; 先执行类加载过程&quot;];
-        B_desc --&gt; C[(&quot;2&quot;)];
-        C --- C_desc[&quot;&lt;strong&gt;2. 分配内存&lt;/strong&gt;&lt;br/&gt;在Java堆中为Person对象分配一块确定大小的内存&lt;br/&gt;- 方式1: 指针碰撞 (Bump the Pointer)&lt;br/&gt;- 方式2: 空闲列表 (Free List)&lt;br/&gt;- 并发处理: CAS 或 TLAB&quot;];
-        C_desc --&gt; D[(&quot;3&quot;)];
-        D --- D_desc[&quot;&lt;strong&gt;3. 初始化零值&lt;/strong&gt;&lt;br/&gt;将分配到的内存空间所有字节清零 (不包括对象头)&lt;br/&gt;- 保证字段不赋初值时也有默认值 (0, false, null)&quot;];
-        D_desc --&gt; E[(&quot;4&quot;)];
-        E --- E_desc[&quot;&lt;strong&gt;4. 设置对象头&lt;/strong&gt;&lt;br/&gt;填充对象头(Object Header)信息&lt;br/&gt;- Mark Word: 哈希码, GC年龄, 锁状态...&lt;br/&gt;- Klass Pointer: 指向方法区中Person类的元数据&quot;];
-        E_desc --&gt; F[(&quot;5&quot;)];
-        F --- F_desc[&quot;&lt;strong&gt;5. 执行&amp;lt;init&amp;gt;方法&lt;/strong&gt;&lt;br/&gt;执行invokespecial指令，调用Person的构造方法&lt;br/&gt;- 按照程序员的意图进行初始化 (字段赋值、执行构造代码)&quot;];
+        A --- B_desc[&quot;&lt;strong&gt;1. 类加载检查&lt;/strong&gt;&lt;br/&gt;JVM遇到new指令，检查Person类是否已加载、解析、初始化？&lt;br/&gt;(是) -&gt; 继续&lt;br/&gt;(否) -&gt; 先执行类加载过程&quot;];
+        B_desc--- C_desc[&quot;&lt;strong&gt;2. 分配内存&lt;/strong&gt;&lt;br/&gt;在Java堆中为Person对象分配一块确定大小的内存&lt;br/&gt;- 方式1: 指针碰撞 (Bump the Pointer)&lt;br/&gt;- 方式2: 空闲列表 (Free List)&lt;br/&gt;- 并发处理: CAS 或 TLAB&quot;];
+        C_desc --- D_desc[&quot;&lt;strong&gt;3. 初始化零值&lt;/strong&gt;&lt;br/&gt;将分配到的内存空间所有字节清零 (不包括对象头)&lt;br/&gt;- 保证字段不赋初值时也有默认值 (0, false, null)&quot;];
+        D_desc --- E_desc[&quot;&lt;strong&gt;4. 设置对象头&lt;/strong&gt;&lt;br/&gt;填充对象头(Object Header)信息&lt;br/&gt;- Mark Word: 哈希码, GC年龄, 锁状态...&lt;br/&gt;- Klass Pointer: 指向方法区中Person类的元数据&quot;];
+        E_desc --- F_desc[&quot;&lt;strong&gt;5. 执行&amp;lt;init&amp;gt;方法&lt;/strong&gt;&lt;br/&gt;执行invokespecial指令，调用Person的构造方法&lt;br/&gt;- 按照程序员的意图进行初始化 (字段赋值、执行构造代码)&quot;];
     end
 
     F_desc --&gt; G;
@@ -921,12 +1051,7 @@
 
     %% 样式定义
     style A fill:#f9f,stroke:#333,stroke-width:2px
-    style G fill:#ccf,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#bbf,stroke:#333,stroke-width:2px
-    style D fill:#bbf,stroke:#333,stroke-width:2px
-    style E fill:#bbf,stroke:#333,stroke-width:2px
-    style F fill:#bbf,stroke:#333,stroke-width:2px</code></pre>
+    style G fill:#ccf,stroke:#333,stroke-width:2px</code></pre>
 
 <hr>
 <h4 id="2-1-2-详细步骤分解"><a href="#2-1-2-详细步骤分解" class="headerlink" title="2.1.2 详细步骤分解"></a>2.1.2 详细步骤分解</h4><h5 id="1-类加载检查-Class-Loading-Check"><a href="#1-类加载检查-Class-Loading-Check" class="headerlink" title="1. 类加载检查 (Class Loading Check)"></a>1. 类加载检查 (Class Loading Check)</h5><p>当JVM执行引擎遇到一条<code>new</code>字节码指令时，它首先会执行一个检查：</p>
@@ -984,7 +1109,7 @@
 </ul>
 <p>至此，<code>Person p = new Person();</code> 这行代码的背后故事才算完整落幕。这个过程体现了JVM设计的严谨性和为了性能所做的深度优化（如TLAB）。</p>
 <hr>
-<h3 id="2-2-对象的内存布局-对象头、实例数据、对齐填充"><a href="#2-2-对象的内存布局-对象头、实例数据、对齐填充" class="headerlink" title="2.2 对象的内存布局 (对象头、实例数据、对齐填充)"></a>2.2 对象的内存布局 (对象头、实例数据、对齐填充)</h3><p>在HotSpot虚拟机中，一个Java对象在堆内存中的存储布局可以划分为三个部分：<strong>对象头（Header）</strong>、<strong>实例数据（Instance Data）</strong> 和 <strong>对齐填充（Padding）</strong>。</p>
+<h3 id="2-2-对象的内存布局"><a href="#2-2-对象的内存布局" class="headerlink" title="2.2 对象的内存布局"></a>2.2 对象的内存布局</h3><p>在HotSpot虚拟机中，一个Java对象在堆内存中的存储布局可以划分为三个部分：<strong>对象头（Header）</strong>、<strong>实例数据（Instance Data）</strong> 和 <strong>对齐填充（Padding）</strong>。</p>
 <h4 id="2-2-1-对象头-Object-Header"><a href="#2-2-1-对象头-Object-Header" class="headerlink" title="2.2.1 对象头 (Object Header)"></a>2.2.1 对象头 (Object Header)</h4><p>对象头是对象内存布局的起始部分，它包含了对象的元信息，不存储业务数据。在HotSpot中，对象头内部又包含两部分（或三部分，如果是数组对象的话）：</p>
 <h5 id="1-Mark-Word-标记字段"><a href="#1-Mark-Word-标记字段" class="headerlink" title="1. Mark Word (标记字段)"></a>1. Mark Word (标记字段)</h5><p>Mark Word是对象头中<strong>最复杂、最核心</strong>的部分。它用于存储对象自身的运行时数据，如哈希码、GC分代年龄、锁状态等。这部分数据是<strong>动态的</strong>，会随着对象的运行状态而改变。</p>
 <p>为了在有限的空间里存储更多的信息，Mark Word被设计成一个<strong>非固定的数据结构</strong>，它会根据对象的状态复用自己的存储空间。在32位和64位虚拟机中，Mark Word分别占用32位（4字节）和64位（8字节）。</p>
@@ -1109,7 +1234,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.openjdk.jol.info.ClassLayout;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JOLExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">        System.out.println(ClassLayout.parseInstance(o).toPrintable());</span><br><span class="line"></span><br><span class="line">        <span class="type">MyObject</span> <span class="variable">myObj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyObject</span>();</span><br><span class="line">        System.out.println(ClassLayout.parseInstance(myObj).toPrintable());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h3 id="2-3-对象的访问定位-句柄访问-vs-直接指针访问"><a href="#2-3-对象的访问定位-句柄访问-vs-直接指针访问" class="headerlink" title="2.3 对象的访问定位 (句柄访问 vs. 直接指针访问)"></a>2.3 对象的访问定位 (句柄访问 vs. 直接指针访问)</h3><p>我们已经知道，当执行 <code>Person p = new Person();</code> 时，变量 <code>p</code> 作为一个引用（reference）存放在Java虚拟机栈的局部变量表中，而 <code>new Person()</code> 的实例则存放在Java堆中。现在的问题是，栈上的 <code>p</code> 是如何精确地定位到堆上那个对象的？</p>
+<h3 id="2-3-对象的访问定位-句柄访问-vs-直接指针访问"><a href="#2-3-对象的访问定位-句柄访问-vs-直接指针访问" class="headerlink" title="2.3 对象的访问定位 (句柄访问 vs. 直接指针访问)"></a>2.3 对象的访问定位 (句柄访问 vs. 直接指针访问)</h3><p>当执行 <code>Person p = new Person();</code> 时，变量 <code>p</code> 作为一个引用（reference）存放在Java虚拟机栈的局部变量表中，而 <code>new Person()</code> 的实例则存放在Java堆中。现在的问题是，栈上的 <code>p</code> 是如何精确地定位到堆上那个对象的？</p>
 <h4 id="2-3-1-句柄访问-Handle-Access"><a href="#2-3-1-句柄访问-Handle-Access" class="headerlink" title="2.3.1 句柄访问 (Handle Access)"></a>2.3.1 句柄访问 (Handle Access)</h4><p><strong>工作原理：</strong></p>
 <p>句柄访问方式引入了一个<strong>中间层</strong>——<strong>句柄池（Handle Pool）</strong>。</p>
 <ol>
@@ -1211,7 +1336,6 @@
 </ul>
 <hr>
 <h4 id="2-3-4-HotSpot虚拟机的选择"><a href="#2-3-4-HotSpot虚拟机的选择" class="headerlink" title="2.3.4 HotSpot虚拟机的选择"></a>2.3.4 HotSpot虚拟机的选择</h4><p><strong>HotSpot虚拟机采用的是——直接指针访问方式。</strong></p>
-<p><strong>为什么？</strong></p>
 <p>这是一个典型的<strong>性能权衡</strong>。虽然在GC时对象移动会导致引用更新的成本，但从整个程序的生命周期来看，<strong>对象访问的频率远远高于垃圾回收的频率</strong>。</p>
 <p>为了追求极致的性能，HotSpot团队选择了牺牲GC时的一点复杂性，来换取日常运行时更高的访问速度。因此，我们平时在HotSpot上运行的Java程序，其引用变量存储的都是对象的直接地址。</p>
 <p><strong>总结对比：</strong></p>
@@ -1225,7 +1349,7 @@
 </thead>
 <tbody><tr>
 <td><strong>访问速度</strong></td>
-<td>慢 (两次指针解引用)</td>
+<td>慢 (两)</td>
 <td><strong>快 (一次指针解引用)</strong></td>
 </tr>
 <tr>
@@ -8131,7 +8255,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-24 11:48:26" itemprop="dateModified" datetime="2025-10-24T11:48:26+08:00">2025-10-24</time>
+      <time title="修改时间：2025-10-30 13:31:53" itemprop="dateModified" datetime="2025-10-30T13:31:53+08:00">2025-10-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
