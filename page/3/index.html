@@ -2059,7 +2059,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-17 16:08:42" itemprop="dateModified" datetime="2025-10-17T16:08:42+08:00">2025-10-17</time>
+      <time title="修改时间：2025-11-04 15:09:51" itemprop="dateModified" datetime="2025-11-04T15:09:51+08:00">2025-11-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -7184,6 +7184,163 @@
 <li><strong>然后</strong>，在开发和测试阶段，通过性能分析工具（如慢查询日志、<code>EXPLAIN</code>）找出性能瓶颈所在的查询。</li>
 <li><strong>最后</strong>，针对性地对这些瓶颈进行优化。如果索引优化等手段已无法满足需求，再审慎地、局部地引入反范式设计。</li>
 </ol>
+<hr>
+<h3 id="1-4-命名规范"><a href="#1-4-命名规范" class="headerlink" title="1.4 命名规范"></a>1.4 命名规范</h3><h4 id="1-4-1-通用核心原则"><a href="#1-4-1-通用核心原则" class="headerlink" title="1.4.1 通用核心原则"></a>1.4.1 通用核心原则</h4><ol>
+<li><strong>可读性与意义性 (Readability &amp; Meaningfulness)</strong>：名称应清晰、易于理解，能准确描述其代表的实体或功能。避免使用无意义的缩写或模糊的名称（如 <code>a1</code>, <code>temp_table</code>）。</li>
+<li><strong>一致性 (Consistency)</strong>：在整个项目或团队中，遵循同一套命名标准。例如，要么都用单数，要么都用复数；要么都用蛇形命名法，要么都用驼峰命名法。</li>
+<li><strong>避免使用关键字 (Avoid Keywords)</strong>：不要使用 SQL 的保留关键字作为名称（如 <code>SELECT</code>, <code>TABLE</code>, <code>GROUP</code>, <code>ORDER</code>）。如果必须使用，请用引号&#96;&#96;&#96;&#96;或<code>[]</code>括起来，但这通常是不推荐的做法。</li>
+<li><strong>使用英文单词 (Use English)</strong>：在专业开发中，强烈推荐使用英文。避免使用拼音或中英混合，这会给不同文化背景的协作者带来困扰。</li>
+<li><strong>大小写策略 (Casing Strategy)</strong>：推荐统一使用 <strong>小写字母</strong>。因为某些数据库（如 Windows 上的 MySQL）不区分大小写，而另一些（如 Linux 上的 MySQL）则默认区分。全部使用小写可以避免因环境不同导致的问题。</li>
+<li><strong>分隔符 (Delimiter)</strong>：推荐使用下划线 <code>_</code> 作为单词间的分隔符（即 <strong>蛇形命名法, snake_case</strong>），因为它在 SQL 中具有最好的可读性和兼容性。不推荐使用连字符 <code>-</code>，因为它在 SQL 中通常被解析为减号。</li>
+</ol>
+<hr>
+<h4 id="1-4-2-具体对象命名规范"><a href="#1-4-2-具体对象命名规范" class="headerlink" title="1.4.2 具体对象命名规范"></a>1.4.2 具体对象命名规范</h4><h4 id="1-4-1-数据库-Database"><a href="#1-4-1-数据库-Database" class="headerlink" title="1.4.1 数据库 (Database)"></a>1.4.1 数据库 (Database)</h4><ul>
+<li><strong>格式</strong>: <code>项目名_环境标识</code></li>
+<li><strong>说明</strong>:<ul>
+<li>使用项目或应用的名称作为前缀。</li>
+<li>使用环境后缀（如 <code>_dev</code>, <code>_test</code>, <code>_prod</code>）来区分开发、测试和生产环境。</li>
+</ul>
+</li>
+<li><strong>示例</strong>:<ul>
+<li><code>my_project_dev</code></li>
+<li><code>erp_system_test</code></li>
+<li><code>main_website_prod</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-4-2-表-Table"><a href="#1-4-2-表-Table" class="headerlink" title="1.4.2 表 (Table)"></a>1.4.2 表 (Table)</h4><ul>
+<li><strong>格式</strong>: <code>[业务模块_]名词复数</code> 或 <code>[业务模块_]名词单数</code></li>
+<li><strong>说明</strong>:<ul>
+<li><strong>单数 vs 复数 (Singular vs. Plural)</strong>：这是一个经典争论。<ul>
+<li><strong>推荐使用复数 (Plural)</strong>：如 <code>users</code>, <code>products</code>, <code>orders</code>。这更符合自然语言的直觉（”SELECT … FROM users” 读起来像 “从用户们中查询”）。大多数现代框架（如 Rails, Django）也推荐复数形式。</li>
+<li><strong>单数 (Singular)</strong>：如 <code>user</code>, <code>product</code>, <code>order</code>。这种观点认为表是单个实体的蓝图或集合。</li>
+<li><strong>关键在于团队统一</strong>。如果非要选一个，<strong>复数</strong>是更主流的选择。</li>
+</ul>
+</li>
+<li><strong>前缀 (Prefix)</strong>：<ul>
+<li>通常 <strong>不推荐</strong> 为表添加 <code>tbl_</code> 或 <code>t_</code> 这样的前缀，因为这增加了冗余，现代 IDE 都能轻松区分对象类型。</li>
+<li>如果项目模块划分清晰，可以使用业务模块作为前缀，用下划线分隔。例如，用户中心的表可以命名为 <code>uc_users</code>。</li>
+</ul>
+</li>
+<li><strong>关联表&#x2F;中间表 (Junction Table)</strong>：对于多对多关系的中间表，将两个关联的表名按字母顺序组合。</li>
+</ul>
+</li>
+<li><strong>示例</strong>:<ul>
+<li><code>users</code> (用户信息表)</li>
+<li><code>products</code> (产品表)</li>
+<li><code>order_details</code> (订单详情表)</li>
+<li><code>roles_users</code> (角色与用户的关联表，<code>roles</code> 在 <code>users</code> 前)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-4-3-字段-列-Column-Field"><a href="#1-4-3-字段-列-Column-Field" class="headerlink" title="1.4.3 字段&#x2F;列 (Column &#x2F; Field)"></a>1.4.3 字段&#x2F;列 (Column &#x2F; Field)</h4><ul>
+<li><strong>格式</strong>: <code>名词</code> 或 <code>形容词_名词</code></li>
+<li><strong>命名法</strong>: 强制使用 <strong>蛇形命名法 (snake_case)</strong>。</li>
+<li><strong>说明</strong>:<ul>
+<li><strong>通用字段</strong>: 名称应清晰描述字段内容。<ul>
+<li>示例: <code>first_name</code>, <code>email_address</code>, <code>last_login_ip</code></li>
+</ul>
+</li>
+<li><strong>主键 (Primary Key)</strong>:<ul>
+<li>推荐直接使用 <code>id</code>。这非常简洁，并且是许多 ORM 框架的默认约定。</li>
+<li>或者使用 <code>表名单数_id</code> 的形式，如 <code>user_id</code>，在多表连接时更具可读性。</li>
+</ul>
+</li>
+<li><strong>外键 (Foreign Key)</strong>:<ul>
+<li><strong>标准格式</strong>: <code>关联表名词单数_id</code>。这是 <strong>极其重要</strong> 的规范。</li>
+<li>例如，在 <code>orders</code> 表中，关联 <code>users</code> 表的外键应命名为 <code>user_id</code>。这样任何人看到 <code>user_id</code> 字段，都能立刻明白它指向 <code>users</code> 表的 <code>id</code>。</li>
+</ul>
+</li>
+<li><strong>布尔值 (Boolean)</strong>:<ul>
+<li>使用 <code>is_</code> 或 <code>has_</code> 作为前缀，使其在 <code>WHERE</code> 子句中非常易读。</li>
+<li>示例: <code>is_active</code>, <code>is_deleted</code>, <code>has_license</code></li>
+</ul>
+</li>
+<li><strong>时间&#x2F;日期 (Date&#x2F;Time)</strong>:<ul>
+<li>使用 <code>_at</code> 或 <code>_time</code> 作为后缀表示精确时间点。</li>
+<li>使用 <code>_date</code> 作为后缀表示日期。</li>
+<li>示例: <code>created_at</code>, <code>updated_at</code>, <code>login_at</code>, <code>publish_date</code></li>
+</ul>
+</li>
+<li><strong>避免字段前缀</strong>: 不要使用 <code>col_</code> 或其他无意义的前缀。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-4-4-视图-View"><a href="#1-4-4-视图-View" class="headerlink" title="1.4.4 视图 (View)"></a>1.4.4 视图 (View)</h4><ul>
+<li><strong>格式</strong>: <code>v_</code> 或 <code>vw_</code> + <code>描述性名称</code></li>
+<li><strong>说明</strong>: 使用前缀 <code>v_</code> (view) 或 <code>vw_</code> (view) 来明确标识这是一个视图，以便与表区分开。</li>
+<li><strong>示例</strong>:<ul>
+<li><code>v_active_users</code> (活跃用户视图)</li>
+<li><code>vw_product_sales_summary</code> (产品销售汇总视图)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-4-5-索引-Index"><a href="#1-4-5-索引-Index" class="headerlink" title="1.4.5 索引 (Index)"></a>1.4.5 索引 (Index)</h4><ul>
+<li><strong>格式</strong>: <code>idx_表名_字段名</code> 或 <code>uk_表名_字段名</code></li>
+<li><strong>说明</strong>:<ul>
+<li><code>idx_</code> (index) 用于普通索引。</li>
+<li><code>uk_</code> (unique key) 或 <code>uidx_</code> 用于唯一索引。</li>
+<li>名称中包含表名和列名，可以快速定位索引的作用。如果索引包含多个列，可以将它们都列出。</li>
+</ul>
+</li>
+<li><strong>示例</strong>:<ul>
+<li><code>idx_users_email</code> (在 <code>users</code> 表的 <code>email</code> 字段上的索引)</li>
+<li><code>uk_users_username</code> (在 <code>users</code> 表的 <code>username</code> 字段上的唯一索引)</li>
+<li><code>idx_orders_user_id_created_at</code> (在 <code>orders</code> 表上的联合索引)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-4-6-约束-Constraint"><a href="#1-4-6-约束-Constraint" class="headerlink" title="1.4.6 约束 (Constraint)"></a>1.4.6 约束 (Constraint)</h4><ul>
+<li><strong>格式</strong>: <code>类型前缀_表名_字段名</code></li>
+<li><strong>说明</strong>: 为约束明确命名，便于后期管理和调试。<ul>
+<li><code>pk_</code> (Primary Key): 主键约束</li>
+<li><code>fk_</code> (Foreign Key): 外键约束</li>
+<li><code>chk_</code> (Check): 检查约束</li>
+<li><code>uq_</code> (Unique): 唯一约束（同唯一索引）</li>
+</ul>
+</li>
+<li><strong>示例</strong>:<ul>
+<li><code>pk_users</code> (users 表的主键)</li>
+<li><code>fk_orders_user_id</code> (orders 表关联 users 表的外键)</li>
+<li><code>chk_products_price</code> (检查 products 表 price 字段的约束)</li>
+<li><code>uq_users_email</code> (users 表 email 字段的唯一约束)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-4-7-存储过程-Stored-Procedure"><a href="#1-4-7-存储过程-Stored-Procedure" class="headerlink" title="1.4.7 存储过程 (Stored Procedure)"></a>1.4.7 存储过程 (Stored Procedure)</h4><ul>
+<li><strong>格式</strong>: <code>usp_动词_名词</code> 或 <code>sp_动词_名词</code></li>
+<li><strong>说明</strong>:<ul>
+<li>使用前缀 <code>usp_</code> (user stored procedure) 或 <code>sp_</code>。<strong>注意</strong>：在 SQL Server 中，<code>sp_</code> 是系统存储过程的前缀，为避免冲突和性能问题，推荐使用 <code>usp_</code>。</li>
+<li>采用 “动词+名词” 结构，清晰描述其功能。</li>
+</ul>
+</li>
+<li><strong>示例</strong>:<ul>
+<li><code>usp_get_user_by_id</code></li>
+<li><code>usp_update_order_status</code></li>
+<li><code>usp_archive_old_logs</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="1-4-8-触发器-Trigger"><a href="#1-4-8-触发器-Trigger" class="headerlink" title="1.4.8 触发器 (Trigger)"></a>1.4.8 触发器 (Trigger)</h4><ul>
+<li><strong>格式</strong>: <code>trg_表名_时机_事件</code></li>
+<li><strong>说明</strong>:<ul>
+<li>前缀 <code>trg_</code> (trigger)。</li>
+<li>包含表名、触发时机（<code>before</code>, <code>after</code>）和触发事件（<code>insert</code>, <code>update</code>, <code>delete</code>）。</li>
+</ul>
+</li>
+<li><strong>示例</strong>:<ul>
+<li><code>trg_users_after_update</code></li>
+<li><code>trg_order_details_before_insert</code></li>
+</ul>
+</li>
+</ul>
 <hr>
 <h2 id="2-事务与并发控制"><a href="#2-事务与并发控制" class="headerlink" title="2. 事务与并发控制"></a>2. 事务与并发控制</h2><h3 id="2-1-事务的四大特性-ACID"><a href="#2-1-事务的四大特性-ACID" class="headerlink" title="2.1 事务的四大特性 (ACID)"></a>2.1 事务的四大特性 (ACID)</h3><h4 id="2-1-1-A-原子性-Atomicity"><a href="#2-1-1-A-原子性-Atomicity" class="headerlink" title="2.1.1 A - 原子性 (Atomicity)"></a>2.1.1 A - 原子性 (Atomicity)</h4><h5 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h5><p>原子性指事务是一个<strong>不可分割</strong>的工作单元。事务中的所有操作，要么全部成功提交，要么全部失败回滚。</p>
 <p><strong>通俗解释</strong>：“<strong>要么不做，要么做全套</strong>”。</p>
