@@ -18754,7 +18754,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-07 14:38:13" itemprop="dateModified" datetime="2025-11-07T14:38:13+08:00">2025-11-07</time>
+      <time title="修改时间：2025-11-14 16:16:11" itemprop="dateModified" datetime="2025-11-14T16:16:11+08:00">2025-11-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -20155,6 +20155,158 @@
 <li><strong>数据库连接池</strong>：当调用<code>connection.close()</code>时，连接池并不会真正关闭物理连接，而是通过代理将连接归还给连接池。</li>
 </ol>
 <hr>
+<h3 id="4-8-泛型"><a href="#4-8-泛型" class="headerlink" title="4.8 泛型"></a>4.8 泛型</h3><h4 id="4-8-1-简介"><a href="#4-8-1-简介" class="headerlink" title="4.8.1 简介"></a>4.8.1 简介</h4><p><strong>泛型 (Generics)</strong> 的本质是 <strong>参数化类型 (Parameterized Type)</strong>，也就是说，将类型像参数一样传递。它允许我们在定义类、接口和方法时使用类型参数，而在使用时再指定具体的类型。</p>
+<p><strong>为什么需要泛型？</strong></p>
+<p>在泛型出现之前（JDK 1.5 以前），Java 的集合类（如 <code>ArrayList</code>）只能存储 <code>Object</code> 类型的对象。这样做有两个主要弊端：</p>
+<ol>
+<li><p><strong>类型不安全</strong>：你可以向一个集合中添加任何类型的对象，编译器不会报错。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 泛型出现前</span></span><br><span class="line"><span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</span><br><span class="line">list.add(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">list.add(<span class="number">123</span>); <span class="comment">// 编译时完全正常</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>需要强制类型转换</strong>：从集合中取出元素时，必须手动进行强制类型转换，这不仅繁琐，而且可能在运行时抛出 <code>ClassCastException</code> 异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 运行时会抛出 ClassCastException</span></span><br><span class="line"><span class="type">String</span> <span class="variable">first</span> <span class="operator">=</span> (String) list.get(<span class="number">0</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">second</span> <span class="operator">=</span> (String) list.get(<span class="number">1</span>); <span class="comment">// 错误！123无法转换为String</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>泛型带来的好处：</strong></p>
+<ol>
+<li><p><strong>编译时类型检查 (Type Safety)</strong>：编译器会在编译阶段检查类型，防止将错误类型的对象放入集合中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用泛型后</span></span><br><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line"><span class="comment">// list.add(123); // 编译时就会报错！</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>消除强制类型转换 (Eliminates Casts)</strong>：从集合中获取元素时，不再需要手动转换，代码更简洁、更安全。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">first</span> <span class="operator">=</span> list.get(<span class="number">0</span>); <span class="comment">// 无需强制转换</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>代码重用与抽象 (Code Reusability)</strong>：可以编写出更通用、更灵活的代码，一套代码可以适用于多种数据类型。</p>
+</li>
+</ol>
+<hr>
+<h4 id="4-8-2-泛型的核心用法"><a href="#4-8-2-泛型的核心用法" class="headerlink" title="4.8.2 泛型的核心用法"></a>4.8.2 泛型的核心用法</h4><h5 id="1-泛型类-Generic-Class"><a href="#1-泛型类-Generic-Class" class="headerlink" title="1. 泛型类 (Generic Class)"></a>1. 泛型类 (Generic Class)</h5><p>在类名后添加 <code>&lt;T&gt;</code>（T 是一个约定的类型参数名，可以是任何合法的标识符）来定义一个泛型类。</p>
+<p><strong>语法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ClassName</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例：一个通用的 “盒子” 类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Box</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T content;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T content)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.content = content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> content;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用泛型类</span></span><br><span class="line">Box&lt;Integer&gt; integerBox = <span class="keyword">new</span> <span class="title class_">Box</span>&lt;&gt;();</span><br><span class="line">integerBox.set(<span class="number">10</span>);</span><br><span class="line"><span class="comment">// integerBox.set(&quot;hello&quot;); // 编译错误</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">value</span> <span class="operator">=</span> integerBox.get();</span><br><span class="line"></span><br><span class="line">Box&lt;String&gt; stringBox = <span class="keyword">new</span> <span class="title class_">Box</span>&lt;&gt;();</span><br><span class="line">stringBox.set(<span class="string">&quot;Java Generics&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> stringBox.get();</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="2-泛型接口-Generic-Interface"><a href="#2-泛型接口-Generic-Interface" class="headerlink" title="2. 泛型接口 (Generic Interface)"></a>2. 泛型接口 (Generic Interface)</h5><p>与泛型类类似，在接口名后添加 <code>&lt;T&gt;</code>。</p>
+<p><strong>语法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">InterfaceName</span>&lt;T&gt; &#123;</span><br><span class="line">    T <span class="title function_">next</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例：一个通用的 “生成器” 接口</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Generator</span>&lt;T&gt; &#123;</span><br><span class="line">    T <span class="title function_">generate</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现泛型接口</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RandomIntegerGenerator</span> <span class="keyword">implements</span> <span class="title class_">Generator</span>&lt;Integer&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">generate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">StaticStringGenerator</span> <span class="keyword">implements</span> <span class="title class_">Generator</span>&lt;String&gt; &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">generate</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="3-泛型方法-Generic-Method"><a href="#3-泛型方法-Generic-Method" class="headerlink" title="3. 泛型方法 (Generic Method)"></a>3. 泛型方法 (Generic Method)</h5><p>泛型方法允许方法的类型参数独立于类的类型参数。</p>
+<p><strong>语法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; T <span class="title function_">methodName</span><span class="params">(T argument)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&lt;T&gt;</code>：类型参数声明，必须放在返回值类型之前。</li>
+<li><code>T</code>：可以作为方法的返回类型、参数类型等。</li>
+</ul>
+<p><strong>特点：</strong></p>
+<ul>
+<li>泛型方法可以是静态的或非静态的。</li>
+<li>方法的类型参数 <code>&lt;T&gt;</code> 作用域仅限于该方法。</li>
+</ul>
+<p><strong>示例：一个打印任意类型数组的工具方法</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Utils</span> &#123;</span><br><span class="line">    <span class="comment">// 这是一个泛型方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;E&gt; <span class="keyword">void</span> <span class="title function_">printArray</span><span class="params">(E[] inputArray)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (E element : inputArray) &#123;</span><br><span class="line">            System.out.printf(<span class="string">&quot;%s &quot;</span>, element);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用泛型方法</span></span><br><span class="line">Integer[] intArray = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line">String[] stringArray = &#123;<span class="string">&quot;Hello&quot;</span>, <span class="string">&quot;World&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line">Utils.printArray(intArray);   <span class="comment">// 输出: 1 2 3 4 5</span></span><br><span class="line">Utils.printArray(stringArray); <span class="comment">// 输出: Hello World</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>类型推断</strong>：大多数情况下，编译器可以根据传入的参数自动推断出 <code>E</code> 的具体类型，所以我们不需要显式指定，如 <code>Utils.&lt;Integer&gt;printArray(intArray)</code>。</p>
+<hr>
+<h4 id="4-8-3-通配符-Wildcards"><a href="#4-8-3-通配符-Wildcards" class="headerlink" title="4.8.3 通配符 (Wildcards)"></a>4.8.3 通配符 (Wildcards)</h4><p>通配符 <code>?</code> 用于表示未知的类型，主要用于解决泛型类型不具备继承性的问题。</p>
+<h5 id="1-为什么需要通配符？"><a href="#1-为什么需要通配符？" class="headerlink" title="1. 为什么需要通配符？"></a>1. 为什么需要通配符？</h5><p><strong>核心问题</strong>：<code>List&lt;Integer&gt;</code> <strong>不是</strong> <code>List&lt;Number&gt;</code> 的子类。</p>
+<p>虽然 <code>Integer</code> 是 <code>Number</code> 的子类，但包含它们的泛型类型之间没有继承关系。这被称为 <strong>泛型的不变性 (Invariance)</strong>。</p>
+<p><strong>为什么？</strong> 假设 <code>List&lt;Integer&gt;</code> 是 <code>List&lt;Number&gt;</code> 的子类，那么下面的代码在编译时将是合法的，但在运行时会产生严重问题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; intList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"><span class="comment">// 假设这是合法的</span></span><br><span class="line">List&lt;Number&gt; numList = intList; </span><br><span class="line"><span class="comment">// 那么我们可以向 numList 中添加 Double</span></span><br><span class="line">numList.add(<span class="number">3.14</span>); <span class="comment">// 合法，因为 Double 是 Number</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 问题来了：我们从 intList 中取出了一个 Double！</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">myInt</span> <span class="operator">=</span> intList.get(<span class="number">0</span>); <span class="comment">// ClassCastException: Double cannot be cast to Integer</span></span><br></pre></td></tr></table></figure>
+
+<p>为了在保证类型安全的前提下，让泛型代码更灵活，通配符应运而生。</p>
+<hr>
+<h5 id="2-上界通配符-extends-T"><a href="#2-上界通配符-extends-T" class="headerlink" title="2. 上界通配符 (? extends T)"></a>2. 上界通配符 (<code>? extends T</code>)</h5><p><strong>含义</strong>：表示一个未知的类型，但这个类型是 <code>T</code> 或 <code>T</code> 的子类。</p>
+<p><strong>用途</strong>：主要用于 <strong>读取</strong> 数据（作为生产者），不用于写入。</p>
+<p><strong>示例</strong>：计算一个数字列表的总和。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个方法可以接受 List&lt;Integer&gt;, List&lt;Double&gt;, List&lt;Float&gt; 等</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">sumOfList</span><span class="params">(List&lt;? extends Number&gt; list)</span> &#123;</span><br><span class="line">    <span class="type">double</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0.0</span>;</span><br><span class="line">    <span class="keyword">for</span> (Number n : list) &#123;</span><br><span class="line">        sum += n.doubleValue(); <span class="comment">// 安全读取：因为我们知道每个元素至少是 Number</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// list.add(123); // 编译错误！</span></span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>写入限制</strong>：你不能向 <code>List&lt;? extends Number&gt;</code> 中添加任何元素（<code>null</code> 除外），因为编译器无法确定 <code>?</code> 的具体类型。如果是 <code>List&lt;Double&gt;</code>，你不能添加 <code>Integer</code>；如果是 <code>List&lt;Integer&gt;</code>，你不能添加 <code>Double</code>。为了安全，编译器干脆禁止所有添加操作。</p>
+<hr>
+<h5 id="3-下界通配符-super-T"><a href="#3-下界通配符-super-T" class="headerlink" title="3. 下界通配符 (? super T)"></a>3. 下界通配符 (<code>? super T</code>)</h5><p><strong>含义</strong>：表示一个未知的类型，但这个类型是 <code>T</code> 或 <code>T</code> 的超类。</p>
+<p><strong>用途</strong>：主要用于 <strong>写入</strong> 数据（作为消费者），不适合读取。</p>
+<p><strong>示例</strong>：向一个列表中添加整数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这个方法可以接受 List&lt;Integer&gt;, List&lt;Number&gt;, List&lt;Object&gt;</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">addIntegers</span><span class="params">(List&lt;? <span class="built_in">super</span> Integer&gt; list)</span> &#123;</span><br><span class="line">    list.add(<span class="number">1</span>); <span class="comment">// 安全写入：因为 1 是 Integer，而列表可以容纳 Integer 或其父类</span></span><br><span class="line">    list.add(<span class="number">2</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Object obj = list.get(0); // 读取是有限制的</span></span><br><span class="line">    <span class="comment">// Integer i = list.get(0); // 编译错误！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>读取限制</strong>：当你从 <code>List&lt;? super Integer&gt;</code> 中读取时，你只能保证得到的是一个 <code>Object</code>，因为你不知道它的具体类型是 <code>Integer</code>、<code>Number</code> 还是 <code>Object</code>。</p>
+<hr>
+<h5 id="4-无界通配符"><a href="#4-无界通配符" class="headerlink" title="4. 无界通配符 (?)"></a>4. 无界通配符 (<code>?</code>)</h5><p><strong>含义</strong>：表示任何类型，等同于 <code>? extends Object</code>。</p>
+<p><strong>用途</strong>：当元素的具体类型不重要时使用，通常用于只读操作，且不依赖于具体类型的方法。</p>
+<p><strong>示例</strong>：打印任何类型的列表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printList</span><span class="params">(List&lt;?&gt; list)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (Object elem : list) &#123; <span class="comment">// 只能按 Object 读取</span></span><br><span class="line">        System.out.print(elem + <span class="string">&quot; &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// list.add(new Object()); // 编译错误！与 extends 一样，不能写入</span></span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="5-PECS-原则"><a href="#5-PECS-原则" class="headerlink" title="5. PECS 原则"></a>5. PECS 原则</h5><p>这是一个非常有用的助记法则，用于决定使用 <code>extends</code> 还是 <code>super</code>：</p>
+<p><strong>PECS: Producer Extends, Consumer Super</strong></p>
+<ul>
+<li><strong>Producer Extends</strong>：如果你的方法需要一个列表作为生产者（你从中 <strong>读取</strong> T 类型的元素），请使用 <code>? extends T</code>。</li>
+<li><strong>Consumer Super</strong>：如果你的方法需要一个列表作为消费者（你向其中 <strong>写入</strong> T 类型的元素），请使用 <code>? super T</code>。</li>
+</ul>
+<p><strong>经典示例：<code>Collections.copy()</code></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> <span class="title function_">copy</span><span class="params">(List&lt;? <span class="built_in">super</span> T&gt; dest, List&lt;? extends T&gt; src)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; src.size(); i++) &#123;</span><br><span class="line">        <span class="comment">// src 是生产者 (Producer)，从中读取，用 extends</span></span><br><span class="line">        <span class="comment">// dest 是消费者 (Consumer)，向其中写入，用 super</span></span><br><span class="line">        dest.set(i, src.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="4-8-4-类型擦除-Type-Erasure"><a href="#4-8-4-类型擦除-Type-Erasure" class="headerlink" title="4.8.4 类型擦除 (Type Erasure)"></a>4.8.4 类型擦除 (Type Erasure)</h4><h5 id="1-什么是类型擦除？"><a href="#1-什么是类型擦除？" class="headerlink" title="1. 什么是类型擦除？"></a>1. 什么是类型擦除？</h5><p>Java 的泛型是通过 <strong>类型擦除</strong> 来实现的。这意味着泛型信息 <strong>只存在于编译期</strong>，在运行时（<code>.class</code> 文件中）会被 “擦除” 掉。</p>
+<p><strong>擦除规则：</strong></p>
+<ol>
+<li>对于无界泛型（如 <code>&lt;T&gt;</code>），<code>T</code> 被替换为 <code>Object</code>。</li>
+<li>对于有界泛型（如 <code>&lt;T extends Number&gt;</code>），<code>T</code> 被替换为它的上界，即 <code>Number</code>。</li>
+</ol>
+<p><strong>示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编译前</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Box</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> T content;</span><br><span class="line">    <span class="keyword">public</span> T <span class="title function_">get</span><span class="params">()</span> &#123; <span class="keyword">return</span> content; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译后（在字节码层面）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Box</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object content;</span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">()</span> &#123; <span class="keyword">return</span> content; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译器在必要时会自动插入强制类型转换，以保证类型安全。这就是为什么你从 <code>List&lt;String&gt;</code> 中 <code>get()</code> 元素时不需要手动转换，因为编译器帮你做了。</p>
+<hr>
+<h5 id="2-类型擦除带来的问题与桥接方法"><a href="#2-类型擦除带来的问题与桥接方法" class="headerlink" title="2. 类型擦除带来的问题与桥接方法"></a>2. 类型擦除带来的问题与桥接方法</h5><p>类型擦除会导致一些看似矛盾的现象，比如重写（Override）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> T data;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(T data)</span> &#123; <span class="built_in">this</span>.data = data; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(T data)</span> &#123; <span class="built_in">this</span>.data = data; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyNode</span> <span class="keyword">extends</span> <span class="title class_">Node</span>&lt;Integer&gt; &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyNode</span><span class="params">(Integer data)</span> &#123; <span class="built_in">super</span>(data); &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这个方法重写了父类的方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(Integer data)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>.setData(data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Node&lt;T&gt;</code> 擦除后，<code>setData</code> 方法的签名是 <code>setData(Object data)</code>。</li>
+<li><code>MyNode</code> 中，<code>setData</code> 方法的签名是 <code>setData(Integer data)</code>。</li>
+</ul>
+<p>这两个方法的签名在字节码层面是不同的，不符合重写规则。为了解决这个问题，编译器会自动生成一个 <strong>桥接方法 (Bridge Method)</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 MyNode 类中，编译器自动生成的桥接方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(Object data)</span> &#123;</span><br><span class="line">    <span class="comment">// 调用我们自己写的、更具体的方法</span></span><br><span class="line">    setData((Integer) data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个桥接方法才是真正重写了父类的方法，它内部再调用我们自己定义的 <code>setData(Integer data)</code> 方法。</p>
+<hr>
+<h4 id="4-8-5-泛型的限制"><a href="#4-8-5-泛型的限制" class="headerlink" title="4.8.5 泛型的限制"></a>4.8.5 泛型的限制</h4><p>由于类型擦除，泛型有一些使用上的限制：</p>
+<ol>
+<li><strong>不能使用基本数据类型</strong>：不能是 <code>List&lt;int&gt;</code>，必须使用包装类 <code>List&lt;Integer&gt;</code>。</li>
+<li><strong>不能创建类型参数的实例</strong>：不能 <code>new T()</code>，因为 <code>T</code> 在运行时被擦除了。<ul>
+<li><strong>解决方案</strong>：通过反射创建，需要传入 <code>Class&lt;T&gt;</code> 对象。<code>T instance = clazz.newInstance();</code></li>
+</ul>
+</li>
+<li><strong>不能声明静态字段为泛型类型</strong>：<code>private static T instance;</code> 是非法的。因为静态字段是类级别的，所有实例（<code>Box&lt;Integer&gt;</code>, <code>Box&lt;String&gt;</code>）共享同一个静态字段，类型会冲突。</li>
+<li><strong>不能使用 <code>instanceof</code> 检查参数化类型</strong>：<code>if (obj instanceof List&lt;String&gt;)</code> 是非法的，因为运行时没有 <code>String</code> 的信息。<ul>
+<li><strong>可以</strong>：<code>if (obj instanceof List&lt;?&gt;)</code> 或 <code>if (obj instanceof List)</code>。</li>
+</ul>
+</li>
+<li><strong>不能创建泛型数组</strong>：<code>T[] array = new T[10];</code> 是非法的。<ul>
+<li><strong>原因</strong>：Java 数组是协变的（<code>Integer[]</code> 是 <code>Number[]</code> 的子类），而泛型是不变的。如果允许创建泛型数组，会破坏类型安全（参考 <code>List&lt;Integer&gt;</code> 和 <code>List&lt;Number&gt;</code> 的例子）。</li>
+<li><strong>解决方案</strong>：创建 <code>Object[]</code> 然后强转，或者使用 <code>List</code> 代替。</li>
+</ul>
+</li>
+<li><strong>不能创建、捕获或抛出泛型异常</strong>：不能 <code>class MyException&lt;T&gt; extends Exception {}</code>。</li>
+</ol>
+<hr>
+<h4 id="4-8-6-泛型使用的最佳实践"><a href="#4-8-6-泛型使用的最佳实践" class="headerlink" title="4.8.6 泛型使用的最佳实践"></a>4.8.6 泛型使用的最佳实践</h4><ol>
+<li><strong>始终使用泛型</strong>：在代码中，尽量避免使用原始类型（如 <code>List</code>），而是使用 <code>List&lt;String&gt;</code> 等。这能让编译器帮你检查类型。</li>
+<li><strong>遵循 PECS 原则</strong>：在设计 API 时，合理使用 <code>extends</code> 和 <code>super</code> 通配符，使你的方法更具灵活性。</li>
+<li><strong>优先使用 <code>List</code> 而非 <code>T[]</code></strong>：<code>List</code> 在泛型支持、类型安全和功能上都优于数组。</li>
+<li><strong>编程到接口</strong>：声明变量时使用接口类型，如 <code>List&lt;String&gt; list = new ArrayList&lt;&gt;();</code>，而不是 <code>ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</code>。</li>
+</ol>
+<hr>
+<h4 id="4-8-7-总结"><a href="#4-8-7-总结" class="headerlink" title="4.8.7 总结"></a>4.8.7 总结</h4><ul>
+<li><strong>核心目的</strong>：提供编译时类型安全，避免运行时 <code>ClassCastException</code>。</li>
+<li><strong>核心用法</strong>：泛型类、泛型接口、泛型方法。</li>
+<li><strong>高级用法</strong>：使用通配符 <code>?</code>（<code>extends</code>, <code>super</code>）来增加 API 的灵活性，遵循 <strong>PECS</strong> 原则。</li>
+<li><strong>实现机制</strong>：通过 <strong>类型擦除</strong> 实现，泛型信息在运行时不可用。</li>
+<li><strong>主要限制</strong>：不能用于基本类型、不能创建 <code>T</code> 实例、不能创建泛型数组等。</li>
+</ul>
+<hr>
 <h2 id="5-综合与对比"><a href="#5-综合与对比" class="headerlink" title="5. 综合与对比"></a>5. 综合与对比</h2><h3 id="5-1-抽象类-Abstract-Class-vs-接口-Interface"><a href="#5-1-抽象类-Abstract-Class-vs-接口-Interface" class="headerlink" title="5.1 抽象类 (Abstract Class) vs 接口 (Interface)"></a>5.1 抽象类 (Abstract Class) vs 接口 (Interface)</h3><p>自从 Java 8 引入默认方法和静态方法，以及 Java 9 引入私有方法后，接口的能力大大增强。以下是它们在现代 Java 中的对比。</p>
 <table>
 <thead>
@@ -20379,7 +20531,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-14 15:37:41" itemprop="dateModified" datetime="2025-11-14T15:37:41+08:00">2025-11-14</time>
+      <time title="修改时间：2025-11-14 15:39:31" itemprop="dateModified" datetime="2025-11-14T15:39:31+08:00">2025-11-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
