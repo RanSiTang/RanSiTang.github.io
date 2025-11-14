@@ -19,26 +19,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="二、数组&amp;字符串&amp;内存分配1. 数组1.1 数组的核心特性定义：数组是一种用于存储固定大小的、相同类型元素的线性数据结构。 核心特点：  固定长度：一旦数组被创建，其长度就不可改变。 相同类型：数组中的所有元素必须是相同的数据类型（无论是基本类型还是引用类型）。 内存连续：数组在内存中占据一块连续的空间，这使得通过索引访问元素非常高效（时间复杂度为 O(1)）。 索引访问：每个元素">
+    <meta name="description" content="二、数组&amp;字符串1. 数组1.1 数组的核心特性定义：数组是一种用于存储固定大小的、相同类型元素的线性数据结构。 核心特点：  固定长度：一旦数组被创建，其长度就不可改变。 相同类型：数组中的所有元素必须是相同的数据类型（无论是基本类型还是引用类型）。 内存连续：数组在内存中占据一块连续的空间，这使得通过索引访问元素非常高效（时间复杂度为 O(1)）。 索引访问：每个元素都有一个从 0 开">
 <meta property="og:type" content="article">
-<meta property="og:title" content="二、数组&amp;字符串&amp;内存分配">
-<meta property="og:url" content="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2&%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/index.html">
+<meta property="og:title" content="二、数组&amp;字符串">
+<meta property="og:url" content="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2/index.html">
 <meta property="og:site_name" content="冉的技术宝典">
-<meta property="og:description" content="二、数组&amp;字符串&amp;内存分配1. 数组1.1 数组的核心特性定义：数组是一种用于存储固定大小的、相同类型元素的线性数据结构。 核心特点：  固定长度：一旦数组被创建，其长度就不可改变。 相同类型：数组中的所有元素必须是相同的数据类型（无论是基本类型还是引用类型）。 内存连续：数组在内存中占据一块连续的空间，这使得通过索引访问元素非常高效（时间复杂度为 O(1)）。 索引访问：每个元素">
+<meta property="og:description" content="二、数组&amp;字符串1. 数组1.1 数组的核心特性定义：数组是一种用于存储固定大小的、相同类型元素的线性数据结构。 核心特点：  固定长度：一旦数组被创建，其长度就不可改变。 相同类型：数组中的所有元素必须是相同的数据类型（无论是基本类型还是引用类型）。 内存连续：数组在内存中占据一块连续的空间，这使得通过索引访问元素非常高效（时间复杂度为 O(1)）。 索引访问：每个元素都有一个从 0 开">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-06T10:05:00.000Z">
-<meta property="article:modified_time" content="2025-11-06T10:30:43.172Z">
+<meta property="article:modified_time" content="2025-11-14T07:37:41.108Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2&%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">
+<link rel="canonical" href="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2&%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/","path":"2025/09/06/基础核心层/Java/二、数组&字符串&内存分配/","title":"二、数组&字符串&内存分配"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2/","path":"2025/09/06/基础核心层/Java/二、数组&字符串/","title":"二、数组&字符串"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>二、数组&字符串&内存分配 | 冉的技术宝典</title>
+<title>二、数组&字符串 | 冉的技术宝典</title>
   
 
 
@@ -129,7 +129,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84-%E5%AD%97%E7%AC%A6%E4%B8%B2-%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-text">二、数组&amp;字符串&amp;内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%95%B0%E7%BB%84"><span class="nav-text">1. 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%95%B0%E7%BB%84%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-text">1.1 数组的核心特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%95%B0%E7%BB%84%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">1.2 数组的声明与初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-%E5%A3%B0%E6%98%8E%E6%95%B0%E7%BB%84"><span class="nav-text">1.2.1 声明数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E7%BB%84"><span class="nav-text">1.2.2 初始化数组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%95%B0%E7%BB%84%E7%9A%84%E8%AE%BF%E9%97%AE%E4%B8%8E%E9%81%8D%E5%8E%86"><span class="nav-text">1.3 数组的访问与遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-%E8%AE%BF%E9%97%AE%E5%85%83%E7%B4%A0"><span class="nav-text">1.3.1 访问元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2-%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84"><span class="nav-text">1.3.2 遍历数组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-text">1.4 多维数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-1-%E5%A3%B0%E6%98%8E%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">1.4.1 声明和初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-2-%E8%AE%BF%E9%97%AE%E4%B8%8E%E9%81%8D%E5%8E%86"><span class="nav-text">1.4.2 访问与遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-3-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">1.4.3 注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E6%95%B0%E7%BB%84%E7%9A%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E4%B8%8E%E5%B7%A5%E5%85%B7%E7%B1%BB-Arrays"><span class="nav-text">1.5 数组的常用操作与工具类 Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-%E6%95%B0%E7%BB%84%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF"><span class="nav-text">1.6 数组的注意事项与常见错误</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text">2. 字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%BD%BF%E7%94%A8"><span class="nav-text">2.1 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-%E5%88%9B%E5%BB%BA-String-%E5%AF%B9%E8%B1%A1"><span class="nav-text">2.1.1 创建 String 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">2.1.2 字符串的基本操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%BA%95%E5%B1%82%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3"><span class="nav-text">2.2 底层机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%EF%BC%88%E6%B7%B1%E5%85%A5%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%89"><span class="nav-text">2.2.1 字符串的创建与内存分配（深入常量池）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-intern-%E6%96%B9%E6%B3%95%EF%BC%9A%E6%89%8B%E5%8A%A8%E5%85%A5%E6%B1%A0"><span class="nav-text">2.2.2 intern() 方法：手动入池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0%E7%9A%84%E4%BD%8D%E7%BD%AE%E6%BC%94%E5%8F%98"><span class="nav-text">2.2.3 字符串常量池的位置演变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4-String-%E7%9A%84%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7-Immutability"><span class="nav-text">2.2.4 String 的不可变性 (Immutability)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-5-JDK-9-%E7%9A%84%E5%BA%95%E5%B1%82%E4%BC%98%E5%8C%96%EF%BC%9Abyte-coder"><span class="nav-text">2.2.5 JDK 9 的底层优化：byte[] + coder</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-StringBuilder%E3%80%81StringBuffer%E5%92%8CStringJoiner"><span class="nav-text">2.3 StringBuilder、StringBuffer和StringJoiner</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-StringBuilder"><span class="nav-text">2.3.1 StringBuilder</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-text">主要构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-StringBuffer"><span class="nav-text">2.3.2 StringBuffer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7-1"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-3-StringJoiner"><span class="nav-text">2.3.3 StringJoiner</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7-2"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-1"><span class="nav-text">主要构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-1"><span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-4-%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-text">2.3.4 对比总结与选择指南</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="nav-text">如何选择？</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Java-%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-text">3. Java 对象内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AF%B9%E8%B1%A1%E7%BB%93%E6%9E%84%E6%A6%82%E8%A7%88"><span class="nav-text">3.1 对象结构概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%90%84%E9%83%A8%E5%88%86%E8%AF%A6%E8%A7%A3"><span class="nav-text">3.2 各部分详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-%E5%AF%B9%E8%B1%A1%E5%A4%B4-Object-Header"><span class="nav-text">3.2.1 对象头 (Object Header)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AE-Instance-Data"><span class="nav-text">3.2.2 实例数据 (Instance Data)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85-Padding"><span class="nav-text">3.2.3 对齐填充 (Padding)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90"><span class="nav-text">3.3 案例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-1-java-lang-Object-%E7%A9%BA%E5%AF%B9%E8%B1%A1"><span class="nav-text">案例 1: java.lang.Object 空对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-2-%E5%8C%85%E5%90%AB%E4%B8%80%E4%B8%AA-int-%E5%AD%97%E6%AE%B5%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="nav-text">案例 2: 包含一个 int 字段的对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-3-java-lang-Boolean-%E5%AF%B9%E8%B1%A1"><span class="nav-text">案例 3: java.lang.Boolean 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-4-java-lang-String-%E5%AF%B9%E8%B1%A1-JDK-8"><span class="nav-text">案例 4: java.lang.String 对象 (JDK 8+)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-text">3.4 数组对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-5-int-4-%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1"><span class="nav-text">案例 5: int[4] 数组对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-6-String-3-%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%E6%95%B0%E7%BB%84-%E5%AF%B9%E8%B1%A1"><span class="nav-text">案例 6: String[3] (引用类型数组) 对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-%E6%80%BB%E7%BB%93%E4%B8%8E%E8%A6%81%E7%82%B9"><span class="nav-text">3.5 总结与要点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-text">4. Java内存分配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Java-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA"><span class="nav-text">4.1 Java 运行时数据区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-1-%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8-Program-Counter-Register"><span class="nav-text">4.1.1 程序计数器 (Program Counter Register)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-2-Java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-Java-Virtual-Machine-Stacks"><span class="nav-text">4.1.2 Java 虚拟机栈 (Java Virtual Machine Stacks)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-3-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88-Native-Method-Stack"><span class="nav-text">4.1.3 本地方法栈 (Native Method Stack)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-4-Java-%E5%A0%86-Java-Heap"><span class="nav-text">4.1.4 Java 堆 (Java Heap)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-5-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area"><span class="nav-text">4.1.5. 方法区 (Method Area)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E7%A4%BA%E4%BE%8B"><span class="nav-text">4.2 示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E6%80%BB%E7%BB%93%E4%B8%8E%E5%AF%B9%E6%AF%94"><span class="nav-text">4.3 总结与对比</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text">二、数组&amp;字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%95%B0%E7%BB%84"><span class="nav-text">1. 数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%95%B0%E7%BB%84%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-text">1.1 数组的核心特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%95%B0%E7%BB%84%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">1.2 数组的声明与初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-%E5%A3%B0%E6%98%8E%E6%95%B0%E7%BB%84"><span class="nav-text">1.2.1 声明数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E7%BB%84"><span class="nav-text">1.2.2 初始化数组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%95%B0%E7%BB%84%E7%9A%84%E8%AE%BF%E9%97%AE%E4%B8%8E%E9%81%8D%E5%8E%86"><span class="nav-text">1.3 数组的访问与遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-%E8%AE%BF%E9%97%AE%E5%85%83%E7%B4%A0"><span class="nav-text">1.3.1 访问元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2-%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84"><span class="nav-text">1.3.2 遍历数组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-text">1.4 多维数组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-1-%E5%A3%B0%E6%98%8E%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-text">1.4.1 声明和初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-2-%E8%AE%BF%E9%97%AE%E4%B8%8E%E9%81%8D%E5%8E%86"><span class="nav-text">1.4.2 访问与遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-3-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">1.4.3 注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E6%95%B0%E7%BB%84%E7%9A%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E4%B8%8E%E5%B7%A5%E5%85%B7%E7%B1%BB-Arrays"><span class="nav-text">1.5 数组的常用操作与工具类 Arrays</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-%E6%95%B0%E7%BB%84%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF"><span class="nav-text">1.6 数组的注意事项与常见错误</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text">2. 字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%BD%BF%E7%94%A8"><span class="nav-text">2.1 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-%E5%88%9B%E5%BB%BA-String-%E5%AF%B9%E8%B1%A1"><span class="nav-text">2.1.1 创建 String 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">2.1.2 字符串的基本操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%BA%95%E5%B1%82%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3"><span class="nav-text">2.2 底层机制详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%EF%BC%88%E6%B7%B1%E5%85%A5%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%89"><span class="nav-text">2.2.1 字符串的创建与内存分配（深入常量池）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-intern-%E6%96%B9%E6%B3%95%EF%BC%9A%E6%89%8B%E5%8A%A8%E5%85%A5%E6%B1%A0"><span class="nav-text">2.2.2 intern() 方法：手动入池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0%E7%9A%84%E4%BD%8D%E7%BD%AE%E6%BC%94%E5%8F%98"><span class="nav-text">2.2.3 字符串常量池的位置演变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4-String-%E7%9A%84%E4%B8%8D%E5%8F%AF%E5%8F%98%E6%80%A7-Immutability"><span class="nav-text">2.2.4 String 的不可变性 (Immutability)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-5-JDK-9-%E7%9A%84%E5%BA%95%E5%B1%82%E4%BC%98%E5%8C%96%EF%BC%9Abyte-coder"><span class="nav-text">2.2.5 JDK 9 的底层优化：byte[] + coder</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-StringBuilder%E3%80%81StringBuffer%E5%92%8CStringJoiner"><span class="nav-text">2.3 StringBuilder、StringBuffer和StringJoiner</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-StringBuilder"><span class="nav-text">2.3.1 StringBuilder</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-text">主要构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-StringBuffer"><span class="nav-text">2.3.2 StringBuffer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7-1"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-3-StringJoiner"><span class="nav-text">2.3.3 StringJoiner</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7-2"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-1"><span class="nav-text">主要构造方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-1"><span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-4-%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93%E4%B8%8E%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-text">2.3.4 对比总结与选择指南</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="nav-text">如何选择？</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -175,7 +175,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2&%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/06/%E5%9F%BA%E7%A1%80%E6%A0%B8%E5%BF%83%E5%B1%82/Java/%E4%BA%8C%E3%80%81%E6%95%B0%E7%BB%84&%E5%AD%97%E7%AC%A6%E4%B8%B2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -188,12 +188,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="二、数组&amp;字符串&amp;内存分配 | 冉的技术宝典">
+      <meta itemprop="name" content="二、数组&amp;字符串 | 冉的技术宝典">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          二、数组&字符串&内存分配
+          二、数组&字符串
         </h1>
 
         <div class="post-meta-container">
@@ -211,7 +211,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-06 18:30:43" itemprop="dateModified" datetime="2025-11-06T18:30:43+08:00">2025-11-06</time>
+      <time title="修改时间：2025-11-14 15:37:41" itemprop="dateModified" datetime="2025-11-14T15:37:41+08:00">2025-11-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -236,7 +236,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="二、数组-字符串-内存分配"><a href="#二、数组-字符串-内存分配" class="headerlink" title="二、数组&amp;字符串&amp;内存分配"></a>二、数组&amp;字符串&amp;内存分配</h1><h2 id="1-数组"><a href="#1-数组" class="headerlink" title="1. 数组"></a>1. 数组</h2><h3 id="1-1-数组的核心特性"><a href="#1-1-数组的核心特性" class="headerlink" title="1.1 数组的核心特性"></a>1.1 数组的核心特性</h3><p><strong>定义</strong>：数组是一种用于存储<strong>固定大小的</strong>、<strong>相同类型元素</strong>的线性数据结构。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="二、数组-字符串"><a href="#二、数组-字符串" class="headerlink" title="二、数组&amp;字符串"></a>二、数组&amp;字符串</h1><h2 id="1-数组"><a href="#1-数组" class="headerlink" title="1. 数组"></a>1. 数组</h2><h3 id="1-1-数组的核心特性"><a href="#1-1-数组的核心特性" class="headerlink" title="1.1 数组的核心特性"></a>1.1 数组的核心特性</h3><p><strong>定义</strong>：数组是一种用于存储<strong>固定大小的</strong>、<strong>相同类型元素</strong>的线性数据结构。</p>
 <p><strong>核心特点</strong>：</p>
 <ol>
 <li><strong>固定长度</strong>：一旦数组被创建，其长度就不可改变。</li>
@@ -585,333 +585,6 @@
 <li><strong><code>StringJoiner</code></strong>：<strong>目的驱动</strong>。当你需要拼接一个带有<strong>固定分隔符</strong>的列表，特别是还需要<strong>前缀和后缀</strong>时，它就是最清晰、最优雅的选择。与 Java 8 Stream API 是天作之合。</li>
 </ol>
 <p><strong>一句话总结：单线程拼接用 <code>StringBuilder</code>，要格式化成串用 <code>StringJoiner</code>，<code>StringBuffer</code> 基本被遗忘。</strong></p>
-<hr>
-<h2 id="3-Java-对象内存布局"><a href="#3-Java-对象内存布局" class="headerlink" title="3. Java 对象内存布局"></a>3. Java 对象内存布局</h2><p>Java 对象在堆内存中的存储布局可以分为三个部分：<strong>对象头 (Header)</strong>、<strong>实例数据 (Instance Data)</strong> 和<strong>对齐填充 (Padding)</strong>。</p>
-<h3 id="3-1-对象结构概览"><a href="#3-1-对象结构概览" class="headerlink" title="3.1 对象结构概览"></a>3.1 对象结构概览</h3><table>
-<thead>
-<tr>
-<th align="left">部分</th>
-<th align="left">描述</th>
-<th align="left">必选</th>
-<th align="left">大小 (64位 JVM, 开启压缩指针)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>对象头 (Header)</strong></td>
-<td align="left">包含对象的元数据</td>
-<td align="left">是</td>
-<td align="left">12 字节 (8B Mark Word + 4B Klass Word)</td>
-</tr>
-<tr>
-<td align="left"><strong>实例数据 (Instance Data)</strong></td>
-<td align="left">对象所有字段的内容</td>
-<td align="left">否 (无字段则无)</td>
-<td align="left">取决于具体字段类型和数量</td>
-</tr>
-<tr>
-<td align="left"><strong>对齐填充 (Padding)</strong></td>
-<td align="left">使对象总大小为 8 字节的整数倍</td>
-<td align="left">否 (大小刚好则无)</td>
-<td align="left">0 - 7 字节</td>
-</tr>
-</tbody></table>
-<p><strong>总大小公式</strong>：<code>对象头 + 实例数据 + 对齐填充</code>，且总大小必须是 <strong>8 字节的整数倍</strong>。</p>
-<hr>
-<h3 id="3-2-各部分详解"><a href="#3-2-各部分详解" class="headerlink" title="3.2 各部分详解"></a>3.2 各部分详解</h3><h4 id="3-2-1-对象头-Object-Header"><a href="#3-2-1-对象头-Object-Header" class="headerlink" title="3.2.1 对象头 (Object Header)"></a>3.2.1 对象头 (Object Header)</h4><ol>
-<li><strong>Mark Word</strong>: 存储对象自身的运行时数据。</li>
-</ol>
-<ul>
-<li>包括：哈希码、GC 分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等。</li>
-<li><strong>大小</strong>：在 64 位 JVM 上占 <strong>8 字节</strong>。</li>
-</ul>
-<ol>
-<li><strong>Klass Pointer (类型指针)</strong>: 指向对象的类元数据（<code>Class</code> 对象），JVM 通过它来确定对象是哪个类的实例。</li>
-</ol>
-<ul>
-<li><strong>大小</strong>：在 64 位 JVM 且开启指针压缩 (<code>-XX:+UseCompressedOops</code>，<strong>默认开启</strong>) 时，占 <strong>4 字节</strong>；关闭时占 8 字节。</li>
-</ul>
-<blockquote>
-<p><strong>指针压缩</strong>: 为了减少 64 位平台下的内存消耗，JVM 将原本 64 位（8字节）的 Klass Pointer 压缩为 32 位（4字节）。这使得对象头从 16 字节 (8+8) 减少到 12 字节 (8+4)，显著节约了内存。</p>
-</blockquote>
-<hr>
-<h4 id="3-2-2-实例数据-Instance-Data"><a href="#3-2-2-实例数据-Instance-Data" class="headerlink" title="3.2.2 实例数据 (Instance Data)"></a>3.2.2 实例数据 (Instance Data)</h4><p>这是对象<strong>真正存储有效信息</strong>的部分，包含了代码中定义的所有类型的字段内容（包括从父类继承来的）。</p>
-<ul>
-<li><p><strong>内容</strong>：对象中所有定义字段的内容（包括从其父类继承的）。</p>
-</li>
-<li><p><strong>大小</strong>：完全由字段的类型和数量决定。</p>
-</li>
-<li><p><strong>基本类型占用空间</strong>：</p>
-<table>
-<thead>
-<tr>
-<th align="left">类型</th>
-<th align="left">大小</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>boolean</code>, <code>byte</code></td>
-<td align="left">1 字节</td>
-</tr>
-<tr>
-<td align="left"><code>short</code>, <code>char</code></td>
-<td align="left">2 字节</td>
-</tr>
-<tr>
-<td align="left"><code>int</code>, <code>float</code></td>
-<td align="left">4 字节</td>
-</tr>
-<tr>
-<td align="left"><code>long</code>, <code>double</code></td>
-<td align="left">8 字节</td>
-</tr>
-<tr>
-<td align="left"><strong>引用类型</strong></td>
-<td align="left"><strong>4字节</strong> (64位JVM开启压缩指针时)</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>注意</strong>：虽然 <code>boolean</code> 理论上只需 1 位，但 JVM 将其最小单位定义为 <strong>1 字节</strong>。</p>
-</blockquote>
-</li>
-</ul>
-<hr>
-<h4 id="3-2-3-对齐填充-Padding"><a href="#3-2-3-对齐填充-Padding" class="headerlink" title="3.2.3 对齐填充 (Padding)"></a>3.2.3 对齐填充 (Padding)</h4><ul>
-<li><strong>作用</strong>: HotSpot JVM 的内存管理系统要求<strong>对象的起始地址必须是 8 字节的整数倍</strong>（即 8 字节对齐）。因此，对象的总大小也必须是 8 字节的整数倍。</li>
-<li><strong>原因</strong>: 对齐后，CPU 的内存访问速度会大大提升。这是一种典型的“以空间换时间”的策略。</li>
-<li>如果 <code>对象头 + 实例数据</code> 的总大小不是 8 的倍数，JVM 会自动添加若干字节的无效数据（Padding）来补全。</li>
-</ul>
-<hr>
-<h3 id="3-3-案例分析"><a href="#3-3-案例分析" class="headerlink" title="3.3 案例分析"></a>3.3 案例分析</h3><h4 id="案例-1-java-lang-Object-空对象"><a href="#案例-1-java-lang-Object-空对象" class="headerlink" title="案例 1: java.lang.Object 空对象"></a>案例 1: <code>java.lang.Object</code> 空对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码</span></span><br><span class="line"><span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"><span class="comment">// JOL 输出</span></span><br><span class="line">java.lang.Object object internals:</span><br><span class="line">OFF  SZ   TYPE DESCRIPTION               VALUE</span><br><span class="line">  <span class="number">0</span>   <span class="number">8</span>        (object header: mark)     <span class="number">0x0000000000000001</span> (non-biasable; age: <span class="number">0</span>)</span><br><span class="line">  <span class="number">8</span>   <span class="number">4</span>        (object header: class)    <span class="number">0x000000f8</span> <span class="comment">// Klass Pointer</span></span><br><span class="line"> <span class="number">12</span>   <span class="number">4</span>        (object alignment gap)    <span class="comment">// 对齐填充</span></span><br><span class="line">Instance size: <span class="number">16</span> bytes</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>分析</strong>：对象头占 12B (8B Mark Word + 4B Klass Pointer)。12B 不是 8 的倍数，需要填充 4B 达到 16B。</li>
-<li><strong>结论</strong>：一个空 <code>Object</code> 对象占用 <strong>16 字节</strong>。</li>
-</ul>
-<hr>
-<h4 id="案例-2-包含一个-int-字段的对象"><a href="#案例-2-包含一个-int-字段的对象" class="headerlink" title="案例 2: 包含一个 int 字段的对象"></a>案例 2: 包含一个 <code>int</code> 字段的对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleInt</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">SimpleInt</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleInt</span>();</span><br><span class="line"><span class="comment">// JOL 输出 (简化)</span></span><br><span class="line">OFF  SZ   TYPE DESCRIPTION               VALUE</span><br><span class="line">  <span class="number">0</span>   <span class="number">8</span>        (object header: mark)     ...</span><br><span class="line">  <span class="number">8</span>   <span class="number">4</span>        (object header: class)    ...</span><br><span class="line"> <span class="number">12</span>   <span class="number">4</span>    <span class="type">int</span> SimpleInt.value           <span class="number">0</span></span><br><span class="line">Instance size: <span class="number">16</span> bytes</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>分析</strong>：对象头 (12B) + 实例数据 <code>int value</code> (4B) &#x3D; 16B。16 是 8 的倍数，无需填充。</li>
-<li><strong>结论</strong>：该对象占用 <strong>16 字节</strong>。</li>
-</ul>
-<hr>
-<h4 id="案例-3-java-lang-Boolean-对象"><a href="#案例-3-java-lang-Boolean-对象" class="headerlink" title="案例 3: java.lang.Boolean 对象"></a>案例 3: <code>java.lang.Boolean</code> 对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码</span></span><br><span class="line"><span class="type">Boolean</span> <span class="variable">obj</span> <span class="operator">=</span> Boolean.TRUE;</span><br><span class="line"><span class="comment">// JOL 输出 (简化)</span></span><br><span class="line">OFF  SZ   TYPE DESCRIPTION               VALUE</span><br><span class="line">  <span class="number">0</span>   <span class="number">8</span>        (object header: mark)     ...</span><br><span class="line">  <span class="number">8</span>   <span class="number">4</span>        (object header: class)    ...</span><br><span class="line"> <span class="number">12</span>   <span class="number">1</span>   <span class="type">byte</span> Boolean.value             <span class="number">1</span> <span class="comment">// Java 内部用 byte 表示 boolean</span></span><br><span class="line"> <span class="number">13</span>   <span class="number">3</span>        (object alignment gap)    <span class="comment">// 对齐填充</span></span><br><span class="line">Instance size: <span class="number">16</span> bytes</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>分析</strong>：对象头 (12B) + 实例数据 <code>byte value</code> (1B) &#x3D; 13B。13B 不是 8 的倍数，需要填充 3B 达到 16B。</li>
-<li><strong>结论</strong>：一个 <code>Boolean</code> 对象实际占用 <strong>16 字节</strong>。</li>
-</ul>
-<hr>
-<h4 id="案例-4-java-lang-String-对象-JDK-8"><a href="#案例-4-java-lang-String-对象-JDK-8" class="headerlink" title="案例 4: java.lang.String 对象 (JDK 8+)"></a>案例 4: <code>java.lang.String</code> 对象 (JDK 8+)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="comment">// JOL 输出 (简化)</span></span><br><span class="line">OFF  SZ     TYPE DESCRIPTION               VALUE</span><br><span class="line">  <span class="number">0</span>   <span class="number">8</span>          (object header: mark)     ...</span><br><span class="line">  <span class="number">8</span>   <span class="number">4</span>          (object header: class)    ...</span><br><span class="line"> <span class="number">12</span>   <span class="number">4</span>   <span class="type">byte</span>[] String.value              [] <span class="comment">// 引用，指向实际字节数组</span></span><br><span class="line"> <span class="number">16</span>   <span class="number">4</span>      <span class="type">int</span> String.hash               <span class="number">0</span></span><br><span class="line"> <span class="number">20</span>   <span class="number">1</span>     <span class="type">byte</span> String.coder              <span class="number">0</span> <span class="comment">// UTF-16 编码标识</span></span><br><span class="line"> <span class="number">21</span>   <span class="number">3</span>          (object alignment gap)    <span class="comment">// 对齐填充！注意这里</span></span><br><span class="line">Instance size: <span class="number">24</span> bytes</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>分析</strong>：<ul>
-<li>对象头: 12B</li>
-<li>实例数据: <code>byte[] value</code> (4B) + <code>int hash</code> (4B) + <code>byte coder</code> (1B) &#x3D; 9B</li>
-<li><strong>小计</strong>: 12B + 9B &#x3D; 21B</li>
-<li><strong>填充</strong>: 21B 不是 8 的倍数，需要填充 3B 达到 24B。</li>
-</ul>
-</li>
-<li><strong>结论</strong>：一个看似空的 <code>String</code> 对象本身也占用 <strong>24 字节</strong>。这还不包括它内部 <code>byte[] value</code> 数组所占用的内存。</li>
-</ul>
-<hr>
-<h3 id="3-4-数组对象的内存布局"><a href="#3-4-数组对象的内存布局" class="headerlink" title="3.4 数组对象的内存布局"></a>3.4 数组对象的内存布局</h3><p>数组也是对象，其布局与普通对象类似，但对象头中包含一个额外的 <strong>4 字节</strong> 的<strong>数组长度</strong>字段。</p>
-<h4 id="案例-5-int-4-数组对象"><a href="#案例-5-int-4-数组对象" class="headerlink" title="案例 5: int[4] 数组对象"></a>案例 5: <code>int[4]</code> 数组对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码</span></span><br><span class="line"><span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">4</span>];</span><br><span class="line"><span class="comment">// JOL 输出 (简化)</span></span><br><span class="line">OFF  SZ   TYPE DESCRIPTION               VALUE</span><br><span class="line">  <span class="number">0</span>   <span class="number">8</span>        (object header: mark)     ...</span><br><span class="line">  <span class="number">8</span>   <span class="number">4</span>        (object header: class)    ... <span class="comment">// 指向 int[] 类元数据</span></span><br><span class="line"> <span class="number">12</span>   <span class="number">4</span>        (array length)            <span class="number">4</span>   <span class="comment">// 额外字段！</span></span><br><span class="line"> <span class="number">16</span>   <span class="number">4</span>    <span class="type">int</span> [<span class="number">0</span>]                       <span class="number">0</span></span><br><span class="line"> <span class="number">20</span>   <span class="number">4</span>    <span class="type">int</span> [<span class="number">1</span>]                       <span class="number">0</span></span><br><span class="line"> <span class="number">24</span>   <span class="number">4</span>    <span class="type">int</span> [<span class="number">2</span>]                       <span class="number">0</span></span><br><span class="line"> <span class="number">28</span>   <span class="number">4</span>    <span class="type">int</span> [<span class="number">3</span>]                       <span class="number">0</span></span><br><span class="line">Instance size: <span class="number">32</span> bytes</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>分析</strong>：<ul>
-<li><strong>对象头</strong>: 8B (Mark Word) + 4B (Klass Pointer) + 4B (数组长度) &#x3D; <strong>16B</strong></li>
-<li><strong>实例数据</strong>: 4 个 <code>int</code> * 4B &#x3D; <strong>16B</strong></li>
-<li><strong>总计</strong>: 16B + 16B &#x3D; 32B，刚好是 8 的倍数，无需填充。</li>
-</ul>
-</li>
-<li><strong>结论</strong>：一个 <code>int[4]</code> 数组占用 <strong>32 字节</strong>。</li>
-</ul>
-<hr>
-<h4 id="案例-6-String-3-引用类型数组-对象"><a href="#案例-6-String-3-引用类型数组-对象" class="headerlink" title="案例 6: String[3] (引用类型数组) 对象"></a>案例 6: <code>String[3]</code> (引用类型数组) 对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码</span></span><br><span class="line">String[] strArray = <span class="keyword">new</span> <span class="title class_">String</span>[<span class="number">3</span>];</span><br><span class="line"><span class="comment">// JOL 输出 (简化)</span></span><br><span class="line">OFF  SZ     TYPE DESCRIPTION               VALUE</span><br><span class="line">  <span class="number">0</span>   <span class="number">8</span>          (object header: mark)     ...</span><br><span class="line">  <span class="number">8</span>   <span class="number">4</span>          (object header: class)    ... <span class="comment">// 指向 String[] 类元数据</span></span><br><span class="line"> <span class="number">12</span>   <span class="number">4</span>          (array length)            <span class="number">3</span>   <span class="comment">// 额外字段！</span></span><br><span class="line"> <span class="number">16</span>   <span class="number">4</span>   String [<span class="number">0</span>]                       <span class="literal">null</span> <span class="comment">// 引用</span></span><br><span class="line"> <span class="number">20</span>   <span class="number">4</span>   String [<span class="number">1</span>]                       <span class="literal">null</span> <span class="comment">// 引用</span></span><br><span class="line"> <span class="number">24</span>   <span class="number">4</span>   String [<span class="number">2</span>]                       <span class="literal">null</span> <span class="comment">// 引用</span></span><br><span class="line"> <span class="number">28</span>   <span class="number">4</span>          (object alignment gap)        <span class="comment">// 对齐填充</span></span><br><span class="line">Instance size: <span class="number">32</span> bytes</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>分析</strong>：<ul>
-<li><strong>对象头</strong>: 8B + 4B + 4B &#x3D; <strong>16B</strong></li>
-<li><strong>实例数据</strong>: 3 个引用 * 4B &#x3D; <strong>12B</strong></li>
-<li><strong>小计</strong>: 16B + 12B &#x3D; 28B</li>
-<li><strong>填充</strong>: 28B 不是 8 的倍数，需要填充 4B 达到 32B。</li>
-</ul>
-</li>
-<li><strong>结论</strong>：一个 <code>String[3]</code> 数组<strong>容器本身</strong>占用 <strong>32 字节</strong>。注意，这<strong>不包含</strong><code>String</code>元素对象本身的大小。</li>
-</ul>
-<hr>
-<h3 id="3-5-总结与要点"><a href="#3-5-总结与要点" class="headerlink" title="3.5 总结与要点"></a>3.5 总结与要点</h3><ol>
-<li><strong>固定开销</strong>：每个对象都有对象头的固定开销（普通对象12B，数组对象16B）。</li>
-<li><strong>空间换时间</strong>：对齐填充机制用空间换取了CPU访问内存的速度。</li>
-<li><strong>包装类型成本高</strong>：推荐在大量使用时使用基本类型而非包装类型（如 <code>int</code> vs <code>Integer</code>）。</li>
-<li><strong>工具的重要性</strong>：使用 <strong>JOL (Java Object Layout)</strong> 工具可以直观地查看对象内存布局，避免理论计算的误差。</li>
-<li><strong>数组的特殊性</strong>：数组对象头多一个 4B 的 length 字段。引用类型数组存储的是引用，而非对象本身。</li>
-<li><strong>完整内存分析</strong>：分析复杂对象（如<code>String</code>、集合类）的内存占用时，需考虑其内部所有引用的对象。</li>
-</ol>
-<p><strong>如何使用 JOL</strong>:</p>
-<ol>
-<li><p>在 Maven 项目中添加依赖：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.openjdk.jol<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jol-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.17<span class="tag">&lt;/<span class="name">version</span>&gt;</span> <span class="comment">&lt;!-- 使用最新版本 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在代码中解析实例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.openjdk.jol.info.ClassLayout;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">System.out.println(ClassLayout.parseInstance(obj).toPrintable());</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="4-Java内存分配"><a href="#4-Java内存分配" class="headerlink" title="4. Java内存分配"></a>4. Java内存分配</h2><p>Java 内存分配主要可以分为两大块：<strong>内存区域</strong> 和<strong>内存模型</strong>。</p>
-<ol>
-<li><strong>内存区域</strong> 指的是 JVM 在运行时将其管理的内存划分为几个不同用途的区域，这是《Java 虚拟机规范》中定义的概念。</li>
-<li><strong>内存模型</strong> (JMM) 则是一个抽象概念，定义了线程如何与内存交互，主要是为了解决多线程环境下的可见性、有序性问题。</li>
-</ol>
-<h3 id="4-1-Java-运行时数据区"><a href="#4-1-Java-运行时数据区" class="headerlink" title="4.1 Java 运行时数据区"></a>4.1 Java 运行时数据区</h3><p>当 Java 程序运行时，JVM 会把它管理的内存划分为以下几个不同的数据区域。这些区域有些是线程私有的，随着线程的创建和销毁而存在；有些则是线程共享的，随着虚拟机的启动而创建，关闭而销毁。</p>
-<p>下图清晰地展示了这些区域及其线程共享状态：</p>
-<pre><code class="highlight mermaid">graph TD
-    A[&quot;Java 运行时数据区&quot;] --&gt; B[&quot;线程私有&quot;]
-    A --&gt; C[&quot;线程共享&quot;]
-
-    subgraph 线程私有
-        B --&gt; D[&quot;程序计数器&lt;br/&gt;Program Counter Register&quot;]
-        B --&gt; E[&quot;Java 虚拟机栈&lt;br/&gt;JVM Stack&quot;]
-        B --&gt; F[&quot;本地方法栈&lt;br/&gt;Native Method Stack&quot;]
-    end
-
-    subgraph 线程共享
-        C --&gt; G[&quot;Java 堆&lt;br/&gt;Java Heap&quot;]
-        C --&gt; H[&quot;方法区&lt;br/&gt;Method Area&quot;]
-    end
-
-    H --&gt; I[&quot;运行时常量池&lt;br/&gt;Runtime Constant Pool&quot;]</code></pre>
-
-<hr>
-<h4 id="4-1-1-程序计数器-Program-Counter-Register"><a href="#4-1-1-程序计数器-Program-Counter-Register" class="headerlink" title="4.1.1 程序计数器 (Program Counter Register)"></a>4.1.1 程序计数器 (Program Counter Register)</h4><ul>
-<li><strong>作用</strong>： 它可以看作是当前线程所执行的<strong>字节码的行号指示器</strong>。字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令。分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。</li>
-<li><strong>特点</strong>：<ul>
-<li><strong>线程私有</strong>：每条线程都有一个独立的程序计数器，各条线程之间互不影响，独立存储。</li>
-<li>如果线程正在执行的是一个 <strong>Java 方法</strong>，这个计数器记录的是正在执行的虚拟机字节码指令的地址。</li>
-<li>如果正在执行的是 <strong>Native 方法</strong>（本地方法，如用 C&#x2F;C++ 实现的方法），这个计数器的值则为<strong>空 (Undefined)</strong>。</li>
-<li>此区域是唯一一个在《Java 虚拟机规范》中<strong>没有规定任何 <code>OutOfMemoryError</code> 情况</strong>的区域。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="4-1-2-Java-虚拟机栈-Java-Virtual-Machine-Stacks"><a href="#4-1-2-Java-虚拟机栈-Java-Virtual-Machine-Stacks" class="headerlink" title="4.1.2 Java 虚拟机栈 (Java Virtual Machine Stacks)"></a>4.1.2 Java 虚拟机栈 (Java Virtual Machine Stacks)</h4><ul>
-<li><strong>作用</strong>： 描述的是 <strong>Java 方法执行的内存模型</strong>。每个方法在执行的同时都会创建一个 <strong>栈帧 (Stack Frame)</strong>，用于存储<strong>局部变量表、操作数栈、动态链接、方法出口</strong>等信息。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</li>
-<li><strong>栈帧 (Stack Frame)</strong> 详解：<ul>
-<li><strong>局部变量表 (Local Variable Table)</strong>： 存放了编译期可知的各种<strong>基本数据类型</strong> (<code>boolean</code>, <code>byte</code>, <code>char</code>, <code>short</code>, <code>int</code>, <code>float</code>, <code>long</code>, <code>double</code>)、<strong>对象引用</strong> (<code>reference</code> 类型，它不等同于对象本身，可能是一个指向对象起始地址的引用指针，也可能是指向一个代表对象的句柄或其他与此对象相关的位置&#96;) 和 <strong>returnAddress 类型</strong>（指向了一条字节码指令的地址）。</li>
-<li><strong>操作数栈 (Operand Stack)</strong>： 方法执行过程中，各种字节码指令往操作数栈中写入和提取内容，即入栈和出栈。</li>
-<li><strong>动态链接 (Dynamic Linking)</strong>： 指向运行时常量池中该栈帧所属方法的引用。</li>
-<li><strong>方法返回地址 (Return Address)</strong>： 方法退出后，需要返回到方法被调用的位置，程序计数器中的值就是通过这个来恢复的。</li>
-</ul>
-</li>
-<li><strong>异常状况</strong>：<ul>
-<li>如果线程请求的栈深度大于虚拟机所允许的深度，将抛出 <strong><code>StackOverflowError</code></strong> 异常（例如无限递归）。</li>
-<li>如果虚拟机栈可以动态扩展（当前大部分 Java 虚拟机都可动态扩展，只不过规范中也允许固定长度的虚拟机栈），如果扩展时无法申请到足够的内存，就会抛出 <strong><code>OutOfMemoryError</code></strong> 异常。</li>
-</ul>
-</li>
-<li><strong>特点</strong>： <strong>线程私有</strong>，生命周期与线程相同。</li>
-</ul>
-<hr>
-<h4 id="4-1-3-本地方法栈-Native-Method-Stack"><a href="#4-1-3-本地方法栈-Native-Method-Stack" class="headerlink" title="4.1.3 本地方法栈 (Native Method Stack)"></a>4.1.3 本地方法栈 (Native Method Stack)</h4><ul>
-<li><strong>作用</strong>： 与虚拟机栈非常相似。其区别在于：<strong>虚拟机栈为虚拟机执行 Java 方法（也就是字节码）服务，而本地方法栈则为虚拟机使用到的 Native 方法服务。</strong></li>
-<li><strong>特点</strong>： 与虚拟机栈一样，本地方法栈区域也会抛出 <code>StackOverflowError</code> 和 <code>OutOfMemoryError</code> 异常。</li>
-<li><strong>注意</strong>： HotSpot 虚拟机直接就把本地方法栈和虚拟机栈合二为一了。</li>
-</ul>
-<hr>
-<h4 id="4-1-4-Java-堆-Java-Heap"><a href="#4-1-4-Java-堆-Java-Heap" class="headerlink" title="4.1.4 Java 堆 (Java Heap)"></a>4.1.4 Java 堆 (Java Heap)</h4><ul>
-<li><strong>作用</strong>： 这是 <strong>最核心</strong> 的内存区域，<strong>此内存区域的唯一目的就是存放对象实例</strong>。几乎所有的对象实例以及数组都在这里分配内存。“几乎所有”是因为随着 JIT 编译器的发展与逃逸分析技术逐渐成熟，栈上分配、标量替换优化技术会导致一些微妙的变化发生，所有对象都分配在堆上也渐渐变得不是那么“绝对”了。</li>
-<li><strong>特点</strong>：<ul>
-<li><strong>线程共享</strong>：Java 堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。</li>
-<li><strong>GC 的主要管理区域</strong>：由于现代垃圾收集器基本都采用分代收集算法，所以 Java 堆中还可以细分为：<strong>新生代 (Young Generation)</strong> 和 <strong>老年代 (Old Generation&#x2F;Tenured Generation)</strong>。新生代又可以细分为 Eden 空间、From Survivor 空间、To Survivor 空间等。这样划分是为了更好地进行内存回收和分配。</li>
-<li><strong>异常状况</strong>： 如果在堆中没有内存完成实例分配，并且堆也无法再扩展时，将会抛出 <strong><code>OutOfMemoryError</code></strong> 异常（俗称 <code>java.lang.OutOfMemoryError: Java heap space</code>）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="4-1-5-方法区-Method-Area"><a href="#4-1-5-方法区-Method-Area" class="headerlink" title="4.1.5. 方法区 (Method Area)"></a>4.1.5. 方法区 (Method Area)</h4><ul>
-<li><strong>作用</strong>： 用于存储已被虚拟机加载的<strong>类信息、常量、静态变量、即时编译器编译后的代码缓存</strong>等数据。</li>
-<li><strong>运行时常量池 (Runtime Constant Pool)</strong>： 它是方法区的一部分。Class 文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是<strong>常量池表 (Constant Pool Table)</strong>，用于存放编译期生成的各种<strong>字面量</strong>和<strong>符号引用</strong>，这部分内容将在类加载后存放到方法区的运行时常量池中。</li>
-<li><strong>演进历史</strong>：<ul>
-<li>在 JDK 1.7 之前，方法区的实现通常被称为 <strong>“永久代” (PermGen)</strong>。</li>
-<li>在 JDK 1.8 及之后，HotSpot 虚拟机彻底移除了永久代，改用 <strong>元空间 (Metaspace)</strong> 来实现方法区。元空间不再使用虚拟机的内存，而是使用<strong>本地内存 (Native Memory)</strong>。</li>
-</ul>
-</li>
-<li><strong>异常状况</strong>：<ul>
-<li>当方法区（或元空间）无法满足内存分配需求时，将抛出 <strong><code>OutOfMemoryError</code></strong> 异常（在 JDK 1.8 之前是 <code>java.lang.OutOfMemoryError: PermGen space</code>，之后是 <code>java.lang.OutOfMemoryError: Metaspace</code>）。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="4-2-示例"><a href="#4-2-示例" class="headerlink" title="4.2 示例"></a>4.2 示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name; <span class="comment">// 实例变量，随对象存放在堆中</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;     <span class="comment">// 实例变量，随对象存放在堆中</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">(String name, <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sayHello</span><span class="params">()</span> &#123; <span class="comment">// 方法信息存放在方法区</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">greeting</span> <span class="operator">=</span> <span class="string">&quot;Hello!&quot;</span>; <span class="comment">// 局部变量，存放在sayHello方法的栈帧的局部变量表中</span></span><br><span class="line">        System.out.println(greeting + <span class="string">&quot; I&#x27;m &quot;</span> + <span class="built_in">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> <span class="number">123</span>; <span class="comment">// 局部变量，存放在main方法的栈帧的局部变量表中</span></span><br><span class="line">        <span class="type">Student</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;Alice&quot;</span>, <span class="number">20</span>); <span class="comment">// s是对象引用，在栈中；new Student(...)是对象本身，在堆中。</span></span><br><span class="line">        s.sayHello(); <span class="comment">// 调用方法，为sayHello创建新的栈帧</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><strong>编译</strong>：<code>javac</code> 命令将 <code>.java</code> 文件编译为 <code>.class</code> 文件，其中的常量等信息会存入常量池表。</li>
-<li><strong>类加载</strong>：JVM 启动 <code>Main</code> 类，将 <code>Main</code> 和 <code>Student</code> 的类信息、常量、静态变量等加载到<strong>方法区</strong>。</li>
-<li><strong>执行 <code>main</code> 方法</strong>：<ul>
-<li>为 <code>main</code> 方法创建一个<strong>栈帧</strong>，压入<strong>虚拟机栈</strong>。</li>
-<li>局部变量 <code>id</code>（基本类型）和 <code>s</code>（引用类型）存储在 <code>main</code> 栈帧的<strong>局部变量表</strong>中。</li>
-</ul>
-</li>
-<li><strong>创建 <code>Student</code> 对象</strong>：<ul>
-<li><code>new Student(&quot;Alice&quot;, 20)</code> 会在 <strong>Java 堆</strong> 中分配内存，创建 <code>Student</code> 对象实例，并初始化其字段 <code>name</code> 和 <code>age</code>。</li>
-<li>对象中包含了指向方法区中 <code>Student</code> 类类型信息的指针。</li>
-</ul>
-</li>
-<li><strong>赋值</strong>：将堆中对象的地址赋值给栈帧局部变量表中的引用变量 <code>s</code>。</li>
-<li><strong>调用方法</strong>：<ul>
-<li>执行 <code>s.sayHello()</code> 时，JVM 会为 <code>sayHello</code> 方法创建一个新的<strong>栈帧</strong>并压入栈。</li>
-<li>方法中的局部变量 <code>greeting</code> 存放在 <code>sayHello</code> 栈帧的<strong>局部变量表</strong>中。</li>
-<li>方法执行完毕后，其对应的栈帧出栈，局部变量 <code>greeting</code> 随之销毁。</li>
-</ul>
-</li>
-<li><strong>程序结束</strong>：<code>main</code> 方法执行完毕，其栈帧出栈，JVM 退出。</li>
-</ol>
-<hr>
-<h3 id="4-3-总结与对比"><a href="#4-3-总结与对比" class="headerlink" title="4.3 总结与对比"></a>4.3 总结与对比</h3><table>
-<thead>
-<tr>
-<th align="left">内存区域</th>
-<th align="left">线程共享？</th>
-<th align="left">作用</th>
-<th align="left">异常</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>程序计数器</strong></td>
-<td align="left">私有</td>
-<td align="left">当前线程执行的字节码行号指示器</td>
-<td align="left">无</td>
-</tr>
-<tr>
-<td align="left"><strong>虚拟机栈</strong></td>
-<td align="left">私有</td>
-<td align="left">存储 Java 方法调用的栈帧</td>
-<td align="left"><code>StackOverflowError</code> <code>OutOfMemoryError</code></td>
-</tr>
-<tr>
-<td align="left"><strong>本地方法栈</strong></td>
-<td align="left">私有</td>
-<td align="left">存储 Native 方法调用的栈帧</td>
-<td align="left"><code>StackOverflowError</code> <code>OutOfMemoryError</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Java 堆</strong></td>
-<td align="left"><strong>共享</strong></td>
-<td align="left"><strong>存储对象实例和数组</strong></td>
-<td align="left"><strong><code>OutOfMemoryError</code></strong></td>
-</tr>
-<tr>
-<td align="left"><strong>方法区</strong></td>
-<td align="left"><strong>共享</strong></td>
-<td align="left">存储类信息、常量、静态变量等</td>
-<td align="left"><strong><code>OutOfMemoryError</code></strong></td>
-</tr>
-</tbody></table>
-<p><strong>核心要点</strong>：</p>
-<ul>
-<li><strong>栈</strong>：解决的是程序运行的问题，即方法如何执行、数据如何处理。生命周期与线程相同，存取速度<strong>快</strong>。</li>
-<li><strong>堆</strong>：解决的是数据存储的问题，即对象和数组怎么放、放在哪。是 GC 的主战场，生命周期与虚拟机相同，存取速度<strong>相对慢</strong>。</li>
-<li>理解 <code>StackOverflowError</code> 和 <code>OutOfMemoryError</code> 的区别：一个是因为<strong>栈深度</strong>太大（通常是代码bug），另一个是因为<strong>内存空间</strong>不足（可能是代码bug，也可能是正常需要调大内存配置）。</li>
-</ul>
 
     </div>
 
