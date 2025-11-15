@@ -2059,7 +2059,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-13 13:04:16" itemprop="dateModified" datetime="2025-11-13T13:04:16+08:00">2025-11-13</time>
+      <time title="修改时间：2025-11-15 20:40:26" itemprop="dateModified" datetime="2025-11-15T20:40:26+08:00">2025-11-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -6071,6 +6071,7 @@
 <li><p><strong>原因</strong>：B+树是按照 <code>(name, age, status)</code> 的顺序进行排序的。它先按 <code>name</code> 排序，<code>name</code> 相同再按 <code>age</code> 排序，以此类推。如果直接用 <code>age</code> 查询，数据在索引树中是无序的，无法进行高效查找。</p>
 </li>
 </ul>
+<hr>
 <h4 id="2-4-2-在索引列上进行计算、函数或类型转换"><a href="#2-4-2-在索引列上进行计算、函数或类型转换" class="headerlink" title="2.4.2 在索引列上进行计算、函数或类型转换"></a>2.4.2 在索引列上进行计算、函数或类型转换</h4><p>优化器无法“反向”计算出函数作用前的值，因此无法使用索引。必须保证索引列在 <code>WHERE</code> 子句中是“干净”的。</p>
 <ul>
 <li><p><strong>失效场景：</strong></p>
