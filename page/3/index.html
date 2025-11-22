@@ -2059,7 +2059,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-16 12:35:06" itemprop="dateModified" datetime="2025-11-16T12:35:06+08:00">2025-11-16</time>
+      <time title="修改时间：2025-11-21 18:15:08" itemprop="dateModified" datetime="2025-11-21T18:15:08+08:00">2025-11-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -3415,7 +3415,8 @@
 <p><strong>基本语法：</strong></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">REVOKE</span> privilege_type [(column_list)] [, privilege_type [(column_list)]] ...</span><br><span class="line"><span class="keyword">ON</span> [object_type] privilege_level</span><br><span class="line"><span class="keyword">FROM</span> user_identity [, user_identity] ...;</span><br></pre></td></tr></table></figure>
 
-<p><strong>语法解析：</strong><br><code>REVOKE</code> 的语法与 <code>GRANT</code> 非常相似，只是将 <code>TO</code> 关键字换成了 <code>FROM</code>。</p>
+<p><strong>语法解析：</strong></p>
+<p><code>REVOKE</code> 的语法与 <code>GRANT</code> 非常相似，只是将 <code>TO</code> 关键字换成了 <code>FROM</code>。</p>
 <p><strong>示例：</strong></p>
 <ol>
 <li><p><strong>撤销用户的 <code>DELETE</code> 权限</strong></p>
@@ -11534,7 +11535,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-19 10:59:37" itemprop="dateModified" datetime="2025-10-19T10:59:37+08:00">2025-10-19</time>
+      <time title="修改时间：2025-11-21 14:32:33" itemprop="dateModified" datetime="2025-11-21T14:32:33+08:00">2025-11-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -11757,7 +11758,7 @@
 <li>端口号是一个 16 位的数字（0-65535）。</li>
 <li>如果 URL 中<strong>省略了端口号</strong>，浏览器会使用该协议的<strong>默认端口</strong>。<ul>
 <li><code>http</code> 的默认端口是 <strong>80</strong>。</li>
-<li><code>httpss</code> 的默认端口是 <strong>443</strong>。</li>
+<li><code>https</code> 的默认端口是 <strong>443</strong>。</li>
 </ul>
 </li>
 <li>因此，<code>http://example.com</code> 等价于 <code>http://example.com:80</code>。</li>
@@ -11832,7 +11833,7 @@
 <ol>
 <li>物理层 (Physical)</li>
 <li>数据链路层 (Data Link)</li>
-<li>网络层 (Network)</li>
+<li><strong>网络层 (Network)</strong></li>
 <li><strong>传输层 (Transport)</strong></li>
 <li>会话层 (Session)</li>
 <li>表示层 (Presentation)</li>
@@ -11852,13 +11853,58 @@
 <li><strong>面向字节流 (Byte Stream)</strong>: 数据像水流一样，没有边界。发送方写入的数据和接收方读取的数据在字节序列上是一致的，但读取的次数和大小可能与写入时不同。</li>
 </ol>
 <hr>
-<h4 id="3-1-2-底层核心机制"><a href="#3-1-2-底层核心机制" class="headerlink" title="3.1.2 底层核心机制"></a>3.1.2 底层核心机制</h4><h5 id="1-三次握手-Three-Way-Handshake-建立连接"><a href="#1-三次握手-Three-Way-Handshake-建立连接" class="headerlink" title="1. 三次握手 (Three-Way Handshake) - 建立连接"></a>1. 三次握手 (Three-Way Handshake) - 建立连接</h5><ol>
-<li><code>SYN</code>: 客户端发送一个SYN（同步序列编号 <code>seq=x</code> ）包到服务器，请求建立连接，并进入<code>SYN_SENT</code>状态。</li>
-<li><code>SYN+ACK</code>: 服务器收到SYN包后，必须确认客户端的SYN（<code>ack=x+1</code>），同时自己也发送一个SYN包（<code>seq=y</code>），即SYN+ACK包，此时服务器进入<code>SYN_RECV</code>状态。</li>
-<li><code>ACK</code>: 客户端收到服务器的SYN+ACK包后，会发送一个ACK（<code>ack=y+1</code>）包，此包发送完毕，客户端和服务器进入<code>ESTABLISHED</code>（已建立连接）状态，完成三次握手。</li>
-</ol>
+<h4 id="3-1-2-基本概念与标志位"><a href="#3-1-2-基本概念与标志位" class="headerlink" title="3.1.2 基本概念与标志位"></a>3.1.2 基本概念与标志位</h4><p> TCP 报文头中的几个关键标志位（Flag）和字段：</p>
 <ul>
-<li><strong>目的</strong>: 确保双方都具备发送和接收数据的能力。</li>
+<li><strong>SYN (Synchronize Sequence Numbers)</strong>：同步序列号，用于发起连接。</li>
+<li><strong>ACK (Acknowledgment)</strong>：确认标志，用于确认收到数据。</li>
+<li><strong>FIN (Finish)</strong>：结束标志，用于释放连接。</li>
+<li><strong>seq (Sequence Number)</strong>：序列号，标识当前发送数据的起始位置。</li>
+<li><strong>ack (Acknowledgment Number)</strong>：确认号，期望收到对方下一个报文段的第一个字节的序号（即告诉对方：这个序号之前的数据我都收到了）。</li>
+</ul>
+<hr>
+<h4 id="3-1-3-底层核心机制"><a href="#3-1-3-底层核心机制" class="headerlink" title="3.1.3 底层核心机制"></a>3.1.3 底层核心机制</h4><h5 id="1-三次握手-Three-Way-Handshake-建立连接"><a href="#1-三次握手-Three-Way-Handshake-建立连接" class="headerlink" title="1. 三次握手 (Three-Way Handshake) - 建立连接"></a>1. 三次握手 (Three-Way Handshake) - 建立连接</h5><ul>
+<li><p><strong>第一次握手 (SYN)</strong></p>
+<ul>
+<li><strong>动作</strong>：客户端发送一个 SYN 报文段到服务器，并选择一个初始序列号 <code>seq = x</code>。</li>
+<li><strong>标志位</strong>：<code>SYN=1</code>, <code>seq=x</code></li>
+<li><strong>状态变化</strong>：客户端进入 <strong>SYN_SENT</strong> 状态。</li>
+<li><strong>含义</strong>：客户端说：“你好，我想建立连接，我的初始序号是 x。”</li>
+</ul>
+</li>
+<li><p><strong>第二次握手 (SYN + ACK)</strong></p>
+<ul>
+<li><strong>动作</strong>：服务器收到 SYN 报文后，同意建立连接。向客户端发送确认报文。同时也发送自己的 SYN 请求信息。</li>
+<li><strong>标志位</strong>：<code>SYN=1</code>, <code>ACK=1</code>, <code>seq=y</code>, <code>ack=x+1</code></li>
+<li><strong>状态变化</strong>：服务器进入 <strong>SYN_RCVD</strong> 状态。</li>
+<li><strong>含义</strong>：服务器说：“收到了，我知道你的序号是 x 了。我也想建立连接，我的初始序号是 y。”</li>
+</ul>
+</li>
+<li><p><strong>第三次握手 (ACK)</strong></p>
+<ul>
+<li><strong>动作</strong>：客户端收到服务器的 SYN+ACK 报文后，向服务器发送确认报文。</li>
+<li><strong>标志位</strong>：<code>ACK=1</code>, <code>seq=x+1</code>, <code>ack=y+1</code></li>
+<li><strong>状态变化</strong>：客户端进入 <strong>ESTABLISHED</strong> 状态。服务器收到该报文后，也进入 <strong>ESTABLISHED</strong> 状态。</li>
+<li><strong>含义</strong>：客户端说：“收到了，我知道你的序号是 y 了。连接建立完成！”</li>
+</ul>
+</li>
+<li><p><strong>目的</strong>: 确保双方都具备发送和接收数据的能力。</p>
+</li>
+<li><p><strong>为什么是三次，而不是两次？</strong></p>
+<ol>
+<li><strong>防止失效的连接请求突然传到服务端</strong>：<ul>
+<li>如果只有两次握手：假设客户端发出的第一个 SYN 请求在网络中滞留了，客户端超时重发了第二个 SYN 并建立了连接、传输完数据、关闭了连接。</li>
+<li>此时，滞留的第一个 SYN 终于到达了服务器。服务器误以为是新的连接请求，于是发出 ACK（第二次握手）。如果只有两次，连接就建立了，服务器会一直等待客户端发数据，导致资源浪费。</li>
+<li>有了三次握手，客户端收到服务器对“滞留 SYN”的回复时，发现这不是自己当前的请求，就会发送 RST（复位）报文拒绝连接。</li>
+</ul>
+</li>
+<li><strong>确认双方的收发能力</strong>：<ul>
+<li>第一次：服务端确认（对方发正常，自己收正常）。</li>
+<li>第二次：客户端确认（自己发&#x2F;收正常，对方发&#x2F;收正常）。</li>
+<li>第三次：服务端确认（自己发正常，对方收正常）。</li>
+</ul>
+</li>
+</ol>
+</li>
 </ul>
 <pre><code class="highlight mermaid">sequenceDiagram
     participant Client as 客户端
@@ -11880,14 +11926,60 @@
     note left of Server: 服务器收到ACK后&lt;br/&gt;也进入 ESTABLISHED 状态</code></pre>
 
 <hr>
-<h5 id="2-四次挥手-Four-Way-Wave-断开连接"><a href="#2-四次挥手-Four-Way-Wave-断开连接" class="headerlink" title="2. 四次挥手 (Four-Way Wave) - 断开连接"></a>2. 四次挥手 (Four-Way Wave) - 断开连接</h5><ol>
-<li><code>FIN</code>: 客户端（或服务器）发送一个FIN（结束 <code>seq=u</code>）报文，用来关闭从该端到另一端的数据传送，进入<code>FIN_WAIT_1</code>状态。</li>
-<li><code>ACK</code>: 另一端收到FIN后，发送一个ACK给对方，确认序号为收到序号+1(<code>ack=u+1</code>)。此时，这一方向的连接关闭，进入<code>CLOSE_WAIT</code>状态。</li>
-<li><code>FIN</code>: 当这一端也准备好关闭连接时，发送FIN报文给对方(<code>seq=w</code>)，进入<code>LAST_ACK</code>状态。</li>
-<li><code>ACK</code>: 对方收到FIN报文后，发送ACK报文作为应答(<code>ack=w+1</code>)，进入<code>TIME_WAIT</code>状态。发送ACK后，接收端进入<code>CLOSED</code>状态。发送端在等待2MSL（最长报文段寿命）后，进入<code>CLOSED</code>状态。</li>
-</ol>
+<h5 id="2-四次挥手-Four-Way-Wave-断开连接"><a href="#2-四次挥手-Four-Way-Wave-断开连接" class="headerlink" title="2. 四次挥手 (Four-Way Wave) - 断开连接"></a>2. 四次挥手 (Four-Way Wave) - 断开连接</h5><p>假设客户端先发起关闭请求（服务端也可以发起）。</p>
 <ul>
-<li><strong>目的</strong>: 确保双方数据都已传输完毕，并优雅地关闭连接。</li>
+<li><p><strong>第一次挥手 (FIN)</strong></p>
+<ul>
+<li><strong>动作</strong>：客户端数据发送完毕，向服务器发送 FIN 报文，请求关闭连接。</li>
+<li><strong>标志位</strong>：<code>FIN=1</code>, <code>seq=u</code></li>
+<li><strong>状态变化</strong>：客户端进入 <strong>FIN_WAIT_1</strong> 状态。</li>
+<li><strong>含义</strong>：客户端说：“我没有数据要发给你了，我想断开。”</li>
+</ul>
+</li>
+<li><p><strong>第二次挥手 (ACK)</strong></p>
+<ul>
+<li><strong>动作</strong>：服务器收到 FIN 报文，回发一个 ACK 报文。</li>
+<li><strong>标志位</strong>：<code>ACK=1</code>, <code>seq=v</code>, <code>ack=u+1</code></li>
+<li><strong>状态变化</strong>：服务器进入 <strong>CLOSE_WAIT</strong> 状态；客户端收到后进入 <strong>FIN_WAIT_2</strong> 状态。</li>
+<li><strong>含义</strong>：服务器说：“好的，我知道你要断开了。但我可能还有数据没发完，你先等一下。”</li>
+<li><em>注意：此时 TCP 处于“半关闭”状态，客户端不能发数据，但能收数据。</em></li>
+</ul>
+</li>
+<li><p><strong>第三次挥手 (FIN)</strong></p>
+<ul>
+<li><strong>动作</strong>：服务器的数据也发送完了，向客户端发送 FIN 报文。</li>
+<li><strong>标志位</strong>：<code>FIN=1</code>, <code>ACK=1</code>, <code>seq=w</code>, <code>ack=u+1</code></li>
+<li><strong>状态变化</strong>：服务器进入 <strong>LAST_ACK</strong> 状态。</li>
+<li><strong>含义</strong>：服务器说：“我也没数据要发了，现在可以正式断开了。”</li>
+</ul>
+</li>
+<li><p><strong>第四次挥手 (ACK)</strong></p>
+<ul>
+<li><strong>动作</strong>：客户端收到服务器的 FIN 报文，回发 ACK 报文。</li>
+<li><strong>标志位</strong>：<code>ACK=1</code>, <code>seq=u+1</code>, <code>ack=w+1</code></li>
+<li><strong>状态变化</strong>：<ul>
+<li>客户端进入 <strong>TIME_WAIT</strong> 状态，等待 <strong>2MSL</strong>（最长报文段寿命）时间后，自动进入 <strong>CLOSED</strong> 状态。</li>
+<li>服务器收到 ACK 后，直接进入 <strong>CLOSED</strong> 状态。</li>
+</ul>
+</li>
+<li><strong>含义</strong>：客户端说：“好的，再见。”</li>
+</ul>
+</li>
+<li><p><strong>目的</strong>: 确保双方数据都已传输完毕，并优雅地关闭连接。</p>
+</li>
+<li><p><strong>为什么要四次挥手？</strong></p>
+<ul>
+<li>因为 TCP 是全双工的。</li>
+<li>当客户端发送 FIN 时，只代表客户端没数据发了，但服务器可能还有数据要处理和发送。</li>
+<li>所以服务器先回一个 ACK（表示收到关闭请求），等自己数据处理完了，再发一个 FIN（表示自己也准备好了）。ACK 和 FIN 分了两步发，所以是四次。</li>
+</ul>
+</li>
+<li><p><strong>为什么客户端最后要等待 2MSL (TIME_WAIT)？</strong><br>这是为了保证连接正确关闭：</p>
+<ol>
+<li><strong>保证最后一个 ACK 能到达服务器</strong>：如果客户端发出的第四次挥手（ACK）丢包了，服务器收不到确认，会超时重传第三次挥手（FIN）。客户端必须维持 TIME_WAIT 状态才能收到这个重传的 FIN 并再次补发 ACK。如果是直接 CLOSED，服务器重传 FIN 时客户端会报错。</li>
+<li><strong>防止旧报文混淆新连接</strong>：等待 2MSL 可以让本连接中产生的所有报文段都从网络中消失。防止在同样的 IP 和端口建立新连接时，收到上一个连接残留的旧数据包。</li>
+</ol>
+</li>
 </ul>
 <pre><code class="highlight mermaid">sequenceDiagram
     participant Client as 主动关闭方
@@ -11921,7 +12013,7 @@
     note right of Client: 客户端等待 2*MSL 后&lt;br/&gt;也进入 CLOSED 状态</code></pre>
 
 <hr>
-<h4 id="3-1-3-Java-TCP编程核心类-基于BIO"><a href="#3-1-3-Java-TCP编程核心类-基于BIO" class="headerlink" title="3.1.3 Java TCP编程核心类 (基于BIO)"></a>3.1.3 Java TCP编程核心类 (基于BIO)</h4><h5 id="1-ServerSocket-服务器端"><a href="#1-ServerSocket-服务器端" class="headerlink" title="1. ServerSocket (服务器端)"></a>1. <code>ServerSocket</code> (服务器端)</h5><ul>
+<h4 id="3-1-4-Java-TCP编程核心类-基于BIO"><a href="#3-1-4-Java-TCP编程核心类-基于BIO" class="headerlink" title="3.1.4 Java TCP编程核心类 (基于BIO)"></a>3.1.4 Java TCP编程核心类 (基于BIO)</h4><h5 id="1-ServerSocket-服务器端"><a href="#1-ServerSocket-服务器端" class="headerlink" title="1. ServerSocket (服务器端)"></a>1. <code>ServerSocket</code> (服务器端)</h5><ul>
 <li><strong>角色与职责</strong>:<ul>
 <li>代表服务器端的监听套接字。</li>
 <li>它的核心职责是监听指定的服务器端口，等待客户端的连接请求。</li>
@@ -11987,7 +12079,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * TCP 客户端</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> HuangJinCheng</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@since</span> 2025/9/15</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TcpClient</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 服务器地址和端口</span></span><br><span class="line">        <span class="keyword">final</span> <span class="type">String</span> <span class="variable">SERVER_HOST</span> <span class="operator">=</span> <span class="string">&quot;127.0.0.1&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="type">int</span> <span class="variable">SERVER_PORT</span> <span class="operator">=</span> <span class="number">8080</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (</span><br><span class="line">                <span class="comment">// 创建客户端Socket连接到服务器</span></span><br><span class="line">                <span class="type">Socket</span> <span class="variable">socket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Socket</span>(SERVER_HOST, SERVER_PORT);</span><br><span class="line">                <span class="comment">// 创建输出流，用于向服务器发送消息</span></span><br><span class="line">                <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(socket.getOutputStream(), <span class="literal">true</span>);</span><br><span class="line">                <span class="comment">// 创建输入流，用于接收服务器消息</span></span><br><span class="line">                <span class="type">BufferedReader</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(socket.getInputStream()));</span><br><span class="line">                <span class="comment">// 创建控制台输入扫描器</span></span><br><span class="line">                <span class="type">Scanner</span> <span class="variable">scanner</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in)</span><br><span class="line">        ) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;已连接到服务器&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 启动一个线程接收服务器消息</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    String response;</span><br><span class="line">                    <span class="comment">// 持续读取服务器发送的消息并打印到控制台</span></span><br><span class="line">                    <span class="keyword">while</span> ((response = in.readLine()) != <span class="literal">null</span>) &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;服务器回复：&quot;</span> + response);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;与服务器连接断开&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;).start();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 主线程负责发送消息</span></span><br><span class="line">            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;请输入消息（输入 &#x27;bye&#x27; 退出）：&quot;</span>);</span><br><span class="line">                <span class="comment">// 从控制台读取用户输入</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> scanner.nextLine();</span><br><span class="line">                <span class="comment">// 将消息发送给服务器</span></span><br><span class="line">                out.println(message);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 如果输入bye则退出循环</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="string">&quot;bye&quot;</span>.equalsIgnoreCase(message)) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">             <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h4 id="3-1-3-TCP粘包-拆包"><a href="#3-1-3-TCP粘包-拆包" class="headerlink" title="3.1.3 TCP粘包&#x2F;拆包"></a>3.1.3 TCP粘包&#x2F;拆包</h4><h5 id="1-问题本质"><a href="#1-问题本质" class="headerlink" title="1. 问题本质"></a>1. 问题本质</h5><p>首先，必须明确一个核心前提：<strong>TCP粘包&#x2F;拆包不是TCP协议的Bug，而是其核心特性——面向字节流（Byte Stream）——所带来的必然现象。</strong></p>
+<h4 id="3-1-5-TCP粘包-拆包"><a href="#3-1-5-TCP粘包-拆包" class="headerlink" title="3.1.5 TCP粘包&#x2F;拆包"></a>3.1.5 TCP粘包&#x2F;拆包</h4><h5 id="1-问题本质"><a href="#1-问题本质" class="headerlink" title="1. 问题本质"></a>1. 问题本质</h5><p>首先，必须明确一个核心前提：<strong>TCP粘包&#x2F;拆包不是TCP协议的Bug，而是其核心特性——面向字节流（Byte Stream）——所带来的必然现象。</strong></p>
 <ul>
 <li><strong>面向字节流 (Byte Stream)</strong>: 在TCP看来，它要传输的数据就是一连串没有边界的字节，像水流一样。TCP不关心你应用层一次<code>write</code>了多少数据，也不关心你应用层一次<code>read</code>想要多少数据。它只负责把这一串字节数据可靠地、按序地从一端传输到另一端。</li>
 <li><strong>对比UDP (Datagram-Oriented)</strong>: UDP是面向数据报的。你发送一个数据包，接收方就会收到一个完整的数据包。它有明确的边界，像一个个独立的集装箱，所以UDP天然不会有粘包&#x2F;拆包问题。</li>
@@ -12315,7 +12407,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-17 11:08:30" itemprop="dateModified" datetime="2025-10-17T11:08:30+08:00">2025-10-17</time>
+      <time title="修改时间：2025-11-22 12:26:39" itemprop="dateModified" datetime="2025-11-22T12:26:39+08:00">2025-11-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -12342,12 +12434,12 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="七、Java新特性"><a href="#七、Java新特性" class="headerlink" title="七、Java新特性"></a>七、Java新特性</h1><h2 id="1-Stream流"><a href="#1-Stream流" class="headerlink" title="1. Stream流"></a>1. Stream流</h2><h3 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h3><p><strong>Stream</strong> 是 Java 8 引入的接口（<code>java.util.stream.Stream&lt;T&gt;</code>），用于描述数据集合的序列化处理管道。</p>
-<p>它不是数据结构，而是对数据源（如 List、Set、数组）的视图，支持函数式编程风格。</p>
 <p><strong>核心特性</strong>：</p>
 <ul>
-<li><strong>惰性求值</strong>：中间操作不会立即执行，只有遇到终端操作时才触发计算。</li>
-<li><strong>不可变</strong>：Stream 操作不修改原数据源。</li>
-<li><strong>一次性使用</strong>：Stream 消费后即关闭，不能重用（会抛 <code>IllegalStateException</code>）。</li>
+<li><strong>不是数据结构</strong>：Stream 不存储数据，它只是按需计算。</li>
+<li><strong>不修改源数据</strong>：Stream 的操作不会改变源对象，而是返回一个新的结果。</li>
+<li><strong>惰性求值（Lazy）</strong>：中间操作（Intermediate Operations）不会立即执行，只有遇到终结操作（Terminal Operation）时，流才会被触发计算。</li>
+<li><strong>一次性使用</strong>：流一旦被消费（执行了终结操作），就不能再次使用了。</li>
 </ul>
 <p><strong>优势</strong>：</p>
 <ul>
@@ -12386,11 +12478,14 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="1-3-Stream的生命周期与核心概念"><a href="#1-3-Stream的生命周期与核心概念" class="headerlink" title="1.3 Stream的生命周期与核心概念"></a>1.3 Stream的生命周期与核心概念</h3><ol>
-<li><strong>数据源 (Source)</strong>: 创建一个 Stream。</li>
-<li><strong>中间操作 (Intermediate Operations)</strong>: 对 Stream 进行转换和处理。可以有零个或多个中间操作。这些操作是<strong>惰性求值 (Lazy Evaluation)</strong> 的，它们不会立即执行，而是返回一个新的 Stream。</li>
-<li><strong>终端操作 (Terminal Operation)</strong>: 触发整个 Stream pipeline 的计算，并产生一个最终结果或副作用。一个 Stream 只能有一个终端操作，执行后该 Stream 就被消费掉了，不能再使用。</li>
+<h3 id="1-3-Stream的生命周期与核心概念"><a href="#1-3-Stream的生命周期与核心概念" class="headerlink" title="1.3 Stream的生命周期与核心概念"></a>1.3 Stream的生命周期与核心概念</h3><p>Stream 的生命周期通常分为三个阶段：</p>
+<ol>
+<li><strong>创建流（Source）</strong>：从集合、数组或生成器中获取流。</li>
+<li><strong>中间操作（Intermediate）</strong>：对数据进行处理（过滤、转换等），返回一个新的 Stream。</li>
+<li><strong>终结操作（Terminal）</strong>：触发流的执行，产生最终结果（List、Integer、void 等）。</li>
 </ol>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">数据源 -&gt; filter -&gt; map -&gt; sorted -&gt; collect (结果)</span><br><span class="line">(Source)    (中间操作 - 惰性)         (终结操作 - 触发)</span><br></pre></td></tr></table></figure>
+
 <hr>
 <h3 id="1-4-创建Stream"><a href="#1-4-创建Stream" class="headerlink" title="1.4 创建Stream"></a>1.4 创建Stream</h3><table>
 <thead>
@@ -12401,17 +12496,17 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="left"><strong>从集合创建</strong></td>
+<td align="left"><strong>集合创建</strong></td>
 <td align="left"><code>collection.stream()</code> 或 <code>collection.parallelStream()</code></td>
 <td align="left"><code>List&lt;String&gt; list = ...; Stream&lt;String&gt; stream = list.stream();</code></td>
 </tr>
 <tr>
-<td align="left"><strong>从数组创建</strong></td>
+<td align="left"><strong>数组创建</strong></td>
 <td align="left"><code>Arrays.stream(array)</code></td>
 <td align="left"><code>String[] array = ...; Stream&lt;String&gt; stream = Arrays.stream(array);</code></td>
 </tr>
 <tr>
-<td align="left"><strong>由静态方法创建</strong></td>
+<td align="left"><strong>静态方法创建</strong></td>
 <td align="left"><code>Stream.of(T... values)</code></td>
 <td align="left"><code>Stream&lt;String&gt; stream = Stream.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);</code></td>
 </tr>
@@ -12432,8 +12527,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="1-5-常用中间操作"><a href="#1-5-常用中间操作" class="headerlink" title="1.5 常用中间操作"></a>1.5 常用中间操作</h3><p>这些方法都返回一个新的 Stream，可以形成链式调用。</p>
-<h4 id="1-5-1-筛选与切片"><a href="#1-5-1-筛选与切片" class="headerlink" title="1.5.1 筛选与切片"></a>1.5.1 筛选与切片</h4><table>
+<h3 id="1-5-常用中间操作"><a href="#1-5-常用中间操作" class="headerlink" title="1.5 常用中间操作"></a>1.5 常用中间操作</h3><h4 id="1-5-1-筛选与切片"><a href="#1-5-1-筛选与切片" class="headerlink" title="1.5.1 筛选与切片"></a>1.5.1 筛选与切片</h4><table>
 <thead>
 <tr>
 <th align="left">方法签名</th>
@@ -12446,17 +12540,19 @@
 </tr>
 <tr>
 <td align="left"><code>distinct()</code></td>
-<td align="left">去除重复元素（依赖元素的 <code>equals()</code> 方法）。</td>
+<td align="left">去除重复元素（依赖 <code>equals</code> 和 <code>hashCode</code>）。</td>
 </tr>
 <tr>
 <td align="left"><code>limit(long maxSize)</code></td>
-<td align="left">截断流，使其元素不超过给定数量。</td>
+<td align="left">截断流，只取前maxSize个元素。</td>
 </tr>
 <tr>
 <td align="left"><code>skip(long n)</code></td>
-<td align="left">跳过前 n 个元素。</td>
+<td align="left">跳过，丢弃前 n 个元素。</td>
 </tr>
 </tbody></table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">list.stream()</span><br><span class="line">    .filter(s -&gt; s.length() &gt; <span class="number">3</span>) <span class="comment">// 长度大于3</span></span><br><span class="line">    .distinct()                  <span class="comment">// 去重</span></span><br><span class="line">    .limit(<span class="number">5</span>)                    <span class="comment">// 只取前5个</span></span><br><span class="line">    .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+
 <hr>
 <h4 id="1-5-2-映射-Mapping"><a href="#1-5-2-映射-Mapping" class="headerlink" title="1.5.2 映射 (Mapping)"></a>1.5.2 映射 (Mapping)</h4><table>
 <thead>
@@ -12474,9 +12570,7 @@
 <td align="left"><strong>扁平化映射</strong>。将每个元素转换为一个 Stream，然后将所有这些 Stream 连接成一个单一的 Stream（一对多映射）。</td>
 </tr>
 </tbody></table>
-<p><code>flatMap</code> 是一个非常重要但容易混淆的操作。</p>
-<p><strong>示例</strong>：将 <code>[[&quot;a&quot;, &quot;b&quot;], [&quot;c&quot;, &quot;d&quot;]]</code> 转换为 <code>[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</code>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;List&lt;String&gt;&gt; listOfLists = Arrays.asList(Arrays.asList(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>), Arrays.asList(<span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>));</span><br><span class="line"><span class="comment">// 使用 map 会得到 Stream&lt;List&lt;String&gt;&gt;</span></span><br><span class="line"><span class="comment">// 使用 flatMap 会得到 Stream&lt;String&gt;</span></span><br><span class="line">List&lt;String&gt; flattenedList = listOfLists.stream()</span><br><span class="line">                                        .flatMap(List::stream) <span class="comment">// 每个子List变成一个Stream，然后合并</span></span><br><span class="line">                                        .collect(Collectors.toList());</span><br><span class="line">System.out.println(flattenedList); <span class="comment">// [a, b, c, d]</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// map: 获取所有用户的名字</span></span><br><span class="line">List&lt;String&gt; names = users.stream()</span><br><span class="line">                          .map(User::getName)</span><br><span class="line">                          .collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line"><span class="comment">// flatMap: 单词列表 -&gt; 字母列表</span></span><br><span class="line">List&lt;String&gt; words = Arrays.asList(<span class="string">&quot;Hello&quot;</span>, <span class="string">&quot;World&quot;</span>);</span><br><span class="line">List&lt;String&gt; chars = words.stream()</span><br><span class="line">                          .map(w -&gt; w.split(<span class="string">&quot;&quot;</span>))</span><br><span class="line">                          .flatMap(Arrays::stream) <span class="comment">// 将多个数组流合并为一个流</span></span><br><span class="line">                          .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h4 id="1-5-3-排序"><a href="#1-5-3-排序" class="headerlink" title="1.5.3 排序"></a>1.5.3 排序</h4><table>
@@ -12495,6 +12589,8 @@
 <td align="left">使用自定义比较器排序。</td>
 </tr>
 </tbody></table>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list.stream()</span><br><span class="line">    .sorted(Comparator.comparing(User::getAge).reversed()) <span class="comment">// 按年龄倒序</span></span><br><span class="line">    .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+
 <hr>
 <h4 id="1-5-4-调试"><a href="#1-5-4-调试" class="headerlink" title="1.5.4 调试"></a>1.5.4 调试</h4><table>
 <thead>
@@ -12509,8 +12605,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h3 id="1-6-常用终端操作"><a href="#1-6-常用终端操作" class="headerlink" title="1.6 常用终端操作"></a>1.6 常用终端操作</h3><p>这些操作会触发计算并关闭 Stream。</p>
-<h4 id="1-6-1-匹配与查找"><a href="#1-6-1-匹配与查找" class="headerlink" title="1.6.1 匹配与查找"></a>1.6.1 匹配与查找</h4><p>这些是<strong>短路操作 (Short-circuiting)</strong>，一旦找到满足条件的结果，就会立即停止计算。</p>
+<h3 id="1-6-常用终端操作"><a href="#1-6-常用终端操作" class="headerlink" title="1.6 常用终端操作"></a>1.6 常用终端操作</h3><h4 id="1-6-1-匹配与查找"><a href="#1-6-1-匹配与查找" class="headerlink" title="1.6.1 匹配与查找"></a>1.6.1 匹配与查找</h4><p>这些是<strong>短路操作 (Short-circuiting)</strong>，一旦找到满足条件的结果，就会立即停止计算。</p>
 <table>
 <thead>
 <tr>
@@ -12796,8 +12891,17 @@
 <li><strong>不要用 <code>Optional</code> 包装集合</strong>：一个返回集合的方法，如果没有结果，应该返回一个<strong>空的集合</strong>（如 <code>Collections.emptyList()</code>），而不是 <code>Optional&lt;List&lt;T&gt;&gt;</code>。这更符合直觉且调用方无需额外处理 <code>Optional</code>。</li>
 </ol>
 <hr>
-<h2 id="3-Lambda表达式"><a href="#3-Lambda表达式" class="headerlink" title="3. Lambda表达式"></a>3. Lambda表达式</h2><h3 id="3-1-概述"><a href="#3-1-概述" class="headerlink" title="3.1 概述"></a>3.1 概述</h3><p>Lambda 表达式是 Java 8 引入的一个核心特性，它允许我们将<strong>函数作为方法的参数</strong>传递，或者把代码看作数据来处理。本质上，Lambda 表达式是一个<strong>匿名函数</strong>，它没有名称，但有参数列表、函数主体、返回类型，并且可能抛出异常。</p>
-<p>在 Java 8 之前，如果你想传递一段代码逻辑（比如一个比较器或一个任务），你必须使用<strong>匿名内部类</strong>。</p>
+<h2 id="3-Lambda表达式"><a href="#3-Lambda表达式" class="headerlink" title="3. Lambda表达式"></a>3. Lambda表达式</h2><h3 id="3-1-概述"><a href="#3-1-概述" class="headerlink" title="3.1 概述"></a>3.1 概述</h3><ul>
+<li><strong>引入版本</strong>：Java 8。</li>
+<li><strong>本质</strong>：Lambda 表达式在 Java 中本质上是一个<strong>匿名函数</strong>。它提供了一种简洁的方式来表示代码块（行为），并可以将这些代码块作为参数传递给方法。</li>
+<li><strong>目的</strong>：<ol>
+<li>减少冗余代码（特别是匿名内部类）。</li>
+<li>支持函数式编程风格。</li>
+<li>为 Stream API（流式处理）提供基础支持。</li>
+</ol>
+</li>
+</ul>
+<p>在 Java 8 之前，如果想传递一段代码逻辑（比如一个比较器或一个任务），必须使用<strong>匿名内部类</strong>。</p>
 <p><strong>示例：使用匿名内部类排序</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; names = Arrays.asList(<span class="string">&quot;peter&quot;</span>, <span class="string">&quot;anna&quot;</span>, <span class="string">&quot;mike&quot;</span>, <span class="string">&quot;xenia&quot;</span>);</span><br><span class="line"></span><br><span class="line">Collections.sort(names, <span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(String a, String b)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> a.compareTo(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
@@ -12813,7 +12917,8 @@
 <p>这段代码已经简洁了很多。我们还可以进一步简化它，这将在后面详细讲解。</p>
 <hr>
 <h3 id="3-2-Lambda-表达式的核心语法"><a href="#3-2-Lambda-表达式的核心语法" class="headerlink" title="3.2 Lambda 表达式的核心语法"></a>3.2 Lambda 表达式的核心语法</h3><p>Lambda 表达式的基本语法结构是：</p>
-<p><code>(parameters) -&gt; expression</code> 或 <code>(parameters) -&gt; { statements; }</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(parameters) -&gt; expression</span><br><span class="line">或</span><br><span class="line">(parameters) -&gt; &#123; statements; &#125;</span><br></pre></td></tr></table></figure>
+
 <p>它由三部分组成：</p>
 <ol>
 <li><strong>参数列表 (Parameter list)</strong>: <code>(String a, String b)</code></li>
@@ -12836,95 +12941,126 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Runnable</span> <span class="variable">r</span> <span class="operator">=</span> () -&gt; System.out.println(<span class="string">&quot;Hello Lambda!&quot;</span>);</span><br></pre></td></tr></table></figure></li>
 </ol>
 <hr>
-<h3 id="3-3-函数式接口"><a href="#3-3-函数式接口" class="headerlink" title="3.3 函数式接口"></a>3.3 函数式接口</h3><h4 id="3-3-1-概述"><a href="#3-3-1-概述" class="headerlink" title="3.3.1 概述"></a>3.3.1 概述</h4><p>函数式接口是<strong>有且仅有一个抽象方法</strong>的接口（可以有多个默认方法或静态方法）。Java 8 引入了 <code>@FunctionalInterface</code> 注解，用于在编译时检查一个接口是否满足函数式接口的条件。这不是必需的，但加上它是一个好习惯。</p>
+<h3 id="3-3-函数式接口"><a href="#3-3-函数式接口" class="headerlink" title="3.3 函数式接口"></a>3.3 函数式接口</h3><h4 id="3-3-1-概述"><a href="#3-3-1-概述" class="headerlink" title="3.3.1 概述"></a>3.3.1 概述</h4><p>Lambda 表达式必须依赖于<strong>函数式接口</strong>才能运行。</p>
+<ul>
+<li><strong>定义</strong>：接口中<strong>有且仅有一个抽象方法</strong>的接口。</li>
+<li><strong>注解</strong>：Java 8 引入<code>@FunctionalInterface</code>（可选，但推荐加上，用于编译器检查）。</li>
+<li><strong>特例</strong>：接口中可以包含默认方法（default methods）和静态方法（static methods），只要抽象方法只有一个即可。</li>
+</ul>
 <p><strong>示例：<code>Runnable</code> 接口就是一个函数式接口</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><code>Comparator</code> 也是，它只有一个抽象方法 <code>compare()</code>。</p>
 <p>Lambda 表达式的参数列表和返回类型必须与函数式接口中抽象方法的签名相匹配。</p>
 <hr>
-<h4 id="3-3-2-function"><a href="#3-3-2-function" class="headerlink" title="3.3.2 function"></a>3.3.2 function</h4><p>Java 8 在 <code>java.util.function</code> 包中预定义了大量常用的函数式接口，以满足各种场景的需求。熟悉它们至关重要。</p>
+<h4 id="3-3-2-内置四大核心函数式接口"><a href="#3-3-2-内置四大核心函数式接口" class="headerlink" title="3.3.2 内置四大核心函数式接口"></a>3.3.2 内置四大核心函数式接口</h4><p>Java 8 在 <code>java.util.function</code> 包中预定义了大量常用的函数式接口，以满足各种场景的需求。</p>
 <table>
 <thead>
 <tr>
-<th align="left">接口名称</th>
+<th align="left">接口名</th>
 <th align="left">抽象方法</th>
 <th align="left">描述</th>
-<th align="left">示例</th>
+<th align="left">典型用途</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left"><strong><code>Predicate&lt;T&gt;</code></strong></td>
-<td align="left"><code>boolean test(T t)</code></td>
-<td align="left"><strong>断言&#x2F;判断</strong>。接收一个参数，返回一个布尔值。</td>
-<td align="left"><code>s -&gt; s.length() &gt; 5</code></td>
-</tr>
-<tr>
 <td align="left"><strong><code>Consumer&lt;T&gt;</code></strong></td>
 <td align="left"><code>void accept(T t)</code></td>
-<td align="left"><strong>消费</strong>。接收一个参数，没有返回值。</td>
-<td align="left"><code>s -&gt; System.out.println(s)</code></td>
-</tr>
-<tr>
-<td align="left"><strong><code>Function&lt;T, R&gt;</code></strong></td>
-<td align="left"><code>R apply(T t)</code></td>
-<td align="left"><strong>转换&#x2F;映射</strong>。接收一个参数，返回一个结果。</td>
-<td align="left"><code>s -&gt; s.toUpperCase()</code></td>
+<td align="left"><strong>消费型接口</strong>：接收一个参数，无返回值。</td>
+<td align="left">打印日志、修改对象属性</td>
 </tr>
 <tr>
 <td align="left"><strong><code>Supplier&lt;T&gt;</code></strong></td>
 <td align="left"><code>T get()</code></td>
-<td align="left"><strong>供给</strong>。不接收参数，返回一个结果。</td>
-<td align="left"><code>() -&gt; &quot;hello&quot;</code></td>
+<td align="left"><strong>供给型接口</strong>：不接收参数，返回一个结果。</td>
+<td align="left">工厂方法、获取随机数</td>
+</tr>
+<tr>
+<td align="left"><strong><code>Function&lt;T, R&gt;</code></strong></td>
+<td align="left"><code>R apply(T t)</code></td>
+<td align="left"><strong>函数型接口</strong>：接收类型 T，返回类型 R。</td>
+<td align="left">数据类型转换、计算</td>
+</tr>
+<tr>
+<td align="left"><strong><code>Predicate&lt;T&gt;</code></strong></td>
+<td align="left"><code>boolean test(T t)</code></td>
+<td align="left"><strong>断言型接口</strong>：接收一个参数，返回布尔值。</td>
+<td align="left">逻辑判断、过滤数据</td>
 </tr>
 <tr>
 <td align="left"><strong><code>UnaryOperator&lt;T&gt;</code></strong></td>
 <td align="left"><code>T apply(T t)</code></td>
-<td align="left"><strong>一元操作</strong>。<code>Function</code>的特例，输入输出类型相同。</td>
-<td align="left"><code>n -&gt; n * 2</code></td>
+<td align="left"><strong>函数型接口</strong>：<code>Function</code>的特例，输入输出类型相同。</td>
+<td align="left"></td>
 </tr>
 <tr>
 <td align="left"><strong><code>BinaryOperator&lt;T&gt;</code></strong></td>
 <td align="left"><code>T apply(T t1, T t2)</code></td>
-<td align="left"><strong>二元操作</strong>。接收两个同类型参数，返回同类型结果。</td>
-<td align="left"><code>(a, b) -&gt; a + b</code></td>
+<td align="left"><strong>函数型接口</strong>：接收两个同类型参数，返回同类型结果。</td>
+<td align="left"></td>
 </tr>
 </tbody></table>
 <p>此外，还有针对基本数据类型（<code>int</code>, <code>long</code>, <code>double</code>）的特化版本，如 <code>IntPredicate</code>, <code>LongConsumer</code>, <code>DoubleFunction</code> 等，以避免自动装箱&#x2F;拆箱带来的性能开销。</p>
+<p><strong>代码示例：</strong></p>
+<p><strong>1. Consumer (消费型)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; printer = s -&gt; System.out.println(<span class="string">&quot;Processing: &quot;</span> + s);</span><br><span class="line">printer.accept(<span class="string">&quot;Hello Java&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. Supplier (供给型)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;Double&gt; randomizer = () -&gt; Math.random();</span><br><span class="line">System.out.println(randomizer.get());</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. Function (函数型)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;String, Integer&gt; strLength = s -&gt; s.length();</span><br><span class="line">System.out.println(strLength.apply(<span class="string">&quot;Lambda&quot;</span>)); <span class="comment">// 输出 6</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>4. Predicate (断言型)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;Integer&gt; isEven = n -&gt; n % <span class="number">2</span> == <span class="number">0</span>;</span><br><span class="line">System.out.println(isEven.test(<span class="number">4</span>)); <span class="comment">// 输出 true</span></span><br></pre></td></tr></table></figure>
+
 <hr>
-<h3 id="3-4-方法引用"><a href="#3-4-方法引用" class="headerlink" title="3.4 方法引用"></a>3.4 方法引用</h3><p>方法引用是 Lambda 表达式的一种特殊、更简洁的写法。当你需要实现的 Lambda 表达式的主体<strong>恰好是调用一个已存在的方法</strong>时，就可以使用方法引用。</p>
+<h3 id="3-4-方法引用"><a href="#3-4-方法引用" class="headerlink" title="3.4 方法引用"></a>3.4 方法引用</h3><p>当 Lambda 表达式的方法体<strong>仅仅是调用一个已存在的方法</strong>时，可以使用方法引用来进一步简化代码。符号为 <code>::</code>。</p>
 <p><strong>四种类型的方法引用</strong></p>
 <ol>
 <li><strong>静态方法引用 (Static Method Reference)</strong><ul>
 <li><strong>语法</strong>: <code>ClassName::staticMethodName</code></li>
-<li><strong>示例</strong>: <code>s -&gt; Integer.parseInt(s)</code> 可以写成 <code>Integer::parseInt</code></li>
+<li><strong>Lambda</strong>: <code>(args) -&gt; ClassName.staticMethod(args)</code></li>
+<li><strong>Ref</strong>: <code>ClassName::staticMethod</code></li>
+<li><strong>Example</strong>: <code>Math::max</code> 等同于 <code>(x, y) -&gt; Math.max(x, y)</code></li>
 </ul>
 </li>
 <li><strong>实例方法引用 (Instance Method Reference on a Specific Object)</strong><ul>
 <li><strong>语法</strong>: <code>instance::instanceMethodName</code></li>
-<li><strong>示例</strong>: <code>() -&gt; System.out.println(&quot;hello&quot;)</code>。如果 <code>out</code> 是 <code>System</code> 的一个实例，可以写成 <code>System.out::println</code>。</li>
+<li><strong>Lambda</strong>: <code>(args) -&gt; instance.method(args)</code></li>
+<li><strong>Ref</strong>: <code>System.out::println</code></li>
+<li><strong>Example</strong>: <code>list.forEach(System.out::println)</code></li>
 </ul>
 </li>
 <li><strong>特定类型的任意对象的实例方法引用</strong><ul>
 <li><strong>语法</strong>: <code>ClassName::instanceMethodName</code></li>
-<li><strong>描述</strong>: Lambda 的第一个参数会成为调用该实例方法的对象。</li>
-<li><strong>示例</strong>: <code>(s1, s2) -&gt; s1.compareToIgnoreCase(s2)</code> 可以写成 <code>String::compareToIgnoreCase</code>。</li>
+<li><strong>Lambda</strong>: <code>(obj, args) -&gt; obj.instanceMethod(args)</code></li>
+<li><strong>Ref</strong>: <code>String::compareTo</code></li>
+<li><strong>Example</strong>: <code>(s1, s2) -&gt; s1.compareTo(s2)</code> 变为 <code>String::compareTo</code></li>
 </ul>
 </li>
 <li><strong>构造方法引用 (Constructor Reference)</strong><ul>
 <li><strong>语法</strong>: <code>ClassName::new</code></li>
-<li><strong>示例</strong>: <code>() -&gt; new ArrayList&lt;&gt;()</code> 可以写成 <code>ArrayList::new</code>。</li>
+<li><strong>Lambda</strong>: <code>() -&gt; new ArrayList&lt;&gt;()</code></li>
+<li><strong>Ref</strong>: <code>ArrayList::new</code></li>
 </ul>
 </li>
 </ol>
-<p><strong>使用方法引用的好处</strong>：代码更短，意图更清晰，可读性更强。</p>
 <hr>
 <h3 id="3-5-Lambda表达式的变量捕获"><a href="#3-5-Lambda表达式的变量捕获" class="headerlink" title="3.5 Lambda表达式的变量捕获"></a>3.5 Lambda表达式的变量捕获</h3><p>Lambda 表达式可以访问其外部作用域的变量，这个过程称为“捕获”。</p>
 <ul>
-<li><strong>可以捕获什么</strong>: 局部变量、实例变量、静态变量。</li>
-<li><strong>捕获规则</strong>: Lambda 表达式只能捕获<strong>事实上的最终变量 (effectively final)</strong>。<ul>
-<li><strong>final 变量</strong>: 明确声明为 <code>final</code> 的变量。</li>
-<li><strong>事实上的 final 变量</strong>: 初始化后，其值再也没有被改变过的局部变量。</li>
+<li><strong>捕获局部变量</strong>：<ul>
+<li>Lambda 内部可以捕获外部的局部变量。</li>
+<li><strong>限制</strong>：该变量必须是 <code>final</code> 或者 <strong>effectively final</strong>（即初始化后从未被修改过）。</li>
+<li><em>原因</em>：为了防止并发问题（Java 的闭包是通过值拷贝实现的）。</li>
+</ul>
+</li>
+<li><strong>捕获成员变量和静态变量</strong>：<ul>
+<li>没有限制，可以读取和修改。</li>
+</ul>
+</li>
+<li><strong>捕获this 关键字</strong>：<ul>
+<li>在 Lambda 内部，<code>this</code> 指向的是<strong>创建该 Lambda 的外部类实例</strong>，而不是 Lambda 本身（这点与匿名内部类不同）。</li>
 </ul>
 </li>
 </ul>
@@ -12934,14 +13070,16 @@
 <p><strong>为什么有这个限制？</strong></p>
 <p>这是为了避免在多线程环境下（Lambda 表达式常用于并发）出现线程安全问题。如果 Lambda 可以修改外部变量，那么当 Lambda 在另一个线程执行时，就可能出现数据不一致的问题。Java 设计者通过强制变量为事实 final 来简化并发模型，避免了这类错误。</p>
 <hr>
-<h3 id="3-7-代码示例"><a href="#3-7-代码示例" class="headerlink" title="3.7 代码示例"></a>3.7 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; languages = Arrays.asList(<span class="string">&quot;Java&quot;</span>, <span class="string">&quot;Scala&quot;</span>, <span class="string">&quot;Python&quot;</span>, <span class="string">&quot;JavaScript&quot;</span>, <span class="string">&quot;Go&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 使用 Predicate 进行过滤</span></span><br><span class="line">List&lt;String&gt; languagesWithJ = languages.stream()</span><br><span class="line">    .filter(lang -&gt; lang.startsWith(<span class="string">&quot;J&quot;</span>)) <span class="comment">// Predicate&lt;String&gt;</span></span><br><span class="line">    .collect(Collectors.toList());</span><br><span class="line">System.out.println(languagesWithJ); <span class="comment">// [Java, JavaScript]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 使用 Function 进行映射</span></span><br><span class="line">List&lt;Integer&gt; lengths = languages.stream()</span><br><span class="line">    .map(String::length) <span class="comment">// Function&lt;String, Integer&gt; 使用了方法引用</span></span><br><span class="line">    .collect(Collectors.toList());</span><br><span class="line">System.out.println(lengths); <span class="comment">// [4, 5, 6, 10, 2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 使用 Consumer 进行遍历</span></span><br><span class="line">languages.forEach(System.out::println); <span class="comment">// Consumer&lt;String&gt; 使用了方法引用</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 使用 BinaryOperator 进行归约</span></span><br><span class="line"><span class="type">String</span> <span class="variable">combined</span> <span class="operator">=</span> languages.stream()</span><br><span class="line">    .reduce(<span class="string">&quot;&quot;</span>, (acc, lang) -&gt; acc + <span class="string">&quot; &quot;</span> + lang); <span class="comment">// BinaryOperator&lt;String&gt;</span></span><br><span class="line">System.out.println(combined.trim()); <span class="comment">// Java Scala Python JavaScript Go</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-7-Lambda-与-Stream-API-实战"><a href="#3-7-Lambda-与-Stream-API-实战" class="headerlink" title="3.7 Lambda 与 Stream API 实战"></a>3.7 Lambda 与 Stream API 实战</h3><p>Lambda 最强大的威力体现在集合操作上，结合 <code>Stream API</code>。</p>
+<p><strong>场景：有一个用户列表，找出年龄大于 20 岁的用户姓名，转换为大写并排序。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">List&lt;User&gt; users = Arrays.asList(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;Alice&quot;</span>, <span class="number">23</span>),</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;Bob&quot;</span>, <span class="number">19</span>),</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">User</span>(<span class="string">&quot;Charlie&quot;</span>, <span class="number">25</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统方式：需要写循环、if判断、临时集合</span></span><br><span class="line"><span class="comment">// ...（省略冗长代码）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Lambda + Stream 方式：</span></span><br><span class="line">List&lt;String&gt; names = users.stream()</span><br><span class="line">    .filter(u -&gt; u.getAge() &gt; <span class="number">20</span>)       <span class="comment">// Predicate: 筛选</span></span><br><span class="line">    .map(u -&gt; u.getName().toUpperCase())<span class="comment">// Function: 转换</span></span><br><span class="line">    .sorted()                           <span class="comment">// Comparator: 排序</span></span><br><span class="line">    .collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">System.out.println(names); <span class="comment">// [ALICE, CHARLIE]</span></span><br></pre></td></tr></table></figure>
 
 <hr>
 <h3 id="3-8-最佳实践"><a href="#3-8-最佳实践" class="headerlink" title="3.8 最佳实践"></a>3.8 最佳实践</h3><ol>
 <li><strong>优先使用 Lambda</strong>: 在任何需要函数式接口的地方，优先使用 Lambda 表达式或方法引用，而不是匿名内部类。</li>
 <li><strong>保持简洁</strong>: Lambda 的威力在于其简洁性。如果一个 Lambda 的主体变得很长（超过3行），考虑将其重构为一个独立的私有方法，然后使用方法引用。</li>
 <li><strong>明确类型 vs 类型推断</strong>: 在大多数情况下，让编译器进行类型推断。但如果 Lambda 逻辑复杂，显式声明参数类型可以提高可读性。</li>
-<li><strong>熟悉 <code>java.util.function</code></strong>: 这是使用 Lambda 和 Stream API 的基础，必须熟练掌握。</li>
+<li><strong>熟悉 <code>java.util.function</code></strong>: 这是使用 Lambda 和 Stream API 的基础，必须熟练掌握并优先使用避免过度自定义接口。</li>
 <li><strong>理解闭包和变量捕获</strong>: 清楚 Lambda 能够访问哪些变量以及相关的限制，是编写正确代码的关键。</li>
 </ol>
 
