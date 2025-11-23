@@ -27,7 +27,7 @@
 <meta property="og:description" content="六、常用工具类1. Math1.1 简介 (Introduction)java.lang.Math 类是一个工具类，提供了执行基本数学运算所需的方法，如初等指数、对数、平方根和三角函数。它包含了大量的静态方法，方便我们随时调用。  1.2 核心特点 final 类: Math 类被声明为 final，因此不能被继承。 私有构造函数: 它的构造函数是 private 的，这意味着无法创建 Math">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-06T10:25:00.000Z">
-<meta property="article:modified_time" content="2025-11-09T04:25:57.109Z">
+<meta property="article:modified_time" content="2025-11-23T03:26:01.458Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
@@ -129,7 +129,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="nav-text">六、常用工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Math"><span class="nav-text">1. Math</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">1.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">1.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">1.3 常用方法详解与示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97"><span class="nav-text">1.3.1 基本运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2-%E5%8F%96%E6%95%B4%E8%BF%90%E7%AE%97"><span class="nav-text">1.3.2 取整运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-3-%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="nav-text">1.3.3 随机数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-4-%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0%E4%B8%8E%E5%B8%B8%E6%95%B0"><span class="nav-text">1.3.4 三角函数与常数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">4. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-System"><span class="nav-text">2. System</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">2.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">2.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.3 常用方法详解与示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-%E6%A0%87%E5%87%86I-O%E6%B5%81"><span class="nav-text">2.3.1 标准I&#x2F;O流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-%E7%B3%BB%E7%BB%9F%E6%93%8D%E4%BD%9C"><span class="nav-text">2.3.2 系统操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.4. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Objects"><span class="nav-text">3. Objects</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">3.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">3.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">3.3 常用方法详解与示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-%E7%A9%BA%E6%8C%87%E9%92%88%E6%A3%80%E6%9F%A5"><span class="nav-text">3.3.1 空指针检查</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-%E5%AF%B9%E8%B1%A1%E6%AF%94%E8%BE%83%E4%B8%8E%E5%93%88%E5%B8%8C"><span class="nav-text">3.3.2 对象比较与哈希</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-3-%E5%85%B6%E4%BB%96%E5%AE%9E%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">3.3.3 其他实用方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">3.4 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-BigInteger"><span class="nav-text">4. BigInteger</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">4.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">4.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-text">4.3 构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">4.4 常用方法详解与示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">4.5 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-BigDecima"><span class="nav-text">5. BigDecima</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">5.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">5.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-%E9%99%B7%E9%98%B1%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">5.3 构造方法 (陷阱与最佳实践)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.4. 常用方法详解与示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.5 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">6. 正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">6.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%A0%B8%E5%BF%83%E7%B1%BB"><span class="nav-text">6.2 核心类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E5%B8%B8%E7%94%A8%E5%85%83%E5%AD%97%E7%AC%A6-Metacharacters"><span class="nav-text">6.3 常用元字符 (Metacharacters)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-Java-%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-text">6.4 Java 中的使用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-1-String-%E7%B1%BB%E7%9A%84%E4%BE%BF%E6%8D%B7%E6%96%B9%E6%B3%95"><span class="nav-text">6.4.1 String 类的便捷方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-2-Pattern-%E5%92%8C-Matcher-%E7%9A%84%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B-%E6%9B%B4%E5%BC%BA%E5%A4%A7%E7%81%B5%E6%B4%BB"><span class="nav-text">6.4.2 Pattern 和 Matcher 的标准流程 (更强大灵活)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">6.5. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%97%B6%E9%97%B4%E7%B1%BB"><span class="nav-text">7. 时间类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-JDK-7%E5%8F%8A%E4%B9%8B%E5%89%8D%E7%9A%84%E6%97%B6%E9%97%B4API%E3%80%90%E8%BF%87%E6%97%B6%E3%80%91"><span class="nav-text">7.1 JDK 7及之前的时间API【过时】</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-1-Date%E7%B1%BB"><span class="nav-text">7.1.1 Date类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">2. 常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">3. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-2-Calender"><span class="nav-text">7.1.2 Calender</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A6%82%E8%BF%B0-1"><span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-1"><span class="nav-text">2. 常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-1"><span class="nav-text">3. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-2-SimpleDateFormat"><span class="nav-text">7.1.2 SimpleDateFormat</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A6%82%E8%BF%B0-2"><span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-2"><span class="nav-text">2. 常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-2"><span class="nav-text">3. 代码示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-JDK-8%E5%8F%8A%E4%B9%8B%E5%90%8E%E7%9A%84%E6%96%B0%E6%97%B6%E9%97%B4API"><span class="nav-text">7.2 JDK 8及之后的新时间API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-1-%E6%A0%B8%E5%BF%83%E7%B1%BB%E6%A6%82%E8%A7%88"><span class="nav-text">7.2.1 核心类概览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E4%B8%8E%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">7.2.2 常用方法与代码示例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-LocalDate-LocalTime-LocalDateTime"><span class="nav-text">1. LocalDate, LocalTime, LocalDateTime</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-Instant-%E6%97%B6%E9%97%B4%E6%88%B3"><span class="nav-text">2. Instant (时间戳)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-DateTimeFormatter-%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E8%A7%A3%E6%9E%90"><span class="nav-text">3. DateTimeFormatter (格式化与解析)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-Duration-%E5%92%8C-Period-%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94"><span class="nav-text">4. Duration 和 Period (时间间隔)</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="nav-text">六、常用工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Math"><span class="nav-text">1. Math</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">1.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">1.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">1.3 常用方法详解与示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-%E5%9F%BA%E6%9C%AC%E8%BF%90%E7%AE%97"><span class="nav-text">1.3.1 基本运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2-%E5%8F%96%E6%95%B4%E8%BF%90%E7%AE%97"><span class="nav-text">1.3.2 取整运算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-3-%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="nav-text">1.3.3 随机数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-4-%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0%E4%B8%8E%E5%B8%B8%E6%95%B0"><span class="nav-text">1.3.4 三角函数与常数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">4. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-System"><span class="nav-text">2. System</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">2.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">2.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.3 常用方法详解与示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-%E6%A0%87%E5%87%86I-O%E6%B5%81"><span class="nav-text">2.3.1 标准I&#x2F;O流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-%E7%B3%BB%E7%BB%9F%E6%93%8D%E4%BD%9C"><span class="nav-text">2.3.2 系统操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.4. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Objects"><span class="nav-text">3. Objects</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">3.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">3.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">3.3 常用方法详解与示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-%E7%A9%BA%E6%8C%87%E9%92%88%E6%A3%80%E6%9F%A5"><span class="nav-text">3.3.1 空指针检查</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-%E5%AF%B9%E8%B1%A1%E6%AF%94%E8%BE%83%E4%B8%8E%E5%93%88%E5%B8%8C"><span class="nav-text">3.3.2 对象比较与哈希</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-3-%E5%85%B6%E4%BB%96%E5%AE%9E%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">3.3.3 其他实用方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">3.4 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-BigInteger"><span class="nav-text">4. BigInteger</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">4.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">4.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="nav-text">4.3 构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">4.4 常用方法详解与示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">4.5 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-BigDecima"><span class="nav-text">5. BigDecima</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">5.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E6%A0%B8%E5%BF%83%E7%89%B9%E7%82%B9"><span class="nav-text">5.2 核心特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95-%E9%99%B7%E9%98%B1%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">5.3 构造方法 (陷阱与最佳实践)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%B8%8E%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.4. 常用方法详解与示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.5 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">6. 正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E7%AE%80%E4%BB%8B-Introduction"><span class="nav-text">6.1 简介 (Introduction)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%A0%B8%E5%BF%83%E7%B1%BB"><span class="nav-text">6.2 核心类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-text">6.3 基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-1-%E5%AD%97%E7%AC%A6%E7%B1%BB"><span class="nav-text">6.3.1 字符类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-2-%E8%BE%B9%E7%95%8C%E5%8C%B9%E9%85%8D%E5%99%A8"><span class="nav-text">6.3.2 边界匹配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-3-3-%E9%87%8F%E8%AF%8D"><span class="nav-text">6.3.3 量词</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-Java-%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-text">6.4 Java 中的使用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-1-String-%E7%B1%BB%E7%9A%84%E4%BE%BF%E6%8D%B7%E6%96%B9%E6%B3%95"><span class="nav-text">6.4.1 String 类的便捷方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-2-Pattern-%E5%92%8C-Matcher-%E7%9A%84%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B-%E6%9B%B4%E5%BC%BA%E5%A4%A7%E7%81%B5%E6%B4%BB"><span class="nav-text">6.4.2 Pattern 和 Matcher 的标准流程 (更强大灵活)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-4-3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">6.4.3 代码示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-%E5%88%86%E7%BB%84%E4%B8%8E%E6%8D%95%E8%8E%B7"><span class="nav-text">6.5 分组与捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-6-%E5%B8%B8%E7%94%A8Pattern%E6%A0%87%E8%AF%86"><span class="nav-text">6.6 常用Pattern标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-7-%E9%9B%B6%E5%AE%BD%E6%96%AD%E8%A8%80"><span class="nav-text">6.7 零宽断言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-8-%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%90%88%E9%9B%86"><span class="nav-text">6.8 常用正则表达式合集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-9-%E5%B8%B8%E8%A7%81%E5%9D%91%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">6.9 常见坑与最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%97%B6%E9%97%B4%E7%B1%BB"><span class="nav-text">7. 时间类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-JDK-7%E5%8F%8A%E4%B9%8B%E5%89%8D%E7%9A%84%E6%97%B6%E9%97%B4API%E3%80%90%E8%BF%87%E6%97%B6%E3%80%91"><span class="nav-text">7.1 JDK 7及之前的时间API【过时】</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-1-Date%E7%B1%BB"><span class="nav-text">7.1.1 Date类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-text">2. 常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">3. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-2-Calender"><span class="nav-text">7.1.2 Calender</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A6%82%E8%BF%B0-1"><span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-1"><span class="nav-text">2. 常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-1"><span class="nav-text">3. 代码示例</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-2-SimpleDateFormat"><span class="nav-text">7.1.2 SimpleDateFormat</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A6%82%E8%BF%B0-2"><span class="nav-text">1. 概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95-2"><span class="nav-text">2. 常用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-2"><span class="nav-text">3. 代码示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-JDK-8%E5%8F%8A%E4%B9%8B%E5%90%8E%E7%9A%84%E6%96%B0%E6%97%B6%E9%97%B4API"><span class="nav-text">7.2 JDK 8及之后的新时间API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-1-%E6%A0%B8%E5%BF%83%E7%B1%BB%E6%A6%82%E8%A7%88"><span class="nav-text">7.2.1 核心类概览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-2-%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E4%B8%8E%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">7.2.2 常用方法与代码示例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-LocalDate-LocalTime-LocalDateTime"><span class="nav-text">1. LocalDate, LocalTime, LocalDateTime</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-Instant-%E6%97%B6%E9%97%B4%E6%88%B3"><span class="nav-text">2. Instant (时间戳)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-DateTimeFormatter-%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E8%A7%A3%E6%9E%90"><span class="nav-text">3. DateTimeFormatter (格式化与解析)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-Duration-%E5%92%8C-Period-%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94"><span class="nav-text">4. Duration 和 Period (时间间隔)</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,7 +211,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-09 12:25:57" itemprop="dateModified" datetime="2025-11-09T12:25:57+08:00">2025-11-09</time>
+      <time title="修改时间：2025-11-23 11:26:01" itemprop="dateModified" datetime="2025-11-23T11:26:01+08:00">2025-11-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -693,110 +693,144 @@
 <hr>
 <h2 id="6-正则表达式"><a href="#6-正则表达式" class="headerlink" title="6. 正则表达式"></a>6. 正则表达式</h2><h3 id="6-1-简介-Introduction"><a href="#6-1-简介-Introduction" class="headerlink" title="6.1 简介 (Introduction)"></a>6.1 简介 (Introduction)</h3><p>正则表达式（Regex）是一种强大的字符串处理工具，它定义了一个<strong>搜索模式</strong>，用于匹配、查找、替换和分割字符串。Java 通过 <code>java.util.regex</code> 包提供了完整的正则表达式支持。</p>
 <hr>
-<h3 id="6-2-核心类"><a href="#6-2-核心类" class="headerlink" title="6.2 核心类"></a>6.2 核心类</h3><ul>
-<li><strong><code>Pattern</code></strong>: 正则表达式的编译表示。一个正则表达式字符串首先被编译成一个 <code>Pattern</code> 对象，这个过程有性能开销，因此<strong>对于需要重复使用的正则表达式，应将其编译一次并重用</strong>。</li>
-<li><strong><code>Matcher</code></strong>: 模式匹配器。一个 <code>Matcher</code> 对象是 <code>Pattern</code> 对象在一个具体输入字符串上的匹配状态机。它提供了多种查找和匹配方法。</li>
-</ul>
-<hr>
-<h3 id="6-3-常用元字符-Metacharacters"><a href="#6-3-常用元字符-Metacharacters" class="headerlink" title="6.3 常用元字符 (Metacharacters)"></a>6.3 常用元字符 (Metacharacters)</h3><table>
+<h3 id="6-2-核心类"><a href="#6-2-核心类" class="headerlink" title="6.2 核心类"></a>6.2 核心类</h3><table>
 <thead>
 <tr>
-<th align="left">类别</th>
-<th align="left">元字符</th>
+<th align="left">类名</th>
 <th align="left">描述</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left"><strong>字符类</strong></td>
-<td align="left"><code>.</code></td>
-<td align="left">匹配除换行符外的任意单个字符。</td>
+<td align="left"><strong><code>Pattern</code></strong></td>
+<td align="left"><strong>正则表达式的编译表示形式</strong>。它是不可变的，且是线程安全的。通常通过 <code>Pattern.compile(regex)</code> 创建。</td>
 </tr>
 <tr>
-<td align="left"></td>
-<td align="left"><code>\d</code></td>
-<td align="left">匹配一个数字，等价于 <code>[0-9]</code>。</td>
+<td align="left"><strong><code>Matcher</code></strong></td>
+<td align="left"><strong>执行匹配操作的引擎</strong>。它解释 Pattern 对字符串进行匹配。它是有状态的，<strong>线程不安全</strong>。</td>
 </tr>
 <tr>
-<td align="left"></td>
-<td align="left"><code>\D</code></td>
-<td align="left">匹配一个非数字。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>\w</code></td>
-<td align="left">匹配一个单词字符（字母、数字、下划线），等价于 <code>[a-zA-Z0-9_]</code>。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>\W</code></td>
-<td align="left">匹配一个非单词字符。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>\s</code></td>
-<td align="left">匹配一个空白字符（空格、制表符、换行符等）。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>[...]</code></td>
-<td align="left">匹配方括号中的任意一个字符。例如 <code>[abc]</code> 匹配 ‘a’ 或 ‘b’ 或 ‘c’。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>[^...]</code></td>
-<td align="left">匹配<strong>不</strong>在方括号中的任意一个字符。</td>
-</tr>
-<tr>
-<td align="left"><strong>量词</strong></td>
-<td align="left"><code>*</code></td>
-<td align="left">匹配前面的元素零次或多次。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>+</code></td>
-<td align="left">匹配前面的元素一次或多次。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>?</code></td>
-<td align="left">匹配前面的元素零次或一次。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>{n}</code></td>
-<td align="left">匹配前面的元素恰好 n 次。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>{n,}</code></td>
-<td align="left">匹配前面的元素至少 n 次。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>{n,m}</code></td>
-<td align="left">匹配前面的元素至少 n 次，至多 m 次。</td>
-</tr>
-<tr>
-<td align="left"><strong>边界</strong></td>
-<td align="left"><code>^</code></td>
-<td align="left">匹配输入的开头。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>$</code></td>
-<td align="left">匹配输入的结尾。</td>
-</tr>
-<tr>
-<td align="left"></td>
-<td align="left"><code>\b</code></td>
-<td align="left">匹配单词边界。</td>
-</tr>
-<tr>
-<td align="left"><strong>分组</strong></td>
-<td align="left"><code>(...)</code></td>
-<td align="left">将多个字符作为一个单元进行分组，并<strong>捕获</strong>匹配的内容。</td>
+<td align="left"><strong><code>PatternSyntaxException</code></strong></td>
+<td align="left">当正则表达式语法错误时抛出的非受检异常。</td>
 </tr>
 </tbody></table>
+<hr>
+<h3 id="6-3-基础语法"><a href="#6-3-基础语法" class="headerlink" title="6.3 基础语法"></a>6.3 基础语法</h3><h4 id="6-3-1-字符类"><a href="#6-3-1-字符类" class="headerlink" title="6.3.1 字符类"></a>6.3.1 字符类</h4><table>
+<thead>
+<tr>
+<th align="left">写法</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>[abc]</code></td>
+<td align="left">a、b 或 c (简单类)</td>
+</tr>
+<tr>
+<td align="left"><code>[^abc]</code></td>
+<td align="left">任何字符，除了 a、b 或 c (否定)</td>
+</tr>
+<tr>
+<td align="left"><code>[a-zA-Z]</code></td>
+<td align="left">a 到 z 或 A 到 Z (范围)</td>
+</tr>
+<tr>
+<td align="left"><code>.</code></td>
+<td align="left">任何字符 (默认不匹配换行符)</td>
+</tr>
+<tr>
+<td align="left"><code>\d</code></td>
+<td align="left">数字：<code>[0-9]</code></td>
+</tr>
+<tr>
+<td align="left"><code>\D</code></td>
+<td align="left">非数字：<code>[^0-9]</code></td>
+</tr>
+<tr>
+<td align="left"><code>\s</code></td>
+<td align="left">空白字符：<code>[ \t\n\x0B\f\r]</code></td>
+</tr>
+<tr>
+<td align="left"><code>\S</code></td>
+<td align="left">非空白字符：<code>[^\s]</code></td>
+</tr>
+<tr>
+<td align="left"><code>\w</code></td>
+<td align="left">单词字符：<code>[a-zA-Z_0-9]</code> (字母、数字、下划线)</td>
+</tr>
+<tr>
+<td align="left"><code>\W</code></td>
+<td align="left">非单词字符：<code>[^\w]</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="6-3-2-边界匹配器"><a href="#6-3-2-边界匹配器" class="headerlink" title="6.3.2 边界匹配器"></a>6.3.2 边界匹配器</h4><table>
+<thead>
+<tr>
+<th align="left">写法</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>^</code></td>
+<td align="left">行的开头</td>
+</tr>
+<tr>
+<td align="left"><code>$</code></td>
+<td align="left">行的结尾</td>
+</tr>
+<tr>
+<td align="left"><code>\b</code></td>
+<td align="left">单词边界</td>
+</tr>
+<tr>
+<td align="left"><code>\B</code></td>
+<td align="left">非单词边界</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="6-3-3-量词"><a href="#6-3-3-量词" class="headerlink" title="6.3.3 量词"></a>6.3.3 量词</h4><table>
+<thead>
+<tr>
+<th align="left">贪婪 (Greedy)</th>
+<th align="left">勉强&#x2F;懒惰 (Reluctant)</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>X?</code></td>
+<td align="left"><code>X??</code></td>
+<td align="left">X 出现 0 次或 1 次</td>
+</tr>
+<tr>
+<td align="left"><code>X*</code></td>
+<td align="left"><code>X*?</code></td>
+<td align="left">X 出现 0 次或多次</td>
+</tr>
+<tr>
+<td align="left"><code>X+</code></td>
+<td align="left"><code>X+?</code></td>
+<td align="left">X 出现 1 次或多次</td>
+</tr>
+<tr>
+<td align="left"><code>X{n}</code></td>
+<td align="left"><code>X{n}?</code></td>
+<td align="left">X 恰好出现 n 次</td>
+</tr>
+<tr>
+<td align="left"><code>X{n,}</code></td>
+<td align="left"><code>X{n,}?</code></td>
+<td align="left">X 至少出现 n 次</td>
+</tr>
+<tr>
+<td align="left"><code>X{n,m}</code></td>
+<td align="left"><code>X{n,m}?</code></td>
+<td align="left">X 出现 n 到 m 次</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>贪婪</strong>：尽可能多地匹配。</li>
+<li><strong>懒惰</strong>：尽可能少地匹配 (在量词后加 <code>?</code>)。</li>
+</ul>
 <hr>
 <h3 id="6-4-Java-中的使用方式"><a href="#6-4-Java-中的使用方式" class="headerlink" title="6.4 Java 中的使用方式"></a>6.4 Java 中的使用方式</h3><h4 id="6-4-1-String-类的便捷方法"><a href="#6-4-1-String-类的便捷方法" class="headerlink" title="6.4.1 String 类的便捷方法"></a>6.4.1 <code>String</code> 类的便捷方法</h4><p><code>String</code> 类内置了一些使用正则表达式的便捷方法，适合简单的匹配场景。</p>
 <ul>
@@ -816,8 +850,136 @@
 </li>
 </ol>
 <hr>
-<h3 id="6-5-代码示例"><a href="#6-5-代码示例" class="headerlink" title="6.5. 代码示例"></a>6.5. 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.regex.Matcher;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RegexDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// --- 1. String类的便捷方法 ---</span></span><br><span class="line">        <span class="comment">// a. 验证手机号 (简单示例)</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">phoneRegex</span> <span class="operator">=</span> <span class="string">&quot;^1[3-9]\\d&#123;9&#125;$&quot;</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;18812345678&quot;</span>.matches(phoneRegex)); <span class="comment">// true</span></span><br><span class="line">        System.out.println(<span class="string">&quot;12812345678&quot;</span>.matches(phoneRegex)); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// b. 替换</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">text</span> <span class="operator">=</span> <span class="string">&quot;Hello Java, I love Java!&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">replacedText</span> <span class="operator">=</span> text.replaceAll(<span class="string">&quot;Java&quot;</span>, <span class="string">&quot;World&quot;</span>);</span><br><span class="line">        System.out.println(replacedText); <span class="comment">// Hello World, I love World!</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// c. 分割</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">data</span> <span class="operator">=</span> <span class="string">&quot;apple,banana,,orange&quot;</span>;</span><br><span class="line">        String[] fruits = data.split(<span class="string">&quot;,&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String fruit : fruits) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Fruit: &#x27;&quot;</span> + fruit + <span class="string">&quot;&#x27;&quot;</span>); <span class="comment">// 注意会产生空字符串</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// --- 2. Pattern 和 Matcher 的标准用法 ---</span></span><br><span class="line">        <span class="comment">// 目标：从文本中提取所有邮箱地址</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">log</span> <span class="operator">=</span> <span class="string">&quot;Contact us at support@example.com or sales.department@company.co.uk for help.&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">emailRegex</span> <span class="operator">=</span> <span class="string">&quot;\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]&#123;2,&#125;\\b&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 编译模式 (可重用)</span></span><br><span class="line">        <span class="type">Pattern</span> <span class="variable">emailPattern</span> <span class="operator">=</span> Pattern.compile(emailRegex);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 创建匹配器</span></span><br><span class="line">        <span class="type">Matcher</span> <span class="variable">matcher</span> <span class="operator">=</span> emailPattern.matcher(log);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 查找所有匹配</span></span><br><span class="line">        System.out.println(<span class="string">&quot;找到的邮箱地址:&quot;</span>);</span><br><span class="line">        <span class="keyword">while</span> (matcher.find()) &#123;</span><br><span class="line">            <span class="comment">// matcher.group(0) 或 matcher.group() 返回整个匹配的字符串</span></span><br><span class="line">            System.out.println(matcher.group());</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// --- 3. 捕获组 (Capturing Groups) ---</span></span><br><span class="line">        <span class="comment">// 目标：从 &quot;John Doe&quot; 中提取姓和名</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">nameRegex</span> <span class="operator">=</span> <span class="string">&quot;(\\w+)\\s+(\\w+)&quot;</span>; <span class="comment">// 两个捕获组 (firstName) (lastName)</span></span><br><span class="line">        <span class="type">Pattern</span> <span class="variable">namePattern</span> <span class="operator">=</span> Pattern.compile(nameRegex);</span><br><span class="line">        <span class="type">Matcher</span> <span class="variable">nameMatcher</span> <span class="operator">=</span> namePattern.matcher(<span class="string">&quot;John Doe&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nameMatcher.matches()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">firstName</span> <span class="operator">=</span> nameMatcher.group(<span class="number">1</span>); <span class="comment">// 第一个括号匹配的内容</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">lastName</span> <span class="operator">=</span> nameMatcher.group(<span class="number">2</span>);  <span class="comment">// 第二个括号匹配的内容</span></span><br><span class="line">            System.out.println(<span class="string">&quot;First Name: &quot;</span> + firstName); <span class="comment">// John</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Last Name: &quot;</span> + lastName);   <span class="comment">// Doe</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="6-4-3-代码示例"><a href="#6-4-3-代码示例" class="headerlink" title="6.4.3 代码示例"></a>6.4.3 代码示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.regex.Matcher;</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RegexDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// --- 1. String类的便捷方法 ---</span></span><br><span class="line">        <span class="comment">// a. 验证手机号 (简单示例)</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">phoneRegex</span> <span class="operator">=</span> <span class="string">&quot;^1[3-9]\\d&#123;9&#125;$&quot;</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;18812345678&quot;</span>.matches(phoneRegex)); <span class="comment">// true</span></span><br><span class="line">        System.out.println(<span class="string">&quot;12812345678&quot;</span>.matches(phoneRegex)); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// b. 替换</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">text</span> <span class="operator">=</span> <span class="string">&quot;Hello Java, I love Java!&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">replacedText</span> <span class="operator">=</span> text.replaceAll(<span class="string">&quot;Java&quot;</span>, <span class="string">&quot;World&quot;</span>);</span><br><span class="line">        System.out.println(replacedText); <span class="comment">// Hello World, I love World!</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// c. 分割</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">data</span> <span class="operator">=</span> <span class="string">&quot;apple,banana,,orange&quot;</span>;</span><br><span class="line">        String[] fruits = data.split(<span class="string">&quot;,&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (String fruit : fruits) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;Fruit: &#x27;&quot;</span> + fruit + <span class="string">&quot;&#x27;&quot;</span>); <span class="comment">// 注意会产生空字符串</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// --- 2. Pattern 和 Matcher 的标准用法 ---</span></span><br><span class="line">        <span class="comment">// 目标：从文本中提取所有邮箱地址</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">log</span> <span class="operator">=</span> <span class="string">&quot;Contact us at support@example.com or sales.department@company.co.uk for help.&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">emailRegex</span> <span class="operator">=</span> <span class="string">&quot;\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]&#123;2,&#125;\\b&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 编译模式 (可重用)</span></span><br><span class="line">        <span class="type">Pattern</span> <span class="variable">emailPattern</span> <span class="operator">=</span> Pattern.compile(emailRegex);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 创建匹配器</span></span><br><span class="line">        <span class="type">Matcher</span> <span class="variable">matcher</span> <span class="operator">=</span> emailPattern.matcher(log);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 查找所有匹配</span></span><br><span class="line">        System.out.println(<span class="string">&quot;找到的邮箱地址:&quot;</span>);</span><br><span class="line">        <span class="keyword">while</span> (matcher.find()) &#123;</span><br><span class="line">            <span class="comment">// matcher.group(0) 或 matcher.group() 返回整个匹配的字符串</span></span><br><span class="line">            System.out.println(matcher.group());</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// --- 3. 捕获组 (Capturing Groups) ---</span></span><br><span class="line">        <span class="comment">// 目标：从 &quot;John Doe&quot; 中提取姓和名</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">nameRegex</span> <span class="operator">=</span> <span class="string">&quot;(\\w+)\\s+(\\w+)&quot;</span>; <span class="comment">// 两个捕获组 (firstName) (lastName)</span></span><br><span class="line">        <span class="type">Pattern</span> <span class="variable">namePattern</span> <span class="operator">=</span> Pattern.compile(nameRegex);</span><br><span class="line">        <span class="type">Matcher</span> <span class="variable">nameMatcher</span> <span class="operator">=</span> namePattern.matcher(<span class="string">&quot;John Doe&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nameMatcher.matches()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">firstName</span> <span class="operator">=</span> nameMatcher.group(<span class="number">1</span>); <span class="comment">// 第一个括号匹配的内容</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">lastName</span> <span class="operator">=</span> nameMatcher.group(<span class="number">2</span>);  <span class="comment">// 第二个括号匹配的内容</span></span><br><span class="line">            System.out.println(<span class="string">&quot;First Name: &quot;</span> + firstName); <span class="comment">// John</span></span><br><span class="line">            System.out.println(<span class="string">&quot;Last Name: &quot;</span> + lastName);   <span class="comment">// Doe</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<hr>
+<h3 id="6-5-分组与捕获"><a href="#6-5-分组与捕获" class="headerlink" title="6.5 分组与捕获"></a>6.5 分组与捕获</h3><p>用圆括号 <code>()</code> 将部分正则括起来，可以提取子串。</p>
+<ul>
+<li><code>group(0)</code>：代表整个匹配到的字符串。</li>
+<li><code>group(1)</code>：代表第一个括号匹配的内容。</li>
+<li><code>group(2)</code>：代表第二个括号，依此类推。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">text</span> <span class="operator">=</span> <span class="string">&quot;User: alice, ID: 1001&quot;</span>;</span><br><span class="line"><span class="type">Pattern</span> <span class="variable">p</span> <span class="operator">=</span> Pattern.compile(<span class="string">&quot;User: (\\w+), ID: (\\d+)&quot;</span>);</span><br><span class="line"><span class="type">Matcher</span> <span class="variable">m</span> <span class="operator">=</span> p.matcher(text);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (m.find()) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Whole: &quot;</span> + m.group(<span class="number">0</span>)); <span class="comment">// &quot;User: alice, ID: 1001&quot;</span></span><br><span class="line">    System.out.println(<span class="string">&quot;Name:  &quot;</span> + m.group(<span class="number">1</span>)); <span class="comment">// &quot;alice&quot;</span></span><br><span class="line">    System.out.println(<span class="string">&quot;ID:    &quot;</span> + m.group(<span class="number">2</span>)); <span class="comment">// &quot;1001&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>非捕获组</strong></p>
+<p><code>(?:X)</code> ：匹配 X，但不捕获（不能用 group(1) 提取），用于提升性能或仅做逻辑分组。</p>
+<hr>
+<h3 id="6-6-常用Pattern标识"><a href="#6-6-常用Pattern标识" class="headerlink" title="6.6 常用Pattern标识"></a>6.6 常用Pattern标识</h3><p>可以在 <code>compile</code> 时指定，也可以在正则内部通过 <code>(?flags)</code> 指定。</p>
+<table>
+<thead>
+<tr>
+<th align="left">标志常量</th>
+<th align="left">内部写法</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Pattern.CASE_INSENSITIVE</code></td>
+<td align="left"><code>(?i)</code></td>
+<td align="left"><strong>忽略大小写</strong> (如 <code>[a-z]</code> 也能匹配大写)</td>
+</tr>
+<tr>
+<td align="left"><code>Pattern.MULTILINE</code></td>
+<td align="left"><code>(?m)</code></td>
+<td align="left"><strong>多行模式</strong>。<code>^</code> 和 <code>$</code> 匹配每一行的开头结尾，而不仅仅是整个字符串的开头结尾。</td>
+</tr>
+<tr>
+<td align="left"><code>Pattern.DOTALL</code></td>
+<td align="left"><code>(?s)</code></td>
+<td align="left"><strong>点号全配</strong>。让 <code>.</code> 也可以匹配换行符 <code>\n</code>。</td>
+</tr>
+</tbody></table>
+<p><strong>示例：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 忽略大小写匹配 &quot;java&quot;</span></span><br><span class="line"><span class="type">Pattern</span> <span class="variable">p</span> <span class="operator">=</span> Pattern.compile(<span class="string">&quot;java&quot;</span>, Pattern.CASE_INSENSITIVE);</span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"><span class="type">Pattern</span> <span class="variable">p2</span> <span class="operator">=</span> Pattern.compile(<span class="string">&quot;(?i)java&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="6-7-零宽断言"><a href="#6-7-零宽断言" class="headerlink" title="6.7 零宽断言"></a>6.7 零宽断言</h3><p>用于匹配位置，<strong>不消耗字符</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">语法</th>
+<th align="left">名称</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>(?=X)</code></td>
+<td align="left">正向先行断言</td>
+<td align="left">右边必须是 X (例如：<code>Win(?=XP)</code> 匹配 “WinXP” 中的 “Win”)</td>
+</tr>
+<tr>
+<td align="left"><code>(?!X)</code></td>
+<td align="left">负向先行断言</td>
+<td align="left">右边不能是 X</td>
+</tr>
+<tr>
+<td align="left"><code>(?&lt;=X)</code></td>
+<td align="left">正向后行断言</td>
+<td align="left">左边必须是 X</td>
+</tr>
+<tr>
+<td align="left"><code>(?&lt;!X)</code></td>
+<td align="left">负向后行断言</td>
+<td align="left">左边不能是 X</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="6-8-常用正则表达式合集"><a href="#6-8-常用正则表达式合集" class="headerlink" title="6.8 常用正则表达式合集"></a>6.8 常用正则表达式合集</h3><table>
+<thead>
+<tr>
+<th align="left">用途</th>
+<th align="left">正则表达式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>中文字符</strong></td>
+<td align="left"><code>[\u4e00-\u9fa5]</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Email</strong></td>
+<td align="left"><code>\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*</code></td>
+</tr>
+<tr>
+<td align="left"><strong>中国手机号</strong></td>
+<td align="left"><code>^1[3-9]\d{9}$</code></td>
+</tr>
+<tr>
+<td align="left"><strong>身份证(18位)</strong></td>
+<td align="left">&#96;^[1-9]\d{5}(18</td>
+</tr>
+<tr>
+<td align="left"><strong>日期 (yyyy-MM-dd)</strong></td>
+<td align="left"><code>^\d{4}-\d{2}-\d{2}$</code></td>
+</tr>
+<tr>
+<td align="left"><strong>去除首尾空格</strong></td>
+<td align="left">&#96;^\s+</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="6-9-常见坑与最佳实践"><a href="#6-9-常见坑与最佳实践" class="headerlink" title="6.9 常见坑与最佳实践"></a>6.9 常见坑与最佳实践</h3><ol>
+<li><strong><code>matches()</code> vs <code>find()</code></strong>:<ul>
+<li><code>matches()</code>：尝试将<strong>整个区域</strong>与模式匹配（相当于自带 <code>^...$</code>）。</li>
+<li><code>find()</code>：在输入序列中查找匹配的<strong>子序列</strong>。</li>
+</ul>
+</li>
+<li><strong>反斜杠地狱</strong>:<ul>
+<li>Java 字符串中 <code>\</code> 是转义符。</li>
+<li>正则中 <code>\</code> 也是转义符。</li>
+<li><strong>结论</strong>：要匹配一个真实的反斜杠字符 <code>\</code>，Java 字符串里需要写 <code>\\\\</code>。</li>
+</ul>
+</li>
+<li><strong>性能问题</strong>:<ul>
+<li><strong>预编译</strong>：如果一个正则要用多次，<strong>一定</strong>要定义为 <code>static final Pattern</code> 常量，避免在循环中重复 <code>Pattern.compile()</code>。</li>
+<li><strong>回溯陷阱 (Catastrophic Backtracking)</strong>：避免嵌套的量词，如 <code>(a+)+</code>，这在处理长字符串时可能导致 CPU 100% 卡死。</li>
+</ul>
+</li>
+<li><strong>线程安全</strong>:<ul>
+<li><code>Pattern</code> 是线程安全的，可以全局共享。</li>
+<li><code>Matcher</code> 不是线程安全的，每个线程&#x2F;每次操作需要重新创建。</li>
+</ul>
+</li>
+</ol>
 <hr>
 <h2 id="7-时间类"><a href="#7-时间类" class="headerlink" title="7. 时间类"></a>7. 时间类</h2><h3 id="7-1-JDK-7及之前的时间API【过时】"><a href="#7-1-JDK-7及之前的时间API【过时】" class="headerlink" title="7.1 JDK 7及之前的时间API【过时】"></a>7.1 JDK 7及之前的时间API【过时】</h3><h4 id="7-1-1-Date类"><a href="#7-1-1-Date类" class="headerlink" title="7.1.1 Date类"></a>7.1.1 Date类</h4><h5 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h5><ul>
 <li><strong>简介</strong>: <code>Date</code> 类是Java早期用于表示特定时间点的类。其内部本质上是一个包装了 <code>long</code> 类型毫秒值的对象，该毫秒值表示自UTC 1970年1月1日00:00:00以来的时间戳。</li>
