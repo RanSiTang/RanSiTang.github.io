@@ -9176,7 +9176,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-24 11:26:27" itemprop="dateModified" datetime="2025-11-24T11:26:27+08:00">2025-11-24</time>
+      <time title="修改时间：2025-11-24 20:34:27" itemprop="dateModified" datetime="2025-11-24T20:34:27+08:00">2025-11-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -10547,7 +10547,7 @@
 <p><code>Lock</code> 接口的主要方法：</p>
 <ul>
 <li><strong><code>void lock()</code></strong>: 获取锁。如果锁已被其他线程持有，则当前线程将被阻塞，直到获取到锁。这是最常用的方法。</li>
-<li><strong><code>void lockInterruptibly()</code> throws InterruptedException</strong>: 可中断地获取锁。与 <code>lock()</code> 类似，但如果当前线程在等待锁的过程中被中断（<code>Thread.interrupt()</code>），它会抛出 <code>InterruptedException</code> 并停止等待。这为处理死锁等问题提供了可能性。</li>
+<li><strong><code>void lockInterruptibly() throws InterruptedException</code></strong>: 可中断地获取锁。与 <code>lock()</code> 类似，但如果当前线程在等待锁的过程中被中断（<code>Thread.interrupt()</code>），它会抛出 <code>InterruptedException</code> 并停止等待。这为处理死锁等问题提供了可能性。</li>
 <li><strong><code>boolean tryLock()</code></strong>: 尝试非阻塞地获取锁。该方法会立即返回，如果获取成功，返回 <code>true</code>；如果锁已被其他线程持有，立即返回 <code>false</code>，当前线程不会被阻塞。</li>
 <li><strong><code>boolean tryLock(long time, TimeUnit unit) throws InterruptedException</code></strong>: 带超时的尝试获取锁。在指定的时间内尝试获取锁，如果在超时前获取成功，返回 <code>true</code>；如果在超时前锁仍未被释放或等待过程中被中断，返回 <code>false</code>。</li>
 <li><strong><code>void unlock()</code></strong>: 释放锁。</li>
@@ -10642,7 +10642,7 @@
 <li><strong>锁降级</strong>：允许一个持有写锁的线程，在不释放写锁的情况下，继续获取读锁。反之（从读锁升级到写锁）则不允许。</li>
 </ul>
 <p><strong>使用场景示例（缓存实现）：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CachedData</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object data;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">boolean</span> cacheValid;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ReentrantReadWriteLock</span> <span class="variable">rwl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantReadWriteLock</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Lock</span> <span class="variable">readLock</span> <span class="operator">=</span> rwl.readLock();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Lock</span> <span class="variable">writeLock</span> <span class="operator">=</span> rwl.writeLock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">        readLock.lock(); <span class="comment">// 获取读锁</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!cacheValid) &#123;</span><br><span class="line">                <span class="comment">// 必须释放读锁，否则写锁无法获取（锁升级不允许）</span></span><br><span class="line">                readLock.unlock();</span><br><span class="line">                writeLock.lock(); <span class="comment">// 获取写锁</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 再次检查，防止其他线程已更新</span></span><br><span class="line">                    <span class="keyword">if</span> (!cacheValid) &#123;</span><br><span class="line">                        data = <span class="string">&quot;Some data from database&quot;</span>; <span class="comment">// 模拟从DB获取数据</span></span><br><span class="line">                        cacheValid = <span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// 在释放写锁前，获取读锁（锁降级）</span></span><br><span class="line">                    <span class="comment">// 保证数据一致性，防止其他写线程修改</span></span><br><span class="line">                    readLock.lock(); </span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    writeLock.unlock(); <span class="comment">// 释放写锁</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 此处已持有读锁</span></span><br><span class="line">            <span class="keyword">return</span> data;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            readLock.unlock(); <span class="comment">// 释放读锁</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CachedData</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object data;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">boolean</span> cacheValid;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">ReentrantReadWriteLock</span> <span class="variable">rwl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantReadWriteLock</span>();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Lock</span> <span class="variable">writeLock</span> <span class="operator">=</span> rwl.writeLock();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Lock <span class="type">read</span> <span class="variable">Lock</span> <span class="operator">=</span> rwl.readLock(); </span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">get</span><span class="params">()</span> &#123;</span><br><span class="line">        readLock.lock(); <span class="comment">// 获取读锁</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!cacheValid) &#123;</span><br><span class="line">                <span class="comment">// 必须释放读锁，否则写锁无法获取（锁升级不允许）</span></span><br><span class="line">                readLock.unlock();</span><br><span class="line">                writeLock.lock(); <span class="comment">// 获取写锁</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// 再次检查，防止其他线程已更新</span></span><br><span class="line">                    <span class="keyword">if</span> (!cacheValid) &#123;</span><br><span class="line">                        data = <span class="string">&quot;Some data from database&quot;</span>; <span class="comment">// 模拟从DB获取数据</span></span><br><span class="line">                        cacheValid = <span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// 在释放写锁前，获取读锁（锁降级）</span></span><br><span class="line">                    <span class="comment">// 保证数据一致性，防止其他写线程修改</span></span><br><span class="line">                    readLock.lock(); </span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    writeLock.unlock(); <span class="comment">// 释放写锁</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 此处已持有读锁</span></span><br><span class="line">            <span class="keyword">return</span> data;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            readLock.unlock(); <span class="comment">// 释放读锁</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h4 id="3-2-4-StampedLock-Java-8"><a href="#3-2-4-StampedLock-Java-8" class="headerlink" title="3.2.4 StampedLock (Java 8+)"></a>3.2.4 StampedLock (Java 8+)</h4><p><code>StampedLock</code> 是 Java 8 引入的一种新的锁机制，可以看作是 <code>ReentrantReadWriteLock</code> 的性能增强版。它支持三种模式：<strong>写锁、悲观读锁、乐观读</strong>。</p>
@@ -10666,96 +10666,168 @@
 </ul>
 <hr>
 <h3 id="3-3-JUC-并发编程的原子基石：CAS-与-AQS"><a href="#3-3-JUC-并发编程的原子基石：CAS-与-AQS" class="headerlink" title="3.3 JUC - 并发编程的原子基石：CAS 与 AQS"></a>3.3 JUC - 并发编程的原子基石：CAS 与 AQS</h3><p>如果说 <code>Lock</code> 接口定义了锁的行为，那么 <code>CAS</code> 和 <code>AQS</code> 就是构建这些高级锁（如 <code>ReentrantLock</code>, <code>ReentrantReadWriteLock</code> 等）的底层核心技术。它们是整个 JUC 框架的基石。</p>
-<h4 id="3-3-1-CAS-CompareAndSwap-比较并交换"><a href="#3-3-1-CAS-CompareAndSwap-比较并交换" class="headerlink" title="3.3.1 CAS (CompareAndSwap) - 比较并交换"></a>3.3.1 CAS (CompareAndSwap) - 比较并交换</h4><p>CAS 是一种无锁（Lock-Free）的原子操作，通常由硬件直接支持，以保证其原子性。它是一种乐观锁的实现思想。</p>
+<h4 id="3-3-1-CAS-CompareAndSwap-比较并交换"><a href="#3-3-1-CAS-CompareAndSwap-比较并交换" class="headerlink" title="3.3.1 CAS (CompareAndSwap) - 比较并交换"></a>3.3.1 CAS (CompareAndSwap) - 比较并交换</h4><p>CAS 是一条 CPU 的<strong>原子指令</strong>，是并发编程中<strong>无锁（Lock-Free）机制的基石。它体现了一种乐观锁</strong>的思想：假设没有冲突，直接尝试修改；如果冲突，则重试或放弃，通常都是硬件提供。</p>
 <h5 id="1-核心思想"><a href="#1-核心思想" class="headerlink" title="1. 核心思想"></a>1. 核心思想</h5><p>CAS 操作包含三个操作数：</p>
 <ol>
-<li><strong>内存位置 V (Variable)</strong>：要更新的变量。</li>
-<li><strong>预期原值 A (Expected)</strong>：你认为这个变量现在的值。</li>
-<li><strong>新值 B (New)</strong>：如果变量的值符合你的预期，你希望更新成的新值。</li>
+<li><strong>V (Memory Value)</strong>：内存中的实际值。</li>
+<li><strong>A (Expected Value)</strong>：预期值。</li>
+<li><strong>B (New Value)</strong>：要更新的新值。</li>
 </ol>
-<p><strong>执行过程</strong>：当一个线程执行 CAS 操作时，它会原子性地比较内存位置 V 的值是否与预期原值 A 相等。</p>
-<ul>
-<li>如果 <strong>相等</strong>，就将 V 的值更新为 B，并返回 <code>true</code>。</li>
-<li>如果 <strong>不相等</strong>，说明在当前线程准备更新的期间，V 的值已经被其他线程修改了。此时，操作失败，不做任何修改，并返回 <code>false</code>。</li>
-</ul>
-<p>这个 “比较并交换” 的过程是一条 CPU 原子指令，不会被中断，从而保证了操作的原子性。</p>
-<hr>
-<h5 id="2-Java中的实现"><a href="#2-Java中的实现" class="headerlink" title="2. Java中的实现"></a>2. Java中的实现</h5><p>Java 无法直接操作硬件指令，而是通过 <code>sun.misc.Unsafe</code> 类中的一系列 <code>compareAndSwap*</code> 方法（如 <code>compareAndSwapInt</code>, <code>compareAndSwapLong</code>）来调用底层 C&#x2F;C++ 代码，最终实现 CAS。</p>
-<p>JUC 中的原子类，如 <code>AtomicInteger</code>、<code>AtomicLong</code> 等，其核心就是封装了 <code>Unsafe</code> 类的 CAS 操作。</p>
-<p><strong>示例：<code>AtomicInteger</code> 的 <code>incrementAndGet()</code> 伪代码</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AtomicInteger 内部实现类似逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">incrementAndGet</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123; <span class="comment">// 使用自旋的方式不断尝试</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">current</span> <span class="operator">=</span> get(); <span class="comment">// 1. 获取当前值</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">next</span> <span class="operator">=</span> current + <span class="number">1</span>; <span class="comment">// 2. 计算新值</span></span><br><span class="line">        <span class="comment">// 3. 使用 CAS 尝试更新</span></span><br><span class="line">        <span class="comment">// 如果当前值仍然是 current，就更新为 next，并返回 true</span></span><br><span class="line">        <span class="keyword">if</span> (compareAndSet(current, next)) &#123; </span><br><span class="line">            <span class="keyword">return</span> next; <span class="comment">// 更新成功，退出循环</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果 CAS 失败，说明 current 值被其他线程修改了</span></span><br><span class="line">        <span class="comment">// 循环会继续，重新获取最新值，再次尝试</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="highlight mermaid">flowchart TD
+    A[线程尝试修改 V] --&gt; B&#123;比较 V 和 A?&#125;
+    B --&gt;|YES 相等| C[把 V 更新为 B]
+    B --&gt;|NO 不等| D[不做修改]
+    C --&gt; E[返回 true]
+    D --&gt; F[返回 false]</code></pre>
 
-<p>这种 “CAS + 自旋” 的模式是无锁编程的经典范式。</p>
 <hr>
-<h5 id="3-CAS的三大问题及解决方案"><a href="#3-CAS的三大问题及解决方案" class="headerlink" title="3. CAS的三大问题及解决方案"></a>3. CAS的三大问题及解决方案</h5><p><strong>ABA 问题</strong></p>
+<h5 id="2-Java-中的底层实现"><a href="#2-Java-中的底层实现" class="headerlink" title="2. Java 中的底层实现"></a>2. Java 中的底层实现</h5><p>Java 语言本身无法直接访问硬件，它是通过 <code>JNI (Java Native Interface)</code> 调用 C++ 代码实现的。</p>
 <ul>
-<li><strong>问题描述</strong>：一个值从 A 变成了 B，然后又变回了 A。CAS 检查时会发现它的值仍然是 A，于是操作成功。但实际上，这个值已经被改变过了。在某些场景下，这会引发问题（例如，链表的节点被复用）。</li>
-<li><strong>解决方案</strong>：使用<strong>版本号</strong>或<strong>时间戳</strong>。JUC 提供了 <code>AtomicStampedReference</code> 类，它在更新时不仅会检查当前值，还会检查当前版本号。只有值和版本号都符合预期，才会更新成功，并且更新时会同时更新值和版本号。</li>
-</ul>
-<p><strong>自旋时间长，开销大</strong></p>
-<ul>
-<li><strong>问题描述</strong>：如果并发冲突非常激烈，很多线程会反复尝试 CAS 操作但都失败，这会导致它们长时间地“自旋”，空耗 CPU 资源。</li>
-<li><strong>解决方案</strong>：这方面没有完美的解决方案。Java 8 之后对自旋锁进行了一些优化，例如适应性自旋。但在高竞争环境下，传统锁（如 <code>ReentrantLock</code>）的性能可能会优于纯 CAS，因为失败的线程会被挂起，而不是空转。</li>
-</ul>
-<p><strong>只能保证一个共享变量的原子操作</strong></p>
-<ul>
-<li><strong>问题描述</strong>：CAS 操作一次只能保证一个内存地址上的值的原子性。如果需要同时对多个变量进行原子操作，CAS 无能为力。</li>
-<li><strong>解决方案</strong>：<ul>
-<li>将多个变量封装成一个对象，然后使用 <code>AtomicReference</code> 对这个对象的引用进行 CAS 操作。</li>
-<li>使用传统的锁（<code>synchronized</code> 或 <code>Lock</code>）。</li>
+<li><strong>关键类</strong>：<code>sun.misc.Unsafe</code><br>JUC 包下的原子类（如 <code>AtomicInteger</code>）底层都依赖这个类。它提供了直接操作内存的能力。</li>
+<li><strong>关键方法</strong>：<ul>
+<li><code>compareAndSwapInt(...)</code></li>
+<li><code>compareAndSwapLong(...)</code></li>
+<li><em>(注：JDK 9 之后引入了 <code>VarHandle</code> 来逐渐替代 Unsafe)</em></li>
 </ul>
 </li>
 </ul>
 <hr>
-<h4 id="3-3-2-AQS-AbstractQueuedSynchronizer-抽象队列同步器"><a href="#3-3-2-AQS-AbstractQueuedSynchronizer-抽象队列同步器" class="headerlink" title="3.3.2 AQS (AbstractQueuedSynchronizer) - 抽象队列同步器"></a>3.3.2 AQS (AbstractQueuedSynchronizer) - 抽象队列同步器</h4><p>AQS 是一个用于构建锁和同步器的<strong>框架</strong>。JUC 包中的许多同步器（如 <code>ReentrantLock</code>, <code>Semaphore</code>, <code>CountDownLatch</code>, <code>ReentrantReadWriteLock</code>）都是基于 AQS 构建的。</p>
-<p>AQS 的核心思想是，如果被请求的共享资源空闲，则将当前请求资源的线程设置为有效的工作线程，并将共享资源设置为锁定状态。如果共享资源被占用，就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制 AQS 是用一个 <strong>CLH 队列锁</strong> 的变体实现的，即将暂时获取不到锁的线程加入到一个虚拟的<strong>双向队列</strong>中。</p>
-<h5 id="1-AQS核心设计"><a href="#1-AQS核心设计" class="headerlink" title="1. AQS核心设计"></a>1. AQS核心设计</h5><p>AQS 内部维护了两个核心部分：</p>
+<h5 id="3-经典范式：CAS-自旋"><a href="#3-经典范式：CAS-自旋" class="headerlink" title="3. 经典范式：CAS+自旋"></a>3. 经典范式：CAS+自旋</h5><p>单纯的 CAS 只能尝试一次，失败就结束了。为了实现“直到成功为止”的效果，通常配合**自旋（Spin）**使用。</p>
+<p><strong>伪代码演示 (AtomicInteger 源码逻辑)</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">incrementAndGet</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// 自旋循环 (Do-While 结构)</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="comment">// 1. 获取当前内存中的最新值 (预期值 A)</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">current</span> <span class="operator">=</span> <span class="built_in">this</span>.get();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 计算目标值 (新值 B)</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">next</span> <span class="operator">=</span> current + <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3. CAS 原子性尝试</span></span><br><span class="line">        <span class="comment">// 如果内存里的值还是 current，就把它改成 next，返回 true</span></span><br><span class="line">        <span class="keyword">if</span> (compareAndSet(current, next)) &#123;</span><br><span class="line">            <span class="keyword">return</span> next; <span class="comment">// 成功则返回</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 4. 失败则继续循环 (自旋)，重新获取 current 再试</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="4-CAS-的三大缺陷与解决方案"><a href="#4-CAS-的三大缺陷与解决方案" class="headerlink" title="4. CAS 的三大缺陷与解决方案"></a>4. CAS 的三大缺陷与解决方案</h5><table>
+<thead>
+<tr>
+<th align="left">缺陷</th>
+<th align="left">描述</th>
+<th align="left">解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>1. ABA 问题</strong></td>
+<td align="left"><strong>现象</strong>：值从 A 变为 B，又变回 A。CAS 检查时发现值没变，误认为没发生过修改。<br><strong>隐患</strong>：在堆栈操作或链表节点复用中，可能导致逻辑崩溃。</td>
+<td align="left"><strong>加版本号 (Version)</strong><br>使用 <code>AtomicStampedReference</code>。<br>比较时不仅检查引用是否相等，还要检查<strong>版本戳 (Stamp)</strong> 是否一致。<br>操作：<code>1A -&gt; 2B -&gt; 3A</code></td>
+</tr>
+<tr>
+<td align="left"><strong>2. 自旋开销大</strong></td>
+<td align="left"><strong>现象</strong>：在高并发写场景下，大量线程 CAS 失败并不断自旋，导致 <strong>CPU 使用率飙升</strong>。</td>
+<td align="left"><strong>1. 分散热点 (LongAdder)</strong><br>JDK 8 引入 <code>LongAdder</code>，将一个变量分解为多个单元（Cell 数组），线程只竞争自己 Cell 里的值，最后求和。大幅减少冲突。<br><strong>2. 适应性自旋</strong><br>JVM 智能调整自旋次数，甚至挂起线程。</td>
+</tr>
+<tr>
+<td align="left"><strong>3. 只能保证单个变量</strong></td>
+<td align="left"><strong>现象</strong>：CAS 原生只能保证一个内存地址的原子性，无法同时锁住 <code>x</code> 和 <code>y</code> 两个变量。</td>
+<td align="left"><strong>封装对象</strong><br>将多个变量封装成一个对象（如 <code>User {age, name}</code>），利用 <code>AtomicReference</code> 来保证引用的原子性更新。</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="3-3-2-AQS-AbstractQueuedSynchronizer-抽象队列同步器"><a href="#3-3-2-AQS-AbstractQueuedSynchronizer-抽象队列同步器" class="headerlink" title="3.3.2 AQS (AbstractQueuedSynchronizer) - 抽象队列同步器"></a>3.3.2 AQS (AbstractQueuedSynchronizer) - 抽象队列同步器</h4><h5 id="1-核心定位"><a href="#1-核心定位" class="headerlink" title="1. 核心定位"></a>1. 核心定位</h5><p>AQS 是一个用来构建锁和同步器的<strong>顶层抽象框架</strong>。JUC 包中几乎所有的锁和同步工具（<code>ReentrantLock</code>, <code>Semaphore</code>, <code>CountDownLatch</code>, <code>CyclicBarrier</code> 等）核心逻辑都依赖于它。</p>
+<ul>
+<li><strong>核心思想</strong>：如果资源空闲，则抢占；如果资源被占用，则<strong>排队</strong>（阻塞等待）。</li>
+<li><strong>设计模式</strong>：<strong>模板方法模式 (Template Method)</strong>。AQS 解决了“排队、阻塞、唤醒”等繁琐的底层机制，子类只需实现“如何尝试抓取&#x2F;释放资源”的逻辑。</li>
+</ul>
+<hr>
+<h5 id="2-AQS-的三大核心组件"><a href="#2-AQS-的三大核心组件" class="headerlink" title="2. AQS 的三大核心组件"></a>2. AQS 的三大核心组件</h5><p>AQS 的内部架构可以概括为：<strong>状态 (State) + 队列 (CLH Queue) + 线程阻塞 (LockSupport)</strong>。</p>
 <ol>
-<li><strong><code>state</code> 状态变量 (volatile int)</strong><ul>
-<li>它是一个 <code>volatile</code> 的整型变量，用于表示同步状态。</li>
-<li>它的具体含义由实现 AQS 的子类来定义。例如：<ul>
-<li>在 <code>ReentrantLock</code> 中，<code>state</code> 表示锁的重入次数。<code>state=0</code> 表示无锁，<code>state&gt;0</code> 表示已被持有，值代表重入的层数。</li>
-<li>在 <code>CountDownLatch</code> 中，<code>state</code> 表示计数器的值。</li>
-<li>在 <code>Semaphore</code> 中，<code>state</code> 表示剩余的许可数量。</li>
+<li><h5 id="资源状态：state"><a href="#资源状态：state" class="headerlink" title="资源状态：state"></a>资源状态：<code>state</code></h5><ul>
+<li><strong>定义</strong>：<code>private volatile int state;</code></li>
+<li><strong>作用</strong>：标记资源的可用状态。</li>
+<li><strong>操作</strong>：通过 <code>getState()</code>, <code>setState()</code>, <code>compareAndSetState()</code> (CAS) 进行原子操作。</li>
+<li><strong>多态含义</strong>：<ul>
+<li><code>ReentrantLock</code>: 0&#x3D;无锁, 1&#x3D;持有, &gt;1&#x3D;重入次数。</li>
+<li><code>CountDownLatch</code>: 初始值 N, 每次 countDown 减 1, 0&#x3D;任务完成。</li>
+<li><code>Semaphore</code>: 剩余许可证数量。</li>
 </ul>
 </li>
-<li>AQS 提供了 <code>getState()</code>, <code>setState()</code>, <code>compareAndSetState()</code> 等方法来原子性地操作这个状态，其中 <code>compareAndSetState()</code> 就是基于 <strong>CAS</strong> 实现的。</li>
 </ul>
 </li>
-<li><strong>FIFO 等待队列 (双向链表)</strong><ul>
-<li>这是一个先进先出的双向队列，用于存放等待获取锁的线程。</li>
-<li>当一个线程获取锁失败后，AQS 会将该线程和其等待状态封装成一个 <code>Node</code> 对象，并将其加入到队列的尾部。</li>
-<li>当锁被释放时，AQS 会唤醒队列头部的 <code>Node</code> 对应的线程，让它尝试再次获取锁。</li>
-<li>队列的头部节点是当前持有锁的线程（或一个虚拟节点），它在释放锁后会唤醒下一个节点。</li>
+<li><h5 id="等待队列：CLH-变体"><a href="#等待队列：CLH-变体" class="headerlink" title="等待队列：CLH 变体"></a>等待队列：CLH 变体</h5><p>AQS 维护了一个<strong>双向链表</strong>（FIFO队列）。未能获取资源的线程会被封装成 <code>Node</code> 节点加入队尾。</p>
+<p><strong>队列结构图解</strong>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">      +------+  prev  +-----+  prev  +-----+</span><br><span class="line">Head  | Node | &lt;----  | Node| &lt;----  | Node|  Tail</span><br><span class="line">      | (空) |  ----&gt; | T1  | ----&gt;  | T2  |</span><br><span class="line">      +------+  next  +-----+  next  +-----+</span><br><span class="line">     (当前持有锁)      (等待中)       (等待中)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Head 节点</strong>：通常是一个虚拟节点（Dummy Node）或代表当前持有锁的线程。</li>
+<li><strong>Node 节点</strong>：封装了 <strong>线程引用</strong> + <strong>等待状态 (waitStatus)</strong> + <strong>前驱&#x2F;后继指针</strong>。</li>
+</ul>
+</li>
+<li><h5 id="节点状态：waitStatus-关键细节"><a href="#节点状态：waitStatus-关键细节" class="headerlink" title="节点状态：waitStatus (关键细节)"></a>节点状态：<code>waitStatus</code> (关键细节)</h5><p><code>Node</code> 类中有一个 <code>int waitStatus</code> 字段，用于表示当前线程的状态，决定了它能否被唤醒：</p>
+<ul>
+<li><strong>0 (INITIAL)</strong>: 初始状态。</li>
+<li><strong>-1 (SIGNAL)</strong>: <strong>非常重要</strong>。表示“我后面的兄弟睡着了，我释放锁后必须叫醒他”。</li>
+<li><strong>1 (CANCELLED)</strong>: 线程因为超时或中断被取消，不再参与竞争。</li>
+<li><strong>-2 (CONDITION)</strong>: 线程在 Condition 等待队列中（用于 <code>await</code>&#x2F;<code>signal</code>）。</li>
+<li><strong>-3 (PROPAGATE)</strong>: 共享模式下，前驱节点唤醒后，需要向后传播唤醒动作。</li>
 </ul>
 </li>
 </ol>
 <hr>
-<h5 id="2-AQS-的两种模式"><a href="#2-AQS-的两种模式" class="headerlink" title="2. AQS 的两种模式"></a>2. AQS 的两种模式</h5><p>AQS 支持两种资源共享模式，子类在实现时需要选择其中一种或两种都支持：</p>
-<ol>
-<li><strong>独占模式 (Exclusive)</strong>：资源在同一时刻只能被一个线程持有。如 <code>ReentrantLock</code>。</li>
-<li><strong>共享模式 (Shared)</strong>：资源在同一时刻可以被多个线程持有。如 <code>Semaphore</code>, <code>CountDownLatch</code>, <code>ReentrantReadWriteLock</code> 的读锁。</li>
-</ol>
+<h5 id="3-两种资源共享模式"><a href="#3-两种资源共享模式" class="headerlink" title="3. 两种资源共享模式"></a>3. 两种资源共享模式</h5><table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">描述</th>
+<th align="left">典型实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>独占模式 (Exclusive)</strong></td>
+<td align="left">资源一次只能被一个线程持有。</td>
+<td align="left"><code>ReentrantLock</code></td>
+</tr>
+<tr>
+<td align="left"><strong>共享模式 (Shared)</strong></td>
+<td align="left">资源可以被多个线程同时持有。</td>
+<td align="left"><code>Semaphore</code>, <code>CountDownLatch</code>, <code>ReadWriteLock(读锁)</code></td>
+</tr>
+</tbody></table>
 <hr>
-<h5 id="3-AQS-的模板方法模式"><a href="#3-AQS-的模板方法模式" class="headerlink" title="3. AQS 的模板方法模式"></a>3. AQS 的模板方法模式</h5><p>AQS 的设计采用了<strong>模板方法模式</strong>。它将同步器的通用逻辑（如线程的排队、阻塞、唤醒）都封装好了，而将特定的获取&#x2F;释放锁的逻辑定义为几个 “钩子”（hook）方法，交由子类去实现。</p>
-<p>子类需要重写（实现）的关键方法：</p>
+<h5 id="4-AQS-的模板方法模式"><a href="#4-AQS-的模板方法模式" class="headerlink" title="4. AQS 的模板方法模式"></a>4. AQS 的模板方法模式</h5><p>AQS 定义了顶层逻辑（如 <code>acquire()</code>, <code>release()</code>），这些方法是 <code>final</code> 的，不可修改。子类只需要重写以下 <strong>“钩子 (Hook)”</strong> 方法：</p>
 <ul>
-<li><code>tryAcquire(int arg)</code>: 独占模式下，尝试获取资源。成功返回 <code>true</code>，失败返回 <code>false</code>。</li>
-<li><code>tryRelease(int arg)</code>: 独占模式下，尝试释放资源。成功返回 <code>true</code>，失败返回 <code>false</code>。</li>
-<li><code>tryAcquireShared(int arg)</code>: 共享模式下，尝试获取资源。返回负数表示失败；0 表示成功但无剩余资源；正数表示成功且有剩余资源。</li>
-<li><code>tryReleaseShared(int arg)</code>: 共享模式下，尝试释放资源。</li>
-<li><code>isHeldExclusively()</code>: 当前线程是否持有独占锁。</li>
+<li><strong>独占式</strong>：<ul>
+<li><code>tryAcquire(int arg)</code>: 尝试获取锁（成功返回 true）。</li>
+<li><code>tryRelease(int arg)</code>: 尝试释放锁。</li>
+</ul>
+</li>
+<li><strong>共享式</strong>：<ul>
+<li><code>tryAcquireShared(int arg)</code>: 尝试获取共享资源（返回剩余量，&lt;0失败）。</li>
+<li><code>tryReleaseShared(int arg)</code>: 尝试释放共享资源。</li>
+</ul>
+</li>
+<li><strong>其他</strong>：<ul>
+<li><code>isHeldExclusively()</code>: 判断当前线程是否独占资源。</li>
+</ul>
+</li>
 </ul>
 <hr>
-<h5 id="4-源码分析：ReentrantLock-lock-的工作流程"><a href="#4-源码分析：ReentrantLock-lock-的工作流程" class="headerlink" title="4. 源码分析：ReentrantLock.lock() 的工作流程"></a>4. 源码分析：<code>ReentrantLock.lock()</code> 的工作流程</h5><p>以 <code>ReentrantLock</code> 的非公平锁为例，<code>lock()</code> 方法的调用流程大致如下：</p>
+<h5 id="5-源码分析：ReentrantLock-lock-的工作流程"><a href="#5-源码分析：ReentrantLock-lock-的工作流程" class="headerlink" title="5. 源码分析：ReentrantLock.lock() 的工作流程"></a>5. 源码分析：<code>ReentrantLock.lock()</code> 的工作流程</h5><p>以 <strong>非公平锁 (NonfairSync)</strong> 为例，流程如下：</p>
+<p><strong>Step 1: 刚进门先抢一把 (CAS)</strong></p>
+<p>调用 <code>lock()</code> 后，不管队列里有没有人，先执行一次 CAS 尝试把 <code>state</code> 从 0 改成 1。</p>
+<ul>
+<li><strong>成功</strong>：运气好，直接拿锁走人（这就是“非公平”的体现）。</li>
+<li><strong>失败</strong>：进入标准的 AQS 流程 <code>acquire(1)</code>。</li>
+</ul>
+<p><strong>Step 2: 再次尝试 (tryAcquire)</strong></p>
+<p>进入 <code>tryAcquire</code> 逻辑：</p>
 <ol>
-<li>调用 <code>lock()</code> 方法。</li>
-<li>内部调用 AQS 的 <code>acquire(1)</code> 方法。</li>
-<li><code>acquire(1)</code> 方法首先会调用子类（<code>NonfairSync</code>）实现的 <code>tryAcquire(1)</code>。</li>
-<li><code>tryAcquire()</code> 逻辑：<br>a. 检查 <code>state</code> 是否为 0（无锁状态）。如果是，则用 <strong>CAS</strong> 尝试将 <code>state</code> 设置为 1。如果成功，将锁的持有者设为当前线程，返回 <code>true</code>。<br>b. 如果 <code>state</code> 不为 0，检查当前锁的持有者是否是当前线程。如果是，则增加 <code>state</code> 的值（实现重入），返回 <code>true</code>。<br>c. 如果以上都不满足，返回 <code>false</code>。</li>
-<li>如果 <code>tryAcquire()</code> 返回 <code>true</code>，<code>acquire()</code> 方法直接结束，线程获取锁成功。</li>
-<li>如果 <code>tryAcquire()</code> 返回 <code>false</code>，<code>acquire()</code> 方法会将当前线程封装成 <code>Node</code>，加入到 AQS 的等待队列尾部，然后通过 <code>LockSupport.park()</code> 将当前线程挂起，等待被唤醒。</li>
-<li>当持有锁的线程调用 <code>unlock()</code> 时，最终会调用 AQS 的 <code>release()</code> 方法，该方法会调用子类实现的 <code>tryRelease()</code> 来减少 <code>state</code>，当 <code>state</code> 变为 0 时，会唤醒队列头部的下一个等待线程。</li>
+<li><strong>State &#x3D;&#x3D; 0</strong>? 再 CAS 抢一次（也许刚才持有锁的人正好释放了）。</li>
+<li><strong>是自己持有的</strong>? <code>state + 1</code>（锁重入）。</li>
+<li><strong>失败</strong>：返回 false，准备排队。</li>
+</ol>
+<p><strong>Step 3: 入队 (addWaiter)</strong></p>
+<p>将当前线程封装成 <code>Node</code>，通过 CAS 也就是“自旋”的方式，安全地拼接到队列的<strong>尾部 (Tail)</strong>。</p>
+<p><strong>Step 4: 阻塞与自旋 (acquireQueued)</strong></p>
+<p>这是一个死循环（自旋）：</p>
+<ol>
+<li><strong>检查前驱</strong>：如果是 Head 的后继节点（排第二），再试着抢一次锁（也许 Head 刚释放）。</li>
+<li><strong>阻塞</strong>：如果抢不到，或者前驱不是 Head，就检查前驱的 <code>waitStatus</code>。如果是 <code>SIGNAL</code>，调用 <code>LockSupport.park()</code> <strong>挂起当前线程</strong>（进入内核态等待，不再耗 CPU）。</li>
+</ol>
+<p><strong>Step 5: 释放与唤醒</strong></p>
+<p>当持有锁的线程 <code>unlock()</code> -&gt; <code>release()</code> -&gt; <code>tryRelease()</code>：</p>
+<ol>
+<li><code>state</code> 减 1。如果减到 0，表示锁彻底释放。</li>
+<li>找到 Head 节点的下一个有效节点（非 Cancelled），调用 <code>LockSupport.unpark(nextThread)</code> <strong>唤醒它</strong>。</li>
+<li>被唤醒的线程在 Step 4 的循环中醒来，继续抢锁。</li>
 </ol>
 <hr>
 <h2 id="4-JUC-核心工具类"><a href="#4-JUC-核心工具类" class="headerlink" title="4. JUC 核心工具类"></a>4. JUC 核心工具类</h2><h3 id="4-1-原子操作类"><a href="#4-1-原子操作类" class="headerlink" title="4.1 原子操作类"></a>4.1 原子操作类</h3><h4 id="4-1-1-概述与原理"><a href="#4-1-1-概述与原理" class="headerlink" title="4.1.1 概述与原理"></a>4.1.1 概述与原理</h4><p>在多线程环境下，对共享变量进行 <code>i++</code> 这样的操作并不是原子的，它包含了“读取-修改-写入”三个步骤，任何一步都可能被其他线程打断，导致数据不一致。虽然 <code>synchronized</code> 和 <code>Lock</code> 可以解决这个问题，但它们属于悲观锁，在高并发场景下可能引起线程阻塞和上下文切换，开销较大。</p>
@@ -10795,11 +10867,6 @@
 <li><code>AtomicStampedReference&lt;V&gt;</code>: 解决 <strong>CAS 的 ABA 问题</strong>。它在内部维护了一个“版本号”（stamp），更新时不仅要比较值，还要比较版本号。只有两者都相同时才能更新成功。</li>
 <li><code>AtomicMarkableReference&lt;V&gt;</code>: 与 <code>AtomicStampedReference</code> 类似，但版本号是一个布尔值（mark），用于表示数据是否被修改过。更轻量，适用于只关心“变过&#x2F;没变过”的场景。</li>
 </ul>
-<p><strong>ABA 问题示例：</strong></p>
-<p>线程1想把 A 更新为 C。它读取到 A，然后被挂起。</p>
-<p>线程2把 A 更新为 B，然后又更新回 A。</p>
-<p>线程1恢复执行，CAS 检查发现值仍然是 A，于是成功更新为 C。</p>
-<p>但实际上 A 的状态已经发生了变化，这在某些业务逻辑中是致命的。</p>
 <hr>
 <h5 id="3-数组类型原子类"><a href="#3-数组类型原子类" class="headerlink" title="3. 数组类型原子类"></a>3. 数组类型原子类</h5><p>对数组中的某个元素进行原子操作。</p>
 <ul>
@@ -10830,7 +10897,8 @@
 <li><code>LongAdder</code> &#x2F; <code>DoubleAdder</code>: 高性能的原子累加器。</li>
 <li><code>LongAccumulator</code> &#x2F; <code>DoubleAccumulator</code>: <code>LongAdder</code> 的更通用版本，可以自定义累加规则。</li>
 </ul>
-<p><strong><code>LongAdder</code> 的核心思想（分段锁&#x2F;分散热点）：</strong><br><code>LongAdder</code> 内部维护了一个 <code>base</code> 变量和一个 <code>Cell[]</code> 数组。</p>
+<p><strong><code>LongAdder</code> 的核心思想（分段锁&#x2F;分散热点）：</strong></p>
+<p><code>LongAdder</code> 内部维护了一个 <code>base</code> 变量和一个 <code>Cell[]</code> 数组。</p>
 <ul>
 <li><strong>低并发</strong>：当没有竞争时，数据会直接累加到 <code>base</code> 上，与 <code>AtomicLong</code> 类似。</li>
 <li><strong>高并发</strong>：当对 <code>base</code> 的 CAS 更新失败时，线程会尝试在 <code>Cell</code> 数组的一个槽（Cell）中进行累加。每个线程通过哈希等算法映射到自己的槽位，从而将对单个变量的竞争<strong>分散</strong>到多个变量上。</li>
@@ -11031,8 +11099,6 @@
 <ul>
 <li><p><strong>核心思想</strong>:<br><code>CountDownLatch</code> 在初始化时会设置一个计数值。线程可以通过调用 <code>await()</code> 方法来阻塞等待，直到计数值被减到 0。其他线程则可以通过调用 <code>countDown()</code> 方法来将计数值减 1。这个过程是<strong>一次性</strong>的，一旦计数值变为 0，<code>CountDownLatch</code> 就不能再被重置或重复使用。</p>
 </li>
-<li><p><strong>比喻</strong>:<br>想象一下火箭发射。主控室（主线程）按下 <code>await()</code> 按钮后进入等待状态。多个子系统的检查员（工作线程）各自进行检查，每完成一项就调用 <code>countDown()</code>。当所有检查员都报告完成（计数值减到 0），主控室的等待结束，火箭点火发射。</p>
-</li>
 <li><p><strong>核心 API</strong>:</p>
 <ul>
 <li><code>CountDownLatch(int count)</code>: 构造方法，设置初始计数值。</li>
@@ -11053,8 +11119,7 @@
 <hr>
 <h4 id="4-3-2-CyclicBarrier-循环屏障"><a href="#4-3-2-CyclicBarrier-循环屏障" class="headerlink" title="4.3.2 CyclicBarrier - 循环屏障"></a>4.3.2 CyclicBarrier - 循环屏障</h4><p><code>CyclicBarrier</code> 意为“循环的屏障”。它让一组线程互相等待，直到所有线程都到达一个公共的屏障点（barrier point），然后这些线程再<strong>同时</strong>继续执行。</p>
 <ul>
-<li><strong>核心思想</strong>:<br>与 <code>CountDownLatch</code> 不同，<code>CyclicBarrier</code> 是<strong>可重用</strong>的。当所有等待的线程都到达屏障后，屏障会被重置，可以用于下一轮的等待。它还可以在所有线程到达屏障时，选择性地执行一个 <code>Runnable</code> 任务。</li>
-<li><strong>比喻</strong>:<br>想象一个旅行团约定在某个景点门口集合。每个游客（线程）到达后，调用 <code>await()</code> 方法开始等待。直到所有游客都到达（满足设定的数量），大家才一起进入景点。游览完后，他们可以约定在下一个景点门口再次使用这个“集合”规则。</li>
+<li><strong>核心思想</strong>:<br>与 <code>CountDownLatch</code> 不同，<code>CyclicBarrier</code> 是<strong>可重用</strong>的。当所有等待的线程都到达屏障后，屏障会被重置，可以用于下一轮的等待。它还可以在所有线程到达屏障时，选择性地执行一个 <code>Runnable</code> 任务</li>
 <li><strong>核心 API</strong>:<ul>
 <li><code>CyclicBarrier(int parties)</code>: 构造方法，<code>parties</code> 指的是需要等待的线程数量。</li>
 <li><code>CyclicBarrier(int parties, Runnable barrierAction)</code>: 构造方法，增加一个 <code>barrierAction</code>，当所有线程都到达屏障时，会优先执行这个 <code>Runnable</code> 任务。</li>
@@ -11107,8 +11172,6 @@
 <ul>
 <li><p><strong>核心思想</strong>:<br><code>Semaphore</code> 内部维护了一组“许可”（permits）。线程可以通过 <code>acquire()</code> 方法获取一个许可，如果许可已经用完，线程将被阻塞。当线程使用完资源后，必须通过 <code>release()</code> 方法归还许可。</p>
 </li>
-<li><p><strong>比喻</strong>:<br><code>Semaphore</code> 就像一个停车场。停车场有固定数量的车位（permits）。车辆（线程）要进入时，需要从入口拿到一个停车许可 (<code>acquire()</code>)。如果车位已满，车辆就得在入口外排队等待。有车离开时，会归还许可 (<code>release()</code>)，等待的车辆才能进入。</p>
-</li>
 <li><p><strong>核心 API</strong>:</p>
 <ul>
 <li><code>Semaphore(int permits)</code>: 构造方法，设置许可的数量。</li>
@@ -11155,15 +11218,55 @@
 <li><strong>提供更多功能</strong>：支持定时执行、周期性执行、单线程执行、并发数控制等。</li>
 </ul>
 <hr>
-<h4 id="4-4-2-线程池的核心体系-Executor-框架"><a href="#4-4-2-线程池的核心体系-Executor-框架" class="headerlink" title="4.4.2 线程池的核心体系 - Executor 框架"></a>4.4.2 线程池的核心体系 - <code>Executor</code> 框架</h4><p>JUC 中的线程池实现是围绕 <code>Executor</code> 框架展开的。</p>
+<h4 id="4-4-2-线程池的核心体系-Executor-框架"><a href="#4-4-2-线程池的核心体系-Executor-框架" class="headerlink" title="4.4.2 线程池的核心体系 - Executor 框架"></a>4.4.2 线程池的核心体系 - <code>Executor</code> 框架</h4><pre><code class="highlight mermaid">graph
+    A[Executor] --&gt; B[ExecutorService]
+    B --&gt; C[AbstractExecutorService]
+    C --&gt; D[ThreadPoolExecutor]
+    B --&gt; E[ScheduledExecutorService]
+    E --&gt; F[ScheduledThreadPoolExecutor]</code></pre>
+
+<p><strong>第一层：顶层接口 (定义标准)</strong></p>
 <ul>
-<li><strong><code>Executor</code></strong>: 顶级接口，只定义了一个 <code>execute(Runnable command)</code> 方法，用于提交任务。它将任务提交与任务执行解耦。</li>
-<li><strong><code>ExecutorService</code></strong>: <code>Executor</code> 的子接口，增加了对线程池生命周期的管理，如 <code>shutdown()</code>, <code>shutdownNow()</code>, <code>isTerminated()</code> 等，并且可以通过 <code>submit()</code> 方法提交带返回值的 <code>Callable</code> 任务。</li>
-<li><strong><code>AbstractExecutorService</code></strong>: <code>ExecutorService</code> 的抽象实现类，实现了 <code>submit()</code> 等方法。</li>
-<li><strong><code>ThreadPoolExecutor</code></strong>: <strong>线程池的核心实现类</strong>。绝大多数我们使用的线程池都是该类的实例。</li>
-<li><strong><code>ScheduledExecutorService</code></strong>: <code>ExecutorService</code> 的子接口，支持定时及周期性任务执行。</li>
-<li><strong><code>ScheduledThreadPoolExecutor</code></strong>: <code>ScheduledExecutorService</code> 的实现类。</li>
-<li><strong><code>Executors</code></strong>: <strong>工具类</strong>，提供了快速创建常见配置线程池的静态工厂方法（如 <code>newFixedThreadPool</code>, <code>newSingleThreadExecutor</code> 等）。</li>
+<li><strong><code>Executor</code></strong><ul>
+<li><strong>定位</strong>：最顶层的接口，甚至有点“简陋”。</li>
+<li><strong>功能</strong>：只定义了一个方法 <code>void execute(Runnable command)</code>。</li>
+<li><strong>意义</strong>：它只关注**“执行”**，不关注任务怎么运行（同步还是异步）、不关注线程怎么调度，实现了提交与执行的解耦。</li>
+</ul>
+</li>
+</ul>
+<p><strong>第二层：增强接口 (生命周期管理)</strong></p>
+<ul>
+<li><strong><code>ExecutorService</code></strong><ul>
+<li><strong>定位</strong>：<strong>真正被广泛使用的接口</strong>。</li>
+<li><strong>功能</strong>：在 <code>Executor</code> 的基础上，扩展了两个核心能力：<ol>
+<li><strong>生命周期管理</strong>：提供了 <code>shutdown()</code> (平滑关闭), <code>shutdownNow()</code> (暴力关闭), <code>isTerminated()</code> 等方法。</li>
+<li><strong>异步返回值</strong>：提供了 <code>submit()</code> 方法，支持 <code>Callable</code>，并返回 <code>Future</code> 对象用于获取结果。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>第三层：核心实现 (落地干活)</strong></p>
+<ul>
+<li><strong><code>ThreadPoolExecutor</code> (重点)</strong><ul>
+<li><strong>定位</strong>：<strong>线程池的核心实现类</strong>，也是面试和开发中的绝对主角。</li>
+<li><strong>功能</strong>：实现了复杂的线程池逻辑（核心线程、最大线程、队列、拒绝策略等）。</li>
+</ul>
+</li>
+<li><strong><code>ScheduledThreadPoolExecutor</code></strong><ul>
+<li><strong>定位</strong>：定时任务线程池。</li>
+<li><strong>功能</strong>：继承自 <code>ThreadPoolExecutor</code>，实现了 <code>ScheduledExecutorService</code> 接口，用于替代古老的 <code>Timer</code> 类，支持延迟执行和周期性执行。</li>
+</ul>
+</li>
+</ul>
+<p><strong>第四层：辅助工具 (语法糖)</strong></p>
+<ul>
+<li><strong><code>Executors</code></strong><ul>
+<li><strong>定位</strong>：<strong>工具工厂类</strong>（类似于 <code>Collections</code> 之于集合）。</li>
+<li><strong>功能</strong>：提供了 <code>newFixedThreadPool</code>、<code>newCachedThreadPool</code> 等静态方法快捷创建线程池。</li>
+<li><strong>注意</strong>：<strong>生产环境中通常禁止使用此类</strong>，因为它隐藏了复杂的参数配置，容易导致 OOM（内存溢出）。</li>
+</ul>
+</li>
 </ul>
 <hr>
 <h4 id="4-4-3-ThreadPoolExecutor-的核心参数"><a href="#4-4-3-ThreadPoolExecutor-的核心参数" class="headerlink" title="4.4.3 ThreadPoolExecutor 的核心参数"></a>4.4.3 <code>ThreadPoolExecutor</code> 的核心参数</h4><p><code>ThreadPoolExecutor</code> 是最核心的实现类，理解它的构造函数参数至关重要。</p>
@@ -11277,12 +11380,14 @@
 </ul>
 <hr>
 <h3 id="4-5-ThreadLocal"><a href="#4-5-ThreadLocal" class="headerlink" title="4.5 ThreadLocal"></a>4.5 ThreadLocal</h3><h4 id="4-5-1-概述"><a href="#4-5-1-概述" class="headerlink" title="4.5.1. 概述"></a>4.5.1. 概述</h4><p><code>ThreadLocal</code>，直译为“线程本地变量”，它提供了一种创建<strong>线程私有变量</strong>的机制。对于一个 <code>ThreadLocal</code> 变量，每个使用该变量的线程都会拥有一个独立的、私有的副本。一个线程无法访问或修改其他线程的 <code>ThreadLocal</code> 变量副本。</p>
-<p><strong>核心思想</strong>：<br><code>ThreadLocal</code> 并非用于解决多线程共享变量的并发问题，恰恰相反，它通过“<strong>空间换时间</strong>”的方式，为每个线程都提供一份变量的副本，从而避免了多线程之间的竞争和同步开销。它是一种<strong>线程隔离</strong>的解决方案。</p>
+<p><strong>核心思想</strong>：</p>
+<p><code>ThreadLocal</code> 并非用于解决多线程共享变量的并发问题，恰恰相反，它通过“<strong>空间换时间</strong>”的方式，为每个线程都提供一份变量的副本，从而避免了多线程之间的竞争和同步开销。它是一种<strong>线程隔离</strong>的解决方案。</p>
 <p><strong>与 <code>synchronized</code> 的对比</strong>：</p>
 <ul>
 <li><code>synchronized</code>：通过加锁来保证在同一时间只有一个线程能访问共享变量，是一种“<strong>时间换空间</strong>”的策略，多个线程排队访问同一个变量。</li>
 <li><code>ThreadLocal</code>：为每个线程创建独立的变量副本，线程之间互不干扰，是一种“<strong>空间换时间</strong>”的策略，多个线程同时访问各自的变量。</li>
 </ul>
+<hr>
 <h4 id="4-5-2-核心API"><a href="#4-5-2-核心API" class="headerlink" title="4.5.2 核心API"></a>4.5.2 核心API</h4><p><code>ThreadLocal</code> 的使用非常简单，主要有以下几个方法：</p>
 <ul>
 <li><code>void set(T value)</code>: 为当前线程设置一个线程本地变量的值。</li>
@@ -11328,8 +11433,10 @@
 </ol>
 <p><strong>总结关系</strong>：每个 <code>Thread</code> 持有一个 <code>ThreadLocalMap</code>，这个 Map 的 Key 是 <code>ThreadLocal</code> 实例，Value 是线程私有的变量副本。<code>ThreadLocal</code> 本身不存储任何数据，它只是一个“钥匙”，用来从当前线程的 Map 中存取数据。</p>
 <hr>
-<h4 id="4-5-4-内存泄漏问题"><a href="#4-5-4-内存泄漏问题" class="headerlink" title="4.5.4 内存泄漏问题"></a>4.5.4 内存泄漏问题</h4><p><strong>什么是内存泄漏？</strong><br>一个对象已经不再被使用，但由于存在其他对象的强引用，导致垃圾回收器（GC）无法回收它，这个对象所占用的内存就泄漏了。</p>
-<p><strong>ThreadLocal 为什么会内存泄漏？</strong><br>前面提到，<code>ThreadLocalMap</code> 的 <strong>key</strong> 是对 <code>ThreadLocal</code> 对象的<strong>弱引用</strong>。</p>
+<h4 id="4-5-4-内存泄漏问题"><a href="#4-5-4-内存泄漏问题" class="headerlink" title="4.5.4 内存泄漏问题"></a>4.5.4 内存泄漏问题</h4><p><strong>什么是内存泄漏？</strong></p>
+<p>一个对象已经不再被使用，但由于存在其他对象的强引用，导致垃圾回收器（GC）无法回收它，这个对象所占用的内存就泄漏了。</p>
+<p><strong>ThreadLocal 为什么会内存泄漏？</strong></p>
+<p>前面提到，<code>ThreadLocalMap</code> 的 <strong>key</strong> 是对 <code>ThreadLocal</code> 对象的<strong>弱引用</strong>。</p>
 <ul>
 <li><strong>弱引用 (WeakReference)</strong>: 当一个对象只被弱引用指向时，下一次垃圾回收发生时，无论内存是否充足，这个对象都会被回收。</li>
 </ul>
@@ -11340,7 +11447,8 @@
 <li><strong>问题来了</strong>：虽然 key 被回收了，但 Entry 中的 <strong>value</strong> 仍然存在一条从 <code>Thread -&gt; ThreadLocalMap -&gt; Entry -&gt; value</code> 的<strong>强引用链</strong>。</li>
 <li>只要这个线程不消亡，这个强引用链就一直存在，导致 <strong>value 对象无法被回收</strong>，从而造成内存泄漏。</li>
 </ol>
-<p><strong>为什么 Key 要设计成弱引用？</strong><br>这是一个权衡。如果 key 是强引用，那么即使 <code>threadLocal</code> 对象在外部被置为 null，<code>ThreadLocalMap</code> 依然持有它的强引用，<code>ThreadLocal</code> 对象本身也无法被回收。相比之下，弱引用至少能保证 <code>ThreadLocal</code> 对象本身被回收。<code>ThreadLocalMap</code> 在其 <code>set</code>, <code>get</code>, <code>remove</code> 方法中，会顺便检查并清理那些 key 为 null 的 Entry，这是一种<strong>补偿机制</strong>。</p>
+<p><strong>为什么 Key 要设计成弱引用？</strong></p>
+<p>这是一个权衡。如果 key 是强引用，那么即使 <code>threadLocal</code> 对象在外部被置为 null，<code>ThreadLocalMap</code> 依然持有它的强引用，<code>ThreadLocal</code> 对象本身也无法被回收。相比之下，弱引用至少能保证 <code>ThreadLocal</code> 对象本身被回收。<code>ThreadLocalMap</code> 在其 <code>set</code>, <code>get</code>, <code>remove</code> 方法中，会顺便检查并清理那些 key 为 null 的 Entry，这是一种<strong>补偿机制</strong>。</p>
 <p><strong>如何避免内存泄漏？</strong><br>最根本、最有效的解决方法是：<strong>在每次使用完 <code>ThreadLocal</code> 后，手动调用 <code>remove()</code> 方法</strong>。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ThreadLocal&lt;Object&gt; tl = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    tl.set(<span class="keyword">new</span> <span class="title class_">MyObject</span>());</span><br><span class="line">    <span class="comment">// ... use tl.get() ...</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    tl.remove(); <span class="comment">// 保证在任何情况下都能清理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -11348,7 +11456,8 @@
 <hr>
 <h4 id="4-5-6-InheritableThreadLocal"><a href="#4-5-6-InheritableThreadLocal" class="headerlink" title="4.5.6 InheritableThreadLocal"></a>4.5.6 InheritableThreadLocal</h4><p><code>ThreadLocal</code> 的一个问题是，父线程中设置的值，在子线程中无法获取。<code>InheritableThreadLocal</code> 类解决了这个问题。</p>
 <p>当父线程创建一个子线程时，<code>InheritableThreadLocal</code> 会将父线程中存储的本地变量值复制一份给子线程。注意，这只是在<strong>创建子线程时</strong>的一次性复制，之后父子线程的变量副本就是独立的了。</p>
-<p><strong>应用场景</strong>：<br>在一些需要将上下文信息（如用户身份、请求ID、事务信息等）从父线程传递到子线程的场景中非常有用。例如，在使用线程池异步处理任务时，希望子线程也能获取到主线程的上下文信息。</p>
+<p><strong>应用场景</strong>：</p>
+<p>在一些需要将上下文信息（如用户身份、请求ID、事务信息等）从父线程传递到子线程的场景中非常有用。例如，在使用线程池异步处理任务时，希望子线程也能获取到主线程的上下文信息。</p>
 <hr>
 <h2 id="5-实践与总结"><a href="#5-实践与总结" class="headerlink" title="5. 实践与总结"></a>5. 实践与总结</h2><h3 id="5-1-死锁"><a href="#5-1-死锁" class="headerlink" title="5.1 死锁"></a>5.1 死锁</h3><h4 id="5-1-1-概述"><a href="#5-1-1-概述" class="headerlink" title="5.1.1 概述"></a>5.1.1 概述</h4><p><strong>死锁</strong> 是指在并发环境中，两个或多个线程（或进程）在执行过程中，因争夺资源而造成的一种互相等待的现象，若无外力干预，它们都将无法继续向前推进。</p>
 <p>一个经典的死锁场景可以这样描述：</p>
