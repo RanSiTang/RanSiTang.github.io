@@ -17731,7 +17731,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-17 16:08:55" itemprop="dateModified" datetime="2025-10-17T16:08:55+08:00">2025-10-17</time>
+      <time title="修改时间：2025-12-09 17:37:21" itemprop="dateModified" datetime="2025-12-09T17:37:21+08:00">2025-12-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -17793,7 +17793,7 @@
 </ol>
 <hr>
 <hr>
-<h1 id="二、MyBatis"><a href="#二、MyBatis" class="headerlink" title="二、MyBatis"></a>二、MyBatis</h1><h2 id="1-MyBatis简介与核心思想"><a href="#1-MyBatis简介与核心思想" class="headerlink" title="1. MyBatis简介与核心思想"></a>1. MyBatis简介与核心思想</h2><h3 id="1-1-定义与定位"><a href="#1-1-定义与定位" class="headerlink" title="1.1 定义与定位"></a>1.1 定义与定位</h3><p><strong>MyBatis</strong> 是一个优秀的 <strong>持久层框架</strong>，它支持自定义 SQL、存储过程以及高级映射。与传统的全自动 ORM 框架（如 Hibernate）不同，MyBatis 并非完全将开发者与 SQL 隔离开，而是让开发者能够完全掌控 SQL 的编写。因此，它通常被定位为 <strong>“半自动 ORM” (Semi-ORM)</strong> 或 <strong>“SQL 映射器” (SQL Mapper)</strong>。</p>
+<h1 id="二、MyBatis"><a href="#二、MyBatis" class="headerlink" title="二、MyBatis"></a>二、MyBatis</h1><h2 id="1-MyBatis简介与核心思想"><a href="#1-MyBatis简介与核心思想" class="headerlink" title="1. MyBatis简介与核心思想"></a>1. MyBatis简介与核心思想</h2><h3 id="1-1-定义与定位"><a href="#1-1-定义与定位" class="headerlink" title="1.1 定义与定位"></a>1.1 定义与定位</h3><p><strong>MyBatis</strong> 是一个优秀的 <strong>持久层框架</strong>，它支持自定义 SQL、存储过程以及高级映射。与传统的全自动 ORM 框架不同，MyBatis 并非完全将开发者与 SQL 隔离开，而是让开发者能够完全掌控 SQL 的编写。因此，它通常被定位为 <strong>“半自动 ORM” (Semi-ORM)</strong> 或 <strong>“SQL 映射器” (SQL Mapper)</strong>。</p>
 <p>它的核心任务是：将 <strong>Java 对象 (POJO)</strong> 与 <strong>SQL 语句</strong> 进行映射，从而将繁琐的 JDBC 操作（如创建连接、设置参数、处理结果集、关闭资源等）自动化，让开发者可以更专注于 SQL 本身。</p>
 <hr>
 <h3 id="1-2-核心思想"><a href="#1-2-核心思想" class="headerlink" title="1.2 核心思想"></a>1.2 核心思想</h3><h4 id="1-2-1-SQL-与代码分离，专注业务逻辑"><a href="#1-2-1-SQL-与代码分离，专注业务逻辑" class="headerlink" title="1.2.1 SQL 与代码分离，专注业务逻辑"></a>1.2.1 SQL 与代码分离，专注业务逻辑</h4><p>这是 MyBatis 最核心的思想。它主张将 SQL 语句从 Java 代码中抽离出来，统一配置在 XML 映射文件中（或使用注解）。</p>
@@ -17821,99 +17821,142 @@
 <li><strong>异常处理</strong>：将 JDBC 的 <code>SQLException</code> 转换为更易于处理的非检查性异常。</li>
 </ul>
 <hr>
-<h2 id="2-核心组件与工作流程"><a href="#2-核心组件与工作流程" class="headerlink" title="2. 核心组件与工作流程"></a>2. 核心组件与工作流程</h2><h3 id="2-1-核心组件"><a href="#2-1-核心组件" class="headerlink" title="2.1 核心组件"></a>2.1 核心组件</h3><p>MyBatis 的架构由几个核心组件构成，每个组件都扮演着不可或缺的角色。</p>
-<ol>
+<h2 id="2-核心组件与工作流程"><a href="#2-核心组件与工作流程" class="headerlink" title="2. 核心组件与工作流程"></a>2. 核心组件与工作流程</h2><h3 id="2-1-核心组件"><a href="#2-1-核心组件" class="headerlink" title="2.1 核心组件"></a>2.1 核心组件</h3><ol>
 <li><strong>Configuration (配置)</strong><ul>
-<li><strong>描述</strong>：MyBatis 的所有配置信息都保存在一个 <code>Configuration</code> 对象中。它包含了从数据源、事务管理器到类型别名、映射器（Mapper）等所有设置。</li>
-<li><strong>来源</strong>：通常由主配置文件 <code>mybatis-config.xml</code> 和各个映射文件 <code>*.xml</code> 解析而来。</li>
+<li><strong>描述</strong>：<code>Configuration</code> 是 MyBatis 的“大脑”和全局单例容器。初始化时，MyBatis 会读取 <code>mybatis-config.xml</code> 和所有的 Mapper XML（或注解），将这些信息全部解析并存储在该对象中。</li>
+<li><strong>包含内容</strong>：<ul>
+<li>数据源（Environment）、事务管理器。</li>
+<li>所有的 <code>MappedStatement</code>（SQL 语句的内存形式）。</li>
+<li>类型别名（TypeAlias）、类型处理器（TypeHandler）。</li>
+<li>插件列表（Interceptor Chain），这是实现 MyBatis 拦截器的基础。</li>
+</ul>
+</li>
+<li><strong>生命周期</strong>：与应用生命周期一致。</li>
 </ul>
 </li>
 <li><strong>SqlSessionFactoryBuilder (构建器)</strong><ul>
-<li><strong>描述</strong>：这是一个“一次性”的类，它的唯一作用就是根据配置信息（通常是一个 XML 配置文件的输入流）来构建一个 <code>SqlSessionFactory</code>。一旦创建了 <code>SqlSessionFactory</code>，这个构建器就不再需要了。</li>
-<li><strong>生命周期</strong>：方法作用域（用完即可丢弃）。</li>
+<li><strong>描述</strong>：基于建造者模式（Builder Pattern）。它的核心任务是解析配置资源（XML 或 Java Config），构建出复杂的 <code>Configuration</code> 对象，最终生产出 <code>SqlSessionFactory</code>。</li>
+<li><strong>特点</strong>：一旦工厂生产出来，Builder 就失去了作用。</li>
+<li><strong>生命周期</strong>：<strong>方法作用域</strong>（Method Scope）。用完即丢，不应长期持有。</li>
 </ul>
 </li>
 <li><strong>SqlSessionFactory (会话工厂)</strong><ul>
-<li><strong>描述</strong>：这是 MyBatis 的核心入口，类似于一个数据库连接池的工厂。它的主要职责是创建 <code>SqlSession</code> 实例。由于 <code>SqlSessionFactory</code> 的创建过程需要解析 XML 并进行初始化，这是一个昂贵的操作，因此它在应用程序的整个生命周期中通常只存在一个实例（单例模式）。</li>
-<li><strong>生命周期</strong>：应用作用域（Application Scope）。</li>
+<li><strong>描述</strong>：MyBatis 的核心入口，采用工厂模式。默认实现为 <code>DefaultSqlSessionFactory</code>。</li>
+<li><strong>职责</strong>：<ul>
+<li>生产 <code>SqlSession</code> 对象。</li>
+<li>它可以根据环境配置（Environment）创建不同配置的 <code>SqlSession</code>（例如是否自动提交事务）。</li>
+</ul>
+</li>
+<li><strong>生命周期</strong>：<strong>应用作用域</strong>（Application Scope）。它是线程安全的，通常采用单例模式在应用中维护一个全局实例。</li>
 </ul>
 </li>
 <li><strong>SqlSession (会话)</strong><ul>
-<li><strong>描述</strong>：这是应用程序与数据库进行交互的主要接口。你可以通过 <code>SqlSession</code> 实例来执行 SQL 命令、获取 Mapper 代理对象以及管理事务。它封装了底层的 JDBC 连接。</li>
-<li><strong>重要特性</strong>：<strong><code>SqlSession</code> 是线程不安全的</strong>，因此绝不能在多个线程之间共享。最佳实践是将其生命周期限制在单个请求或方法作用域内，用完后必须关闭（<code>try-with-resources</code> 是一个很好的选择）。</li>
-<li><strong>生命周期</strong>：请求或方法作用域。</li>
+<li><strong>描述</strong>：应用程序与持久层交互的顶层 API 接口。默认实现为 <code>DefaultSqlSession</code>。</li>
+<li><strong>两大功能</strong>：<ol>
+<li><strong>API 调用</strong>：提供 <code>selectOne</code>, <code>selectList</code>, <code>insert</code>, <code>commit</code>, <code>close</code> 等方法。</li>
+<li><strong>获取 Mapper</strong>：通过 <code>getMapper(Class&lt;T&gt; type)</code> 获取接口的动态代理对象。</li>
+</ol>
+</li>
+<li><strong>关键注意</strong>：<strong>非线程安全</strong>。每个线程都应该有自己的 <code>SqlSession</code> 实例。绝不能将其作为类的静态字段或实例字段（除非是 Web 框架托管的线程安全代理）。</li>
+<li><strong>生命周期</strong>：<strong>请求&#x2F;方法作用域</strong>。必须遵循“打开 -&gt; 使用 -&gt; 关闭”的模式，通常配合 <code>try-with-resources</code> 使用。</li>
 </ul>
 </li>
 <li><strong>Executor (执行器)</strong><ul>
-<li><strong>描述</strong>：<code>SqlSession</code> 内部的真正执行者。所有 SQL 的执行（查询、更新、存储过程调用）都是由 <code>Executor</code> 完成的。它负责处理参数映射、SQL 动态解析、执行 SQL，并与缓存机制（一级缓存）紧密交互。</li>
-<li><strong>类型</strong>：MyBatis 提供了几种执行器，如 <code>SimpleExecutor</code>（默认）、<code>ReuseExecutor</code>（重用 <code>PreparedStatement</code>）、<code>BatchExecutor</code>（批量执行）。</li>
+<li><strong>描述</strong>：<code>SqlSession</code> 的幕后推手，真正的 SQL 执行指挥官。<code>SqlSession</code> 只是门面，<code>Executor</code> 负责核心调度。</li>
+<li><strong>职责</strong>：<ul>
+<li><strong>缓存管理</strong>：负责查询一级缓存（Session 级别）和二级缓存（Global 级别）。如果缓存命中，直接返回；否则查询数据库。</li>
+<li><strong>事务管理</strong>：提交、回滚事务。</li>
+<li><strong>调度 Handler</strong>：调用 <code>StatementHandler</code> 准备参数和执行 SQL。</li>
+</ul>
+</li>
+<li><strong>类型</strong>：<ul>
+<li><code>SimpleExecutor</code>（默认）：每执行一次 SQL 就创建一个新的 <code>PreparedStatement</code>。</li>
+<li><code>ReuseExecutor</code>：缓存并重用 <code>PreparedStatement</code>。</li>
+<li><code>BatchExecutor</code>：用于批量更新操作，将多条 SQL 攒在一起发送。</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><strong>Mapped Statement (映射语句)</strong><ul>
-<li><strong>描述</strong>：一个封装了单条 SQL 语句所有信息的对象，包括 SQL 文本、输入参数类型、输出结果类型等。它是在解析 XML 映射文件或注解时创建的。<code>Configuration</code> 对象中会有一个 Map 存储所有 <code>MappedStatement</code>，其键（key）通常是 <code>namespace + id</code>（例如 <code>com.example.UserMapper.selectById</code>）。</li>
+<li><strong>描述</strong>：XML 中 <code>&lt;select&gt;</code>, <code>&lt;insert&gt;</code>, <code>&lt;update&gt;</code>, <code>&lt;delete&gt;</code> 标签的内存封装形式。</li>
+<li><strong>结构</strong>：包含 SQL 源码、参数类型（ParameterMap&#x2F;Type）、结果映射（ResultMap&#x2F;Type）、SQL 命令类型（UNKNOWN, INSERT, UPDATE, DELETE, SELECT）等。</li>
+<li><strong>查找方式</strong>：在 <code>Configuration</code> 中通过 <code>Map&lt;String, MappedStatement&gt;</code> 存储，Key 为 <code>namespace + id</code>。</li>
 </ul>
 </li>
 <li><strong>Handler (处理器)</strong><ul>
 <li><strong>描述</strong>：MyBatis 底层使用一系列处理器来完成具体的 JDBC 操作。</li>
-<li><strong><code>ParameterHandler</code></strong>：负责将用户传入的参数设置到 <code>PreparedStatement</code> 中。</li>
-<li><strong><code>ResultSetHandler</code></strong>：负责将 <code>ResultSet</code> 的查询结果集转换成 Java 对象（POJO）。</li>
-<li><strong><code>StatementHandler</code></strong>：负责封装和管理底层的 <code>java.sql.Statement</code> 操作，包括创建 <code>Statement</code>、设置参数和执行 SQL。</li>
+<li><strong>StatementHandler (语句处理器)</strong><ul>
+<li><strong>地位</strong>：JDBC 层的直接操作者。</li>
+<li><strong>职责</strong>：创建 <code>java.sql.Statement</code> 对象，使用 <code>ParameterHandler</code> 格式化参数，调用 JDBC 执行 SQL，最后使用 <code>ResultSetHandler</code> 处理返回值。</li>
+<li><em>注：MyBatis 插件（Interceptor）通常拦截此接口的方法来修改 SQL 或行为。</em></li>
+</ul>
+</li>
+<li><strong>ParameterHandler (参数处理器)</strong><ul>
+<li><strong>职责</strong>：负责将用户传入的 Java 对象参数，转换为 JDBC <code>PreparedStatement</code> 所需的参数（即处理 SQL 中的 <code>?</code> 占位符）。</li>
+</ul>
+</li>
+<li><strong>ResultSetHandler (结果集处理器)</strong><ul>
+<li><strong>职责</strong>：最复杂的部分之一。负责将 JDBC 返回的 <code>ResultSet</code> 结果集，依据 ResultMap 的配置，映射转换为 Java 对象（POJO）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>TypeHandler（类型处理器）</strong><ul>
+<li><strong>描述</strong>：MyBatis 中处理 Java 类型与 JDBC 类型之间转换的桥梁。</li>
+<li><strong>作用</strong>：<ul>
+<li>在 <code>ParameterHandler</code> 设置参数时，将 Java 类型转换为 JDBC 类型。</li>
+<li>在 <code>ResultSetHandler</code> 获取结果时，将 JDBC 类型转换为 Java 类型。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
 <hr>
-<h3 id="2-2-工作流程"><a href="#2-2-工作流程" class="headerlink" title="2.2 工作流程"></a>2.2 工作流程</h3><p>下面以一次典型的查询调用（<code>userMapper.selectById(1)</code>）为例，串联起上述核心组件的工作流程。</p>
-<p><strong>整体流程示例:</strong><code>应用程序 -&gt; SqlSession -&gt; Executor -&gt; StatementHandler -&gt; 数据库</code></p>
-<p><strong>详细步骤:</strong></p>
-<ol>
-<li><strong>加载配置与初始化 (应用启动时)</strong><ul>
-<li>应用程序通过 <code>SqlSessionFactoryBuilder</code> 读取 <code>mybatis-config.xml</code> 和所有映射器 XML 文件。</li>
-<li><code>Builder</code> 解析这些文件，创建一个包含所有配置信息的 <code>Configuration</code> 对象。</li>
-<li>最后，<code>Builder</code> 使用这个 <code>Configuration</code> 对象创建一个唯一的 <code>SqlSessionFactory</code> 实例。</li>
+<h3 id="2-2-工作流程"><a href="#2-2-工作流程" class="headerlink" title="2.2 工作流程"></a>2.2 工作流程</h3><p>整个过程可以分为<strong>初始化阶段</strong>和<strong>运行阶段</strong>。</p>
+<h4 id="2-2-1-初始化阶段"><a href="#2-2-1-初始化阶段" class="headerlink" title="2.2.1 初始化阶段"></a>2.2.1 初始化阶段</h4><ol>
+<li><strong>加载配置</strong>：系统读取 <code>mybatis-config.xml</code> 和 Mapper XML 文件。</li>
+<li><strong>解析与注册</strong>：<code>SqlSessionFactoryBuilder</code> 调用 XML 解析器，将配置信息解析为 <code>Configuration</code> 对象。此时，所有的 SQL 语句都被解析为 <code>MappedStatement</code> 并注册到 Map 中。</li>
+<li><strong>创建工厂</strong>：返回包含完整配置的 <code>SqlSessionFactory</code> 实例。</li>
+</ol>
+<h4 id="2-2-2-代理阶段"><a href="#2-2-2-代理阶段" class="headerlink" title="2.2.2 代理阶段"></a>2.2.2 代理阶段</h4><ol>
+<li><strong>获取会话</strong>：调用 <code>factory.openSession()</code>，创建 <code>SqlSession</code>，同时会创建一个 <code>Executor</code> 对象注入其中。</li>
+<li><strong>获取 Mapper</strong>：调用 <code>sqlSession.getMapper(UserMapper.class)</code>。</li>
+<li><strong>动态代理</strong>：MyBatis 使用 JDK 动态代理生成 Mapper 接口的代理对象（<code>MapperProxy</code>）。当调用接口方法时，会被拦截并转交给 <code>MapperProxy.invoke()</code>。</li>
+</ol>
+<h4 id="2-2-3-数据处理阶段"><a href="#2-2-3-数据处理阶段" class="headerlink" title="2.2.3 数据处理阶段"></a>2.2.3 数据处理阶段</h4><ol>
+<li><strong>定位 SQL</strong>：代理对象根据方法名和接口全限定名，在 <code>Configuration</code> 中找到对应的 <code>MappedStatement</code>。</li>
+<li><strong>执行器调度 (Executor)</strong>：<ul>
+<li>检查<strong>二级缓存</strong>（如果开启）。</li>
+<li>检查<strong>一级缓存</strong>。</li>
+<li>如果缓存未命中，请求数据库。</li>
 </ul>
 </li>
-<li><strong>创建 SqlSession (请求开始时)</strong><ul>
-<li>当需要进行数据库操作时，应用程序代码从 <code>SqlSessionFactory</code> 中获取一个 <code>SqlSession</code> 实例。</li>
-<li><code>SqlSessionFactory</code> 在创建 <code>SqlSession</code> 时，会根据配置为其创建一个 <code>Executor</code>（执行器）。</li>
+<li><strong>语句处理 (StatementHandler)</strong>：<ul>
+<li><code>Executor</code> 创建 <code>StatementHandler</code>。</li>
+<li>此时插件链（Plugins）介入，可以修改 SQL。</li>
+<li>获取 JDBC 连接 (<code>Connection</code>)。</li>
+<li>创建 <code>java.sql.Statement</code> 或 <code>PreparedStatement</code>。</li>
 </ul>
 </li>
-<li><strong>获取 Mapper 代理对象</strong><ul>
-<li>应用程序调用 <code>sqlSession.getMapper(UserMapper.class)</code>。</li>
-<li>MyBatis 会使用 JDK 动态代理为 <code>UserMapper</code> 接口生成一个代理实现类。这个代理对象将所有接口方法的调用都转发给 <code>SqlSession</code> 内部的相应方法。</li>
+<li><strong>参数设置 (ParameterHandler)</strong>：<ul>
+<li><code>StatementHandler</code> 调用 <code>ParameterHandler</code>。</li>
+<li><code>ParameterHandler</code> 根据类型找到对应的 <code>TypeHandler</code>，将 Java 参数填入 SQL 占位符。</li>
 </ul>
 </li>
-<li><strong>执行 Mapper 方法</strong><ul>
-<li>当代码调用 <code>userMapper.selectById(1)</code> 时，实际上是调用了代理对象的方法。</li>
-<li>代理对象会通过 <code>SqlSession</code> 找到并执行对应的 SQL。具体来说，它会调用 <code>sqlSession.selectOne(&quot;com.example.UserMapper.selectById&quot;, 1)</code>。</li>
+<li><strong>SQL 执行</strong>：<ul>
+<li>通过 JDBC 驱动向数据库发送 SQL 并执行。</li>
 </ul>
 </li>
-<li><strong>Executor 执行查询</strong><ul>
-<li><code>SqlSession</code> 将请求委托给内部的 <code>Executor</code>。</li>
-<li><strong>一级缓存检查</strong>：<code>Executor</code> 首先会检查一级缓存（Session 级别的缓存）中是否存在相同的查询结果。如果命中，则直接返回缓存中的数据，不再查询数据库。</li>
-<li><strong>创建 Statement</strong>：如果缓存未命中，<code>Executor</code> 会从 <code>Configuration</code> 中获取 ID 为 <code>com.example.UserMapper.selectById</code> 的 <code>MappedStatement</code> 对象。</li>
-<li><code>Executor</code> 通过 <code>StatementHandler</code> 来准备 SQL 语句。如果 SQL 是动态的，此时会进行解析和拼接。</li>
+<li><strong>结果映射 (ResultSetHandler)</strong>：<ul>
+<li>数据库返回 <code>ResultSet</code>。</li>
+<li><code>StatementHandler</code> 调用 <code>ResultSetHandler</code>。</li>
+<li><code>ResultSetHandler</code> 遍历结果集，根据 <code>ResultMap</code> 定义的映射规则，利用 <code>TypeHandler</code> 将数据转换为 Java 对象。</li>
 </ul>
 </li>
-<li><strong>参数设置与 SQL 执行</strong><ul>
-<li><code>StatementHandler</code> 使用 <code>ParameterHandler</code> 将传入的参数（<code>id=1</code>）安全地设置到 <code>PreparedStatement</code> 的占位符上。</li>
-<li><code>StatementHandler</code> 调用 JDBC 的 <code>execute()</code> 或 <code>executeQuery()</code> 方法，向数据库发送 SQL 请求。</li>
-</ul>
-</li>
-<li><strong>结果集映射</strong><ul>
-<li>数据库返回 <code>ResultSet</code> 结果集。</li>
-<li><code>StatementHandler</code> 使用 <code>ResultSetHandler</code> 来处理这个结果集。</li>
-<li><code>ResultSetHandler</code> 根据 <code>MappedStatement</code> 中定义的 <code>&lt;resultMap&gt;</code> 或结果类型，将 <code>ResultSet</code> 中的每一行数据转换成一个 Java 对象（如 <code>User</code> 对象）。</li>
-</ul>
-</li>
-<li><strong>返回结果与缓存</strong><ul>
-<li><code>Executor</code> 接收到 <code>ResultSetHandler</code> 返回的 Java 对象列表。</li>
-<li><code>Executor</code> 将查询结果存入一级缓存中，以备后续相同的查询使用。</li>
-<li>结果最终被返回给调用者（应用程序）。</li>
-</ul>
-</li>
-<li><strong>关闭 SqlSession (请求结束时)</strong><ul>
-<li>应用程序在使用完毕后，必须调用 <code>sqlSession.close()</code>。</li>
-<li>这个操作会释放 <code>SqlSession</code> 占用的资源，最重要的是将数据库连接归还给连接池，并清空该会话的一级缓存。</li>
+<li><strong>返回与关闭</strong>：<ul>
+<li>结果对象返回给调用方。</li>
+<li>提交事务（如有必要）。</li>
+<li>关闭 <code>SqlSession</code>，释放连接回连接池。</li>
 </ul>
 </li>
 </ol>
@@ -17925,7 +17968,7 @@
 </ul>
 <hr>
 <h3 id="3-2-创建Maven项目并添加依赖"><a href="#3-2-创建Maven项目并添加依赖" class="headerlink" title="3.2 创建Maven项目并添加依赖"></a>3.2 创建Maven项目并添加依赖</h3><p>创建一个标准的 Maven 项目，并在 <code>pom.xml</code> 文件中添加 MyBatis 和 MySQL 驱动的核心依赖。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- MyBatis 核心库 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- MySQL 数据库驱动 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>8.0.28<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 日志（可选，但推荐） --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-simple<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.32<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- MyBatis 核心库 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- MySQL 数据库驱动 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>8.0.28<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <hr>
 <h3 id="3-3-准备数据库和数据表"><a href="#3-3-准备数据库和数据表" class="headerlink" title="3.3 准备数据库和数据表"></a>3.3 准备数据库和数据表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建 user 表</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> `<span class="keyword">user</span>` (</span><br><span class="line">  `id` <span class="type">INT</span>(<span class="number">11</span>) <span class="keyword">NOT NULL</span> AUTO_INCREMENT,</span><br><span class="line">  `username` <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `password` <span class="type">VARCHAR</span>(<span class="number">50</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `email` <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY KEY</span> (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 插入测试数据</span></span><br><span class="line"><span class="keyword">INSERT INTO</span> `<span class="keyword">user</span>` (`id`, `username`, `password`, `email`) </span><br><span class="line"><span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="string">&#x27;Alice&#x27;</span>, <span class="string">&#x27;password123&#x27;</span>, <span class="string">&#x27;alice@example.com&#x27;</span>);</span><br></pre></td></tr></table></figure>
@@ -18076,7 +18119,7 @@
 <li>它会自动<strong>去除</strong>标签内 SQL 语句<strong>结尾</strong>多余的逗号 <code>,</code>。</li>
 </ul>
 <p><strong>场景</strong>：动态更新用户信息，只更新传入对象中非 <code>null</code> 的字段。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;update id=&quot;updateUserSelective&quot; parameterType=&quot;com.example.model.User&quot;&gt;</span><br><span class="line">    UPDATE user</span><br><span class="line">    &lt;set&gt;</span><br><span class="line">        &lt;if test=&quot;username != null and username != &#x27;&#x27;&quot;&gt;</span><br><span class="line">            username = #&#123;username&#125;,</span><br><span class="line">        &lt;/if&gt;</span><br><span class="line">        &lt;if test=&quot;password != null and password != &#x27;&#x27;&quot;&gt;</span><br><span class="line">            password = #&#123;password&#125;,</span><br><span class="line">        &lt;/if&gt;</span><br><span class="line">        &lt;if test=&quot;email != null and email != &#x27;&#x27;&quot;&gt;</span><br><span class="line">            email = #&#123;email&#125;,</span><br><span class="line">        &lt;/if&gt;</span><br><span class="line">    &lt;/set&gt;</span><br><span class="line">    WHERE id = #&#123;id&#125;</span><br><span class="line">&lt;/update&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&lt;</span><span class="keyword">update</span> id<span class="operator">=</span>&quot;updateUserSelective&quot; parameterType<span class="operator">=</span>&quot;com.example.model.User&quot;<span class="operator">&gt;</span></span><br><span class="line">    <span class="keyword">UPDATE</span> <span class="keyword">user</span></span><br><span class="line">    <span class="operator">&lt;</span><span class="keyword">set</span><span class="operator">&gt;</span></span><br><span class="line">        <span class="operator">&lt;</span>if test<span class="operator">=</span>&quot;username != null and username != &#x27;&#x27;&quot;<span class="operator">&gt;</span></span><br><span class="line">            username <span class="operator">=</span> #&#123;username&#125;,</span><br><span class="line">        <span class="operator">&lt;</span><span class="operator">/</span>if<span class="operator">&gt;</span></span><br><span class="line">        <span class="operator">&lt;</span>if test<span class="operator">=</span>&quot;password != null and password != &#x27;&#x27;&quot;<span class="operator">&gt;</span></span><br><span class="line">            password <span class="operator">=</span> #&#123;password&#125;,</span><br><span class="line">        <span class="operator">&lt;</span><span class="operator">/</span>if<span class="operator">&gt;</span></span><br><span class="line">        <span class="operator">&lt;</span>if test<span class="operator">=</span>&quot;email != null and email != &#x27;&#x27;&quot;<span class="operator">&gt;</span></span><br><span class="line">            email <span class="operator">=</span> #&#123;email&#125;,</span><br><span class="line">        <span class="operator">&lt;</span><span class="operator">/</span>if<span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span><span class="operator">/</span><span class="keyword">set</span><span class="operator">&gt;</span></span><br><span class="line">    <span class="keyword">WHERE</span> id <span class="operator">=</span> #&#123;id&#125;</span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span><span class="keyword">update</span><span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>如果没有 <code>&lt;set&gt;</code>，当最后一个 <code>&lt;if&gt;</code> 条件满足时，SQL 语句会以一个逗号结尾，导致语法错误。<code>&lt;set&gt;</code> 完美地解决了这个问题。</p>
 <hr>
@@ -18320,7 +18363,7 @@
 <p>MyBatis-Plus 并不改变 MyBatis 的核心，它是一个<strong>无侵入</strong>的增强包。这意味着：</p>
 <ul>
 <li>依然可以像以前一样使用 MyBatis 的所有原生功能（如编写 XML、动态 SQL 等）。</li>
-<li>在此之上，MP 提供了一系列开箱即用的强大功能，让你从大量重复的、简单的 CRUD（增删改查）工作中解放出来。</li>
+<li>在此之上，MP 提供了一系列开箱即用的强大功能，从大量重复的、简单的 CRUD（增删改查）工作中解放出来。</li>
 </ul>
 <hr>
 <h3 id="1-2-核心优势"><a href="#1-2-核心优势" class="headerlink" title="1.2 核心优势"></a>1.2 核心优势</h3><h4 id="1-2-1-极简-CRUD"><a href="#1-2-1-极简-CRUD" class="headerlink" title="1.2.1 极简 CRUD"></a>1.2.1 极简 CRUD</h4><p>只需要定义一个 Mapper 接口并继承 <code>BaseMapper&lt;T&gt;</code>，即可<strong>无需编写任何 SQL 语句</strong>，自动拥有多达 30+ 种通用的增、删、改、查方法。这覆盖了 80% 以上的单表操作需求，极大地减少了样板代码。</p>
@@ -18328,7 +18371,7 @@
 <li><strong>示例</strong>：<code>insert()</code>, <code>deleteById()</code>, <code>updateById()</code>, <code>selectById()</code>, <code>selectList()</code>, <code>selectPage()</code> 等。</li>
 </ul>
 <hr>
-<h4 id="1-2-2-强大的条件构造器-Wrapper"><a href="#1-2-2-强大的条件构造器-Wrapper" class="headerlink" title="1.2.2 强大的条件构造器 (Wrapper)"></a>1.2.2 强大的条件构造器 (Wrapper)</h4><p>MP 提供了一套功能强大且易于使用的条件构造器 (<code>Wrapper</code>)，允许9通过<strong>链式调用的 Java 代码</strong>来安全、动态地构建复杂的查询条件。这在绝大多数场景下可以完美替代手写 XML 动态 SQL。</p>
+<h4 id="1-2-2-强大的条件构造器-Wrapper"><a href="#1-2-2-强大的条件构造器-Wrapper" class="headerlink" title="1.2.2 强大的条件构造器 (Wrapper)"></a>1.2.2 强大的条件构造器 (Wrapper)</h4><p>MP 提供了一套功能强大且易于使用的条件构造器 (<code>Wrapper</code>)，允许通过<strong>链式调用的 Java 代码</strong>来安全、动态地构建复杂的查询条件。这在绝大多数场景下可以完美替代手写 XML 动态 SQL。</p>
 <p><strong>优点</strong>：</p>
 <ul>
 <li><strong>类型安全</strong>：推荐使用 <code>LambdaQueryWrapper</code>，它通过方法引用 (<code>User::getUsername</code>) 来指定字段，避免了手写字符串 “username” 可能带来的拼写错误，并能在编译期进行检查。</li>
@@ -18339,7 +18382,7 @@
 <h4 id="1-2-3-内置实用插件，开箱即用"><a href="#1-2-3-内置实用插件，开箱即用" class="headerlink" title="1.2.3 内置实用插件，开箱即用"></a>1.2.3 内置实用插件，开箱即用</h4><p>MP 提供了许多在企业级开发中高频使用的功能插件，只需简单配置即可启用，无需自己造轮子。</p>
 <ul>
 <li><strong>分页插件 (<code>PaginationInnerInterceptor</code>)</strong>: 实现了真正的物理分页，自动识别数据库类型并拼接分页 SQL，使用极其简单。</li>
-<li><strong>乐观锁插件 (<code>OptimisticLockerInnerInterceptor</code>)</strong>: 优雅地实现了乐观锁机9制，有效防止并发场景下的数据更新冲突。</li>
+<li><strong>乐观锁插件 (<code>OptimisticLockerInnerInterceptor</code>)</strong>: 优雅地实现了乐观锁机制，有效防止并发场景下的数据更新冲突。</li>
 <li><strong>防全表更新与删除插件 (<code>BlockAttackInnerInterceptor</code>)</strong>: 防止开发人员误操作，执行没有 <code>WHERE</code> 条件的 <code>UPDATE</code> 或 <code>DELETE</code> 语句，保障数据安全。</li>
 </ul>
 <hr>
@@ -18369,7 +18412,7 @@
 <hr>
 <h3 id="2-3-配置数据库连接"><a href="#2-3-配置数据库连接" class="headerlink" title="2.3 配置数据库连接"></a>2.3 配置数据库连接</h3><p>在 <code>src/main/resources/application.yml</code> (或 <code>application.properties</code>) 文件中，配置数据库的数据源信息。</p>
 <p><strong><code>application.yml</code> 格式:</strong></p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># DataSource Configuration</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">	<span class="attr">datasource:</span></span><br><span class="line">        <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">    	<span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/your_database?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=utf8</span></span><br><span class="line">    	<span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    	<span class="attr">password:</span> <span class="string">your_password</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># MyBatis-Plus Global Configuration (可选)</span></span><br><span class="line"><span class="attr">mybatis-plus:</span></span><br><span class="line">	<span class="attr">configuration:</span></span><br><span class="line">    	<span class="attr">log-impl:</span> <span class="string">org.apache.ibatis.logging.stdout.StdOutImpl</span> <span class="comment"># 日志打印到控制台</span></span><br><span class="line">		<span class="attr">map-underscore-to-camel-case:</span> <span class="literal">true</span>     <span class="comment">#开启驼峰自动转换</span></span><br><span class="line">    <span class="attr">global-config:</span></span><br><span class="line">    	<span class="attr">db-config:</span></span><br><span class="line">      		<span class="attr">id-type:</span> <span class="string">assign_id</span>    <span class="comment">#设置统一的主键生成策略</span></span><br><span class="line">      		<span class="attr">logic-delete-field:</span> <span class="string">deleted</span>	<span class="comment"># 全局逻辑删除字段名(逻辑删除激活)</span></span><br><span class="line">      		<span class="attr">logic-delete-value:</span> <span class="number">1</span>	<span class="comment"># 全局逻辑删除字段名(逻辑删除激活)</span></span><br><span class="line">      		<span class="attr">logic-not-delete-value:</span> <span class="number">0</span>  <span class="comment"># 逻辑未删除值（默认为 0）</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># DataSource Configuration</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">	<span class="attr">datasource:</span></span><br><span class="line">        <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">    	<span class="attr">url:</span> <span class="string">jdbc:mysql://localhost:3306/your_database?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=utf8</span></span><br><span class="line">    	<span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    	<span class="attr">password:</span> <span class="string">your_password</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># MyBatis-Plus Global Configuration (可选)</span></span><br><span class="line"><span class="attr">mybatis-plus:</span></span><br><span class="line">	<span class="attr">configuration:</span></span><br><span class="line">		<span class="comment"># 日志打印到控制台</span></span><br><span class="line">    	<span class="attr">log-impl:</span> <span class="string">org.apache.ibatis.logging.stdout.StdOutImpl</span> </span><br><span class="line">    	<span class="comment">#开启驼峰自动转换</span></span><br><span class="line">		<span class="attr">map-underscore-to-camel-case:</span> <span class="literal">true</span>     </span><br><span class="line">    <span class="attr">global-config:</span></span><br><span class="line">    	<span class="attr">db-config:</span></span><br><span class="line">    		<span class="comment">#设置统一的主键生成策略</span></span><br><span class="line">      		<span class="attr">id-type:</span> <span class="string">assign_id</span></span><br><span class="line">            <span class="comment"># 全局逻辑删除字段名(逻辑删除激活)</span></span><br><span class="line">      		<span class="attr">logic-delete-field:</span> <span class="string">deleted</span></span><br><span class="line">            <span class="comment"># 全局逻辑删除字段名(逻辑删除激活)</span></span><br><span class="line">      		<span class="attr">logic-delete-value:</span> <span class="number">1</span></span><br><span class="line">            <span class="comment"># 逻辑未删除值（默认为 0）</span></span><br><span class="line">      		<span class="attr">logic-not-delete-value:</span> <span class="number">0</span>  </span><br></pre></td></tr></table></figure>
 
 <p><strong>注意</strong>: 请替换 <code>your_database</code> 和 <code>your_password</code> 为你自己的配置。</p>
 <hr>
