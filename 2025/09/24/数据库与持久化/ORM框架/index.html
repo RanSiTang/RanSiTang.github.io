@@ -27,7 +27,7 @@
 <meta property="og:description" content="一、简介1. 核心概念与本质1.1 什么是ORM？ORM (Object-Relational Mapping，对象关系映射) 是一种在关系型数据库和面向对象编程语言之间建立桥梁的技术规范。它充当了应用程序与数据库之间的中间件，负责数据的自动持久化与还原。  O (Object): 也就是 Java POJO（领域模型），关注业务逻辑。 R (Relational): 关系型数据库（Schema）">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-24T07:23:30.000Z">
-<meta property="article:modified_time" content="2025-12-11T08:45:24.494Z">
+<meta property="article:modified_time" content="2025-12-12T12:33:03.543Z">
 <meta property="article:author" content="冉丝堂">
 <meta name="twitter:card" content="summary">
 
@@ -211,7 +211,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-11 16:45:24" itemprop="dateModified" datetime="2025-12-11T16:45:24+08:00">2025-12-11</time>
+      <time title="修改时间：2025-12-12 20:33:03" itemprop="dateModified" datetime="2025-12-12T20:33:03+08:00">2025-12-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2390,10 +2390,9 @@
 <hr>
 <h2 id="6-Spring-Data-JPA"><a href="#6-Spring-Data-JPA" class="headerlink" title="6. Spring Data JPA"></a>6. Spring Data JPA</h2><h3 id="6-1-什么是-Spring-Data-JPA？"><a href="#6-1-什么是-Spring-Data-JPA？" class="headerlink" title="6.1 什么是 Spring Data JPA？"></a>6.1 什么是 Spring Data JPA？</h3><p><strong>Spring Data JPA</strong> 是 Spring Data 项目下的一个核心子模块。它并非一个新的 ORM 框架，也不是 JPA 的替代品，而是<strong>在 JPA 规范之上构建的一个更高层次的抽象层</strong>。</p>
 <p><strong>核心目标</strong>：<strong>极大地简化和标准化数据访问层 (DAO&#x2F;Repository) 的开发</strong>。</p>
-<p>Spring Data JPA 通过提供强大的 <code>Repository</code> 抽象和一系列约定，使得开发者可以从繁琐的、样板化的数据访问代码中解放出来，甚至在很多情况下，<strong>无需编写任何实现代码</strong>就能完成复杂的数据库操作。</p>
-<p>它底层的持久化工作仍然委托给 JPA 提供商（默认为 Hibernate）来完成。可以理解为：<br><code>你的代码 -&gt; Spring Data JPA -&gt; JPA API (Hibernate) -&gt; JDBC -&gt; 数据库</code></p>
+<p>Spring Data JPA 通过提供强大的 <code>Repository</code> 抽象和一系列约定，使得开发者可以从繁琐的、样板化的数据访问代码中解放出来，甚至在很多情况下，<strong>无需编写任何实现代码</strong>就能完成复杂的数据库操作。它底层的持久化工作仍然委托给 JPA 提供商（默认为 Hibernate）来完成。可以理解为：<code>你的代码 -&gt; Spring Data JPA -&gt; JPA API (Hibernate) -&gt; JDBC -&gt; 数据库</code></p>
 <hr>
-<h3 id="6-2-核心特性与优势"><a href="#6-2-核心特性与优势" class="headerlink" title="6.2 核心特性与优势"></a>6.2 核心特性与优势</h3><h4 id="6-2-1-强大的-Repository-抽象-JpaRepository"><a href="#6-2-1-强大的-Repository-抽象-JpaRepository" class="headerlink" title="6.2.1 强大的 Repository 抽象 (JpaRepository)"></a>6.2.1 强大的 Repository 抽象 (<code>JpaRepository</code>)</h4><p>这是 Spring Data JPA 的基石。你只需要创建一个接口并继承 <code>JpaRepository&lt;T, ID&gt;</code>，就能<strong>立即免费获得</strong>一整套开箱即用的、功能完善的 CRUD 和分页排序方法。</p>
+<h3 id="6-2-核心特性与优势"><a href="#6-2-核心特性与优势" class="headerlink" title="6.2 核心特性与优势"></a>6.2 核心特性与优势</h3><h4 id="6-2-1-强大的-Repository-抽象-JpaRepository"><a href="#6-2-1-强大的-Repository-抽象-JpaRepository" class="headerlink" title="6.2.1 强大的 Repository 抽象 (JpaRepository)"></a>6.2.1 强大的 Repository 抽象 (<code>JpaRepository</code>)</h4><p>这是 Spring Data JPA 的基石。只需要创建一个接口并继承 <code>JpaRepository&lt;T, ID&gt;</code>，就能<strong>立即获得</strong>一整套开箱即用的、功能完善的 CRUD 和分页排序方法。</p>
 <ul>
 <li><code>save(S entity)</code>: 保存或更新实体。</li>
 <li><code>findById(ID id)</code>: 根据主键查询。</li>
@@ -2407,7 +2406,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 只需要定义接口，无需任何实现类！</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserRepository</span> <span class="keyword">extends</span> <span class="title class_">JpaRepository</span>&lt;User, Long&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h4 id="6-2-2-方法命名查询-Query-Methods-Derived-Queries"><a href="#6-2-2-方法命名查询-Query-Methods-Derived-Queries" class="headerlink" title="6.2.2 方法命名查询 (Query Methods &#x2F; Derived Queries)"></a>6.2.2 方法命名查询 (Query Methods &#x2F; Derived Queries)</h4><p>这是 Spring Data JPA 最“神奇”的特性。你只需<strong>按照一套约定的命名规则来定义接口方法</strong>，Spring Data JPA 就会在运行时自动解析方法名，并为你生成相应的 JPQL 查询。</p>
+<h4 id="6-2-2-方法命名查询-Query-Methods-Derived-Queries"><a href="#6-2-2-方法命名查询-Query-Methods-Derived-Queries" class="headerlink" title="6.2.2 方法命名查询 (Query Methods &#x2F; Derived Queries)"></a>6.2.2 方法命名查询 (Query Methods &#x2F; Derived Queries)</h4><p>这是 Spring Data JPA 最“神奇”的特性。只需<strong>按照一套约定的命名规则来定义接口方法</strong>，Spring Data JPA 就会在运行时自动解析方法名，并为你生成相应的 JPQL 查询。</p>
 <ul>
 <li><strong>关键字</strong>: <code>FindBy</code>, <code>CountBy</code>, <code>ExistsBy</code>, <code>DeleteBy</code></li>
 <li><strong>属性表达式</strong>: <code>And</code>, <code>Or</code>, <code>Between</code>, <code>LessThan</code>, <code>GreaterThan</code>, <code>Like</code>, <code>Containing</code>, <code>IsNull</code>, <code>In</code></li>
