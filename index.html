@@ -15278,7 +15278,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-26 20:02:44" itemprop="dateModified" datetime="2025-10-26T20:02:44+08:00">2025-10-26</time>
+      <time title="修改时间：2026-03-30 13:25:39" itemprop="dateModified" datetime="2026-03-30T13:25:39+08:00">2026-03-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -15728,7 +15728,7 @@
 <hr>
 <h3 id="2-4-更多redis-cli实用技巧"><a href="#2-4-更多redis-cli实用技巧" class="headerlink" title="2.4 更多redis-cli实用技巧"></a>2.4 更多<code>redis-cli</code>实用技巧</h3><ul>
 <li><p><strong><code>--scan</code> 和 <code>--pattern</code></strong>: <code>KEYS</code>命令的安全替代品。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从游标0开始，扫描匹配 user:* 模式的key，每次最多返回100个</span></span><br><span class="line">redis-cli --scan --pattern <span class="string">&quot;user:*&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">                           <span class="comment"># 从游标0开始，扫描匹配 user:* 模式的key，每次最多返回100个</span></span><br><span class="line">redis-cli --scan --pattern <span class="string">&quot;user:*&quot;</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong><code>MONITOR</code></strong>: 实时监控Redis服务器正在执行的命令，是绝佳的调试工具。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">redis-cli monitor</span><br><span class="line">OK</span><br><span class="line">1637842938.123456 [0 127.0.0.1:54321] <span class="string">&quot;SET&quot;</span> <span class="string">&quot;mykey&quot;</span> <span class="string">&quot;hello&quot;</span></span><br><span class="line">1637842940.654321 [0 127.0.0.1:54321] <span class="string">&quot;GET&quot;</span> <span class="string">&quot;mykey&quot;</span></span><br></pre></td></tr></table></figure>
