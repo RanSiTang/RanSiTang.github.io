@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、大语言模型（LLM）基本概念1. 什么是 LLM大语言模型（Large Language Model，简称 LLM）是一种基于 Transformer 架构（一种利用自注意力机制处理序列数据的深度学习架构），在海量文本数据上训练得到的神经网络模型。它的核心能力是根据给定的上文，预测下一个最可能出现的 Token，这个看似简单的”下一个词预测”任务，在大规模数据和参数的加持下，涌现出了理解、推理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大模型基础与模型调用">
+<meta property="og:url" content="http://example.com/2026/05/29/AI/02-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、大语言模型（LLM）基本概念1. 什么是 LLM大语言模型（Large Language Model，简称 LLM）是一种基于 Transformer 架构（一种利用自注意力机制处理序列数据的深度学习架构），在海量文本数据上训练得到的神经网络模型。它的核心能力是根据给定的上文，预测下一个最可能出现的 Token，这个看似简单的”下一个词预测”任务，在大规模数据和参数的加持下，涌现出了理解、推理">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T09:29:18.412Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Java后端">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/05/29/AI/02-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/05/29/AI/02-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8/","path":"2026/05/29/AI/02-大模型基础与模型调用/","title":"大模型基础与模型调用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>大模型基础与模型调用 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%EF%BC%88LLM%EF%BC%89%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">一、大语言模型（LLM）基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-LLM"><span class="nav-text">1. 什么是 LLM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BB%E6%B5%81%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B"><span class="nav-text">2. 主流模型简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Token"><span class="nav-text">3. Token</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Context-Window"><span class="nav-text">4. Context Window</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%87%87%E6%A0%B7%E5%8F%82%E6%95%B0"><span class="nav-text">5. 采样参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%A4%9A%E8%BD%AE%E5%AF%B9%E8%AF%9D%E7%9A%84%E6%B6%88%E6%81%AF%E7%BB%93%E6%9E%84"><span class="nav-text">6. 多轮对话的消息结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81OpenAI-%E5%85%BC%E5%AE%B9-API-%E6%A0%BC%E5%BC%8F%E8%AF%A6%E8%A7%A3"><span class="nav-text">二、OpenAI 兼容 API 格式详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Chat-Completions-API%EF%BC%9A%E8%AF%B7%E6%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">1. Chat Completions API：请求结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Chat-Completions-API%EF%BC%9A%E5%93%8D%E5%BA%94%E7%BB%93%E6%9E%84"><span class="nav-text">2. Chat Completions API：响应结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Streaming-%E4%B8%8E%E9%9D%9E-Streaming-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">3. Streaming 与非 Streaming 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%A4%9A%E8%BD%AE%E5%AF%B9%E8%AF%9D%E7%9A%84-Messages-%E6%9E%84%E9%80%A0"><span class="nav-text">4. 多轮对话的 Messages 构造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-API-Key-%E7%AE%A1%E7%90%86%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">5. API Key 管理与配置最佳实践</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81Java-%E5%90%8E%E7%AB%AF%E8%B0%83%E7%94%A8-LLM-%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-text">三、Java 后端调用 LLM 的四种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8E%9F%E7%94%9F-HTTP-%E8%B0%83%E7%94%A8"><span class="nav-text">1. 原生 HTTP 调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Spring-AI-ChatClient"><span class="nav-text">2. Spring AI ChatClient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-LangChain4j-ChatLanguageModel"><span class="nav-text">3. LangChain4j ChatLanguageModel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B0%81%E8%A3%85%E7%BB%9F%E4%B8%80%E7%9A%84-LLM-Gateway-%E5%B1%82"><span class="nav-text">4. 封装统一的 LLM Gateway 层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F%E7%9A%84%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="nav-text">5. 四种方式的选型建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%B5%81%E5%BC%8F%E8%B0%83%E7%94%A8%EF%BC%88SSE%EF%BC%89%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90"><span class="nav-text">四、流式调用（SSE）深度解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-SSE-%E5%8D%8F%E8%AE%AE%E5%8E%9F%E7%90%86"><span class="nav-text">1. SSE 协议原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Java-%E4%B8%AD%E7%9A%84-SSE-%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-text">2. Java 中的 SSE 实现方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%B5%81%E5%BC%8F%E8%B0%83%E7%94%A8%E5%AF%B9%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">3. 流式调用对用户体验的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%B5%81%E5%BC%8F%E5%9C%BA%E6%99%AF%E4%B8%8B%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">4. 流式场景下的错误处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%A4%9A%E6%A8%A1%E5%9E%8B%E7%AE%A1%E7%90%86%E4%B8%8E%E5%AE%B9%E9%94%99%E7%AD%96%E7%95%A5"><span class="nav-text">五、多模型管理与容错策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%9A%E6%A8%A1%E5%9E%8B%E5%88%87%E6%8D%A2%E7%9A%84%E5%85%B8%E5%9E%8B%E5%9C%BA%E6%99%AF"><span class="nav-text">1. 多模型切换的典型场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Fallback-%E9%93%BE%E8%AE%BE%E8%AE%A1"><span class="nav-text">2. Fallback 链设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="nav-text">3. 重试机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Java-%E4%B8%AD%E6%A8%A1%E5%9E%8B%E8%B7%AF%E7%94%B1%E5%B1%82%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-text">4. Java 中模型路由层的实现思路</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/29/AI/02-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="大模型基础与模型调用 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大模型基础与模型调用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-29T00:00:00+08:00">2026-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-07 17:29:18" itemprop="dateModified" datetime="2026-06-07T17:29:18+08:00">2026-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、大语言模型（LLM）基本概念"><a href="#一、大语言模型（LLM）基本概念" class="headerlink" title="一、大语言模型（LLM）基本概念"></a>一、大语言模型（LLM）基本概念</h1><h2 id="1-什么是-LLM"><a href="#1-什么是-LLM" class="headerlink" title="1. 什么是 LLM"></a>1. 什么是 LLM</h2><p>大语言模型（Large Language Model，简称 LLM）是一种基于 Transformer 架构（一种利用自注意力机制处理序列数据的深度学习架构），在海量文本数据上训练得到的神经网络模型。它的核心能力是<strong>根据给定的上文，预测下一个最可能出现的 Token</strong>，这个看似简单的”下一个词预测”任务，在大规模数据和参数的加持下，涌现出了理解、推理、生成等复杂能力。</p>
+<p>LLM 的发展经历了几个关键阶段：</p>
+<ul>
+<li><strong>2017 年</strong>：Google 发布论文《Attention Is All You Need》，提出 Transformer 架构，奠定了后续所有大模型的技术基础</li>
+<li><strong>2018-2019 年</strong>：BERT（Google）、GPT-1&#x2F;GPT-2（OpenAI）相继发布，验证了预训练 + 微调（Pre-training + Fine-tuning）范式的有效性</li>
+<li><strong>2020-2022 年</strong>：GPT-3 展示了惊人的 Few-shot 学习能力，模型参数规模突破千亿</li>
+<li><strong>2022 年底</strong>：ChatGPT 发布，将 LLM 从实验室带入了大众视野，也开启了 AI 应用开发的浪潮</li>
+<li><strong>2023-2025 年</strong>：开源模型（Llama、Qwen、DeepSeek 等）快速追赶闭源模型，多模态能力、Agent 能力、长上下文成为竞争焦点</li>
+</ul>
+<p>对于后端工程师而言，不需要深入理解 Transformer 的数学细节，但需要理解 LLM 的几个核心概念，因为它们直接影响 API 调用方式、成本控制和系统设计。</p>
+<h2 id="2-主流模型简介"><a href="#2-主流模型简介" class="headerlink" title="2. 主流模型简介"></a>2. 主流模型简介</h2><p>当前市场上的主流 LLM 可以分为闭源和开源两大阵营：</p>
+<p><strong>闭源模型（通过 API 调用）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>提供商</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPT-4o &#x2F; GPT-4.1</td>
+<td>OpenAI</td>
+<td>综合能力最强，多模态原生支持，生态最完善</td>
+</tr>
+<tr>
+<td>Claude Opus 4 &#x2F; Sonnet 4</td>
+<td>Anthropic</td>
+<td>长上下文能力突出（200K），安全性设计领先，代码与推理能力强</td>
+</tr>
+<tr>
+<td>Gemini 2.5 Pro</td>
+<td>Google</td>
+<td>原生多模态，上下文窗口可达 2M Token，与 Google 生态深度整合</td>
+</tr>
+</tbody></table>
+<p><strong>开源模型（可自部署或通过 API 调用）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>提供商</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek-V3 &#x2F; R1</td>
+<td>深度求索</td>
+<td>性价比极高，R1 的推理链（Chain of Thought）能力在开源模型中领先</td>
+</tr>
+<tr>
+<td>Qwen 3 &#x2F; Qwen-Max</td>
+<td>阿里云（通义千问）</td>
+<td>中英文能力强，生态完善，提供多种尺寸满足不同场景</td>
+</tr>
+<tr>
+<td>GLM-4 系列</td>
+<td>智谱 AI</td>
+<td>国内最早的 LLM 团队之一，中文理解能力扎实</td>
+</tr>
+<tr>
+<td>Llama 4</td>
+<td>Meta</td>
+<td>开源社区的基石，生态最丰富，适合二次开发和微调</td>
+</tr>
+</tbody></table>
+<p><strong>选型建议</strong>：生产环境中通常不会只用一个模型。一个务实的策略是——主力模型选一个能力强且稳定的（如 GPT-4o 或 Claude Sonnet 4），同时接入一个高性价比模型（如 DeepSeek-V3）处理简单任务，再备一个开源模型（如 Qwen）用于敏感数据场景的私有化部署。</p>
+<h2 id="3-Token"><a href="#3-Token" class="headerlink" title="3. Token"></a>3. Token</h2><p>Token（词元）是 LLM 处理文本的最小语义单位。它不是字符也不是单词，而是介于两者之间的”子词”（Subword）：</p>
+<ul>
+<li>英文中，一个常见单词如 “hello” 通常是 1 个 Token，而 “indescribable” 可能是 3-4 个 Token（in + describ + able）</li>
+<li>中文中，一个汉字通常是 1-2 个 Token。例如”你好”约 2 个 Token，”人工智能”约 3-4 个 Token</li>
+<li>标点符号、空格、特殊字符也各占 Token</li>
+</ul>
+<p>Token 之所以重要，是因为<strong>大模型的计费、性能限制和上下文容量全部以 Token 为单位</strong>：</p>
+<ul>
+<li><strong>计费</strong>：API 按 Token 数量收费，分为 Input Token（输入）和 Output Token（输出），通常 Output Token 价格是 Input Token 的 2-5 倍</li>
+<li><strong>上下文限制</strong>：每个模型有最大 Context Window，即单次能处理的 Token 总数上限</li>
+<li><strong>延迟</strong>：Token 生成速度（Tokens Per Second, TPS）决定了用户等待时间</li>
+</ul>
+<p>实际项目中，预估 Token 消耗的简单公式：<strong>英文文本字符数 ÷ 4 ≈ Token 数，中文文本字符数 ÷ 1.5 ≈ Token 数</strong>。更准确的计数可以使用模型提供商的 Tokenizer 工具（如 OpenAI 的 <code>tiktoken</code> 库）或在线工具。</p>
+<h2 id="4-Context-Window"><a href="#4-Context-Window" class="headerlink" title="4. Context Window"></a>4. Context Window</h2><p>Context Window（上下文窗口）是指模型<strong>单次推理能处理的 Token 总数上限</strong>——包括输入 Prompt 和模型生成的 Output 之和。</p>
+<p>主流模型的 Context Window 大致范围：</p>
+<ul>
+<li><strong>128K Token</strong>：GPT-4o、Claude Sonnet 4、DeepSeek-V3、Qwen 3 的标准窗口。足够容纳一本约 300 页的英文小说</li>
+<li><strong>200K Token</strong>：Claude Opus 4 等高端模型</li>
+<li><strong>1M-2M Token</strong>：Gemini 2.5 Pro（2M）、Qwen 3 某些配置（1M）。理论上可以一次处理整部《三体》三部曲</li>
+</ul>
+<p>Context Window 对应用设计的直接影响：</p>
+<ul>
+<li><strong>超窗口内容会被截断</strong>：输入超过上下文窗口时，模型提供商通常会截断最早的部分（或拒绝请求）。你需要在前端截断，而不是等模型报错</li>
+<li><strong>长对话会累积成本</strong>：多轮对话中，每次请求都要将历史 Messages 全部带上。对话越长，每次调用的 Input Token 越多，成本越高。这就需要对话摘要（Summarization）或滑动窗口等策略来管理上下文</li>
+<li><strong>“大海捞针”是真实挑战</strong>：窗口大不代表模型能有效利用全部内容。大窗口模型在长文本中间位置的信息提取准确率（Needle in a Haystack 测试）各有差异，选型时需关注</li>
+</ul>
+<h2 id="5-采样参数"><a href="#5-采样参数" class="headerlink" title="5. 采样参数"></a>5. 采样参数</h2><p>LLM 在生成每个 Token 时，实际上是计算词汇表中每个可能的 Token 的概率分布，然后从中采样。以下三个参数控制了这个采样过程：</p>
+<p><strong>Temperature（温度，范围 0-2）</strong>：</p>
+<p>控制输出的<strong>随机性和创造性</strong>。</p>
+<ul>
+<li>Temperature &#x3D; 0 或接近 0：模型几乎总是选择概率最高的 Token，输出高度确定、一致。适用于代码生成、数据提取、分类等需要稳定性的任务</li>
+<li>Temperature ≈ 0.7-1.0：适度的随机性，适用于通用对话和内容生成</li>
+<li>Temperature &gt; 1.0：输出更多样化但也更不可控，容易出现离题和幻觉。适用于创意写作、头脑风暴</li>
+</ul>
+<p>需要注意的是，Temperature &#x3D; 0 并不意味着输出完全确定——模型提供商的后端差异、浮点运算精度等因素仍可能导致微小变化。</p>
+<p><strong>Top-P（核采样，Nucleus Sampling，范围 0-1）</strong>：</p>
+<p>从累积概率超过 Top-P 的最小 Token 集合中采样。例如 Top-P &#x3D; 0.9 表示模型只从概率最高的、累积概率达 90% 的 Token 中采样，忽略长尾的低概率 Token。</p>
+<p>实践中的建议：<strong>同时调整 Temperature 和 Top-P 通常没有必要且容易混乱，选择其一即可</strong>。Temperature 更直观常用；Top-P 在需要动态调整输出多样性时更灵活（如根据输入复杂度自动适配）。</p>
+<p><strong>Top-K</strong>：</p>
+<p>只从概率最高的 K 个 Token 中采样。Top-K 在早期模型中常用，现在的模型多使用 Top-P 替代，因为它能根据概率分布自动调整候选集大小。</p>
+<p><strong>调参实践</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th align="center">Temperature</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码生成</td>
+<td align="center">0 - 0.3</td>
+<td>需要语法精确，不应有随机性</td>
+</tr>
+<tr>
+<td>JSON&#x2F;结构化输出</td>
+<td align="center">0 - 0.2</td>
+<td>结合 JSON Mode 使用</td>
+</tr>
+<tr>
+<td>事实问答</td>
+<td align="center">0 - 0.3</td>
+<td>减少幻觉</td>
+</tr>
+<tr>
+<td>通用对话</td>
+<td align="center">0.7 - 1.0</td>
+<td>自然流畅</td>
+</tr>
+<tr>
+<td>创意写作</td>
+<td align="center">1.0 - 1.5</td>
+<td>需要多样性</td>
+</tr>
+</tbody></table>
+<h2 id="6-多轮对话的消息结构"><a href="#6-多轮对话的消息结构" class="headerlink" title="6. 多轮对话的消息结构"></a>6. 多轮对话的消息结构</h2><p>LLM 的 Chat API 采用结构化的消息列表（Messages）来组织对话。每条消息包含两个字段：<strong>Role</strong>（角色）和 <strong>Content</strong>（内容）。</p>
+<p>三种核心角色：</p>
+<p><strong>System Message（系统消息）</strong>：</p>
+<p>定义模型的行为边界、角色定位和输出规则。System Message 对整个对话全局生效，通常放在 Messages 数组的第一条。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">角色：你是一个专业的 Java 后端技术顾问。</span><br><span class="line">规则：只回答 Java 和 Spring 生态相关问题。</span><br><span class="line">      如果遇到不确定的问题，请直接说不知道，不要编造。</span><br><span class="line">格式：回答请使用 Markdown 格式，代码块指定语言。</span><br></pre></td></tr></table></figure>
+
+<p>System Message 的设计原则：<strong>越简单越好，够用就行</strong>。冗长的 System Message 不仅消耗 Token，还可能让模型”过拟合”规则（Overfitting Rules），反而降低灵活性。实践中，一个高质量的 System Message 通常在 100-500 Token 之间。</p>
+<p><strong>User Message（用户消息）</strong>：</p>
+<p>用户输入的实际问题和上下文。在多轮对话中，通过交替排列 User 和 Assistant 消息来构建对话历史。</p>
+<p><strong>Assistant Message（助手消息）</strong>：</p>
+<p>模型的历史回复。在构造 API 请求时，你需要把之前模型生成的回复以 Assistant Message 的形式放入 Messages 列表，这样模型才能”记住”自己说过什么。</p>
+<p><strong>消息构造的关键规则</strong>：</p>
+<ol>
+<li>Messages 必须是 <strong>Role 交替排列</strong>，以 User 消息结束（不能以 Assistant 消息结尾）</li>
+<li><strong>历史消息越长，每次调用的成本越高</strong>——所有历史 Messages 都计入 Input Token</li>
+<li><strong>Function Call 结果</strong>以特殊的 <code>role: &quot;tool&quot;</code> 消息形式插入（详见后续 Function Calling 章节）</li>
+<li><strong>不同模型对 System Message 的重视程度不同</strong>——开源模型（尤其微调版）对 System Message 的遵循度不如 GPT-4&#x2F;Claude 等闭源模型高</li>
+</ol>
+<hr>
+<h1 id="二、OpenAI-兼容-API-格式详解"><a href="#二、OpenAI-兼容-API-格式详解" class="headerlink" title="二、OpenAI 兼容 API 格式详解"></a>二、OpenAI 兼容 API 格式详解</h1><p>OpenAI 定义了一套 RESTful API 规范，目前已成为事实上的行业标准。无论是闭源模型（GPT、Claude、Gemini）还是国产模型（DeepSeek、Qwen、GLM），绝大多数都提供了与 OpenAI 兼容的 API 端点。因此，<strong>掌握 OpenAI 的 API 格式就等于掌握了调用几乎所有 LLM 的通用方法</strong>。</p>
+<h2 id="1-Chat-Completions-API：请求结构"><a href="#1-Chat-Completions-API：请求结构" class="headerlink" title="1. Chat Completions API：请求结构"></a>1. Chat Completions API：请求结构</h2><p>核心端点为 <code>POST /v1/chat/completions</code>。一个完整的请求示例如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gpt-4o&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;messages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;system&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个 Java 后端专家，回答请简洁，代码使用 Java 示例。&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Spring Boot 3.x 中如何配置虚拟线程？&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;temperature&quot;</span><span class="punctuation">:</span> <span class="number">0.3</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;max_tokens&quot;</span><span class="punctuation">:</span> <span class="number">2048</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;stream&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>关键请求参数说明</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th align="center">必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>model</code></td>
+<td>String</td>
+<td align="center">是</td>
+<td>模型标识符，如 <code>gpt-4o</code>、<code>deepseek-chat</code>、<code>qwen-max</code></td>
+</tr>
+<tr>
+<td><code>messages</code></td>
+<td>Array</td>
+<td align="center">是</td>
+<td>消息列表，角色为 system&#x2F;user&#x2F;assistant&#x2F;tool 之一</td>
+</tr>
+<tr>
+<td><code>temperature</code></td>
+<td>Float</td>
+<td align="center">否</td>
+<td>采样温度，默认 1.0，范围 0-2</td>
+</tr>
+<tr>
+<td><code>top_p</code></td>
+<td>Float</td>
+<td align="center">否</td>
+<td>核采样阈值，默认 1.0</td>
+</tr>
+<tr>
+<td><code>max_tokens</code></td>
+<td>Integer</td>
+<td align="center">否</td>
+<td>限制模型输出的最大 Token 数，不包含 Input Token</td>
+</tr>
+<tr>
+<td><code>stream</code></td>
+<td>Boolean</td>
+<td align="center">否</td>
+<td>是否流式返回，默认 false</td>
+</tr>
+<tr>
+<td><code>stop</code></td>
+<td>String&#x2F;Array</td>
+<td align="center">否</td>
+<td>停止词，模型输出到此内容时立即停止</td>
+</tr>
+<tr>
+<td><code>response_format</code></td>
+<td>Object</td>
+<td align="center">否</td>
+<td>指定输出格式，设为 <code>{&quot;type&quot;: &quot;json_object&quot;}</code> 开启 JSON 模式</td>
+</tr>
+</tbody></table>
+<h2 id="2-Chat-Completions-API：响应结构"><a href="#2-Chat-Completions-API：响应结构" class="headerlink" title="2. Chat Completions API：响应结构"></a>2. Chat Completions API：响应结构</h2><p>非流式调用的典型响应：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chatcmpl-xxx&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chat.completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="number">1718000000</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gpt-4o-2024-05-13&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;在 Spring Boot 3.x 中启用虚拟线程...&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stop&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;usage&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;prompt_tokens&quot;</span><span class="punctuation">:</span> <span class="number">45</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;completion_tokens&quot;</span><span class="punctuation">:</span> <span class="number">512</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;total_tokens&quot;</span><span class="punctuation">:</span> <span class="number">557</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>关键响应字段说明</strong>：</p>
+<ul>
+<li><code>choices[0].message.content</code>：模型的实际输出文本</li>
+<li><code>finish_reason</code>：停止原因。<code>stop</code> 为正常结束，<code>length</code> 为达到 max_tokens 限制（内容可能被截断），<code>content_filter</code> 为内容审核拦截，<code>tool_calls</code> 为模型请求调用工具</li>
+<li><code>usage</code>：Token 消耗统计。<code>prompt_tokens</code> 和 <code>completion_tokens</code> 分别用于计价</li>
+</ul>
+<p><strong>后端代码中必须检查 <code>finish_reason</code></strong>：如果为 <code>length</code>，说明模型输出被截断，你的代码应当有相应的处理逻辑（如提示用户或自动续写）。</p>
+<h2 id="3-Streaming-与非-Streaming-的区别"><a href="#3-Streaming-与非-Streaming-的区别" class="headerlink" title="3. Streaming 与非 Streaming 的区别"></a>3. Streaming 与非 Streaming 的区别</h2><p><strong>非流式调用</strong>：模型生成完所有内容后，一次性返回完整响应。适合批量处理、后端离线任务。</p>
+<p><strong>流式调用</strong>：模型边生成边推送 Token，每个 Token 作为一个独立的事件通过 SSE（Server-Sent Events）发送。适合需要实时反馈的前端交互场景。</p>
+<p>流式响应的数据格式为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data: &#123;&quot;id&quot;:&quot;xxx&quot;,&quot;object&quot;:&quot;chat.completion.chunk&quot;,&quot;choices&quot;:[&#123;&quot;delta&quot;:&#123;&quot;content&quot;:&quot;在&quot;&#125;,&quot;index&quot;:0&#125;]&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;id&quot;:&quot;xxx&quot;,&quot;object&quot;:&quot;chat.completion.chunk&quot;,&quot;choices&quot;:[&#123;&quot;delta&quot;:&#123;&quot;content&quot;:&quot;Spring&quot;&#125;,&quot;index&quot;:0&#125;]&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;id&quot;:&quot;xxx&quot;,&quot;object&quot;:&quot;chat.completion.chunk&quot;,&quot;choices&quot;:[&#123;&quot;delta&quot;:&#123;&quot;content&quot;:&quot; Boot&quot;&#125;,&quot;index&quot;:0&#125;]&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">data: [DONE]</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意流式响应的三个关键点</strong>：</p>
+<ul>
+<li>每条 <code>data:</code> 行是一个 JSON 对象，使用 <code>delta</code> 而不是 <code>message</code>（增量 vs 完整消息）</li>
+<li>最后一条消息是 <code>data: [DONE]</code>，标志流结束</li>
+<li><code>usage</code>（Token 统计）通常在最后一个 Chunk 中返回，不同提供商行为有差异</li>
+</ul>
+<h2 id="4-多轮对话的-Messages-构造"><a href="#4-多轮对话的-Messages-构造" class="headerlink" title="4. 多轮对话的 Messages 构造"></a>4. 多轮对话的 Messages 构造</h2><p>多轮对话中，每次调用 API 都需要携带<strong>完整的对话历史</strong>。这是一个典型的实现方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Java 中的消息列表维护</span></span><br><span class="line">List&lt;Map&lt;String, String&gt;&gt; messages = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始：添加 System Message</span></span><br><span class="line">messages.add(Map.of(<span class="string">&quot;role&quot;</span>, <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>, systemPrompt));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第一轮：用户提问</span></span><br><span class="line">messages.add(Map.of(<span class="string">&quot;role&quot;</span>, <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>, userQuestion));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用 API，获取模型回复</span></span><br><span class="line"><span class="type">ChatResponse</span> <span class="variable">response1</span> <span class="operator">=</span> chatClient.call(messages);</span><br><span class="line">messages.add(Map.of(<span class="string">&quot;role&quot;</span>, <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>, response1.getContent()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二轮：用户追问（带上完整历史）</span></span><br><span class="line">messages.add(Map.of(<span class="string">&quot;role&quot;</span>, <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>, followUpQuestion));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 再次调用 API</span></span><br><span class="line"><span class="type">ChatResponse</span> <span class="variable">response2</span> <span class="operator">=</span> chatClient.call(messages);</span><br><span class="line">messages.add(Map.of(<span class="string">&quot;role&quot;</span>, <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>, response2.getContent()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 对话越长，messages 越大，成本越高，延迟也越大</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>上下文管理策略</strong>：</p>
+<p>当对话轮数过多导致 Token 超出 Context Window 时，常见策略有：</p>
+<ul>
+<li><strong>滑动窗口（Sliding Window）</strong>：只保留最近 N 轮对话，丢弃更早的历史</li>
+<li><strong>对话摘要（Summarization）</strong>：当对话达到一定长度时，调用一个便宜的小模型将历史对话总结为一段摘要，替换原始历史</li>
+<li><strong>智能截断</strong>：保留 System Message + 最近 N 轮完整对话 + 更早对话的摘要</li>
+</ul>
+<h2 id="5-API-Key-管理与配置最佳实践"><a href="#5-API-Key-管理与配置最佳实践" class="headerlink" title="5. API Key 管理与配置最佳实践"></a>5. API Key 管理与配置最佳实践</h2><p>API Key 是调用 LLM 服务的凭证，其安全管理至关重要：</p>
+<ul>
+<li><strong>绝不硬编码</strong>：API Key 永远不写在代码、配置文件或日志中。使用环境变量（<code>${LLM_API_KEY}</code>）或配置中心（如 Spring Cloud Config、Vault）管理</li>
+<li><strong>Base URL 配置化</strong>：每个模型提供商的 Base URL 不同，应通过配置管理而非硬编码。常见提供商的 Base URL：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>提供商</th>
+<th>Base URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI</td>
+<td><code>https://api.openai.com</code></td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td><code>https://api.deepseek.com</code></td>
+</tr>
+<tr>
+<td>阿里云百炼（Qwen）</td>
+<td><code>https://dashscope.aliyuncs.com/compatible-mode</code></td>
+</tr>
+<tr>
+<td>智谱 AI（GLM）</td>
+<td><code>https://open.bigmodel.cn/api/paas/v4</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>密钥轮换</strong>：定期更换 API Key，通过配置热更新避免重启应用</li>
+<li><strong>代理与网络</strong>：国内调用 OpenAI&#x2F;Claude API 通常需要配置 HTTP 代理。Java 中可通过 <code>-Dhttps.proxyHost=...</code> JVM 参数或代码中设置 <code>ProxySelector</code> 实现</li>
+</ul>
+<hr>
+<h1 id="三、Java-后端调用-LLM-的四种方式"><a href="#三、Java-后端调用-LLM-的四种方式" class="headerlink" title="三、Java 后端调用 LLM 的四种方式"></a>三、Java 后端调用 LLM 的四种方式</h1><p>Java 后端的 AI 集成经历了从裸 HTTP 到成熟框架的演进。下面按照<strong>从底层到高层</strong>的顺序介绍四种调用方式，每种都有其适用的场景。</p>
+<h2 id="1-原生-HTTP-调用"><a href="#1-原生-HTTP-调用" class="headerlink" title="1. 原生 HTTP 调用"></a>1. 原生 HTTP 调用</h2><p>这是最基础的方式——直接拼 JSON、发 HTTP 请求、解析 JSON 响应。任何能发 HTTP 请求的 Java 库都可以用来调用 LLM API。</p>
+<p><strong>OkHttp 示例（同步调用）</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 OkHttp 调用 OpenAI 兼容 API</span></span><br><span class="line"><span class="type">OkHttpClient</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>();</span><br><span class="line"><span class="type">String</span> <span class="variable">requestBody</span> <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">      &quot;model&quot;: &quot;deepseek-chat&quot;,</span></span><br><span class="line"><span class="string">      &quot;messages&quot;: [</span></span><br><span class="line"><span class="string">        &#123;&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;你是一个 Java 助手&quot;&#125;,</span></span><br><span class="line"><span class="string">        &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;解释 Spring AOP&quot;&#125;</span></span><br><span class="line"><span class="string">      ],</span></span><br><span class="line"><span class="string">      &quot;temperature&quot;: 0.3,</span></span><br><span class="line"><span class="string">      &quot;stream&quot;: false</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Request</span>.Builder()</span><br><span class="line">    .url(<span class="string">&quot;https://api.deepseek.com/v1/chat/completions&quot;</span>)</span><br><span class="line">    .post(RequestBody.create(requestBody, MediaType.parse(<span class="string">&quot;application/json&quot;</span>)))</span><br><span class="line">    .addHeader(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer &quot;</span> + apiKey)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> (<span class="type">Response</span> <span class="variable">response</span> <span class="operator">=</span> client.newCall(request).execute()) &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">json</span> <span class="operator">=</span> response.body().string();</span><br><span class="line">    <span class="comment">// 解析 JSON，提取 choices[0].message.content</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>RestClient 示例（Spring Boot 3.2+，同步）</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Spring Boot 3.2+ 的 RestClient</span></span><br><span class="line"><span class="type">RestClient</span> <span class="variable">restClient</span> <span class="operator">=</span> RestClient.builder()</span><br><span class="line">    .baseUrl(<span class="string">&quot;https://api.deepseek.com&quot;</span>)</span><br><span class="line">    .defaultHeader(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer &quot;</span> + apiKey)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="type">ChatRequest</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChatRequest</span>(<span class="string">&quot;deepseek-chat&quot;</span>, messages, <span class="number">0.3</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">ChatResponse</span> <span class="variable">response</span> <span class="operator">=</span> restClient.post()</span><br><span class="line">    .uri(<span class="string">&quot;/v1/chat/completions&quot;</span>)</span><br><span class="line">    .body(request)</span><br><span class="line">    .retrieve()</span><br><span class="line">    .body(ChatResponse.class);</span><br></pre></td></tr></table></figure>
+
+<p><strong>WebClient 示例（Spring WebFlux，异步&#x2F;响应式）</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// WebClient 适合响应式架构和流式调用</span></span><br><span class="line"><span class="type">WebClient</span> <span class="variable">webClient</span> <span class="operator">=</span> WebClient.builder()</span><br><span class="line">    .baseUrl(<span class="string">&quot;https://api.deepseek.com&quot;</span>)</span><br><span class="line">    .defaultHeader(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer &quot;</span> + apiKey)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line">Mono&lt;ChatResponse&gt; responseMono = webClient.post()</span><br><span class="line">    .uri(<span class="string">&quot;/v1/chat/completions&quot;</span>)</span><br><span class="line">    .bodyValue(request)</span><br><span class="line">    .retrieve()</span><br><span class="line">    .bodyToMono(ChatResponse.class);</span><br></pre></td></tr></table></figure>
+
+<p><strong>原生 HTTP 调用方式的优缺点</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无框架依赖，任何 Java 项目都能用</td>
+<td>大量样板代码：构造 JSON、处理错误码、解析流式响应</td>
+</tr>
+<tr>
+<td>完全控制 HTTP 细节（超时、代理、重试）</td>
+<td>模型切换时需修改 URL、请求格式等</td>
+</tr>
+<tr>
+<td>适合简单的一次性调用场景</td>
+<td>流式响应的解析和错误处理容易出错</td>
+</tr>
+<tr>
+<td>学习成本最低，只需 HTTP + JSON</td>
+<td>不支持开箱即用的 Tool Calling、RAG 等高级特性</td>
+</tr>
+</tbody></table>
+<p><strong>适用场景</strong>：原型验证、简单的一次性集成、非 Spring 环境的项目。</p>
+<h2 id="2-Spring-AI-ChatClient"><a href="#2-Spring-AI-ChatClient" class="headerlink" title="2. Spring AI ChatClient"></a>2. Spring AI ChatClient</h2><p>Spring AI 是 Spring 生态的官方 AI 扩展，通过 Spring Boot Starter 自动配置的方式将 AI 能力无缝整合到 Spring 应用中。</p>
+<p><strong>引入依赖</strong>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.ai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-ai-openai-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>配置（application.yml）</strong>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">ai:</span></span><br><span class="line">    <span class="attr">openai:</span></span><br><span class="line">      <span class="attr">api-key:</span> <span class="string">$&#123;OPENAI_API_KEY&#125;</span></span><br><span class="line">      <span class="attr">base-url:</span> <span class="string">https://api.openai.com</span></span><br><span class="line">      <span class="attr">chat:</span></span><br><span class="line">        <span class="attr">options:</span></span><br><span class="line">          <span class="attr">model:</span> <span class="string">gpt-4o</span></span><br><span class="line">          <span class="attr">temperature:</span> <span class="number">0.3</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>核心 API 使用</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChatController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ChatClient chatClient;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器注入（Spring Boot 自动配置的 ChatClient.Builder）</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ChatController</span><span class="params">(ChatClient.Builder builder)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.chatClient = builder</span><br><span class="line">            .defaultSystem(<span class="string">&quot;你是一个 Java 后端专家，回答简洁专业。&quot;</span>)</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 简单调用</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/chat&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">chat</span><span class="params">(<span class="meta">@RequestParam</span> String question)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> chatClient.prompt()</span><br><span class="line">            .user(question)</span><br><span class="line">            .call()</span><br><span class="line">            .content();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 流式调用</span></span><br><span class="line">    <span class="meta">@GetMapping(value = &quot;/chat/stream&quot;, produces = MediaType.TEXT_EVENT_STREAM_VALUE)</span></span><br><span class="line">    <span class="keyword">public</span> Flux&lt;String&gt; <span class="title function_">chatStream</span><span class="params">(<span class="meta">@RequestParam</span> String question)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> chatClient.prompt()</span><br><span class="line">            .user(question)</span><br><span class="line">            .stream()</span><br><span class="line">            .content();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Spring AI ChatClient 的核心优势</strong>：</p>
+<ul>
+<li><strong>与 Spring Boot 深度整合</strong>：自动配置、Actuator 健康检查、Micrometer 指标采集</li>
+<li><strong>统一的 ChatClient API</strong>：切换模型只需改配置，代码无需变动</li>
+<li><strong>开箱即用的高级特性</strong>：Prompt Template（支持占位符和多语言资源文件）、结构化输出、流式调用</li>
+<li><strong>一致的安全配置</strong>：与 Spring Security 无缝集成</li>
+</ul>
+<p><strong>适用场景</strong>：Spring Boot 3.2+ 的项目，尤其是已经使用 Spring 生态的团队。</p>
+<h2 id="3-LangChain4j-ChatLanguageModel"><a href="#3-LangChain4j-ChatLanguageModel" class="headerlink" title="3. LangChain4j ChatLanguageModel"></a>3. LangChain4j ChatLanguageModel</h2><p>LangChain4j 是 LangChain 生态的 Java 实现，设计理念更接近 Python LangChain 的编程模型。它的核心目标是<strong>提供模型无关的统一 API</strong>，让同一套代码可以调用任何模型。</p>
+<p><strong>引入依赖</strong>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>dev.langchain4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>langchain4j-open-ai<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;langchain4j.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>核心 API 使用</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造模型实例</span></span><br><span class="line"><span class="type">OpenAiChatModel</span> <span class="variable">model</span> <span class="operator">=</span> OpenAiChatModel.builder()</span><br><span class="line">    .apiKey(System.getenv(<span class="string">&quot;OPENAI_API_KEY&quot;</span>))</span><br><span class="line">    .modelName(<span class="string">&quot;gpt-4o&quot;</span>)</span><br><span class="line">    .temperature(<span class="number">0.3</span>)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 简单调用</span></span><br><span class="line"><span class="type">String</span> <span class="variable">answer</span> <span class="operator">=</span> model.generate(<span class="string">&quot;解释 Java 中的 CompletableFuture&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 流式调用（通过 StreamingResponseHandler 回调）</span></span><br><span class="line">model.generate(<span class="string">&quot;解释 Java 中的 CompletableFuture&quot;</span>,</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">StreamingResponseHandler</span>&lt;AiMessage&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onNext</span><span class="params">(String token)</span> &#123;</span><br><span class="line">            System.out.print(token);  <span class="comment">// 逐 Token 输出</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onComplete</span><span class="params">(Response&lt;AiMessage&gt; response)</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;\nToken 消耗: &quot;</span> + response.tokenUsage());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onError</span><span class="params">(Throwable error)</span> &#123;</span><br><span class="line">            error.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>LangChain4j 的接口体系</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ChatLanguageModel</code></td>
+<td>同步聊天模型调用</td>
+</tr>
+<tr>
+<td><code>StreamingChatLanguageModel</code></td>
+<td>流式聊天模型调用</td>
+</tr>
+<tr>
+<td><code>EmbeddingModel</code></td>
+<td>向量嵌入</td>
+</tr>
+<tr>
+<td><code>ChatMemory</code></td>
+<td>对话记忆管理</td>
+</tr>
+<tr>
+<td><code>AiServices</code></td>
+<td>声明式 AI 服务（类似 Feign）</td>
+</tr>
+<tr>
+<td><code>@Tool</code></td>
+<td>声明工具函数</td>
+</tr>
+</tbody></table>
+<p><strong>Spring Boot 集成</strong>：</p>
+<p>LangChain4j 同样提供了 Spring Boot Starter，支持通过 <code>application.yml</code> 自动配置和注入模型实例。</p>
+<p><strong>适用场景</strong>：需要与 LangChain 生态对齐（如使用 LangSmith 做可观测性）、或者需要在 Spring 和非 Spring 项目间共享 AI 调用逻辑的团队。</p>
+<h2 id="4-封装统一的-LLM-Gateway-层"><a href="#4-封装统一的-LLM-Gateway-层" class="headerlink" title="4. 封装统一的 LLM Gateway 层"></a>4. 封装统一的 LLM Gateway 层</h2><p>当系统需要同时接入多个模型（如 GPT-4o 做复杂推理、DeepSeek 做简单问答、私有化 Qwen 处理敏感数据）时，直接在业务代码中调用不同模型会导致配置分散、切换困难。这时候需要封装一个统一的 LLM Gateway（网关）层。</p>
+<p><strong>LLM Gateway 的核心设计</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 统一的模型调用接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">LlmGateway</span> &#123;</span><br><span class="line">    ChatResponse <span class="title function_">chat</span><span class="params">(LlmRequest request)</span>;</span><br><span class="line">    Flux&lt;ChatResponse&gt; <span class="title function_">chatStream</span><span class="params">(LlmRequest request)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求对象：与具体模型无关</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LlmRequest</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String modelName;         <span class="comment">// 逻辑模型名（如 &quot;default&quot;, &quot;cheap&quot;, &quot;secure&quot;）</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Message&gt; messages;</span><br><span class="line">    <span class="keyword">private</span> Double temperature;</span><br><span class="line">    <span class="keyword">private</span> Integer maxTokens;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Gateway 实现：根据 modelName 路由到具体提供商</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LlmGatewayImpl</span> <span class="keyword">implements</span> <span class="title class_">LlmGateway</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ChatModelProvider&gt; providers;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> ChatResponse <span class="title function_">chat</span><span class="params">(LlmRequest request)</span> &#123;</span><br><span class="line">        <span class="type">ChatModelProvider</span> <span class="variable">provider</span> <span class="operator">=</span> resolveProvider(request.getModelName());</span><br><span class="line">        <span class="keyword">return</span> provider.call(adaptRequest(request));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ChatModelProvider <span class="title function_">resolveProvider</span><span class="params">(String modelName)</span> &#123;</span><br><span class="line">        <span class="comment">// 从配置中查找模型名对应的提供商</span></span><br><span class="line">        <span class="comment">// &quot;default&quot; → OpenAI GPT-4o</span></span><br><span class="line">        <span class="comment">// &quot;cheap&quot; → DeepSeek-V3</span></span><br><span class="line">        <span class="comment">// &quot;secure&quot; → 私有化 Qwen</span></span><br><span class="line">        <span class="keyword">if</span> (!providers.containsKey(modelName)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ModelNotFoundException</span>(<span class="string">&quot;Unknown model: &quot;</span> + modelName);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> providers.get(modelName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Gateway 层的核心能力</strong>：</p>
+<ul>
+<li><strong>模型路由（Model Routing）</strong>：根据请求的模型名或请求属性（复杂度、延迟要求、成本预算）将请求路由到不同的模型提供商</li>
+<li><strong>负载均衡（Load Balancing）</strong>：当一个模型有多个实例（或多 API Key）时，自动分配请求</li>
+<li><strong>Fallback 与故障转移</strong>：主模型不可用时自动切换到备用模型</li>
+<li><strong>成本追踪（Cost Tracking）</strong>：统一记录所有模型调用的 Token 消耗，提供按模型、按业务维度的成本报表</li>
+</ul>
+<p><strong>适用场景</strong>：企业级多模型部署、AI 中台建设、需要统一管控 Token 成本和调用安全的场景。</p>
+<h2 id="5-四种方式的选型建议"><a href="#5-四种方式的选型建议" class="headerlink" title="5. 四种方式的选型建议"></a>5. 四种方式的选型建议</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────┐</span><br><span class="line">│  快速验证 / 原型                        →  原生 HTTP  │</span><br><span class="line">│  Spring Boot 3.2+ 项目，追求开箱即用     →  Spring AI │</span><br><span class="line">│  多项目共享逻辑 / 非 Spring / LangChain生态 → LangChain4j │</span><br><span class="line">│  多模型管理 / 企业级管控 / AI 中台       →  LLM Gateway │</span><br><span class="line">└─────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>一个务实的选择策略：<strong>小型项目从 Spring AI 起步</strong>（如果使用 Spring Boot）或 <strong>LangChain4j 起步</strong>（如果需要框架无关性）；<strong>企业级场景在框架之上自建 Gateway 层</strong>进行统一管控。</p>
+<hr>
+<h1 id="四、流式调用（SSE）深度解析"><a href="#四、流式调用（SSE）深度解析" class="headerlink" title="四、流式调用（SSE）深度解析"></a>四、流式调用（SSE）深度解析</h1><h2 id="1-SSE-协议原理"><a href="#1-SSE-协议原理" class="headerlink" title="1. SSE 协议原理"></a>1. SSE 协议原理</h2><p>SSE（Server-Sent Events，服务端推送事件）是一种基于 HTTP 的服务端向客户端推送数据的技术。与 WebSocket 的全双工不同，SSE 是<strong>单向的</strong>——服务端推送，客户端只能接收。</p>
+<p>SSE 之所以成为 LLM 流式输出的标准协议，原因有二：</p>
+<ul>
+<li><strong>实现简单</strong>：服务端只需设置 <code>Content-Type: text/event-stream</code>，然后逐行输出 <code>data: &lt;json&gt;\n\n</code> 即可。不需要 WebSocket 的握手和帧协议</li>
+<li><strong>浏览器原生支持</strong>：前端可以直接使用 <code>EventSource</code> API 消费 SSE，不需要额外库</li>
+</ul>
+<p>SSE 数据格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">data: &#123;&quot;token&quot;: &quot;你&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;token&quot;: &quot;好&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: &#123;&quot;token&quot;: &quot;！&quot;&#125;</span><br><span class="line"></span><br><span class="line">data: [DONE]</span><br></pre></td></tr></table></figure>
+
+<p>每条消息以 <code>data:</code> 开头，以双换行 <code>\n\n</code> 结束。<code>[DONE]</code> 是 OpenAI 定义的特殊结束标记。</p>
+<h2 id="2-Java-中的-SSE-实现方式"><a href="#2-Java-中的-SSE-实现方式" class="headerlink" title="2. Java 中的 SSE 实现方式"></a>2. Java 中的 SSE 实现方式</h2><p>Java 后端消费 LLM 的 SSE 流（即作为 SSE 客户端），主要有两种方式：</p>
+<p><strong>方式一：WebClient + Flux（响应式）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">WebClient</span> <span class="variable">webClient</span> <span class="operator">=</span> WebClient.create(<span class="string">&quot;https://api.deepseek.com&quot;</span>);</span><br><span class="line"></span><br><span class="line">Flux&lt;String&gt; tokenStream = webClient.post()</span><br><span class="line">    .uri(<span class="string">&quot;/v1/chat/completions&quot;</span>)</span><br><span class="line">    .header(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer &quot;</span> + apiKey)</span><br><span class="line">    .bodyValue(streamRequest)      <span class="comment">// stream: true</span></span><br><span class="line">    .accept(MediaType.TEXT_EVENT_STREAM)</span><br><span class="line">    .retrieve()</span><br><span class="line">    .bodyToFlux(String.class)      <span class="comment">// 每收到一个 SSE event，发射一个 String</span></span><br><span class="line">    .filter(line -&gt; !line.equals(<span class="string">&quot;[DONE]&quot;</span>))</span><br><span class="line">    .map(line -&gt; parseToken(line)); <span class="comment">// 解析 JSON，提取 delta.content</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅流，逐 Token 处理</span></span><br><span class="line">tokenStream.subscribe(</span><br><span class="line">    token -&gt; System.out.print(token),</span><br><span class="line">    error -&gt; log.error(<span class="string">&quot;Stream error&quot;</span>, error),</span><br><span class="line">    () -&gt; log.info(<span class="string">&quot;Stream completed&quot;</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><strong>方式二：OkHttp + 逐行读取（同步阻塞）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">OkHttpClient</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder()</span><br><span class="line">    .readTimeout(<span class="number">5</span>, TimeUnit.MINUTES)  <span class="comment">// 流式调用需要更长的读超时</span></span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> buildStreamRequest();</span><br><span class="line"><span class="keyword">try</span> (<span class="type">Response</span> <span class="variable">response</span> <span class="operator">=</span> client.newCall(request).execute()) &#123;</span><br><span class="line">    <span class="type">BufferedReader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(response.body().byteStream()));</span><br><span class="line"></span><br><span class="line">    String line;</span><br><span class="line">    <span class="keyword">while</span> ((line = reader.readLine()) != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (line.startsWith(<span class="string">&quot;data: &quot;</span>)) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">data</span> <span class="operator">=</span> line.substring(<span class="number">6</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">&quot;[DONE]&quot;</span>.equals(data)) <span class="keyword">break</span>;</span><br><span class="line">            <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> extractToken(data);</span><br><span class="line">            <span class="comment">// 处理 token（发送到前端 / 写入文件等）</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Spring Boot 转发 SSE 到前端</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(value = &quot;/ai/chat/stream&quot;, produces = MediaType.TEXT_EVENT_STREAM_VALUE)</span></span><br><span class="line"><span class="keyword">public</span> Flux&lt;ServerSentEvent&lt;String&gt;&gt; <span class="title function_">chatStream</span><span class="params">(<span class="meta">@RequestParam</span> String question)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> chatClient.prompt()</span><br><span class="line">        .user(question)</span><br><span class="line">        .stream()</span><br><span class="line">        .content()</span><br><span class="line">        .map(token -&gt; ServerSentEvent.&lt;String&gt;builder()</span><br><span class="line">            .data(token)</span><br><span class="line">            .build());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-流式调用对用户体验的影响"><a href="#3-流式调用对用户体验的影响" class="headerlink" title="3. 流式调用对用户体验的影响"></a>3. 流式调用对用户体验的影响</h2><p>流式调用的价值需要从两个指标来理解：</p>
+<ul>
+<li><strong>TTFT（Time To First Token，首 Token 延迟）</strong>：从用户发送请求到收到第一个 Token 的时间。流式方式下这个值通常明显低于非流式的总耗时，用户感觉系统”立刻开始响应”</li>
+<li><strong>总耗时（Total Latency）</strong>：所有 Token 生成完毕的时间。流式和非流式的总耗时基本相同</li>
+</ul>
+<p>流式输出的<strong>心理效应</strong>：用户感知的延迟主要是 TTFT，而非总耗时。一个 200ms 首 Token + 10 秒总耗时的流式体验，远好于 10 秒后一次性返回的非流式体验。</p>
+<p><strong>非流式调用的适用场景</strong>：并非所有场景都需要流式。以下场景适合非流式：</p>
+<ul>
+<li>后端异步任务（如离线生成报告、批量处理）</li>
+<li>需要完整结果后再处理（如 JSON 解析、数据提取）</li>
+<li>输出很短（几十 Token），流式的边际收益不大</li>
+</ul>
+<h2 id="4-流式场景下的错误处理"><a href="#4-流式场景下的错误处理" class="headerlink" title="4. 流式场景下的错误处理"></a>4. 流式场景下的错误处理</h2><p>流式调用的错误处理比非流式更复杂，因为错误可能发生在流的中间（模型已经生成了部分内容）：</p>
+<ul>
+<li><strong>连接中断</strong>：使用 <code>retry()</code> 操作符实现自动重连。注意：流式调用通常在生成内容后不支持断点续传，重连意味着重新发起完整请求</li>
+<li><strong>超时处理</strong>：流式调用中，两次 Token 推送之间的间隔如果超过阈值（Idle Timeout），应触发超时。可以设置读超时（Read Timeout）和空闲超时（Idle Timeout）</li>
+<li><strong>部分内容处理</strong>：流中断时，前端应展示已生成的部分内容，并提示用户”生成中断，请重试”</li>
+<li><strong>背压（Backpressure）</strong>：当下游消费速度慢于模型生成速度时，框架应能缓存或丢弃中间结果。WebFlux 默认支持背压</li>
+</ul>
+<hr>
+<h1 id="五、多模型管理与容错策略"><a href="#五、多模型管理与容错策略" class="headerlink" title="五、多模型管理与容错策略"></a>五、多模型管理与容错策略</h1><h2 id="1-多模型切换的典型场景"><a href="#1-多模型切换的典型场景" class="headerlink" title="1. 多模型切换的典型场景"></a>1. 多模型切换的典型场景</h2><p>生产环境中使用多个模型不是过度设计，而是应对以下现实需求的必然选择：</p>
+<p><strong>成本优化</strong>：</p>
+<p>简单任务（文本分类、关键词提取、格式转换）用小模型，复杂任务（多步推理、代码生成、长文档分析）用大模型。例如：</p>
+<ul>
+<li>DeepSeek-V3 处理 80% 的日常调用（便宜，每百万 Token 约 2 元 RMB）</li>
+<li>GPT-4o 处理 15% 的复杂推理（贵，每百万 Token 约 15 元 RMB）</li>
+<li>Claude Opus 4 处理 5% 的高难度长文档分析</li>
+</ul>
+<p>这种分层策略可以将总成本降低 60% 以上。</p>
+<p><strong>能力互补</strong>：</p>
+<p>不同模型有各自的强项。例如：</p>
+<ul>
+<li>GPT-4o 综合能力强，JSON 结构化输出最稳定</li>
+<li>Claude 长文本理解和代码生成极其出色</li>
+<li>DeepSeek-R1 推理链详细，适合需要展示推导过程的场景</li>
+<li>Qwen 中文能力扎实，适合中文知识库问答</li>
+</ul>
+<p><strong>地域合规与数据安全</strong>：</p>
+<p>敏感数据不能出境时，使用国内模型的 API（如通过阿里云百炼调用 Qwen）或私有化部署开源模型。非敏感数据可以调用海外模型利用其综合能力优势。</p>
+<h2 id="2-Fallback-链设计"><a href="#2-Fallback-链设计" class="headerlink" title="2. Fallback 链设计"></a>2. Fallback 链设计</h2><p>Fallback（故障转移）链是保证 AI 应用可用性的关键机制。当主模型不可用（超时、限流、返回错误）时，自动降级到备用方案。</p>
+<p><strong>典型 Fallback 链结构</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">请求 → 主模型（GPT-4o, 超时 30s）</span><br><span class="line">          ↓ 失败</span><br><span class="line">       → 备用模型（DeepSeek-V3, 超时 30s）</span><br><span class="line">          ↓ 失败</span><br><span class="line">       → 缓存响应（语义匹配的已有答案）</span><br><span class="line">          ↓ 无缓存命中</span><br><span class="line">       → 静态兜底回复（&quot;系统繁忙，请稍后重试&quot;）</span><br></pre></td></tr></table></figure>
+
+<p><strong>Java 实现思路</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ChatResponse <span class="title function_">callWithFallback</span><span class="params">(LlmRequest request)</span> &#123;</span><br><span class="line">    <span class="comment">// 第一级：主模型</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> primaryModel.call(request, Duration.ofSeconds(<span class="number">30</span>));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (TimeoutException | RateLimitException e) &#123;</span><br><span class="line">        log.warn(<span class="string">&quot;主模型调用失败，尝试备用模型: &#123;&#125;&quot;</span>, e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第二级：备用模型</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> fallbackModel.call(request, Duration.ofSeconds(<span class="number">30</span>));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.warn(<span class="string">&quot;备用模型调用失败，尝试缓存: &#123;&#125;&quot;</span>, e.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第三级：语义缓存</span></span><br><span class="line">    Optional&lt;ChatResponse&gt; cached = semanticCache.search(request);</span><br><span class="line">    <span class="keyword">if</span> (cached.isPresent()) &#123;</span><br><span class="line">        log.info(<span class="string">&quot;命中语义缓存&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> cached.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第四级：静态兜底</span></span><br><span class="line">    <span class="keyword">return</span> ChatResponse.fallback(<span class="string">&quot;系统繁忙，请稍后重试&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Fallback 设计原则</strong>：</p>
+<ul>
+<li><strong>降级有痕</strong>：Fallback 发生时必须记录日志和指标，方便事后排查</li>
+<li><strong>模型差异透明化</strong>：备用模型的输出质量可能不同，必要时在响应中标注（如 <code>[由备用模型生成]</code>）</li>
+<li><strong>避免级联失败</strong>：如果主模型是因为上游限频而失败，备用模型可能遭遇同样的问题。不同模型提供商之间有天然隔离</li>
+</ul>
+<h2 id="3-重试机制"><a href="#3-重试机制" class="headerlink" title="3. 重试机制"></a>3. 重试机制</h2><p>LLM 调用的失败模式与传统 HTTP 调用类似但有自己的特点：</p>
+<p><strong>哪些错误值得重试</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>错误类型</th>
+<th align="center">是否重试</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>429 Too Many Requests（限频）</td>
+<td align="center">是</td>
+<td>等待 Retry-After 头指示的时间后重试</td>
+</tr>
+<tr>
+<td>5xx Server Error</td>
+<td align="center">是</td>
+<td>服务器临时故障，短时间后可能恢复</td>
+</tr>
+<tr>
+<td>网络超时 &#x2F; 连接重置</td>
+<td align="center">是</td>
+<td>网络抖动，可重试</td>
+</tr>
+<tr>
+<td>400 Bad Request &#x2F; 401 Unauthorized</td>
+<td align="center">否</td>
+<td>请求有误或认证失败，重试无效</td>
+</tr>
+<tr>
+<td>Context Window 溢出</td>
+<td align="center">否</td>
+<td>需要减少 Token 数量而非重试</td>
+</tr>
+</tbody></table>
+<p><strong>指数退避（Exponential Backoff）实现</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ChatResponse <span class="title function_">callWithRetry</span><span class="params">(LlmRequest request)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">maxRetries</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line">    <span class="type">long</span> <span class="variable">baseDelayMs</span> <span class="operator">=</span> <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">attempt</span> <span class="operator">=</span> <span class="number">0</span>; attempt &lt;= maxRetries; attempt++) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> model.call(request);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RetryableException e) &#123;</span><br><span class="line">            <span class="keyword">if</span> (attempt == maxRetries) <span class="keyword">throw</span> e;</span><br><span class="line"></span><br><span class="line">            <span class="type">long</span> <span class="variable">delay</span> <span class="operator">=</span> baseDelayMs * (<span class="number">1L</span> &lt;&lt; attempt); <span class="comment">// 1s, 2s, 4s</span></span><br><span class="line">            log.warn(<span class="string">&quot;第 &#123;&#125; 次重试，等待 &#123;&#125;ms&quot;</span>, attempt + <span class="number">1</span>, delay);</span><br><span class="line">            Thread.sleep(delay);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;Unreachable&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>幂等性注意</strong>：查询类请求（”帮我查订单状态”）重复调用是幂等的；但生成类请求（”写一封邮件”）重复调用会产生不同的输出。当前 LLM API 不支持幂等键（Idempotency Key），因此重试逻辑需要在业务层考虑这个特性——比如通过对话 ID 去重。</p>
+<h2 id="4-Java-中模型路由层的实现思路"><a href="#4-Java-中模型路由层的实现思路" class="headerlink" title="4. Java 中模型路由层的实现思路"></a>4. Java 中模型路由层的实现思路</h2><p>在企业级场景中，模型路由层通常使用<strong>策略模式（Strategy Pattern）+ 配置驱动</strong>的设计：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 路由策略接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ModelRouter</span> &#123;</span><br><span class="line">    String <span class="title function_">route</span><span class="params">(LlmRequest request)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基于规则的路由（最常用）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleBasedRouter</span> <span class="keyword">implements</span> <span class="title class_">ModelRouter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ModelRoutingProperties props;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">route</span><span class="params">(LlmRequest request)</span> &#123;</span><br><span class="line">        <span class="comment">// 规则 1：用户指定了模型 → 直接使用</span></span><br><span class="line">        <span class="keyword">if</span> (request.getModelName() != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> request.getModelName();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 规则 2：根据请求标记路由</span></span><br><span class="line">        <span class="comment">// 如请求中 tagged=&quot;simple&quot; → 路由到 cheap 模型</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&quot;simple&quot;</span>.equals(request.getTag())) &#123;</span><br><span class="line">            <span class="keyword">return</span> props.getSimpleTaskModel();   <span class="comment">// 配置中定义的 cheap 模型名</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 规则 3：默认模型</span></span><br><span class="line">        <span class="keyword">return</span> props.getDefaultModel();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置驱动的路由规则（application.yml）</span></span><br><span class="line"><span class="comment">// ai.routing:</span></span><br><span class="line"><span class="comment">//   default-model: gpt-4o</span></span><br><span class="line"><span class="comment">//   simple-task-model: deepseek-chat</span></span><br><span class="line"><span class="comment">//   secure-model: private-qwen</span></span><br><span class="line"><span class="comment">//   fallback-chain:</span></span><br><span class="line"><span class="comment">//     - gpt-4o</span></span><br><span class="line"><span class="comment">//     - deepseek-chat</span></span><br><span class="line"><span class="comment">//     - cache</span></span><br></pre></td></tr></table></figure>
+
+<p>路由层的职责边界：<strong>只做路由决策，不负责模型调用</strong>。模型调用逻辑交给 Gateway 层的具体 Provider 实现，保持单一职责。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Java%E5%90%8E%E7%AB%AF/" rel="tag"># Java后端</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/04-Embedding%E4%B8%8E%E5%90%91%E9%87%8F%E5%8C%96/" rel="prev" title="Embedding与向量化">
+                  <i class="fa fa-angle-left"></i> Embedding与向量化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/03-Prompt%E5%B7%A5%E7%A8%8B/" rel="next" title="Prompt工程">
+                  Prompt工程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

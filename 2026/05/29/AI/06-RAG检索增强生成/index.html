@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、RAG 的基本概念与定位1. 什么是 RAGRAG（Retrieval-Augmented Generation，检索增强生成）是一种将信息检索与文本生成结合的 AI 应用架构模式。它的核心思想是：在 LLM 生成答案之前，先从外部知识库中检索出与用户问题最相关的文档片段，然后将这些片段作为”参考资料”注入 Prompt，让 LLM 基于这些资料生成答案。 RAG 的本质是给 LLM 装上”搜">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG检索增强生成">
+<meta property="og:url" content="http://example.com/2026/05/29/AI/06-RAG%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、RAG 的基本概念与定位1. 什么是 RAGRAG（Retrieval-Augmented Generation，检索增强生成）是一种将信息检索与文本生成结合的 AI 应用架构模式。它的核心思想是：在 LLM 生成答案之前，先从外部知识库中检索出与用户问题最相关的文档片段，然后将这些片段作为”参考资料”注入 Prompt，让 LLM 基于这些资料生成答案。 RAG 的本质是给 LLM 装上”搜">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T10:06:40.105Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="RAG">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/05/29/AI/06-RAG%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/05/29/AI/06-RAG%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90/","path":"2026/05/29/AI/06-RAG检索增强生成/","title":"RAG检索增强生成"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RAG检索增强生成 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81RAG-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9A%E4%BD%8D"><span class="nav-text">一、RAG 的基本概念与定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-RAG"><span class="nav-text">1. 什么是 RAG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-RAG-%E8%A7%A3%E5%86%B3%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98%EF%BC%9ALLM-%E7%9A%84%E4%B8%89%E5%A4%A7%E5%B1%80%E9%99%90"><span class="nav-text">2. RAG 解决的核心问题：LLM 的三大局限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-RAG-vs-%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%EF%BC%9A%E4%B8%A4%E7%A7%8D%E7%9F%A5%E8%AF%86%E6%B3%A8%E5%85%A5%E8%8C%83%E5%BC%8F"><span class="nav-text">3. RAG vs 模型微调：两种知识注入范式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81RAG-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B"><span class="nav-text">二、RAG 的核心流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%A6%BB%E7%BA%BF%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%96%87%E6%A1%A3%E7%B4%A2%E5%BC%95%E7%AE%A1%E7%BA%BF"><span class="nav-text">1. 离线阶段：文档索引管线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%96%87%E6%A1%A3%E5%8A%A0%E8%BD%BD%EF%BC%88Document-Loading%EF%BC%89"><span class="nav-text">1.1 文档加载（Document Loading）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%96%87%E6%A1%A3%E8%A7%A3%E6%9E%90%EF%BC%88Document-Parsing%EF%BC%89"><span class="nav-text">1.2 文档解析（Document Parsing）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%96%87%E6%9C%AC%E5%88%87%E5%88%86%EF%BC%88Chunking%EF%BC%89"><span class="nav-text">1.3 文本切分（Chunking）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%90%91%E9%87%8F%E5%8C%96%EF%BC%88Embedding%EF%BC%89"><span class="nav-text">1.4 向量化（Embedding）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E5%90%91%E9%87%8F%E5%AD%98%E5%82%A8%EF%BC%88Vector-Store%EF%BC%89"><span class="nav-text">1.5 向量存储（Vector Store）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9C%A8%E7%BA%BF%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%94%9F%E6%88%90"><span class="nav-text">2. 在线阶段：检索与生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%9F%A5%E8%AF%A2%E5%90%91%E9%87%8F%E5%8C%96"><span class="nav-text">2.1 查询向量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%9B%B8%E4%BC%BC%E6%80%A7%E6%A3%80%E7%B4%A2"><span class="nav-text">2.2 相似性检索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Prompt-%E7%BB%84%E8%A3%85"><span class="nav-text">2.3 Prompt 组装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-LLM-%E7%94%9F%E6%88%90"><span class="nav-text">2.4 LLM 生成</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81RAG-%E7%9A%84%E6%A3%80%E7%B4%A2%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="nav-text">三、RAG 的检索优化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Query-Rewrite%EF%BC%88%E6%9F%A5%E8%AF%A2%E9%87%8D%E5%86%99%EF%BC%89"><span class="nav-text">1. Query Rewrite（查询重写）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Multi-Query-Retrieval%EF%BC%88%E5%A4%9A%E6%9F%A5%E8%AF%A2%E6%A3%80%E7%B4%A2%EF%BC%89"><span class="nav-text">2. Multi-Query Retrieval（多查询检索）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Hybrid-Search%EF%BC%88%E6%B7%B7%E5%90%88%E6%90%9C%E7%B4%A2%EF%BC%89"><span class="nav-text">3. Hybrid Search（混合搜索）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Rerank%EF%BC%88%E9%87%8D%E6%8E%92%E5%BA%8F%EF%BC%89"><span class="nav-text">4. Rerank（重排序）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%A3%80%E7%B4%A2%E4%BC%98%E5%8C%96%E7%9A%84%E7%BB%84%E5%90%88%E7%AD%96%E7%95%A5"><span class="nav-text">5. 检索优化的组合策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%AB%98%E7%BA%A7-RAG-%E6%A8%A1%E5%BC%8F"><span class="nav-text">四、高级 RAG 模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Self-Query-Retrieval%EF%BC%88%E8%87%AA%E6%9F%A5%E8%AF%A2%E6%A3%80%E7%B4%A2%EF%BC%89"><span class="nav-text">1. Self-Query Retrieval（自查询检索）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Parent-Child-Chunk%EF%BC%88%E7%88%B6%E5%AD%90%E6%96%87%E6%9C%AC%E5%9D%97%EF%BC%89"><span class="nav-text">2. Parent-Child Chunk（父子文本块）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%9A%E8%B7%B3%E6%A3%80%E7%B4%A2%EF%BC%88Multi-hop-Retrieval%EF%BC%89"><span class="nav-text">3. 多跳检索（Multi-hop Retrieval）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8E%8B%E7%BC%A9%EF%BC%88Context-Compression%EF%BC%89"><span class="nav-text">4. 上下文压缩（Context Compression）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81Java-%E5%90%8E%E7%AB%AF%E5%AE%9E%E8%B7%B5%EF%BC%9ASpring-AI-RAG-Pipeline"><span class="nav-text">五、Java 后端实践：Spring AI RAG Pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Spring-AI-ETL-Pipeline-%E6%9E%B6%E6%9E%84"><span class="nav-text">1. Spring AI ETL Pipeline 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%87%E6%A1%A3%E8%AF%BB%E5%8F%96%E4%B8%8E%E8%A7%A3%E6%9E%90"><span class="nav-text">2. 文档读取与解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%8C%E6%95%B4-RAG-%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0"><span class="nav-text">3. 完整 RAG 服务实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%B8%A6%E6%A3%80%E7%B4%A2%E4%BC%98%E5%8C%96%E7%9A%84-RAG-%E6%9C%8D%E5%8A%A1"><span class="nav-text">4. 带检索优化的 RAG 服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81Java-%E5%90%8E%E7%AB%AF%E5%AE%9E%E8%B7%B5%EF%BC%9ALangChain4j-RAG-Pipeline"><span class="nav-text">六、Java 后端实践：LangChain4j RAG Pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LangChain4j-RAG-%E7%BB%84%E4%BB%B6%E4%BD%93%E7%B3%BB"><span class="nav-text">1. LangChain4j RAG 组件体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%BB%84%E4%BB%B6%E5%8C%96%E7%BB%84%E8%A3%85-RAG-%E6%B5%81%E7%A8%8B"><span class="nav-text">2. 组件化组装 RAG 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-AiServices-RAG-%E6%95%B4%E5%90%88"><span class="nav-text">3. AiServices + RAG 整合</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81RAG-%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-text">七、RAG 的工程化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%B4%A2%E5%BC%95%E6%9B%B4%E6%96%B0%E4%B8%8E%E5%A2%9E%E9%87%8F%E5%90%8C%E6%AD%A5"><span class="nav-text">1. 索引更新与增量同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">2. 数据一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%96%87%E6%A1%A3%E5%A4%84%E7%90%86"><span class="nav-text">3. 大规模文档处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-RAG-%E8%B4%A8%E9%87%8F%E8%AF%84%E4%BC%B0"><span class="nav-text">4. RAG 质量评估</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/29/AI/06-RAG%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RAG检索增强生成 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RAG检索增强生成
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-29T00:00:00+08:00">2026-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-07 18:06:40" itemprop="dateModified" datetime="2026-06-07T18:06:40+08:00">2026-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、RAG-的基本概念与定位"><a href="#一、RAG-的基本概念与定位" class="headerlink" title="一、RAG 的基本概念与定位"></a>一、RAG 的基本概念与定位</h1><h2 id="1-什么是-RAG"><a href="#1-什么是-RAG" class="headerlink" title="1. 什么是 RAG"></a>1. 什么是 RAG</h2><p>RAG（Retrieval-Augmented Generation，检索增强生成）是一种将<strong>信息检索</strong>与<strong>文本生成</strong>结合的 AI 应用架构模式。它的核心思想是：在 LLM 生成答案之前，先从外部知识库中检索出与用户问题最相关的文档片段，然后将这些片段作为”参考资料”注入 Prompt，让 LLM 基于这些资料生成答案。</p>
+<p>RAG 的本质是<strong>给 LLM 装上”搜索引擎”</strong>——LLM 不再仅依赖训练时记忆的知识，而是可以实时查询外部知识库，获取最新的、领域特定的、可信的信息。</p>
+<p>RAG 的运行流程可以用一句话概括：<strong>用户提问 → 向量化查询 → 检索相关文档 → 组装增强 Prompt → LLM 基于资料生成答案</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                      RAG 运行流程                             │</span><br><span class="line">│                                                             │</span><br><span class="line">│   用户提问：&quot;公司内部 API 网关怎么配置限流？&quot;                   │</span><br><span class="line">│       │                                                     │</span><br><span class="line">│       ▼                                                     │</span><br><span class="line">│   ┌──────────┐    ┌──────────────┐    ┌──────────────────┐ │</span><br><span class="line">│   │ 查询向量化 │ →  │ 向量数据库检索 │ →  │ 返回 TopK 相关文档 │ │</span><br><span class="line">│   │ Embedding│    │ (语义相似搜索) │    │ (Chunk 1,2,3...) │ │</span><br><span class="line">│   └──────────┘    └──────────────┘    └──────────────────┘ │</span><br><span class="line">│                                               │             │</span><br><span class="line">│                                               ▼             │</span><br><span class="line">│   ┌──────────────────────────────────────────────────────┐  │</span><br><span class="line">│   │  组装增强 Prompt：                                     │  │</span><br><span class="line">│   │  &quot;请根据以下参考资料回答用户问题。如果资料中没有相关信息， │  │</span><br><span class="line">│   │   请明确说明。                                         │  │</span><br><span class="line">│   │   参考资料：                                           │  │</span><br><span class="line">│   │   [文档1] API 网关限流配置采用令牌桶算法...              │  │</span><br><span class="line">│   │   [文档2] 限流策略在 gateway.yml 中配置...              │  │</span><br><span class="line">│   │   用户问题：公司内部 API 网关怎么配置限流？&quot;              │  │</span><br><span class="line">│   └──────────────────────────────────────────────────────┘  │</span><br><span class="line">│                                               │             │</span><br><span class="line">│                                               ▼             │</span><br><span class="line">│   ┌──────────────────────────────────────────────────────┐  │</span><br><span class="line">│   │  LLM 生成答案：&quot;根据公司内部文档，API 网关限流配置步骤   │  │</span><br><span class="line">│   │   如下：1. 编辑 gateway.yml，添加 rate-limit 配置段...&quot;│  │</span><br><span class="line">│   └──────────────────────────────────────────────────────┘  │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>RAG 不是某个特定的库或产品，而是一套<strong>架构范式</strong>。只要是”检索外部知识 → 注入 Prompt → 交给 LLM 生成”的模式，无论用什么工具实现，都属于 RAG 的范畴。</p>
+<h2 id="2-RAG-解决的核心问题：LLM-的三大局限"><a href="#2-RAG-解决的核心问题：LLM-的三大局限" class="headerlink" title="2. RAG 解决的核心问题：LLM 的三大局限"></a>2. RAG 解决的核心问题：LLM 的三大局限</h2><p>RAG 之所以成为 AI 应用开发中最基础的架构模式之一，是因为它直接解决了 LLM 的三个固有局限：</p>
+<p><strong>局限一：知识截止日期（Knowledge Cutoff）</strong></p>
+<p>LLM 的知识来自训练数据，训练完成后其知识停留在训练截止日期。对于截止日期之后的信息（如新产品发布、政策变更、最新技术动态），LLM 完全无知。RAG 通过检索外部实时更新的知识库，让 LLM 可以回答关于最新信息的问题。</p>
+<p><strong>局限二：幻觉（Hallucination）</strong></p>
+<p>当 LLM 被问到它不知道的信息时，它倾向于”编造”听起来合理但实际错误的答案——这就是幻觉。幻觉之所以危险，不是因为它明显错误（那样用户会察觉），而是因为它<strong>编造的答案往往听起来非常可信</strong>。RAG 通过将答案限定在检索到的真实文档范围内（in-context learning），大幅降低了幻觉的发生概率——LLM 被要求”基于资料回答”，而不是”凭记忆回答”。</p>
+<p><strong>局限三：领域知识缺失</strong></p>
+<p>通用 LLM 的训练语料以互联网公开内容为主，对于企业内部的私有知识（代码仓库、设计文档、运维手册、业务规范）完全不了解。RAG 通过检索企业内部知识库，让 LLM 能够回答需要私有领域知识的问题。</p>
+<table>
+<thead>
+<tr>
+<th>LLM 局限</th>
+<th>表现</th>
+<th>RAG 如何解决</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>知识截止日期</td>
+<td>不知道最新信息</td>
+<td>检索实时更新的外部知识库</td>
+</tr>
+<tr>
+<td>幻觉</td>
+<td>编造看似合理但错误的答案</td>
+<td>基于检索到的真实文档回答，限定答案边界</td>
+</tr>
+<tr>
+<td>领域知识缺失</td>
+<td>不了解企业内部信息</td>
+<td>检索企业内部私有知识库</td>
+</tr>
+</tbody></table>
+<p><strong>RAG 的附加价值</strong>：</p>
+<ul>
+<li><strong>可溯源（Attribution）</strong>：RAG 生成的答案可以附带引用来源（”这个答案来自《API 网关运维手册》第 3 章”），用户可以自行验证</li>
+<li><strong>知识热更新</strong>：修改外部知识库后，RAG 的回答立即生效——不需要重新训练模型</li>
+<li><strong>权限控制</strong>：不同用户检索不同权限的知识库，可以实现知识隔离</li>
+</ul>
+<h2 id="3-RAG-vs-模型微调：两种知识注入范式"><a href="#3-RAG-vs-模型微调：两种知识注入范式" class="headerlink" title="3. RAG vs 模型微调：两种知识注入范式"></a>3. RAG vs 模型微调：两种知识注入范式</h2><p>RAG 和模型微调（Fine-tuning）是给 LLM 注入外部知识的两种主要方式，它们不是互斥的，而是互补的。</p>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>RAG</th>
+<th>模型微调</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>原理</strong></td>
+<td>检索外部知识注入 Prompt</td>
+<td>修改模型参数，将知识”写入”模型权重</td>
+</tr>
+<tr>
+<td><strong>知识更新</strong></td>
+<td>即时生效（更新知识库即可）</td>
+<td>需要重新训练，周期长</td>
+</tr>
+<tr>
+<td><strong>知识容量</strong></td>
+<td>几乎无限（受限于向量数据库容量）</td>
+<td>有限（受限于模型容量）</td>
+</tr>
+<tr>
+<td><strong>精确事实</strong></td>
+<td>强 — 直接返回原文片段</td>
+<td>弱 — 知识被”模糊化”到参数中</td>
+</tr>
+<tr>
+<td><strong>风格与模式学习</strong></td>
+<td>弱 — 不改变模型行为模式</td>
+<td>强 — 能教会模型特定风格和推理模式</td>
+</tr>
+<tr>
+<td><strong>可解释性</strong></td>
+<td>高 — 可溯源到具体文档</td>
+<td>低 — 参数级修改难以溯源</td>
+</tr>
+<tr>
+<td><strong>成本</strong></td>
+<td>中（检索 + 推理成本）</td>
+<td>高（训练 GPU 成本）</td>
+</tr>
+<tr>
+<td><strong>延迟</strong></td>
+<td>略增（增加检索步骤）</td>
+<td>无额外延迟</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>知识密集型 QA、企业知识库</td>
+<td>特定语气风格、专业推理模式</td>
+</tr>
+</tbody></table>
+<p><strong>决策框架</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">需要注入的是什么？</span><br><span class="line"></span><br><span class="line">  事实性知识（知道什么）        能力性知识（怎么想/怎么做）</span><br><span class="line">        │                              │</span><br><span class="line">        ▼                              ▼</span><br><span class="line">     用 RAG                        用微调</span><br><span class="line">  （企业文档、产品规格、          （特定写作风格、代码风格、</span><br><span class="line">    运维手册、FAQ）                领域推理模式、特定格式输出）</span><br><span class="line"></span><br><span class="line">两者不互斥：可以先微调模型使其掌握特定领域的推理风格，</span><br><span class="line">再用 RAG 为每次提问提供最新的事实信息。</span><br></pre></td></tr></table></figure>
+
+<p>在绝大多数企业 AI 应用中，RAG 是首选的知识注入方式，微调是进阶优化手段。原因很简单：<strong>企业在绝大多数情况下面临的是”怎么让模型知道我的最新文档”，而不是”怎么让模型学会一个全新的推理范式”</strong>。</p>
+<hr>
+<h1 id="二、RAG-的核心流程"><a href="#二、RAG-的核心流程" class="headerlink" title="二、RAG 的核心流程"></a>二、RAG 的核心流程</h1><p>RAG 系统包含两个阶段的处理管线：<strong>离线索引阶段</strong>（Offline Ingestion Pipeline）和<strong>在线检索生成阶段</strong>（Online Retrieval &amp; Generation Pipeline）。</p>
+<h2 id="1-离线阶段：文档索引管线"><a href="#1-离线阶段：文档索引管线" class="headerlink" title="1. 离线阶段：文档索引管线"></a>1. 离线阶段：文档索引管线</h2><p>离线阶段的任务是将原始文档（PDF、Word、Markdown、网页等）转化为可供向量检索的索引数据。这个过程通常只在文档入库时执行一次，或在文档更新时增量执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原始文档 → 文档加载 → 文档解析 → 文本切分 → 向量化 → 向量存储</span><br><span class="line"> (PDF)    (Reader)   (Parser)  (Splitter) (Embedder) (VectorStore)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-文档加载（Document-Loading）"><a href="#1-1-文档加载（Document-Loading）" class="headerlink" title="1.1 文档加载（Document Loading）"></a>1.1 文档加载（Document Loading）</h3><p>文档加载是将各种格式的原始文件读入系统，转换为统一的文本表示。不同的文件格式需要不同的加载器（Reader）。</p>
+<p><strong>常见文档格式及其加载方式</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>加载工具&#x2F;库</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PDF</td>
+<td>Apache PDFBox, Apache Tika</td>
+<td>需要处理扫描件（OCR）、表格、多栏布局</td>
+</tr>
+<tr>
+<td>Word (.docx)</td>
+<td>Apache POI</td>
+<td>需要处理标题层级、表格、页眉页脚</td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td>直接读取文本</td>
+<td>注意 Frontmatter 元数据的提取</td>
+</tr>
+<tr>
+<td>HTML</td>
+<td>Jsoup</td>
+<td>去除广告、导航栏等噪声，只提取正文</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>JDBC</td>
+<td>将结构化数据转为文本描述</td>
+</tr>
+<tr>
+<td>代码仓库</td>
+<td>Git + 自定义解析</td>
+<td>保留文件路径和包结构作为元数据</td>
+</tr>
+</tbody></table>
+<p><strong>文档加载的工程实践</strong>：</p>
+<ul>
+<li><strong>统一文档模型</strong>：定义统一的 <code>Document</code> 对象，包含 <code>content</code>（文本内容）和 <code>metadata</code>（元数据，如来源文件路径、页码、作者、修改时间）</li>
+<li><strong>格式白名单</strong>：只加载支持的格式，对不支持的格式给出明确错误提示</li>
+<li><strong>文件大小限制</strong>：设置单文件大小上限（如 50MB），避免过大的文件（如扫描件、图片 PDF）阻塞处理管线</li>
+</ul>
+<h3 id="1-2-文档解析（Document-Parsing）"><a href="#1-2-文档解析（Document-Parsing）" class="headerlink" title="1.2 文档解析（Document Parsing）"></a>1.2 文档解析（Document Parsing）</h3><p>文档解析是将加载后的文本进一步清洗和结构化——提取有意义的文本内容，去除噪声。</p>
+<p><strong>解析的核心挑战不是”读文件”，而是”提取出真正有用的文本”</strong>。</p>
+<ul>
+<li><strong>PDF 解析的难点</strong>：多栏布局导致文本顺序错乱；表格数据的结构化提取；扫描件需要 OCR；页眉页脚和页码的去除；嵌入图片中文字的提取</li>
+<li><strong>HTML 解析的难点</strong>：导航栏、广告、推荐列表等非正文内容的去除（Boilerplate Removal）；<code>&lt;table&gt;</code>、<code>&lt;code&gt;</code> 等语义标签的正确处理</li>
+<li><strong>代码文件的解析</strong>：保留包路径、类名、方法名等结构化信息作为元数据；Javadoc &#x2F; 注释的提取</li>
+</ul>
+<p><strong>文档解析的策略分层</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">第一层：文本提取（Text Extraction）</span><br><span class="line">  → 从二进制文件中提取原始文本流</span><br><span class="line"></span><br><span class="line">第二层：结构识别（Structure Recognition）</span><br><span class="line">  → 识别标题、段落、表格、列表、代码块等文档结构</span><br><span class="line"></span><br><span class="line">第三层：语义清洗（Semantic Cleaning）</span><br><span class="line">  → 去除页眉页脚、广告、版权声明等噪声</span><br><span class="line">  → 修复编码问题、多余空格、断行错误</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-文本切分（Chunking）"><a href="#1-3-文本切分（Chunking）" class="headerlink" title="1.3 文本切分（Chunking）"></a>1.3 文本切分（Chunking）</h3><p>文本切分已在 <code>04-Embedding与向量化.md</code> 中详细讨论。对于 RAG 来说，文本切分是决定检索质量的关键预处理步骤。</p>
+<p><strong>RAG 场景下文本切分的特殊考量</strong>：</p>
+<ul>
+<li><strong>Chunk Size 与 LLM Context Window 的关系</strong>：Chunk Size 不能只看检索精度，还要考虑返回的 Chunk 在 LLM Context Window 中的占比。如果每个 Chunk 太大（如 4096 Token），返回 5 个就占用了 20000+ Token，留给 LLM 生成回答的空间很少</li>
+<li><strong>语义完整性优先于大小均匀</strong>：宁可大小不均匀，也要保证每个 Chunk 的语义完整。一个好的切分器会在”自然断点”（段落边界、章节边界）处切分，而不是机械地按字符数切分</li>
+<li><strong>Overlap 在 RAG 中的实际价值</strong>：Overlap 不仅防止”边界截断”，更重要的是保证当一个答案需要的信息恰好分布在两个 Chunk 之间时，至少有一个 Chunk 能完整包含该信息。这在技术文档中特别重要——一个配置步骤可能跨越两个段落，Overlap 确保有一个 Chunk 同时包含两个段落的完整内容</li>
+</ul>
+<p><strong>Chunk Size 的经验数据</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>文档类型</th>
+<th align="center">推荐 Chunk Size</th>
+<th align="center">推荐 Overlap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FAQ &#x2F; 短问答</td>
+<td align="center">128-256 Token</td>
+<td align="center">20-50 Token</td>
+</tr>
+<tr>
+<td>技术文档 &#x2F; 手册</td>
+<td align="center">512-1024 Token</td>
+<td align="center">50-100 Token</td>
+</tr>
+<tr>
+<td>长文章 &#x2F; 研究报告</td>
+<td align="center">1024-2048 Token</td>
+<td align="center">100-200 Token</td>
+</tr>
+<tr>
+<td>法律法规 &#x2F; 合同</td>
+<td align="center">512-1024 Token</td>
+<td align="center">100-200 Token（需要较高 Overlap 保证条款完整性）</td>
+</tr>
+</tbody></table>
+<h3 id="1-4-向量化（Embedding）"><a href="#1-4-向量化（Embedding）" class="headerlink" title="1.4 向量化（Embedding）"></a>1.4 向量化（Embedding）</h3><p>向量化是将切分后的文本 Chunk 转换为向量的过程。详见 <code>04-Embedding与向量化.md</code>。</p>
+<p>在 RAG 的离线索引阶段，向量化的工程要点是：</p>
+<ul>
+<li><strong>批量处理</strong>：逐条调用 Embedding API 会导致大量 HTTP 往返。使用批量 API，每次发送 100-500 条文本</li>
+<li><strong>失败重试与幂等性</strong>：Embedding API 调用可能因网络抖动、限流等原因失败。每条文本使用唯一 ID，支持重试而不产生重复向量</li>
+<li><strong>成本估算</strong>：每条 Chunk 的 Embedding 成本约为 LLM 调用的 1&#x2F;100 - 1&#x2F;200，但大规模索引时总量不容忽视。100 万条 Chunk × $0.02&#x2F;1M tokens × 500 tokens&#x2F;Chunk ≈ $10 USD</li>
+<li><strong>模型一致性</strong>：索引阶段和检索阶段必须使用相同的 Embedding 模型。索引用 OpenAI text-embedding-3-small 而检索用 BGE-M3，会导致语义空间不一致，检索效果极差</li>
+</ul>
+<h3 id="1-5-向量存储（Vector-Store）"><a href="#1-5-向量存储（Vector-Store）" class="headerlink" title="1.5 向量存储（Vector Store）"></a>1.5 向量存储（Vector Store）</h3><p>向量化后的数据写入向量数据库。详见 <code>05-向量数据库.md</code>。</p>
+<p>在 RAG 的索引阶段，向量存储的要点是：</p>
+<ul>
+<li><strong>元数据保留</strong>：每个 Chunk 必须保留充分的元数据——来源文档名、页码&#x2F;章节、文档分类、创建时间、Chunk 编号。这些元数据在检索时用于过滤，在生成答案时用于溯源引用</li>
+<li><strong>索引类型选择</strong>：RAG 场景推荐 HNSW 索引，检索速度快、召回率高</li>
+<li><strong>Collection 隔离策略</strong>：不同知识域的数据放入不同 Collection（如 <code>product_docs</code>、<code>internal_wiki</code>、<code>troubleshooting</code>），检索时可以按需指定 Collection</li>
+</ul>
+<h2 id="2-在线阶段：检索与生成"><a href="#2-在线阶段：检索与生成" class="headerlink" title="2. 在线阶段：检索与生成"></a>2. 在线阶段：检索与生成</h2><p>在线阶段是 RAG 系统在运行时的执行流程——用户发起提问，系统完成检索和生成。</p>
+<h3 id="2-1-查询向量化"><a href="#2-1-查询向量化" class="headerlink" title="2.1 查询向量化"></a>2.1 查询向量化</h3><p>用户的自然语言问题需要转换为向量，才能与向量数据库中的文档向量进行相似度匹配。</p>
+<p><strong>直接向量化 vs 查询预处理</strong>：</p>
+<p>最简单的做法是将用户原始问题直接向量化。但在实际应用中，用户的问题往往不适合直接做检索查询——可能包含口语化表达、指代词、信息冗余或不足。因此，在向量化之前对查询进行预处理（Query Rewrite、查询扩展）是提升 RAG 检索质量的关键优化，详见第三章。</p>
+<p><strong>查询向量化的工程要点</strong>：</p>
+<ul>
+<li><strong>延迟敏感</strong>：查询向量化是同步操作，直接影响用户体验。使用低延迟的 Embedding 模型（如 text-embedding-3-small 通常在 50-200ms 内完成）</li>
+<li><strong>缓存</strong>：对于高频查询问题（如常见 FAQ），缓存查询向量和检索结果，避免重复计算和检索</li>
+<li><strong>用户问题长度</strong>：过长的用户问题可能包含噪声信息，影响向量化质量。在向量化前做轻量清洗——截断过长问题、去除礼貌用语等</li>
+</ul>
+<h3 id="2-2-相似性检索"><a href="#2-2-相似性检索" class="headerlink" title="2.2 相似性检索"></a>2.2 相似性检索</h3><p>查询向量传入向量数据库，执行 ANN 检索，返回 TopK 个语义最相似的文档 Chunk。</p>
+<p><strong>检索参数设计</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th align="center">推荐值</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TopK</td>
+<td align="center">3-10</td>
+<td>太少可能遗漏关键信息，太多引入噪声</td>
+</tr>
+<tr>
+<td>相似度阈值</td>
+<td align="center">0.65-0.75</td>
+<td>过滤掉语义不相关的结果</td>
+</tr>
+<tr>
+<td>标量过滤</td>
+<td align="center">按需</td>
+<td>按分类、时间、权限等维度缩小检索范围</td>
+</tr>
+</tbody></table>
+<p><strong>检索结果的后处理</strong>：</p>
+<ul>
+<li><strong>去重</strong>：高度相似的 Chunk 可能返回多条，去重后保留最相关的一条</li>
+<li><strong>排序调整</strong>：按相似度降序排列，将最相关的结果放在 Prompt 最前面（LLM 对 Prompt 中靠前的内容关注度更高）</li>
+<li><strong>上下文拼接</strong>：如果返回的 Chunk 在原文中是连续的（如 Chunk 3 和 Chunk 4 来自同一文档且相邻），将它们拼接为更大的上下文片段</li>
+</ul>
+<h3 id="2-3-Prompt-组装"><a href="#2-3-Prompt-组装" class="headerlink" title="2.3 Prompt 组装"></a>2.3 Prompt 组装</h3><p>检索结果需要被组织成一个结构化的 Prompt，才能注入 LLM。这是 RAG 中连接”检索”和”生成”的桥梁，Prompt 的组装质量直接影响最终答案的质量。</p>
+<p><strong>增强 Prompt 的典型结构</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│  System Prompt                               │</span><br><span class="line">│  &quot;你是一个专业的技术知识助手。你会基于提供的    │</span><br><span class="line">│   参考资料回答用户问题。如果参考资料中没有      │</span><br><span class="line">│   相关信息，请明确说明而不是猜测。&quot;            │</span><br><span class="line">├─────────────────────────────────────────────┤</span><br><span class="line">│  检索结果（上下文）                            │</span><br><span class="line">│  &quot;参考资料：                                  │</span><br><span class="line">│   [来源: API网关手册, 第3章]                   │</span><br><span class="line">│   API 网关限流配置采用令牌桶算法，              │</span><br><span class="line">│   每秒允许通过的最大请求数由 rate 参数控制...    │</span><br><span class="line">│                                              │</span><br><span class="line">│   [来源: 运维FAQ, 条目42]                     │</span><br><span class="line">│   常见限流问题排查：如果限流后仍出现...         │&quot; │</span><br><span class="line">├─────────────────────────────────────────────┤</span><br><span class="line">│  User Prompt                                 │</span><br><span class="line">│  &quot;用户问题：公司内部 API 网关怎么配置限流？     │</span><br><span class="line">│   请基于上述参考资料回答，并注明信息来源。&quot;      │</span><br><span class="line">└─────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>Prompt 组装的关键原则</strong>：</p>
+<ul>
+<li><strong>明确信息来源</strong>：每个 Chunk 附带来源标签（文档名、章节），让 LLM 在回答中能够引用</li>
+<li><strong>边界约束</strong>：显式告诉 LLM “如果资料中没有相关信息，请说明而不是编造”。这降低了 LLM 在检索结果不相关时强行作答的概率</li>
+<li><strong>相关性排序</strong>：将相似度最高的 Chunk 放在最前面——LLM 对 Prompt 中位置靠前的内容赋予更高的注意力权重</li>
+<li><strong>不要过度注入</strong>：Chunk 数量不是越多越好，注入过多文档会稀释最相关信息的注意力。通常在 3-10 个 Chunk 之间</li>
+</ul>
+<h3 id="2-4-LLM-生成"><a href="#2-4-LLM-生成" class="headerlink" title="2.4 LLM 生成"></a>2.4 LLM 生成</h3><p>LLM 基于增强后的 Prompt 生成最终答案。这个阶段的核心考量是<strong>引用溯源</strong>和<strong>拒答机制</strong>。</p>
+<p><strong>引用溯源（Citation）</strong>：要求 LLM 在答案中引用具体的信息来源。可以在 Prompt 中明确要求：”请在回答的每个关键事实后标注来源，格式为 [来源: 文档名, 章节]”。</p>
+<p><strong>拒答机制（Refusal）</strong>：当检索结果与问题相关性很低时，LLM 应该拒绝回答而不是”硬编”。实现方式是设置相似度阈值，当最佳匹配的相似度低于阈值（如 &lt; 0.65）时，在 Prompt 中注入”参考资料：无相关信息”，并引导 LLM 生成拒答回复。</p>
+<hr>
+<h1 id="三、RAG-的检索优化策略"><a href="#三、RAG-的检索优化策略" class="headerlink" title="三、RAG 的检索优化策略"></a>三、RAG 的检索优化策略</h1><p>基础的 RAG（用户提问 → 直接向量化 → 检索 → 生成）在很多情况下表现已经不错，但在面对模糊查询、复杂查询和需要精确匹配的场景时，检索召回率会显著下降。RAG 检索优化是提升 RAG 系统质量的核心投入方向。</p>
+<h2 id="1-Query-Rewrite（查询重写）"><a href="#1-Query-Rewrite（查询重写）" class="headerlink" title="1. Query Rewrite（查询重写）"></a>1. Query Rewrite（查询重写）</h2><p>用户在使用 RAG 系统时，经常提出<strong>不完整、口语化或模糊</strong>的问题。这些问题直接向量化后，与知识库中正式的技术文档之间的语义距离很大，导致检索效果不佳。</p>
+<p><strong>问题示例</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>用户原始问题</th>
+<th>问题</th>
+<th>重写后的检索查询</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“那个限流怎么配啊？”</td>
+<td>指代不明，口语化</td>
+<td>“API 网关限流配置方法”</td>
+</tr>
+<tr>
+<td>“上次说的那个数据库连接池的问题”</td>
+<td>依赖对话上下文</td>
+<td>“数据库连接池配置问题和解决方案”</td>
+</tr>
+<tr>
+<td>“挂了”</td>
+<td>极其模糊</td>
+<td>“服务挂掉的原因和恢复方法”（需结合上下文推断）</td>
+</tr>
+</tbody></table>
+<p><strong>Query Rewrite 的实现方式</strong>：</p>
+<ul>
+<li><strong>LLM 重写</strong>：使用 LLM 本身（通常是轻量模型以降低成本）将用户问题改写为更适合检索的表达。在 Prompt 中要求 LLM 消除指代、补全上下文、使用专业术语替代口语表达</li>
+<li><strong>多轮对话上下文融合</strong>：在多轮对话场景中，用户的后续问题可能依赖对话历史（如”那第二个呢？”）。Query Rewrite 需要融合历史对话上下文，生成独立完整的检索查询</li>
+</ul>
+<p><strong>Query Rewrite 的关键原则</strong>：重写后的查询不是为了给用户看，而是<strong>为了最大化检索召回率</strong>。重写时应该使用知识库中可能出现的术语和表达方式，而不是用户的原话。</p>
+<h2 id="2-Multi-Query-Retrieval（多查询检索）"><a href="#2-Multi-Query-Retrieval（多查询检索）" class="headerlink" title="2. Multi-Query Retrieval（多查询检索）"></a>2. Multi-Query Retrieval（多查询检索）</h2><p>对于复杂问题，一个检索查询可能无法覆盖所有相关方面。Multi-Query Retrieval 的策略是：<strong>从不同角度生成多个查询，分别检索后合并去重</strong>。</p>
+<p>例如，用户问”如何提高 Spring Boot 应用的启动速度？”，可以生成：</p>
+<ul>
+<li>查询 1：”Spring Boot 启动优化方法”（直接角度）</li>
+<li>查询 2：”延迟初始化、懒加载配置”（技术角度）</li>
+<li>查询 3：”Spring Boot 启动慢的常见原因”（诊断角度）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">用户问题 → LLM 生成 3-5 个不同角度的查询</span><br><span class="line">               │</span><br><span class="line">    ┌──────────┼──────────┐</span><br><span class="line">    ▼          ▼          ▼</span><br><span class="line">  检索 1     检索 2     检索 3</span><br><span class="line">    │          │          │</span><br><span class="line">    └──────────┼──────────┘</span><br><span class="line">               ▼</span><br><span class="line">         合并去重 + 分数融合</span><br><span class="line">               │</span><br><span class="line">               ▼</span><br><span class="line">        最终 TopK 结果</span><br></pre></td></tr></table></figure>
+
+<p>这种策略特别适合需要综合多方面信息的复杂问题，检索的多样性显著优于单查询。</p>
+<h2 id="3-Hybrid-Search（混合搜索）"><a href="#3-Hybrid-Search（混合搜索）" class="headerlink" title="3. Hybrid Search（混合搜索）"></a>3. Hybrid Search（混合搜索）</h2><p>混合搜索在 <code>05-向量数据库.md</code> 中有详细介绍。在 RAG 场景中，混合搜索的典型实践是<strong>向量检索（语义） + BM25 检索（关键词）</strong>，通过 RRF（Reciprocal Rank Fusion，倒数排名融合）合并结果。</p>
+<p><strong>在 RAG 中启用混合搜索的信号</strong>：</p>
+<ul>
+<li>知识库包含大量专有名词、产品型号、错误码（这些是关键词检索的优势领域）</li>
+<li>用户经常搜索精确的代码片段、配置项名称</li>
+<li>知识库中的文档使用了多样化的术语表达同一概念</li>
+</ul>
+<p><strong>混合搜索的融合参数调优</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th align="center">α（语义权重）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>通用知识 QA</td>
+<td align="center">0.7</td>
+<td>偏重语义理解</td>
+</tr>
+<tr>
+<td>技术文档搜索（含代码&#x2F;配置）</td>
+<td align="center">0.5</td>
+<td>均衡语义和精确匹配</td>
+</tr>
+<tr>
+<td>错误码&#x2F;产品型号搜索</td>
+<td align="center">0.3</td>
+<td>偏重关键词精确匹配</td>
+</tr>
+</tbody></table>
+<h2 id="4-Rerank（重排序）"><a href="#4-Rerank（重排序）" class="headerlink" title="4. Rerank（重排序）"></a>4. Rerank（重排序）</h2><p>向量检索的 TopK 结果是基于向量相似度排序的，但向量相似度并不总是等于实际相关性——两个文本向量相似度高，可能是因为它们在主题上相近，但不一定意味着它们在内容上直接回答了用户的问题。</p>
+<p><strong>Rerank 的原理</strong>：使用一个更精确但更慢的相关性模型（通常是 Cross-Encoder），对向量检索返回的 TopK 结果进行精确的相关性打分，然后按新分数重新排序。Cross-Encoder 同时接收查询和文档作为输入，通过注意力机制计算精确的相关性分数，比向量相似度准确得多，但计算成本也高得多（不能用于全量检索）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">向量检索（粗筛）→ TopK=50-100（快速，精度一般）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Rerank（精排）→ TopK=5-10（慢速，精度高）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">最终注入 LLM 的结果</span><br></pre></td></tr></table></figure>
+
+<p><strong>Rerank 模型选择</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cohere Rerank v3</td>
+<td>目前效果最佳的商业 Rerank 模型</td>
+</tr>
+<tr>
+<td>BGE-Reranker-v2（BAAI）</td>
+<td>开源首选，中英文表现好</td>
+</tr>
+<tr>
+<td>Cross-Encoder（Sentence-Transformers）</td>
+<td>通用方案，可自定义训练</td>
+</tr>
+</tbody></table>
+<p><strong>Rerank 的成本权衡</strong>：Rerank 的单位成本远高于向量检索（Cross-Encoder 对每条查询-文档对都需要完整推理）。典型策略是先用向量检索召回 50-100 条候选，再用 Rerank 精选 5-10 条。</p>
+<h2 id="5-检索优化的组合策略"><a href="#5-检索优化的组合策略" class="headerlink" title="5. 检索优化的组合策略"></a>5. 检索优化的组合策略</h2><p>在实际 RAG 系统中，上述优化策略不是互斥的，而是可以组合使用。</p>
+<p><strong>典型的分层组合架构</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">用户原始问题</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">Query Rewrite（LLM 改写为适合检索的查询）</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">Multi-Query Generation（生成 3 个不同角度的查询）</span><br><span class="line">     │</span><br><span class="line">     ├──────────┬──────────┐</span><br><span class="line">     ▼          ▼          ▼</span><br><span class="line">向量检索+标量过滤  向量检索   BM25关键词检索</span><br><span class="line">     │          │          │</span><br><span class="line">     └──────────┴──────────┘</span><br><span class="line">                │</span><br><span class="line">                ▼</span><br><span class="line">       RRF 合并去重 → TopK=100</span><br><span class="line">                │</span><br><span class="line">                ▼</span><br><span class="line">       Cross-Encoder Rerank → TopK=5</span><br><span class="line">                │</span><br><span class="line">                ▼</span><br><span class="line">       组装增强 Prompt → LLM 生成答案</span><br></pre></td></tr></table></figure>
+
+<p>这种组合架构在检索的各个阶段各司其职：Query Rewrite 提升查询质量，Multi-Query 提升覆盖面，Hybrid Search 融合语义和关键词优势，Rerank 提升最终结果的精准度。</p>
+<hr>
+<h1 id="四、高级-RAG-模式"><a href="#四、高级-RAG-模式" class="headerlink" title="四、高级 RAG 模式"></a>四、高级 RAG 模式</h1><h2 id="1-Self-Query-Retrieval（自查询检索）"><a href="#1-Self-Query-Retrieval（自查询检索）" class="headerlink" title="1. Self-Query Retrieval（自查询检索）"></a>1. Self-Query Retrieval（自查询检索）</h2><p>Self-Query Retrieval 是让 LLM 从用户的自然语言问题中<strong>自动抽取出结构化过滤条件</strong>，然后将过滤条件应用于向量检索。</p>
+<p>例如，用户问”2024 年发布的关于微服务的架构文档有哪些？”，Self-Query 能将问题拆解为：</p>
+<ul>
+<li><strong>语义查询</strong>：”微服务架构”</li>
+<li><strong>结构化过滤</strong>：<code>year = 2024 AND category = &#39;架构文档&#39;</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Self-Query 的概念示意</span></span><br><span class="line"><span class="type">SelfQueryResult</span> <span class="variable">result</span> <span class="operator">=</span> selfQueryParser.parse(userQuery);</span><br><span class="line"><span class="comment">// result.getQuery()          → &quot;微服务架构&quot;</span></span><br><span class="line"><span class="comment">// result.getFilter()         → year == 2024 &amp;&amp; category == &quot;架构文档&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="type">SearchRequest</span> <span class="variable">request</span> <span class="operator">=</span> SearchRequest.query(result.getQuery())</span><br><span class="line">    .withFilterExpression(result.getFilter())</span><br><span class="line">    .withTopK(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Self-Query 的核心价值是<strong>让用户用自然语言表达过滤意图</strong>，而不需要在 UI 上设计复杂的筛选条件表单。在企业知识库搜索场景中，用户经常需要表达”某个时间段内的””某类文档中的””某个人写的”等条件，Self-Query 让这些条件能自然融入对话。</p>
+<h2 id="2-Parent-Child-Chunk（父子文本块）"><a href="#2-Parent-Child-Chunk（父子文本块）" class="headerlink" title="2. Parent-Child Chunk（父子文本块）"></a>2. Parent-Child Chunk（父子文本块）</h2><p>Parent-Child Chunk 是一种解决”检索粒度”与”上下文完整性”矛盾的策略。</p>
+<p><strong>问题</strong>：小 Chunk 检索精准，但缺乏上下文；大 Chunk 上下文完整，但检索精度下降。</p>
+<p><strong>解决方案</strong>：将文档切分为两种粒度的 Chunk：</p>
+<ul>
+<li><strong>Child Chunk（子块）</strong>：小块（如 256 Token），用于向量检索。小块语义聚焦，检索精度高</li>
+<li><strong>Parent Chunk（父块）</strong>：大块（如 1024-2048 Token），包含子块的完整上下文。在检索时，先通过子块匹配到最相关的小块，然后返回包含该子块的完整父块</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">原始文档：┌─────────────────────────────────────────────────┐</span><br><span class="line">          │  Parent Chunk 1                                 │</span><br><span class="line">          │  ┌──────────┐ ┌──────────┐ ┌──────────┐       │</span><br><span class="line">          │  │ Child 1  │ │ Child 2  │ │ Child 3  │       │</span><br><span class="line">          │  └──────────┘ └──────────┘ └──────────┘       │</span><br><span class="line">          └─────────────────────────────────────────────────┘</span><br><span class="line">          ┌─────────────────────────────────────────────────┐</span><br><span class="line">          │  Parent Chunk 2                                 │</span><br><span class="line">          │  ┌──────────┐ ┌──────────┐ ┌──────────┐       │</span><br><span class="line">          │  │ Child 4  │ │ Child 5  │ │ Child 6  │       │</span><br><span class="line">          │  └──────────┘ └──────────┘ └──────────┘       │</span><br><span class="line">          └─────────────────────────────────────────────────┘</span><br><span class="line"></span><br><span class="line">检索：用户查询 → 匹配到 Child 3（小块，精度高）</span><br><span class="line">返回：Parent Chunk 1（大块，上下文完整）</span><br></pre></td></tr></table></figure>
+
+<p>Parent-Child Chunk 在技术文档、学术论文等结构化强的文档类型中效果特别好——检索精准定位到相关段落（Child），但让 LLM 看到该段落所属完整章节的上下文（Parent）。</p>
+<h2 id="3-多跳检索（Multi-hop-Retrieval）"><a href="#3-多跳检索（Multi-hop-Retrieval）" class="headerlink" title="3. 多跳检索（Multi-hop Retrieval）"></a>3. 多跳检索（Multi-hop Retrieval）</h2><p>多跳检索（Multi-hop Retrieval）处理的是<strong>需要综合多个文档的信息才能回答的问题</strong>。</p>
+<p>例如，用户问：”张三参与的那个使用 Spring Cloud Gateway 的项目，部署在哪个 K8s 集群上？”这个问题需要：</p>
+<ul>
+<li><strong>跳 1</strong>：检索”张三 参与 Spring Cloud Gateway 项目”→ 得到项目名称”电商中台”</li>
+<li><strong>跳 2</strong>：检索”电商中台 K8s 集群 部署”→ 得到集群名称”prod-cluster-east-1”</li>
+</ul>
+<p>多跳检索需要 RAG 系统具备”检索→获取信息→生成新查询→再检索”的迭代能力。实现方式通常是 Agent 模式（后续 09-Agent 章节会详细讨论）：Agent 在执行过程中自主判断是否需要进一步检索，并生成后续的检索查询。</p>
+<h2 id="4-上下文压缩（Context-Compression）"><a href="#4-上下文压缩（Context-Compression）" class="headerlink" title="4. 上下文压缩（Context Compression）"></a>4. 上下文压缩（Context Compression）</h2><p>当检索返回的文档数量多、长度大时，直接全部注入 LLM 会占用大量 Context Window。上下文压缩（Context Compression）的策略是：<strong>对检索返回的文档内容进行摘要压缩，只保留与用户问题相关的部分</strong>。</p>
+<p>实现方式是让 LLM 逐条处理检索结果：”以下文档片段中，哪些内容与用户问题’{用户问题}’相关？请提取出相关的句子，丢弃不相关的部分。”经过压缩的上下文更精简，可以注入更多来源的文档，或者节省 Context Window 留给 LLM 的回答。</p>
+<p>上下文压缩适用于检索源文档很长（如整篇论文、长报告）的场景，但需要注意压缩本身会增加延迟和 LLM 调用成本。</p>
+<hr>
+<h1 id="五、Java-后端实践：Spring-AI-RAG-Pipeline"><a href="#五、Java-后端实践：Spring-AI-RAG-Pipeline" class="headerlink" title="五、Java 后端实践：Spring AI RAG Pipeline"></a>五、Java 后端实践：Spring AI RAG Pipeline</h1><h2 id="1-Spring-AI-ETL-Pipeline-架构"><a href="#1-Spring-AI-ETL-Pipeline-架构" class="headerlink" title="1. Spring AI ETL Pipeline 架构"></a>1. Spring AI ETL Pipeline 架构</h2><p>Spring AI 将 RAG 的文档处理流程抽象为 <strong>ETL Pipeline</strong>（Extract-Transform-Load），由三个核心组件构成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────┐    ┌──────────────┐    ┌──────────────┐</span><br><span class="line">│   Extractor   │ →  │  Transformer  │ →  │    Loader    │</span><br><span class="line">│  (读取文档)    │    │ (转换/切分)    │    │ (向量化+存储) │</span><br><span class="line">│              │    │              │    │              │</span><br><span class="line">│ Document     │    │ TextSplitter │    │ VectorStore  │</span><br><span class="line">│ Reader       │    │              │    │ + Embedding  │</span><br><span class="line">└──────────────┘    └──────────────┘    └──────────────┘</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>DocumentReader（Extractor）</strong>：从不同来源读取原始文档——文件系统、数据库、S3、网页等。输出原始 Document 对象</li>
+<li><strong>DocumentTransformer（Transformer）</strong>：对文档进行转换——文本切分（TextSplitter）、内容摘要、元数据增强等。输出处理后的 Document 列表</li>
+<li><strong>DocumentWriter（Loader）</strong>：将文档写入目标存储——调用 EmbeddingClient 向量化后写入 VectorStore</li>
+</ul>
+<p>Spring AI 将这三个组件组合为一个 <code>DocumentPipeline</code>，自动执行 ETL 流程。</p>
+<h2 id="2-文档读取与解析"><a href="#2-文档读取与解析" class="headerlink" title="2. 文档读取与解析"></a>2. 文档读取与解析</h2><p>Spring AI 提供了多种内置的 DocumentReader：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件系统读取</span></span><br><span class="line"><span class="type">DocumentReader</span> <span class="variable">reader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileSystemDocumentReader</span>(</span><br><span class="line">    <span class="string">&quot;E:/knowledge-base/&quot;</span>,</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">TextDocumentHandler</span>()       <span class="comment">// .txt</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// PDF 读取（基于 Apache PDFBox）</span></span><br><span class="line"><span class="type">DocumentReader</span> <span class="variable">pdfReader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PagePdfDocumentReader</span>(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">FileSystemResource</span>(<span class="string">&quot;docs/api-manual.pdf&quot;</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// JSON 格式读取（每行一个 JSON 对象）</span></span><br><span class="line"><span class="type">DocumentReader</span> <span class="variable">jsonReader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonReader</span>(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">FileSystemResource</span>(<span class="string">&quot;docs/faq.json&quot;</span>),</span><br><span class="line">    <span class="string">&quot;question&quot;</span>,    <span class="comment">// content 字段</span></span><br><span class="line">    <span class="string">&quot;answer&quot;</span>       <span class="comment">// 可选：合并到 content</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Markdown 读取（保留标题层级作为元数据）</span></span><br><span class="line"><span class="type">DocumentReader</span> <span class="variable">mdReader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MarkdownDocumentReader</span>(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">FileSystemResource</span>(<span class="string">&quot;docs/README.md&quot;</span>),</span><br><span class="line">    MarkdownDocumentReaderConfig.builder()</span><br><span class="line">        .withHeadingLevelsToExtract(List.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line">        .build()</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><strong>自定义 DocumentReader</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DatabaseDocumentReader</span> <span class="keyword">implements</span> <span class="title class_">DocumentReader</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> JdbcTemplate jdbcTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">DatabaseDocumentReader</span><span class="params">(JdbcTemplate jdbcTemplate)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.jdbcTemplate = jdbcTemplate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Document&gt; <span class="title function_">read</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            SELECT id, title, content, category, created_at</span></span><br><span class="line"><span class="string">            FROM knowledge_articles</span></span><br><span class="line"><span class="string">            WHERE status = &#x27;published&#x27;</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sql, (rs, rowNum) -&gt; &#123;</span><br><span class="line">            <span class="type">Document</span> <span class="variable">doc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Document</span>(rs.getString(<span class="string">&quot;content&quot;</span>));</span><br><span class="line">            doc.getMetadata().put(<span class="string">&quot;id&quot;</span>, rs.getLong(<span class="string">&quot;id&quot;</span>));</span><br><span class="line">            doc.getMetadata().put(<span class="string">&quot;title&quot;</span>, rs.getString(<span class="string">&quot;title&quot;</span>));</span><br><span class="line">            doc.getMetadata().put(<span class="string">&quot;category&quot;</span>, rs.getString(<span class="string">&quot;category&quot;</span>));</span><br><span class="line">            doc.getMetadata().put(<span class="string">&quot;source&quot;</span>, <span class="string">&quot;database&quot;</span>);</span><br><span class="line">            doc.getMetadata().put(<span class="string">&quot;created_at&quot;</span>, rs.getTimestamp(<span class="string">&quot;created_at&quot;</span>).toString());</span><br><span class="line">            <span class="keyword">return</span> doc;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-完整-RAG-服务实现"><a href="#3-完整-RAG-服务实现" class="headerlink" title="3. 完整 RAG 服务实现"></a>3. 完整 RAG 服务实现</h2><p>以下是一个完整的 Spring AI RAG 服务——从文档入库到语义检索到答案生成：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RagService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> VectorStore vectorStore;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmbeddingClient embeddingClient;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ChatClient chatClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RagService</span><span class="params">(VectorStore vectorStore,</span></span><br><span class="line"><span class="params">                       EmbeddingClient embeddingClient,</span></span><br><span class="line"><span class="params">                       ChatClient chatClient)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.vectorStore = vectorStore;</span><br><span class="line">        <span class="built_in">this</span>.embeddingClient = embeddingClient;</span><br><span class="line">        <span class="built_in">this</span>.chatClient = chatClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// =========================</span></span><br><span class="line">    <span class="comment">// 离线阶段：文档入库</span></span><br><span class="line">    <span class="comment">// =========================</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将文档加载、切分、向量化后写入向量数据库</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ingestDocuments</span><span class="params">(List&lt;Resource&gt; resources, String category)</span> &#123;</span><br><span class="line">        <span class="comment">// Step 1: 读取文档</span></span><br><span class="line">        List&lt;Document&gt; documents = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (Resource resource : resources) &#123;</span><br><span class="line">            <span class="type">DocumentReader</span> <span class="variable">reader</span> <span class="operator">=</span> createReader(resource);</span><br><span class="line">            documents.addAll(reader.read());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 2: 文本切分</span></span><br><span class="line">        <span class="type">TokenTextSplitter</span> <span class="variable">splitter</span> <span class="operator">=</span> TokenTextSplitter.builder()</span><br><span class="line">                .withDefaultChunkSize(<span class="number">512</span>)</span><br><span class="line">                .withMinChunkSizeChars(<span class="number">100</span>)</span><br><span class="line">                .withMinChunkLengthToEmbed(<span class="number">50</span>)</span><br><span class="line">                .withMaxNumChunks(<span class="number">10000</span>)</span><br><span class="line">                .withKeepSeparator(<span class="literal">true</span>)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        List&lt;Document&gt; chunks = splitter.split(documents);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 3: 附加元数据（每个 Chunk 携带来源信息）</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; chunks.size(); i++) &#123;</span><br><span class="line">            <span class="type">Document</span> <span class="variable">chunk</span> <span class="operator">=</span> chunks.get(i);</span><br><span class="line">            chunk.getMetadata().put(<span class="string">&quot;category&quot;</span>, category);</span><br><span class="line">            chunk.getMetadata().put(<span class="string">&quot;ingest_time&quot;</span>, Instant.now().toString());</span><br><span class="line">            chunk.getMetadata().put(<span class="string">&quot;chunk_id&quot;</span>, UUID.randomUUID().toString());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 4: 批量写入向量数据库</span></span><br><span class="line">        <span class="comment">// VectorStore 内部自动调用 EmbeddingClient 向量化</span></span><br><span class="line">        vectorStore.add(chunks);</span><br><span class="line">        log.info(<span class="string">&quot;Ingested &#123;&#125; document chunks into category: &#123;&#125;&quot;</span>, chunks.size(), category);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> DocumentReader <span class="title function_">createReader</span><span class="params">(Resource resource)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">filename</span> <span class="operator">=</span> resource.getFilename();</span><br><span class="line">        <span class="keyword">if</span> (filename == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Cannot determine file type&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (filename.endsWith(<span class="string">&quot;.pdf&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">PagePdfDocumentReader</span>(resource);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (filename.endsWith(<span class="string">&quot;.md&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MarkdownDocumentReader</span>(resource);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">TextDocumentHandler</span>(resource);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// =========================</span></span><br><span class="line">    <span class="comment">// 在线阶段：检索 + 生成</span></span><br><span class="line">    <span class="comment">// =========================</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 基础 RAG：检索 + 生成</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> RagResponse <span class="title function_">answer</span><span class="params">(String userQuestion)</span> &#123;</span><br><span class="line">        <span class="comment">// Step 1: 检索相关文档</span></span><br><span class="line">        List&lt;Document&gt; relevantDocs = vectorStore.similaritySearch(</span><br><span class="line">                SearchRequest.query(userQuestion)</span><br><span class="line">                        .withTopK(<span class="number">5</span>)</span><br><span class="line">                        .withSimilarityThreshold(<span class="number">0.7</span>)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 2: 判断检索质量</span></span><br><span class="line">        <span class="keyword">if</span> (relevantDocs.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RagResponse</span>(</span><br><span class="line">                    <span class="string">&quot;抱歉，未在知识库中找到与您问题相关的信息。&quot;</span>,</span><br><span class="line">                    List.of()</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 3: 构建增强 Prompt</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">context</span> <span class="operator">=</span> buildContext(relevantDocs);</span><br><span class="line">        <span class="type">String</span> <span class="variable">systemPrompt</span> <span class="operator">=</span> buildSystemPrompt(context);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 4: 调用 LLM 生成答案</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">answer</span> <span class="operator">=</span> chatClient.prompt()</span><br><span class="line">                .system(systemPrompt)</span><br><span class="line">                .user(userQuestion)</span><br><span class="line">                .call()</span><br><span class="line">                .content();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 5: 提取引用来源</span></span><br><span class="line">        List&lt;Citation&gt; citations = extractCitations(relevantDocs);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RagResponse</span>(answer, citations);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构建上下文（将多个 Chunk 格式化为结构化参考资料）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">buildContext</span><span class="params">(List&lt;Document&gt; docs)</span> &#123;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; docs.size(); i++) &#123;</span><br><span class="line">            <span class="type">Document</span> <span class="variable">doc</span> <span class="operator">=</span> docs.get(i);</span><br><span class="line">            sb.append(String.format(<span class="string">&quot;[参考资料 %d] 来源: %s, 分类: %s\n&quot;</span>,</span><br><span class="line">                    i + <span class="number">1</span>,</span><br><span class="line">                    doc.getMetadata().getOrDefault(<span class="string">&quot;title&quot;</span>, <span class="string">&quot;未知文档&quot;</span>),</span><br><span class="line">                    doc.getMetadata().getOrDefault(<span class="string">&quot;category&quot;</span>, <span class="string">&quot;未分类&quot;</span>)));</span><br><span class="line">            sb.append(doc.getContent());</span><br><span class="line">            sb.append(<span class="string">&quot;\n\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sb.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构建 System Prompt</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">buildSystemPrompt</span><span class="params">(String context)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            你是一个专业的企业知识助手。请严格遵守以下规则：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            1. 仅基于【参考资料】中的内容回答问题</span></span><br><span class="line"><span class="string">            2. 如果参考资料中没有相关信息，请明确说&quot;参考资料中未找到相关信息&quot;</span></span><br><span class="line"><span class="string">            3. 回答时注明信息来源（如&quot;根据 [参考资料 X]...&quot;）</span></span><br><span class="line"><span class="string">            4. 不要编造或推测参考资料之外的信息</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            【参考资料】</span></span><br><span class="line"><span class="string">            %s</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>.formatted(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 从检索结果中提取引用信息</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Citation&gt; <span class="title function_">extractCitations</span><span class="params">(List&lt;Document&gt; docs)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> docs.stream()</span><br><span class="line">                .map(doc -&gt; <span class="keyword">new</span> <span class="title class_">Citation</span>(</span><br><span class="line">                        (String) doc.getMetadata().getOrDefault(<span class="string">&quot;title&quot;</span>, <span class="string">&quot;未知文档&quot;</span>),</span><br><span class="line">                        (String) doc.getMetadata().getOrDefault(<span class="string">&quot;source&quot;</span>, <span class="string">&quot;&quot;</span>),</span><br><span class="line">                        (Double) doc.getMetadata().getOrDefault(<span class="string">&quot;distance&quot;</span>, <span class="number">0.0</span>)</span><br><span class="line">                ))</span><br><span class="line">                .collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// =========================</span></span><br><span class="line">    <span class="comment">// 数据模型</span></span><br><span class="line">    <span class="comment">// =========================</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">RagResponse</span><span class="params">(String answer, List&lt;Citation&gt; citations)</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">Citation</span><span class="params">(String title, String source, <span class="type">double</span> score)</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-带检索优化的-RAG-服务"><a href="#4-带检索优化的-RAG-服务" class="headerlink" title="4. 带检索优化的 RAG 服务"></a>4. 带检索优化的 RAG 服务</h2><p>在基础 RAG 之上，整合 Query Rewrite 和 Rerank 的增强版本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AdvancedRagService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> VectorStore vectorStore;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ChatClient chatClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AdvancedRagService</span><span class="params">(VectorStore vectorStore, ChatClient chatClient)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.vectorStore = vectorStore;</span><br><span class="line">        <span class="built_in">this</span>.chatClient = chatClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 增强 RAG：Query Rewrite → 检索 → Rerank（可选）→ 生成</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> RagResponse <span class="title function_">answerWithRewrite</span><span class="params">(String userQuestion)</span> &#123;</span><br><span class="line">        <span class="comment">// Step 1: Query Rewrite — 用 LLM 将用户问题改写为适合检索的查询</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">rewrittenQuery</span> <span class="operator">=</span> rewriteQuery(userQuestion);</span><br><span class="line">        log.info(<span class="string">&quot;Original: &#123;&#125; → Rewritten: &#123;&#125;&quot;</span>, userQuestion, rewrittenQuery);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 2: 使用改写后的查询检索</span></span><br><span class="line">        List&lt;Document&gt; candidates = vectorStore.similaritySearch(</span><br><span class="line">                SearchRequest.query(rewrittenQuery)</span><br><span class="line">                        .withTopK(<span class="number">20</span>)      <span class="comment">// 多召回一些，留给 Rerank 精选</span></span><br><span class="line">                        .withSimilarityThreshold(<span class="number">0.65</span>)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (candidates.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RagResponse</span>(<span class="string">&quot;未找到相关信息。&quot;</span>, List.of());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 3: Rerank — 用 LLM 对候选文档精排（生产环境可用 Cross-Encoder）</span></span><br><span class="line">        List&lt;Document&gt; reranked = rerankWithLLM(userQuestion, candidates, <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Step 4: 构建增强 Prompt 并生成答案</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">context</span> <span class="operator">=</span> buildContext(reranked);</span><br><span class="line">        <span class="type">String</span> <span class="variable">answer</span> <span class="operator">=</span> chatClient.prompt()</span><br><span class="line">                .system(buildSystemPrompt(context))</span><br><span class="line">                .user(userQuestion)</span><br><span class="line">                .call()</span><br><span class="line">                .content();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RagResponse</span>(answer, extractCitations(reranked));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Query Rewrite：用 LLM 将口语化/模糊的用户问题改写为适合检索的查询</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">rewriteQuery</span><span class="params">(String userQuestion)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">rewritePrompt</span> <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            你是一个搜索查询优化器。将用户问题改写为更适合知识库检索的查询。</span></span><br><span class="line"><span class="string">            规则：</span></span><br><span class="line"><span class="string">            - 消除口语化表达和指代词（&quot;那个&quot;、&quot;这个&quot;、&quot;它&quot;）</span></span><br><span class="line"><span class="string">            - 使用专业术语替代口语描述</span></span><br><span class="line"><span class="string">            - 保持原问题的核心意图不变</span></span><br><span class="line"><span class="string">            - 如果原问题已经是好的检索查询，直接返回原问题</span></span><br><span class="line"><span class="string">            - 只返回改写后的查询文本，不要加任何解释</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            用户问题：%s</span></span><br><span class="line"><span class="string">            改写后的查询：&quot;&quot;&quot;</span>.formatted(userQuestion);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> chatClient.prompt()</span><br><span class="line">                .system(<span class="string">&quot;你是一个搜索查询优化器，只输出改写后的查询文本。&quot;</span>)</span><br><span class="line">                .user(rewritePrompt)</span><br><span class="line">                .call()</span><br><span class="line">                .content();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用 LLM 对候选文档进行 Rerank</span></span><br><span class="line"><span class="comment">     * 生产环境建议替换为 Cross-Encoder 模型以降低成本</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Document&gt; <span class="title function_">rerankWithLLM</span><span class="params">(String question, List&lt;Document&gt; candidates, <span class="type">int</span> topK)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (candidates.size() &lt;= topK) &#123;</span><br><span class="line">            <span class="keyword">return</span> candidates;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 构建 Rerank Prompt</span></span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">docList</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; candidates.size(); i++) &#123;</span><br><span class="line">            docList.append(String.format(<span class="string">&quot;[文档 %d] %s\n\n&quot;</span>,</span><br><span class="line">                    i, candidates.get(i).getContent().substring(<span class="number">0</span>,</span><br><span class="line">                            Math.min(<span class="number">300</span>, candidates.get(i).getContent().length()))));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">rerankPrompt</span> <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            从以下文档中，选出与用户问题最相关的 %d 个文档。</span></span><br><span class="line"><span class="string">            只返回文档编号（如 &quot;3, 7, 1, 12, 5&quot;），按相关性从高到低排列。</span></span><br><span class="line"><span class="string">            不要返回任何其他内容。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            用户问题：%s</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            %s</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>.formatted(topK, question, docList.toString());</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> chatClient.prompt()</span><br><span class="line">                .system(<span class="string">&quot;你是一个文档相关性评估器，只返回文档编号。&quot;</span>)</span><br><span class="line">                .user(rerankPrompt)</span><br><span class="line">                .call()</span><br><span class="line">                .content();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 解析排名结果</span></span><br><span class="line">        List&lt;Integer&gt; rankedIds = parseRankedIds(result);</span><br><span class="line">        <span class="keyword">return</span> rankedIds.stream()</span><br><span class="line">                .map(id -&gt; id &lt; candidates.size() ? candidates.get(id) : <span class="literal">null</span>)</span><br><span class="line">                .filter(Objects::nonNull)</span><br><span class="line">                .limit(topK)</span><br><span class="line">                .collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Integer&gt; <span class="title function_">parseRankedIds</span><span class="params">(String result)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Arrays.stream(result.trim().split(<span class="string">&quot;[,\\s]+&quot;</span>))</span><br><span class="line">                .map(s -&gt; s.replaceAll(<span class="string">&quot;[^0-9]&quot;</span>, <span class="string">&quot;&quot;</span>))</span><br><span class="line">                .filter(s -&gt; !s.isEmpty())</span><br><span class="line">                .map(Integer::parseInt)</span><br><span class="line">                .collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// buildContext / buildSystemPrompt / extractCitations 与基础版相同</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="六、Java-后端实践：LangChain4j-RAG-Pipeline"><a href="#六、Java-后端实践：LangChain4j-RAG-Pipeline" class="headerlink" title="六、Java 后端实践：LangChain4j RAG Pipeline"></a>六、Java 后端实践：LangChain4j RAG Pipeline</h1><h2 id="1-LangChain4j-RAG-组件体系"><a href="#1-LangChain4j-RAG-组件体系" class="headerlink" title="1. LangChain4j RAG 组件体系"></a>1. LangChain4j RAG 组件体系</h2><p>LangChain4j 的 RAG 组件是围绕 <code>EmbeddingStore</code>、<code>ContentRetriever</code>、<code>RetrievalAugmentor</code> 三个核心接口构建的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────────────────────┐</span><br><span class="line">│                 LangChain4j RAG 组件体系                       │</span><br><span class="line">│                                                              │</span><br><span class="line">│  DocumentLoader ─→ DocumentParser ─→ DocumentSplitter        │</span><br><span class="line">│       │                                      │               │</span><br><span class="line">│       │ 加载原始文档                          │ 切分为 Chunk   │</span><br><span class="line">│       ▼                                      ▼               │</span><br><span class="line">│  ┌──────────────────────────────────────────────────────┐   │</span><br><span class="line">│  │              EmbeddingStore                          │   │</span><br><span class="line">│  │  add(Embedding, TextSegment)                         │   │</span><br><span class="line">│  │  findRelevant(Embedding, maxResults, minScore)       │   │</span><br><span class="line">│  │  removeAll() / remove(id)                            │   │</span><br><span class="line">│  └──────────────────────────────────────────────────────┘   │</span><br><span class="line">│                         │                                    │</span><br><span class="line">│                         ▼                                    │</span><br><span class="line">│  ┌──────────────────────────────────────────────────────┐   │</span><br><span class="line">│  │           ContentRetriever                           │   │</span><br><span class="line">│  │  retrieve(Query) → List&lt;TextSegment&gt;                 │   │</span><br><span class="line">│  │  ┌──────────────────┐  ┌──────────────────┐        │   │</span><br><span class="line">│  │  │ EmbeddingStore   │  │ WebSearch        │  ...   │   │</span><br><span class="line">│  │  │ ContentRetriever │  │ ContentRetriever │        │   │</span><br><span class="line">│  │  └──────────────────┘  └──────────────────┘        │   │</span><br><span class="line">│  └──────────────────────────────────────────────────────┘   │</span><br><span class="line">│                         │                                    │</span><br><span class="line">│                         ▼                                    │</span><br><span class="line">│  ┌──────────────────────────────────────────────────────┐   │</span><br><span class="line">│  │          RetrievalAugmentor                          │   │</span><br><span class="line">│  │  组合多个 ContentRetriever + 查询增强 + 结果融合       │   │</span><br><span class="line">│  └──────────────────────────────────────────────────────┘   │</span><br><span class="line">└──────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-组件化组装-RAG-流程"><a href="#2-组件化组装-RAG-流程" class="headerlink" title="2. 组件化组装 RAG 流程"></a>2. 组件化组装 RAG 流程</h2><p>LangChain4j 使用 Builder 模式将各组件组装为完整的 RAG 流程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LangChain4jRagConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;langchain4j.openai.api-key&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String openAiApiKey;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * EmbeddingModel — 向量化能力</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> EmbeddingModel <span class="title function_">embeddingModel</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> OpenAiEmbeddingModel.builder()</span><br><span class="line">                .apiKey(openAiApiKey)</span><br><span class="line">                .modelName(<span class="string">&quot;text-embedding-3-small&quot;</span>)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * EmbeddingStore — 向量存储（以 pgvector 为例）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> EmbeddingStore&lt;TextSegment&gt; <span class="title function_">embeddingStore</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> PgVectorEmbeddingStore.builder()</span><br><span class="line">                .host(<span class="string">&quot;localhost&quot;</span>)</span><br><span class="line">                .port(<span class="number">5432</span>)</span><br><span class="line">                .database(<span class="string">&quot;rag_db&quot;</span>)</span><br><span class="line">                .user(<span class="string">&quot;postgres&quot;</span>)</span><br><span class="line">                .password(System.getenv(<span class="string">&quot;PG_PASSWORD&quot;</span>))</span><br><span class="line">                .table(<span class="string">&quot;rag_embeddings&quot;</span>)</span><br><span class="line">                .dimension(<span class="number">1536</span>)</span><br><span class="line">                .useIndex(<span class="literal">true</span>)</span><br><span class="line">                .createTable(<span class="literal">true</span>)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * EmbeddingStoreIngestor — 文档入库管线</span></span><br><span class="line"><span class="comment">     * 自动完成：加载 → 解析 → 切分 → 向量化 → 存储</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> EmbeddingStoreIngestor <span class="title function_">embeddingStoreIngestor</span><span class="params">(</span></span><br><span class="line"><span class="params">            EmbeddingModel embeddingModel,</span></span><br><span class="line"><span class="params">            EmbeddingStore&lt;TextSegment&gt; embeddingStore)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> EmbeddingStoreIngestor.builder()</span><br><span class="line">                .embeddingModel(embeddingModel)</span><br><span class="line">                .embeddingStore(embeddingStore)</span><br><span class="line">                <span class="comment">// 自定义切分策略</span></span><br><span class="line">                .documentSplitter(DocumentSplitters.recursive(</span><br><span class="line">                        <span class="number">512</span>,    <span class="comment">// maxSegmentSize</span></span><br><span class="line">                        <span class="number">50</span>      <span class="comment">// overlapSize</span></span><br><span class="line">                ))</span><br><span class="line">                <span class="comment">// 自定义解析器</span></span><br><span class="line">                .documentParser(<span class="keyword">new</span> <span class="title class_">ApacheTikaDocumentParser</span>())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * ContentRetriever — 检索引擎（支持多种检索方式）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> ContentRetriever <span class="title function_">contentRetriever</span><span class="params">(</span></span><br><span class="line"><span class="params">            EmbeddingStore&lt;TextSegment&gt; embeddingStore,</span></span><br><span class="line"><span class="params">            EmbeddingModel embeddingModel)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 向量检索</span></span><br><span class="line">        <span class="type">EmbeddingStoreContentRetriever</span> <span class="variable">vectorRetriever</span> <span class="operator">=</span></span><br><span class="line">                EmbeddingStoreContentRetriever.builder()</span><br><span class="line">                        .embeddingStore(embeddingStore)</span><br><span class="line">                        .embeddingModel(embeddingModel)</span><br><span class="line">                        .maxResults(<span class="number">10</span>)</span><br><span class="line">                        .minScore(<span class="number">0.7</span>)</span><br><span class="line">                        .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 可选：添加 QueryTransformer（查询重写）</span></span><br><span class="line">        <span class="comment">// .queryTransformer(new CompressingQueryTransformer(chatModel))</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> vectorRetriever;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * RetrievalAugmentor — 检索增强器（组合检索 + 查询增强）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RetrievalAugmentor <span class="title function_">retrievalAugmentor</span><span class="params">(</span></span><br><span class="line"><span class="params">            ContentRetriever contentRetriever)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> DefaultRetrievalAugmentor.builder()</span><br><span class="line">                .contentRetriever(contentRetriever)</span><br><span class="line">                <span class="comment">// 可选：添加查询重写</span></span><br><span class="line">                <span class="comment">// .queryTransformer(...)</span></span><br><span class="line">                <span class="comment">// 可选：添加结果后处理</span></span><br><span class="line">                <span class="comment">// .contentInjector(...)</span></span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * ChatAssistant — 最终的对话式 RAG 服务</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> Assistant <span class="title function_">assistant</span><span class="params">(</span></span><br><span class="line"><span class="params">            ChatLanguageModel chatModel,</span></span><br><span class="line"><span class="params">            RetrievalAugmentor retrievalAugmentor)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> AiServices.builder(Assistant.class)</span><br><span class="line">                .chatLanguageModel(chatModel)</span><br><span class="line">                .retrievalAugmentor(retrievalAugmentor)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-AiServices-RAG-整合"><a href="#3-AiServices-RAG-整合" class="headerlink" title="3. AiServices + RAG 整合"></a>3. AiServices + RAG 整合</h2><p>LangChain4j 的 <code>AiServices</code> 是将 RAG 能力注入到声明式接口中的核心机制。通过 <code>@SystemMessage</code> 和 <code>@UserMessage</code> 注解定义 Prompt 模板，RAG 检索结果自动注入。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 声明式 AI 助手接口</span></span><br><span class="line"><span class="comment"> * AiServices 自动为每个方法调用注入 RAG 检索结果</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Assistant</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * RAG 增强问答</span></span><br><span class="line"><span class="comment">     * RetrievalAugmentor 自动将检索结果注入 User Message</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">chat</span><span class="params">(String userMessage)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 更精细的控制：结合 System Prompt + RAG</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">KnowledgeAssistant</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SystemMessage(&quot;&quot;&quot;</span></span><br><span class="line"><span class="meta">        你是一个专业的技术助手，基于提供的知识库内容回答问题。</span></span><br><span class="line"><span class="meta">        规则：</span></span><br><span class="line"><span class="meta">        - 使用 &#123;&#123;information&#125;&#125; 中的信息回答问题</span></span><br><span class="line"><span class="meta">        - 如果信息不足，明确说明</span></span><br><span class="line"><span class="meta">        - 引用具体来源</span></span><br><span class="line"><span class="meta">        &quot;&quot;&quot;)</span></span><br><span class="line">    String <span class="title function_">answer</span><span class="params">(String question)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 带来源追踪的 RAG 接口</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">SourceAwareAssistant</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SystemMessage(&quot;&quot;&quot;</span></span><br><span class="line"><span class="meta">        基于以下信息回答问题。每个答案后附上信息来源。</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">        可用信息：</span></span><br><span class="line"><span class="meta">        &#123;&#123;information&#125;&#125;</span></span><br><span class="line"><span class="meta">        &quot;&quot;&quot;)</span></span><br><span class="line">    Result&lt;String&gt; <span class="title function_">answer</span><span class="params">(String question)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 AiServices 创建实例并调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RagApplicationService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Assistant assistant;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmbeddingStoreIngestor ingestor;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">RagApplicationService</span><span class="params">(Assistant assistant,</span></span><br><span class="line"><span class="params">                                  EmbeddingStoreIngestor ingestor)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.assistant = assistant;</span><br><span class="line">        <span class="built_in">this</span>.ingestor = ingestor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 文档入库</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ingest</span><span class="params">(Path documentPath)</span> &#123;</span><br><span class="line">        <span class="type">Document</span> <span class="variable">document</span> <span class="operator">=</span> loadDocument(documentPath);</span><br><span class="line">        ingestor.ingest(document);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 问答</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">ask</span><span class="params">(String question)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> assistant.chat(question);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>LangChain4j 的组件化方式与 Spring AI 的 ETL Pipeline 在本质上实现了相同的 RAG 流程（加载 → 切分 → 向量化 → 存储 → 检索 → 生成），差异在于设计哲学：Spring AI 偏向统一接口 + Auto-Configuration，LangChain4j 偏向 Builder 模式 + 显式组装。</p>
+<hr>
+<h1 id="七、RAG-的工程化问题"><a href="#七、RAG-的工程化问题" class="headerlink" title="七、RAG 的工程化问题"></a>七、RAG 的工程化问题</h1><p>RAG 系统从 Demo 走到生产环境，需要解决一系列工程化问题。这些问题在原型阶段通常被忽略，但在真实业务场景中每一个都可能导致系统不可用。</p>
+<h2 id="1-索引更新与增量同步"><a href="#1-索引更新与增量同步" class="headerlink" title="1. 索引更新与增量同步"></a>1. 索引更新与增量同步</h2><p>知识库不是静态的——文档会新增、修改、删除。RAG 系统需要感知这些变化并同步更新向量索引。</p>
+<p><strong>全量重建（Full Re-index）</strong>：定期（如每周）清空 Collection 并重新处理所有文档。这是最简单可靠的方案，但成本高（重新 Embedding 所有文档）、周期长（大规模知识库可能需要数小时）。</p>
+<p><strong>增量同步（Incremental Sync）</strong>：只处理变化的文档。通过监听文档变更事件（文件系统监听、数据库 binlog、消息队列），触发增量索引更新。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IncrementalIndexSync</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> VectorStore vectorStore;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmbeddingStoreIngestor ingestor;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 监听文档变更事件并增量同步索引</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleDocumentChanged</span><span class="params">(DocumentChangedEvent event)</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span> (event.getType()) &#123;</span><br><span class="line">            <span class="keyword">case</span> CREATED, UPDATED -&gt; &#123;</span><br><span class="line">                <span class="comment">// 删除旧版本（如果存在）</span></span><br><span class="line">                vectorStore.delete(</span><br><span class="line">                        List.of(<span class="string">&quot;doc:&quot;</span> + event.getDocumentId())</span><br><span class="line">                );</span><br><span class="line">                <span class="comment">// 重新入库新版本</span></span><br><span class="line">                ingestor.ingest(event.getDocument());</span><br><span class="line">                log.info(<span class="string">&quot;Index updated for document: &#123;&#125;&quot;</span>, event.getDocumentId());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">case</span> DELETED -&gt; &#123;</span><br><span class="line">                vectorStore.delete(</span><br><span class="line">                        List.of(<span class="string">&quot;doc:&quot;</span> + event.getDocumentId())</span><br><span class="line">                );</span><br><span class="line">                log.info(<span class="string">&quot;Index removed for document: &#123;&#125;&quot;</span>, event.getDocumentId());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>增量同步的工程挑战</strong>：</p>
+<ul>
+<li><strong>Chunk ID 的稳定性</strong>：文档内容变更后，切分边界可能移动，导致所有 Chunk 的 ID 都发生变化。需要设计稳定的 Chunk ID 生成策略（如基于内容哈希），使未变化的 Chunk 能复用已有的向量</li>
+<li><strong>删除的可靠性</strong>：删除文档意味着需要删除与之关联的所有 Chunk。需要在元数据中记录”文档 ID → 所有 Chunk ID”的映射关系</li>
+</ul>
+<h2 id="2-数据一致性"><a href="#2-数据一致性" class="headerlink" title="2. 数据一致性"></a>2. 数据一致性</h2><p>向量数据库和关系数据库之间的数据一致性是 RAG 工程化的核心挑战。</p>
+<p><strong>常见的不一致场景</strong>：</p>
+<ul>
+<li><strong>向量已写入但事务回滚</strong>：关系数据库中的文档写入事务提交失败，但向量已经写入向量数据库（大多数向量数据库不支持事务回滚）</li>
+<li><strong>向量未写入但文档已可见</strong>：用户在界面上看到了新上传的文档，但向量索引还未完成，导致该文档暂时搜索不到</li>
+<li><strong>删除不彻底</strong>：关系数据库中的文档已标记为删除，但向量数据库中的对应向量未被清理</li>
+</ul>
+<p><strong>推荐的工程方案</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">文档写入流程（最终一致性）：</span><br><span class="line">┌──────────────────────────────────────────────┐</span><br><span class="line">│  1. 文档写入 PostgreSQL                     │</span><br><span class="line">│  2. 发送索引同步消息到消息队列               │</span><br><span class="line">│  3. 异步消费者处理：向量化 → 写入向量数据库   │</span><br><span class="line">│  4. 更新文档状态为 &quot;indexed&quot;                 │</span><br><span class="line">│                                              │</span><br><span class="line">│  文档搜索流程：                               │</span><br><span class="line">│  搜索时过滤 status = &quot;indexed&quot;               │</span><br><span class="line">│  （只搜索已成功索引的文档）                   │</span><br><span class="line">└──────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>消息队列解耦</strong>：文档写入 PostgreSQL 后，发送一条消息通知索引服务异步处理。核心数据库操作不受向量索引速度的影响</li>
+<li><strong>状态标记</strong>：为每个文档维护一个 <code>index_status</code> 字段（<code>pending</code> &#x2F; <code>indexing</code> &#x2F; <code>indexed</code> &#x2F; <code>failed</code>），搜索时只检索状态为 <code>indexed</code> 的文档</li>
+<li><strong>定期对账</strong>：定时对比关系数据库中的文档列表和向量数据库中的向量列表，发现差异后补录或清理</li>
+</ul>
+<h2 id="3-大规模文档处理"><a href="#3-大规模文档处理" class="headerlink" title="3. 大规模文档处理"></a>3. 大规模文档处理</h2><p>当知识库包含数万甚至数十万份文档时，文档处理管线面临吞吐量挑战。</p>
+<p><strong>并行处理架构</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">            ┌──────────┐</span><br><span class="line">            │  文档队列  │</span><br><span class="line">            └──────────┘</span><br><span class="line">                  │</span><br><span class="line">      ┌───────────┼───────────┐</span><br><span class="line">      ▼           ▼           ▼</span><br><span class="line">┌──────────┐ ┌──────────┐ ┌──────────┐</span><br><span class="line">│ Consumer │ │ Consumer │ │ Consumer │  ← 多个消费者并行处理</span><br><span class="line">│   1      │ │   2      │ │   3      │</span><br><span class="line">│ 加载→切分 │ │ 加载→切分 │ │ 加载→切分 │</span><br><span class="line">│ →向量化→  │ │ →向量化→  │ │ →向量化→  │</span><br><span class="line">│ 存储     │ │ 存储     │ │ 存储     │</span><br><span class="line">└──────────┘ └──────────┘ └──────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键优化点</strong>：</p>
+<ul>
+<li><strong>批量 Embedding</strong>：每个消费者累积一批 Chunk（如 200 条）后，使用一次批量 API 调用完成向量化，减少 HTTP 往返</li>
+<li><strong>断点续传</strong>：记录每个文档的处理状态（<code>pending</code> &#x2F; <code>processing</code> &#x2F; <code>completed</code>），支持处理中断后从断点恢复</li>
+<li><strong>限流保护</strong>：Embedding API 通常有速率限制（如 OpenAI 每分钟 3000 RPM），需要在调用端实现限流，避免触发 API 限流</li>
+</ul>
+<h2 id="4-RAG-质量评估"><a href="#4-RAG-质量评估" class="headerlink" title="4. RAG 质量评估"></a>4. RAG 质量评估</h2><p>RAG 系统的质量不能仅靠”感觉还行”来评判，需要建立量化评估体系。</p>
+<p><strong>核心评估指标</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>测量方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>召回率（Recall）</td>
+<td>相关文档被检索到的比例</td>
+<td>标注测试集中”应检索到的文档”与实际检索结果的交集</td>
+</tr>
+<tr>
+<td>精确率（Precision）</td>
+<td>检索结果中真正相关的比例</td>
+<td>人工标注每个检索结果是否相关</td>
+</tr>
+<tr>
+<td>上下文相关性</td>
+<td>检索结果与问题的语义相关性</td>
+<td>可以用 LLM 自动评分（如 Ragas 的 Context Relevancy）</td>
+</tr>
+<tr>
+<td>答案忠实度（Faithfulness）</td>
+<td>答案是否基于检索结果而非编造</td>
+<td>逐句对照答案与检索结果，检测有无幻觉（Ragas Faithfulness）</td>
+</tr>
+<tr>
+<td>答案相关性</td>
+<td>答案是否直接回答了问题</td>
+<td>LLM 评估答案与问题的相关性（Ragas Answer Relevancy）</td>
+</tr>
+</tbody></table>
+<p><strong>评估工具</strong>：</p>
+<ul>
+<li><strong>Ragas</strong>：开源的 RAG 评估框架，提供 Context Precision、Context Recall、Faithfulness、Answer Relevancy 等指标</li>
+<li><strong>LangSmith</strong>：LangChain 的商业评估平台</li>
+<li><strong>自建评估集</strong>：准备 50-200 个真实用户问题及其期望答案，每次索引或检索策略变更后运行评估集，量化变更效果</li>
+</ul>
+<p><strong>持续优化循环</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">评估 → 发现低质量 case → 分析根因</span><br><span class="line">  │                              │</span><br><span class="line">  │    ┌─────────────────────────┘</span><br><span class="line">  │    ▼</span><br><span class="line">  │   是检索问题？ → 调整 Chunk Size / 索引参数 / 混合搜索权重</span><br><span class="line">  │   是生成问题？ → 优化 Prompt 结构 / 约束强度</span><br><span class="line">  │   是知识库问题？ → 补充文档 / 修正错误 / 合并重复</span><br><span class="line">  │</span><br><span class="line">  └── 重新评估，对比指标变化</span><br></pre></td></tr></table></figure>
+
+<p>RAG 质量评估不是为了”证明系统有多好”，而是为了<strong>找到系统的瓶颈在哪里</strong>——是检索没找到（召回问题），还是找到了但没用好（Prompt 问题），还是知识库本身的信息不足。定位瓶颈才能做有针对性的优化。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/RAG/" rel="tag"># RAG</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/07-FunctionCalling%E4%B8%8EToolCalling/" rel="prev" title="Function Calling与Tool Calling">
+                  <i class="fa fa-angle-left"></i> Function Calling与Tool Calling
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/05-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="next" title="向量数据库">
+                  向量数据库 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

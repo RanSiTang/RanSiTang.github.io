@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、Agent 的基本概念与定位1. 什么是 AgentAgent（智能体）是一种以 LLM 为推理核心、具备自主决策能力的 AI 应用形态。与被动等待用户指令的 Chatbot 不同，Agent 能够感知环境、制定计划、选择工具、执行动作、反思结果，在一个闭环中自主完成复杂任务。 用工程语言来定义：Agent &#x3D; LLM（推理引擎）+ Planning（规划能力）+ Memory（记忆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent智能体">
+<meta property="og:url" content="http://example.com/2026/05/29/AI/09-Agent%E6%99%BA%E8%83%BD%E4%BD%93/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、Agent 的基本概念与定位1. 什么是 AgentAgent（智能体）是一种以 LLM 为推理核心、具备自主决策能力的 AI 应用形态。与被动等待用户指令的 Chatbot 不同，Agent 能够感知环境、制定计划、选择工具、执行动作、反思结果，在一个闭环中自主完成复杂任务。 用工程语言来定义：Agent &#x3D; LLM（推理引擎）+ Planning（规划能力）+ Memory（记忆">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T11:08:38.868Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Skills">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/05/29/AI/09-Agent%E6%99%BA%E8%83%BD%E4%BD%93/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/05/29/AI/09-Agent%E6%99%BA%E8%83%BD%E4%BD%93/","path":"2026/05/29/AI/09-Agent智能体/","title":"Agent智能体"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Agent智能体 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Agent-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9A%E4%BD%8D"><span class="nav-text">一、Agent 的基本概念与定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Agent"><span class="nav-text">1. 什么是 Agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Agent-%E4%B8%8E-Chatbot%E3%80%81RAG%E3%80%81Workflow-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">2. Agent 与 Chatbot、RAG、Workflow 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Agent-%E7%9A%84%E8%87%AA%E4%B8%BB%E5%B1%82%E7%BA%A7"><span class="nav-text">3. Agent 的自主层级</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Agent-%E7%9A%84%E6%A0%B8%E5%BF%83%E7%BB%84%E6%88%90"><span class="nav-text">二、Agent 的核心组成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Planning%EF%BC%88%E8%A7%84%E5%88%92%E8%83%BD%E5%8A%9B%EF%BC%89"><span class="nav-text">1. Planning（规划能力）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Memory%EF%BC%88%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="nav-text">2. Memory（记忆系统）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Tool-Use%EF%BC%88%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%EF%BC%89"><span class="nav-text">3. Tool Use（工具使用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reflection%EF%BC%88%E5%8F%8D%E6%80%9D%E4%B8%8E%E8%87%AA%E6%88%91%E4%BF%AE%E6%AD%A3%EF%BC%89"><span class="nav-text">4. Reflection（反思与自我修正）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Skills%EF%BC%88%E6%8A%80%E8%83%BD%E4%BD%93%E7%B3%BB%EF%BC%89"><span class="nav-text">5. Skills（技能体系）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Skills-%E4%B8%8E-Tools-%E7%9A%84%E5%8C%BA%E5%88%AB%E4%B8%8E%E5%8D%8F%E4%BD%9C"><span class="nav-text">6. Skills 与 Tools 的区别与协作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81Agent-%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A0%B8%E5%BF%83%E5%BE%AA%E7%8E%AF%E6%A8%A1%E5%BC%8F"><span class="nav-text">三、Agent 的三种核心循环模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ReAct-Loop%EF%BC%88%E6%8E%A8%E7%90%86-%E8%A1%8C%E5%8A%A8%E5%BE%AA%E7%8E%AF%EF%BC%89"><span class="nav-text">1. ReAct Loop（推理-行动循环）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Plan-Execute%EF%BC%88%E8%A7%84%E5%88%92-%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%BC%8F%EF%BC%89"><span class="nav-text">2. Plan-Execute（规划-执行模式）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Reflection-Loop%EF%BC%88%E5%8F%8D%E6%80%9D-%E6%94%B9%E8%BF%9B%E5%BE%AA%E7%8E%AF%EF%BC%89"><span class="nav-text">3. Reflection Loop（反思-改进循环）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%8D%95-Agent%E3%80%81%E5%A4%9A-Agent-%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%BA%A6%E6%9D%9F"><span class="nav-text">四、单 Agent、多 Agent 与工程化约束</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8D%95-Agent-%E6%9E%B6%E6%9E%84"><span class="nav-text">1. 单 Agent 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%A4%9A-Agent-%E5%8D%8F%E4%BD%9C%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 多 Agent 协作架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Agent-%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%BA%A6%E6%9D%9F"><span class="nav-text">3. Agent 的工程化约束</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81Java-%E5%90%8E%E7%AB%AF%E5%AE%9E%E8%B7%B5%EF%BC%9ASpring-AI-Agent"><span class="nav-text">五、Java 后端实践：Spring AI Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Spring-AI-Agent-%E5%9F%BA%E7%A1%80%E5%AE%9E%E7%8E%B0"><span class="nav-text">1. Spring AI Agent 基础实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ReAct-Loop-%E7%9A%84%E5%AE%8C%E6%95%B4%E5%AE%9E%E7%8E%B0"><span class="nav-text">2. ReAct Loop 的完整实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Agent-%E7%9A%84%E6%B5%81%E5%BC%8F%E6%89%A7%E8%A1%8C%E4%B8%8E%E5%AE%9E%E6%97%B6%E5%8F%8D%E9%A6%88"><span class="nav-text">3. Agent 的流式执行与实时反馈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81Java-%E5%90%8E%E7%AB%AF%E5%AE%9E%E8%B7%B5%EF%BC%9ALangChain4j-Agent"><span class="nav-text">六、Java 后端实践：LangChain4j Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-AiServices-Agent-%E6%A8%A1%E5%BC%8F"><span class="nav-text">1. AiServices Agent 模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%A4%9A-Agent-%E7%BC%96%E6%8E%92"><span class="nav-text">2. 多 Agent 编排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%89%8B%E5%8A%A8%E6%8E%A7%E5%88%B6-Agent-%E5%BE%AA%E7%8E%AF"><span class="nav-text">3. 手动控制 Agent 循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Spring-AI-%E4%B8%8E-LangChain4j-Agent-%E5%AE%9E%E7%8E%B0%E5%AF%B9%E6%AF%94"><span class="nav-text">4. Spring AI 与 LangChain4j Agent 实现对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81Agent-%E4%B8%8E%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E7%9A%84%E9%9B%86%E6%88%90"><span class="nav-text">七、Agent 与业务系统的集成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Agent-%E8%B0%83%E7%94%A8%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1. Agent 调用微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Agent-%E4%B8%8E%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E9%9B%86%E6%88%90"><span class="nav-text">2. Agent 与消息队列的集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Agent-%E7%9A%84%E6%B2%BB%E7%90%86%E4%B8%8E%E7%9B%91%E6%8E%A7"><span class="nav-text">3. Agent 的治理与监控</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/29/AI/09-Agent%E6%99%BA%E8%83%BD%E4%BD%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Agent智能体 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Agent智能体
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-29T00:00:00+08:00">2026-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-07 19:08:38" itemprop="dateModified" datetime="2026-06-07T19:08:38+08:00">2026-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、Agent-的基本概念与定位"><a href="#一、Agent-的基本概念与定位" class="headerlink" title="一、Agent 的基本概念与定位"></a>一、Agent 的基本概念与定位</h1><h2 id="1-什么是-Agent"><a href="#1-什么是-Agent" class="headerlink" title="1. 什么是 Agent"></a>1. 什么是 Agent</h2><p>Agent（智能体）是一种以 LLM 为<strong>推理核心</strong>、具备<strong>自主决策能力</strong>的 AI 应用形态。与被动等待用户指令的 Chatbot 不同，Agent 能够<strong>感知环境、制定计划、选择工具、执行动作、反思结果</strong>，在一个闭环中自主完成复杂任务。</p>
+<p>用工程语言来定义：Agent &#x3D; LLM（推理引擎）+ Planning（规划能力）+ Memory（记忆系统）+ Tools（工具集合）+ Reflection（反思机制）。这五个组件以 LLM 为中心协同工作，使 Agent 具备了超越单次问答的自主任务执行能力。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                        Agent 架构                             │</span><br><span class="line">│                                                             │</span><br><span class="line">│   ┌─────────┐     ┌──────────────┐     ┌──────────────┐    │</span><br><span class="line">│   │ Memory   │ ←→  │   LLM 推理   │ ←→  │   Planning   │    │</span><br><span class="line">│   │ (记忆)   │     │   (大脑)      │     │   (规划)      │    │</span><br><span class="line">│   └─────────┘     └──────────────┘     └──────────────┘    │</span><br><span class="line">│                          ↕                                  │</span><br><span class="line">│                   ┌──────────────┐                          │</span><br><span class="line">│                   │  Tool Use     │                          │</span><br><span class="line">│                   │  (工具执行)    │                          │</span><br><span class="line">│                   └──────────────┘                          │</span><br><span class="line">│                          │                                  │</span><br><span class="line">│              ┌───────────┼───────────┐                     │</span><br><span class="line">│              ▼           ▼           ▼                     │</span><br><span class="line">│        ┌────────┐  ┌────────┐  ┌──────────┐               │</span><br><span class="line">│        │ 搜索API │  │ 数据库  │  │ 业务服务  │  ← 外部环境    │</span><br><span class="line">│        └────────┘  └────────┘  └──────────┘               │</span><br><span class="line">│                                                             │</span><br><span class="line">│   ┌──────────────┐                                          │</span><br><span class="line">│   │  Reflection   │ ← 每一轮行动后反思并调整后续策略          │</span><br><span class="line">│   └──────────────┘                                          │</span><br><span class="line">└─────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Agent-与-Chatbot、RAG、Workflow-的区别"><a href="#2-Agent-与-Chatbot、RAG、Workflow-的区别" class="headerlink" title="2. Agent 与 Chatbot、RAG、Workflow 的区别"></a>2. Agent 与 Chatbot、RAG、Workflow 的区别</h2><p>这是 AI 应用架构中最基础也是最容易混淆的四个概念。它们的差异不在于”用了什么技术”，而在于<strong>谁掌握决策权</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Chatbot</th>
+<th>RAG</th>
+<th>AI Workflow</th>
+<th>Agent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>决策主体</strong></td>
+<td>用户</td>
+<td>系统（固定流程）</td>
+<td>流程引擎（预定义图）</td>
+<td>LLM（自主决策）</td>
+</tr>
+<tr>
+<td><strong>执行路径</strong></td>
+<td>单轮 Q&amp;A</td>
+<td>检索 → 生成（固定两阶段）</td>
+<td>预定义的有向图</td>
+<td>LLM 动态规划</td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>最低（一问一答）</td>
+<td>低（固定模式）</td>
+<td>中（分支预定义）</td>
+<td>最高（自主选路）</td>
+</tr>
+<tr>
+<td><strong>可预测性</strong></td>
+<td>最高</td>
+<td>高</td>
+<td>高</td>
+<td>低（模型可能走非预期路径）</td>
+</tr>
+<tr>
+<td><strong>适用任务</strong></td>
+<td>简单问答</td>
+<td>知识库问答</td>
+<td>标准化业务流程</td>
+<td>开放式复杂任务</td>
+</tr>
+</tbody></table>
+<p><strong>形态演进关系</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Chatbot（被动问答）</span><br><span class="line">    │</span><br><span class="line">    ├─ + 知识库检索 → RAG（知识增强问答）</span><br><span class="line">    │</span><br><span class="line">    ├─ + 预定义流程图 → AI Workflow（标准化流程自动化）</span><br><span class="line">    │</span><br><span class="line">    └─ + 自主规划 + 记忆 + 多工具 → Agent（自主智能体）</span><br></pre></td></tr></table></figure>
+
+<p>Agent 不是对前三种形态的替代，而是对它们的能力升级。一个 Agent 在执行任务时，内部可能调用 RAG 检索知识、执行预定义的 Workflow 子流程、进行多轮对话——但它自己决定<strong>何时调用什么、以什么顺序调用、什么时候任务算完成</strong>。</p>
+<h2 id="3-Agent-的自主层级"><a href="#3-Agent-的自主层级" class="headerlink" title="3. Agent 的自主层级"></a>3. Agent 的自主层级</h2><p>并非所有自称 Agent 的系统都有相同的自主程度。根据 LLM 掌握的控制权大小，可以划分出三个层级：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>控制权分布</th>
+<th>典型表现</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L1：工具增强型</strong></td>
+<td>用户控制流程，Agent 只提供工具</td>
+<td>用户说”查订单”，Agent 调用查询工具返回结果</td>
+<td>低</td>
+</tr>
+<tr>
+<td><strong>L2：任务委派型</strong></td>
+<td>用户定义目标，Agent 规划并执行</td>
+<td>用户说”帮我处理这个退款”，Agent 自主规划：查订单→判断可退款→创建退款单→通知用户</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>L3：完全自主型</strong></td>
+<td>Agent 持续运行，主动感知和响应</td>
+<td>运维 Agent 持续监控系统指标，发现异常后自主排查、告警、甚至自动修复</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<p>目前企业级应用的最佳实践是<strong>L2 任务委派型</strong>——Agent 在明确的边界和约束下自主完成任务。L3 完全自主型在风险控制上仍有较大挑战，仅在少数高度受控的场景中可行。</p>
+<hr>
+<h1 id="二、Agent-的核心组成"><a href="#二、Agent-的核心组成" class="headerlink" title="二、Agent 的核心组成"></a>二、Agent 的核心组成</h1><h2 id="1-Planning（规划能力）"><a href="#1-Planning（规划能力）" class="headerlink" title="1. Planning（规划能力）"></a>1. Planning（规划能力）</h2><p>Planning 是 Agent 区别于简单 Chatbot 的核心能力——面对一个复杂目标，Agent 不是一步到位，而是<strong>先制定执行计划，再逐步执行</strong>。</p>
+<p><strong>规划的两个层次</strong>：</p>
+<ul>
+<li><strong>任务分解（Task Decomposition）</strong>：将复杂目标拆解为多个可执行的子任务。例如，”帮我准备 Q3 技术分享”被分解为”① 检索近半年的技术文档 ② 分析高频话题 ③ 选择 3 个候选主题 ④ 为每个主题生成大纲”</li>
+<li><strong>执行排序（Task Ordering）</strong>：确定子任务的执行顺序和依赖关系。Agent 需要判断哪些任务可以并行（如同时检索多个数据源），哪些任务有依赖（必须先检索才能分析）</li>
+</ul>
+<p><strong>规划的两种生成方式</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>描述</th>
+<th>优势</th>
+<th>劣势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>一次性规划</strong></td>
+<td>在开始执行前生成完整计划</td>
+<td>全局视角，步骤之间逻辑一致</td>
+<td>无法应对中途的意外发现</td>
+</tr>
+<tr>
+<td><strong>增量规划</strong></td>
+<td>执行一步，基于结果规划下一步</td>
+<td>灵活，能基于新的信息调整</td>
+<td>可能偏离全局最优路径</td>
+</tr>
+</tbody></table>
+<p>实践中，大多数 Agent 实现采用<strong>增量规划</strong>——执行每步后观察结果，再决定下一步。这更接近人类解决复杂问题的方式，也更好地利用了 LLM 的推理能力。</p>
+<h2 id="2-Memory（记忆系统）"><a href="#2-Memory（记忆系统）" class="headerlink" title="2. Memory（记忆系统）"></a>2. Memory（记忆系统）</h2><p>Memory 是 Agent 实现<strong>上下文连续性</strong>的基础。没有记忆的 Agent 每一轮都像”失忆”一样重新开始。</p>
+<p><strong>三种记忆类型</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│                     Agent 记忆体系                        │</span><br><span class="line">│                                                         │</span><br><span class="line">│   短期记忆（Short-term Memory）                           │</span><br><span class="line">│   ├─ 当前对话的完整历史（消息列表）                        │</span><br><span class="line">│   ├─ 最近 N 轮的推理-行动-观察记录                        │</span><br><span class="line">│   └─ 存储位置：内存 / LLM Context Window                │</span><br><span class="line">│                                                         │</span><br><span class="line">│   工作记忆（Working Memory）                              │</span><br><span class="line">│   ├─ 当前任务的中间结果和状态                             │</span><br><span class="line">│   ├─ 已完成的子任务、待处理的子任务                        │</span><br><span class="line">│   └─ 存储位置：内存 / Redis（分布式场景）                  │</span><br><span class="line">│                                                         │</span><br><span class="line">│   长期记忆（Long-term Memory）                            │</span><br><span class="line">│   ├─ 历史任务的经验总结                                   │</span><br><span class="line">│   ├─ 用户偏好和习惯                                       │</span><br><span class="line">│   ├─ 领域知识（非训练数据）                                │</span><br><span class="line">│   └─ 存储位置：向量数据库 + 关系数据库                     │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>短期记忆的管理挑战</strong>：LLM Context Window 有限，对话历史增长到一定程度必须截断。简单的截断策略（如只保留最后 N 轮）会丢失早期的关键信息。更高级的做法是<strong>记忆摘要</strong>——用 LLM 将历史对话压缩为摘要，保留关键信息的同时控制 Token 消耗。</p>
+<p><strong>长期记忆的实现</strong>：长期记忆本质上是一个<strong>RAG 系统</strong>——将历史任务的经验、用户偏好存储为向量，当 Agent 处理新任务时检索相关记忆。例如，Agent 之前帮用户处理过”退款”任务，当下次用户再说”和上次一样退了吧”，Agent 能检索到上次的操作参数并复用。</p>
+<h2 id="3-Tool-Use（工具使用）"><a href="#3-Tool-Use（工具使用）" class="headerlink" title="3. Tool Use（工具使用）"></a>3. Tool Use（工具使用）</h2><p>Tool Use 是 Agent 与外部世界交互的接口。第 07 章 Function Calling 已详细讨论了工具定义和调用机制，在 Agent 语境下需要补充的是<strong>工具的使用策略</strong>。</p>
+<p>Agent 对工具的使用比 Workflow 中预定的工具调用更灵活：</p>
+<ul>
+<li><strong>自主选择</strong>：Agent 自己决定何时使用哪个工具——不需要流程图中预先指定</li>
+<li><strong>组合使用</strong>：Agent 可以将多个工具组合使用——先用搜索工具找到相关文档，再用计算工具分析数据，最后用邮件工具发送报告</li>
+<li><strong>错误恢复</strong>：工具调用失败时，Agent 可以分析失败原因并尝试替代方案——工具超时了就换一个查询策略，而不是简单报错</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Agent 自主使用工具的决策链：</span><br><span class="line"></span><br><span class="line">  任务：&quot;分析本月销售数据并生成报告&quot;</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  Agent 推理: 需要先获取数据</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  调用: salesDataQuery(startDate=&quot;2026-05-01&quot;, endDate=&quot;2026-05-31&quot;)</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  观察: 返回 500 条记录，包含产品、地区、金额</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  Agent 推理: 数据量适中，需要统计分析</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  调用: dataAnalysis(data=salesData, dimensions=[&quot;product&quot;, &quot;region&quot;])</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  观察: 返回各维度的统计结果，发现华东地区销售额下降 15%</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  Agent 推理: 发现了异常，需要深入分析华东地区</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  调用: salesDataQuery(region=&quot;华东&quot;, granularity=&quot;weekly&quot;)</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  ... 继续推理和调用，直到认为信息足够</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  调用: reportGenerate(title=&quot;5月销售分析报告&quot;, data=allFindings, format=&quot;markdown&quot;)</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">  返回最终报告给用户</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Reflection（反思与自我修正）"><a href="#4-Reflection（反思与自我修正）" class="headerlink" title="4. Reflection（反思与自我修正）"></a>4. Reflection（反思与自我修正）</h2><p>Reflection 是 Agent 在<strong>执行过程中评估自己的进展并调整策略</strong>的能力。它是 Agent 区别于”一次性输出”的关键特征——Agent 不是说一次就完，而是反复检查、修正、优化。</p>
+<p><strong>Reflection 的三个层次</strong>：</p>
+<ul>
+<li><strong>结果评估</strong>：”工具返回的结果是否满足了我的需求？如果不满足，我该如何调整查询？”</li>
+<li><strong>进展评估</strong>：”在完成总体目标的路径上，我进展到哪一步了？方向是否正确？”</li>
+<li><strong>策略反思</strong>：”我目前的方法是最优的吗？有没有更好的方式？前几步的策略选择是否有改进空间？”</li>
+</ul>
+<p><strong>Reflection 的触发时机</strong>：</p>
+<ul>
+<li><strong>每一步后</strong>：执行工具调用后，评估结果质量，决定是否需要调整</li>
+<li><strong>阶段性检查</strong>：完成一组子任务后，检查进展是否符合预期</li>
+<li><strong>遇到障碍时</strong>：工具报错、结果异常、信息不足时，分析原因并调整策略</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Reflection 示例：</span><br><span class="line"></span><br><span class="line">  Agent 尝试调用: searchProduct(&quot;高端机械键盘&quot;)</span><br><span class="line">  观察: 返回 50+ 条结果，信息过载</span><br><span class="line"></span><br><span class="line">  Agent Reflection:</span><br><span class="line">  &quot;搜索结果太多了，包含各种品牌和价位。</span><br><span class="line">   我应该缩小范围——用户之前提到偏好 500-800 元价位，</span><br><span class="line">   让我加上价格过滤条件重新搜索。&quot;</span><br><span class="line"></span><br><span class="line">  Agent 调整后调用: searchProduct(&quot;机械键盘&quot;, priceRange=&quot;500-800&quot;, sortBy=&quot;rating&quot;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-Skills（技能体系）"><a href="#5-Skills（技能体系）" class="headerlink" title="5. Skills（技能体系）"></a>5. Skills（技能体系）</h2><p>Skills 是比 Tools 更高层次的抽象——<strong>Skill 是一组相关 Tool 的封装，加上使用这些 Tool 的领域知识和操作规范</strong>。</p>
+<p>如果说 Tool 是”函数”（单一操作，输入→输出），Skill 就是”模块”（封装了领域知识、操作流程和多个 Tool 的协作方式）。例如：</p>
+<ul>
+<li><strong>Tool</strong>：<code>queryDatabase(sql)</code> ——执行一条 SQL 查询</li>
+<li><strong>Skill</strong>：<code>DatabaseDiagnosis</code> ——包含了查询慢查询日志、分析索引使用情况、检查连接池状态、生成优化建议等一系列操作，以及”先看整体指标再定位具体问题”的诊断方法论</li>
+</ul>
+<p><strong>Skill 的组成要素</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Skill = &#123;</span><br><span class="line">  name: &quot;OrderManagement&quot;,          // 技能名称</span><br><span class="line">  description: &quot;订单管理与问题处理&quot;,   // 技能说明</span><br><span class="line">  tools: [                          // 封装的基础工具</span><br><span class="line">    getOrder,</span><br><span class="line">    searchOrders,</span><br><span class="line">    cancelOrder,</span><br><span class="line">    createRefund</span><br><span class="line">  ],</span><br><span class="line">  knowledge: &quot;订单相关的业务规则...&quot;,  // 领域知识</span><br><span class="line">  procedures: [                     // 标准操作流程（SOP）</span><br><span class="line">    &quot;查询订单前先确认用户身份&quot;,</span><br><span class="line">    &quot;取消订单前必须确认订单状态为可取消&quot;,</span><br><span class="line">    &quot;退款金额不能超过订单实付金额&quot;</span><br><span class="line">  ],</span><br><span class="line">  fallback: &quot;联系人工客服&quot;           // 技能无法处理时的兜底</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-Skills-与-Tools-的区别与协作"><a href="#6-Skills-与-Tools-的区别与协作" class="headerlink" title="6. Skills 与 Tools 的区别与协作"></a>6. Skills 与 Tools 的区别与协作</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Tool（工具）</th>
+<th>Skill（技能）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>粒度</strong></td>
+<td>原子操作</td>
+<td>复合能力</td>
+</tr>
+<tr>
+<td><strong>封装内容</strong></td>
+<td>函数签名 + 描述</td>
+<td>多个 Tool + 领域知识 + 操作规范</td>
+</tr>
+<tr>
+<td><strong>谁来选择</strong></td>
+<td>Agent &#x2F; LLM 自主决定</td>
+<td>Agent 选择 Skill，Skill 内部自行调度 Tool</td>
+</tr>
+<tr>
+<td><strong>知识包含</strong></td>
+<td>无</td>
+<td>包含领域知识和最佳实践</td>
+</tr>
+<tr>
+<td><strong>类比</strong></td>
+<td>JDBC <code>executeQuery()</code></td>
+<td><code>OrderService</code>（封装了业务逻辑）</td>
+</tr>
+<tr>
+<td><strong>复用单元</strong></td>
+<td>单个 API 调用</td>
+<td>可复用的业务能力模块</td>
+</tr>
+</tbody></table>
+<p><strong>协作模式</strong>：</p>
+<p>Agent 在规划阶段选择需要使用的 Skill，每个 Skill 在执行阶段自主调度内部的 Tool。这种两层架构降低了 Agent 的决策复杂度——Agent 不需要在数十个原子 Tool 中选择，而是从几个 Skill 中选择；具体的 Tool 调度交给 Skill 内部处理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Agent 层（做决策）:           Skill 层（做执行）:          Tool 层:</span><br><span class="line"></span><br><span class="line">  &quot;用户要退款&quot;              OrderManagement Skill</span><br><span class="line">       │                        │</span><br><span class="line">       ▼                        ├─→ getOrder()</span><br><span class="line">  选择 OrderManagement          ├─→ validateRefundEligibility()</span><br><span class="line">  Skill                        ├─→ createRefund()</span><br><span class="line">       │                        └─→ notifyUser()</span><br><span class="line">       ▼</span><br><span class="line">  &quot;用户要查产品&quot;             ProductSearch Skill</span><br><span class="line">       │                        │</span><br><span class="line">       ▼                        ├─→ searchProducts()</span><br><span class="line">  选择 ProductSearch            ├─→ checkInventory()</span><br><span class="line">  Skill                        └─→ comparePrices()</span><br></pre></td></tr></table></figure>
+
+<p>Skills 的设计直接影响了 Agent 的实际效能——精心设计的 Skills 封装了领域专家的判断逻辑，让 Agent 的决策更接近专家行为；设计粗糙的 Skills 只是一堆函数的堆砌，反而增加了 Agent 选择的困难。</p>
+<hr>
+<h1 id="三、Agent-的三种核心循环模式"><a href="#三、Agent-的三种核心循环模式" class="headerlink" title="三、Agent 的三种核心循环模式"></a>三、Agent 的三种核心循环模式</h1><p>Agent 的行为驱动核心是一个<strong>循环（Loop）</strong>：感知 → 思考 → 行动 → 观察 → 反思 → 再思考…。不同的循环模式决定了 Agent 的决策方式。</p>
+<h2 id="1-ReAct-Loop（推理-行动循环）"><a href="#1-ReAct-Loop（推理-行动循环）" class="headerlink" title="1. ReAct Loop（推理-行动循环）"></a>1. ReAct Loop（推理-行动循环）</h2><p>ReAct（Reasoning + Acting）是最经典也是使用最广泛的 Agent 循环模式。其核心思想是<strong>推理和行动交替进行</strong>：每一步 Agent 先输出推理（分析当前状态、思考下一步做什么），然后执行一个动作（调用工具或输出结果），观察动作结果，再进入下一轮推理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">ReAct Loop 的执行过程：</span><br><span class="line"></span><br><span class="line">  用户目标: &quot;帮我分析为什么昨天华东地区的订单量下降了&quot;</span><br><span class="line"></span><br><span class="line">  ┌─ Round 1 ─────────────────────────────────────┐</span><br><span class="line">  │ Thought: 需要先查询昨日的订单数据，对比前日数据    │</span><br><span class="line">  │ Action:  queryDailyOrders(date=&quot;2026-06-06&quot;,    │</span><br><span class="line">  │           region=&quot;华东&quot;)                         │</span><br><span class="line">  │ Observation: 华东昨日订单 1234 单，前日 1567 单    │</span><br><span class="line">  │           ↓ 下降 333 单（-21.3%）                │</span><br><span class="line">  └────────────────────────────────────────────────┘</span><br><span class="line"></span><br><span class="line">  ┌─ Round 2 ─────────────────────────────────────┐</span><br><span class="line">  │ Thought: 下降幅度显著，需要看各品类明细定位问题     │</span><br><span class="line">  │ Action:  queryOrdersByCategory(date=&quot;2026-06-06&quot;,│</span><br><span class="line">  │           region=&quot;华东&quot;)                         │</span><br><span class="line">  │ Observation: 电子产品下降 40%，其他品类基本持平     │</span><br><span class="line">  └────────────────────────────────────────────────┘</span><br><span class="line"></span><br><span class="line">  ┌─ Round 3 ─────────────────────────────────────┐</span><br><span class="line">  │ Thought: 电子产品异常下降，可能是促销活动结束或     │</span><br><span class="line">  │          竞品活动影响。需要查看是否有关联事件        │</span><br><span class="line">  │ Action:  queryEvents(date=&quot;2026-06-05&quot;,          │</span><br><span class="line">  │           region=&quot;华东&quot;, category=&quot;电子产品&quot;)      │</span><br><span class="line">  │ Observation: 6月5日竞品平台开启&quot;618数码节&quot;          │</span><br><span class="line">  └────────────────────────────────────────────────┘</span><br><span class="line"></span><br><span class="line">  ┌─ Round 4 ─────────────────────────────────────┐</span><br><span class="line">  │ Thought: 找到原因了。竞品618活动导致订单被分流。    │</span><br><span class="line">  │          可以给出分析结论和建议了                    │</span><br><span class="line">  │ Action:  FINISH（生成最终分析报告）                │</span><br><span class="line">  │ &quot;华东地区6月6日订单量较前日下降21.3%，主要原因是     │</span><br><span class="line">  │  电子产品品类下降40%。经查，竞品平台于6月5日开启...  │</span><br><span class="line">  │  建议：1. 推出针对性满减活动 2. 加强会员专属折扣...&quot; │</span><br><span class="line">  └────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>ReAct 的每一步都强制 Agent 输出 <strong>“思考→行动→观察”</strong> 的完整链条，这使得 Agent 的决策过程完全透明——你不仅看到它做了什么，还看到它为什么这样做。这种透明性在调试和审计时至关重要。</p>
+<h2 id="2-Plan-Execute（规划-执行模式）"><a href="#2-Plan-Execute（规划-执行模式）" class="headerlink" title="2. Plan-Execute（规划-执行模式）"></a>2. Plan-Execute（规划-执行模式）</h2><p>Plan-Execute 模式将 Agent 的决策分为两个阶段：先制定完整计划，再逐步执行。它比 ReAct 更适合<strong>目标明确、步骤可预见的任务</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Plan-Execute 的执行过程：</span><br><span class="line"></span><br><span class="line">  用户目标: &quot;帮我写一篇关于Spring Boot 3.4新特性的技术博客&quot;</span><br><span class="line"></span><br><span class="line">  ┌─ Plan Phase ──────────────────────────────────┐</span><br><span class="line">  │ Agent 制定计划:                                  │</span><br><span class="line">  │ 1. 检索 Spring Boot 3.4 官方 Release Notes       │</span><br><span class="line">  │ 2. 识别 5 个最重要的新特性                        │</span><br><span class="line">  │ 3. 对每个特性的原理和用法做深入检索                │</span><br><span class="line">  │ 4. 编写代码示例（每个特性至少一个）                │</span><br><span class="line">  │ 5. 生成完整博客文章                               │</span><br><span class="line">  │ 6. 自我审查：检查代码正确性和内容准确性            │</span><br><span class="line">  └────────────────────────────────────────────────┘</span><br><span class="line"></span><br><span class="line">  ┌─ Execute Phase ───────────────────────────────┐</span><br><span class="line">  │ 按计划逐步执行，每步完成后检查结果                  │</span><br><span class="line">  │ 如果在执行过程中发现计划需要调整（如发现更多重要     │</span><br><span class="line">  │ 特性），Agent 可以回到 Plan Phase 更新计划         │</span><br><span class="line">  └────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>Plan-Execute vs ReAct 的选择</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ReAct</th>
+<th>Plan-Execute</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>适用任务</td>
+<td>探索性强，路径不确定</td>
+<td>目标明确，步骤可预见</td>
+</tr>
+<tr>
+<td>效率</td>
+<td>每步都推理，Token 消耗大</td>
+<td>规划一次，执行多步，效率更高</td>
+</tr>
+<tr>
+<td>灵活性</td>
+<td>高，能随时调整</td>
+<td>中，需要回到规划阶段调整</td>
+</tr>
+<tr>
+<td>用户可见性</td>
+<td>逐步看到进展</td>
+<td>可以先审查计划再执行</td>
+</tr>
+</tbody></table>
+<p>实践中，Plan-Execute 和 ReAct 并不互斥。可以在宏观层面使用 Plan-Execute（先规划整体策略），在微观层面使用 ReAct（执行每个步骤时灵活调整）。</p>
+<h2 id="3-Reflection-Loop（反思-改进循环）"><a href="#3-Reflection-Loop（反思-改进循环）" class="headerlink" title="3. Reflection Loop（反思-改进循环）"></a>3. Reflection Loop（反思-改进循环）</h2><p>Reflection Loop 在 ReAct 或 Plan-Execute 的基础上增加了一个<strong>后置的反思阶段</strong>——任务执行完成后，Agent 反思自己的表现，总结经验教训，将改进点存入长期记忆。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Reflection Loop 的执行过程：</span><br><span class="line"></span><br><span class="line">  [任务执行] → [生成结果]</span><br><span class="line">                    │</span><br><span class="line">                    ▼</span><br><span class="line">  ┌─ Reflection Phase ────────────────────────────┐</span><br><span class="line">  │ Agent 反思:                                     │</span><br><span class="line">  │ &quot;这次任务中我犯了两个错误:                        │</span><br><span class="line">  │  1. 第一次搜索用了太宽泛的关键词，浪费了一轮查询    │</span><br><span class="line">  │  2. 没有先用 count 查询确认数据量，导致拉了        │</span><br><span class="line">  │     大量数据后才发只需前10条                      │</span><br><span class="line">  │ 下次类似任务应该:                                 │</span><br><span class="line">  │  - 先用精确关键词搜索，不够再放宽                   │</span><br><span class="line">  │  - 查询前先确认数据量，按需控制返回条数&quot;            │</span><br><span class="line">  └────────────────────────────────────────────────┘</span><br><span class="line">                    │</span><br><span class="line">                    ▼</span><br><span class="line">         存入长期记忆（后续任务可检索）</span><br></pre></td></tr></table></figure>
+
+<p>Reflection Loop 的价值在于让 Agent <strong>从经验中学习</strong>，随着使用次数增长变得越来越”懂”如何高效完成任务。这是 Agent 从”能干活”进化到”会干活”的关键机制。</p>
+<hr>
+<h1 id="四、单-Agent、多-Agent-与工程化约束"><a href="#四、单-Agent、多-Agent-与工程化约束" class="headerlink" title="四、单 Agent、多 Agent 与工程化约束"></a>四、单 Agent、多 Agent 与工程化约束</h1><h2 id="1-单-Agent-架构"><a href="#1-单-Agent-架构" class="headerlink" title="1. 单 Agent 架构"></a>1. 单 Agent 架构</h2><p>单 Agent 架构是最基础的 Agent 形态——一个 LLM 实例负责所有的推理、规划和工具调用。它简单直接，适合中等复杂度的任务。</p>
+<p><strong>单 Agent 的适用边界</strong>：</p>
+<ul>
+<li>任务边界清晰，不涉及多个专业领域</li>
+<li>可用的工具数量在 10-20 个以内</li>
+<li>任务的决策链不会过长（&lt; 15 轮 ReAct 循环）</li>
+<li>用户期望的完成时间在分钟级（非小时级）</li>
+</ul>
+<p>当任务跨多个不相关的专业领域，或者工具数量膨胀到 LLM 难以有效选择时，单 Agent 的效率和准确性都会下降——这时需要考虑多 Agent 协作。</p>
+<h2 id="2-多-Agent-协作架构"><a href="#2-多-Agent-协作架构" class="headerlink" title="2. 多 Agent 协作架构"></a>2. 多 Agent 协作架构</h2><p>多 Agent 架构将任务分配给<strong>多个专业化的 Agent</strong>，每个 Agent 负责一个子领域，通过协作完成复杂任务。</p>
+<p><strong>常见协作模式</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>描述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>主从模式（Orchestrator-Worker）</strong></td>
+<td>一个主 Agent 负责任务分解和调度，多个 Worker Agent 负责执行具体子任务</td>
+<td>有明确主流程的多步骤任务</td>
+</tr>
+<tr>
+<td><strong>对等协作（Peer-to-Peer）</strong></td>
+<td>多个专业 Agent 平等对话，各自贡献专业视角</td>
+<td>需要多领域交叉分析的任务</td>
+</tr>
+<tr>
+<td><strong>辩论模式（Debate）</strong></td>
+<td>多个 Agent 分别生成答案，互相质疑和评审，最终融合</td>
+<td>需要高质量、高可靠性输出的任务</td>
+</tr>
+<tr>
+<td><strong>分层模式（Hierarchical）</strong></td>
+<td>多层 Agent 结构，上级负责策略，下级负责执行，层层分解</td>
+<td>超复杂任务（如大型系统重构）</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">主从模式示例：</span><br><span class="line"></span><br><span class="line">  用户: &quot;帮我准备Q3技术分享，主题是&#x27;AI在运维中的应用&#x27;&quot;</span><br><span class="line"></span><br><span class="line">  ┌─────────────────────────────────────┐</span><br><span class="line">  │      Orchestrator Agent（主控）      │</span><br><span class="line">  │  &quot;我需要准备一个技术分享，需要三个     │</span><br><span class="line">  │   方面的内容：行业趋势、内部实践、     │</span><br><span class="line">  │   技术对比。分别交给三个专业Agent&quot;    │</span><br><span class="line">  └─────────────────────────────────────┘</span><br><span class="line">           │            │            │</span><br><span class="line">           ▼            ▼            ▼</span><br><span class="line">  ┌──────────┐  ┌──────────┐  ┌──────────┐</span><br><span class="line">  │ Research  │  │ Internal │  │ Technical │</span><br><span class="line">  │ Agent    │  │ Practices│  │ Compare   │</span><br><span class="line">  │          │  │ Agent    │  │ Agent     │</span><br><span class="line">  │ 搜索外部  │  │ 检索内部  │  │ 对比不同   │</span><br><span class="line">  │ 行业报告  │  │ 实践案例  │  │ 技术方案   │</span><br><span class="line">  └──────────┘  └──────────┘  └──────────┘</span><br><span class="line">           │            │            │</span><br><span class="line">           └────────────┼────────────┘</span><br><span class="line">                        ▼</span><br><span class="line">  ┌─────────────────────────────────────┐</span><br><span class="line">  │      Orchestrator Agent（主控）      │</span><br><span class="line">  │  &quot;汇总三个Agent的结果，生成完整大纲&quot;  │</span><br><span class="line">  └─────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>多 Agent 的工程挑战</strong>：</p>
+<ul>
+<li><strong>通信开销</strong>：Agent 之间的消息传递增加了 Token 消耗和延迟</li>
+<li><strong>一致性</strong>：多个 Agent 可能给出矛盾的信息或建议，需要融合机制</li>
+<li><strong>错误传播</strong>：一个 Agent 的错误决策可能影响下游 Agent 的判断</li>
+<li><strong>调试困难</strong>：多 Agent 系统的决策链更长，定位问题根因更难</li>
+</ul>
+<h2 id="3-Agent-的工程化约束"><a href="#3-Agent-的工程化约束" class="headerlink" title="3. Agent 的工程化约束"></a>3. Agent 的工程化约束</h2><p>Agent 的自主性是一把双刃剑——灵活性的代价是失控风险。工程化约束是让 Agent 在安全边界内发挥能力的必要手段。</p>
+<p><strong>约束一：行动边界（Action Boundary）</strong></p>
+<p>不是所有工具都应该暴露给 Agent。区分”安全工具”（只读查询、数据分析）和”危险工具”（删除数据、发送外部消息、修改配置）。危险工具需要额外的确认机制或完全禁止 Agent 自主调用。</p>
+<p><strong>约束二：步数限制（Step Limit）</strong></p>
+<p>Agent 可能在复杂任务中陷入无限循环——反复搜索、反复调整但无法收敛。设置最大 ReAct 步数（如 15 步），超过限制时强制终止并给出当前状态摘要。</p>
+<p><strong>约束三：Token 预算（Token Budget）</strong></p>
+<p>Agent 的每次推理、每次工具调用都消耗 Token。复杂任务可能消耗数万甚至数十万 Token。为每个 Agent 任务设置 Token 预算上限，超出预算时优雅降级。</p>
+<p><strong>约束四：用户确认（Human Confirmation）</strong></p>
+<p>对于高风险操作，Agent 执行前必须获得用户确认。不是停止 Agent，而是”Agent 规划好方案 → 展示给用户审核 → 用户确认后执行”——Agent 仍然自主规划，但执行权受控。</p>
+<p><strong>约束五：沙箱化（Sandboxing）</strong></p>
+<p>Agent 的工具调用应该在受控的环境中执行——数据库只读副本、API 调用的参数校验层、文件操作的限制目录。Agent 永远不能直接访问生产系统的关键资源。</p>
+<hr>
+<h1 id="五、Java-后端实践：Spring-AI-Agent"><a href="#五、Java-后端实践：Spring-AI-Agent" class="headerlink" title="五、Java 后端实践：Spring AI Agent"></a>五、Java 后端实践：Spring AI Agent</h1><h2 id="1-Spring-AI-Agent-基础实现"><a href="#1-Spring-AI-Agent-基础实现" class="headerlink" title="1. Spring AI Agent 基础实现"></a>1. Spring AI Agent 基础实现</h2><p>Spring AI 目前没有提供开箱即用的 Agent 框架（如 LangChain 的 AgentExecutor），但基于 <code>ChatClient</code> + <code>@Tool</code> + <code>FunctionCallback</code>，可以构建出完整的 Agent 能力。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Agent 执行上下文：携带任务过程中所有状态</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AgentContext</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String taskId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String goal;                          <span class="comment">// 用户目标</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Message&gt; conversationHistory;     <span class="comment">// 完整对话历史</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;ToolExecution&gt; toolExecutions;    <span class="comment">// 工具调用记录</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; workingMemory;     <span class="comment">// 工作记忆</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> stepCount;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> finished;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AgentContext</span><span class="params">(String taskId, String goal)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.taskId = taskId;</span><br><span class="line">        <span class="built_in">this</span>.goal = goal;</span><br><span class="line">        <span class="built_in">this</span>.conversationHistory = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="built_in">this</span>.toolExecutions = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        <span class="built_in">this</span>.workingMemory = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="built_in">this</span>.stepCount = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.finished = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// getters / setters...</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">ToolExecution</span><span class="params">(String toolName, String arguments, String result, <span class="type">int</span> step)</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Agent 核心引擎：驱动 ReAct 循环</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AgentEngine</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ChatClient chatClient;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, FunctionCallback&gt; toolRegistry;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AgentMetricsCollector metricsCollector;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">MAX_STEPS</span> <span class="operator">=</span> <span class="number">15</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">MAX_TOKENS_PER_TASK</span> <span class="operator">=</span> <span class="number">50000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AgentEngine</span><span class="params">(ChatClient.Builder chatClientBuilder,</span></span><br><span class="line"><span class="params">                        List&lt;FunctionCallback&gt; tools,</span></span><br><span class="line"><span class="params">                        AgentMetricsCollector metricsCollector)</span> &#123;</span><br><span class="line">        <span class="comment">// 构建带工具能力的 ChatClient</span></span><br><span class="line">        <span class="built_in">this</span>.chatClient = chatClientBuilder</span><br><span class="line">                .defaultFunctions(tools.stream()</span><br><span class="line">                        .map(FunctionCallback::getName)</span><br><span class="line">                        .toArray(String[]::<span class="keyword">new</span>))</span><br><span class="line">                .build();</span><br><span class="line">        <span class="built_in">this</span>.toolRegistry = tools.stream()</span><br><span class="line">                .collect(Collectors.toMap(FunctionCallback::getName, t -&gt; t));</span><br><span class="line">        <span class="built_in">this</span>.metricsCollector = metricsCollector;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 执行 Agent 任务（ReAct Loop）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> AgentResult <span class="title function_">execute</span><span class="params">(String goal, String userId)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> UUID.randomUUID().toString();</span><br><span class="line">        <span class="type">AgentContext</span> <span class="variable">ctx</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AgentContext</span>(taskId, goal);</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">startTime</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        log.info(<span class="string">&quot;Agent task started: taskId=&#123;&#125;, goal=&#123;&#125;&quot;</span>, taskId, goal);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 初始化：注入 System Prompt（Agent 的行为规范）</span></span><br><span class="line">            ctx.getConversationHistory().add(</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">SystemMessage</span>(buildAgentSystemPrompt(goal, userId))</span><br><span class="line">            );</span><br><span class="line">            ctx.getConversationHistory().add(</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">UserMessage</span>(goal)</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">            <span class="comment">// ReAct 主循环</span></span><br><span class="line">            <span class="keyword">while</span> (ctx.getStepCount() &lt; MAX_STEPS &amp;&amp; !ctx.isFinished()) &#123;</span><br><span class="line">                ctx.setStepCount(ctx.getStepCount() + <span class="number">1</span>);</span><br><span class="line">                <span class="type">int</span> <span class="variable">currentStep</span> <span class="operator">=</span> ctx.getStepCount();</span><br><span class="line"></span><br><span class="line">                log.info(<span class="string">&quot;Agent step &#123;&#125;: taskId=&#123;&#125;&quot;</span>, currentStep, taskId);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 调用 LLM（ChatClient 自动处理 Function Calling）</span></span><br><span class="line">                <span class="type">ChatResponse</span> <span class="variable">response</span> <span class="operator">=</span> chatClient.prompt()</span><br><span class="line">                        .messages(ctx.getConversationHistory())</span><br><span class="line">                        .call()</span><br><span class="line">                        .chatResponse();</span><br><span class="line"></span><br><span class="line">                <span class="type">AiMessage</span> <span class="variable">aiMessage</span> <span class="operator">=</span> response.getResult().getOutput();</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 判断响应类型</span></span><br><span class="line">                <span class="keyword">if</span> (aiMessage.hasToolCalls()) &#123;</span><br><span class="line">                    <span class="comment">// LLM 决定调用工具</span></span><br><span class="line">                    handleToolCalls(ctx, aiMessage, currentStep);</span><br><span class="line"></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// LLM 输出最终文本回复</span></span><br><span class="line">                    <span class="type">String</span> <span class="variable">text</span> <span class="operator">=</span> aiMessage.getText();</span><br><span class="line">                    ctx.getConversationHistory().add(<span class="keyword">new</span> <span class="title class_">AssistantMessage</span>(text));</span><br><span class="line">                    ctx.setFinished(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="type">long</span> <span class="variable">elapsed</span> <span class="operator">=</span> System.currentTimeMillis() - startTime;</span><br><span class="line">                    metricsCollector.recordSuccess(taskId, ctx.getStepCount(), elapsed);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AgentResult</span>(<span class="literal">true</span>, text, ctx.getToolExecutions(), ctx.getStepCount());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 超过最大步数：生成阶段性总结</span></span><br><span class="line">            <span class="keyword">if</span> (!ctx.isFinished()) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">summary</span> <span class="operator">=</span> generateTimeoutSummary(ctx);</span><br><span class="line">                metricsCollector.recordTimeout(taskId, ctx.getStepCount());</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AgentResult</span>(<span class="literal">false</span>, summary, ctx.getToolExecutions(), ctx.getStepCount());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;Unexpected agent state&quot;</span>);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;Agent task failed: taskId=&#123;&#125;&quot;</span>, taskId, e);</span><br><span class="line">            metricsCollector.recordError(taskId, e);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AgentResult</span>(<span class="literal">false</span>, <span class="string">&quot;任务执行失败：&quot;</span> + e.getMessage(),</span><br><span class="line">                    ctx.getToolExecutions(), ctx.getStepCount());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构建 Agent System Prompt（最关键的 Prompt 工程）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">buildAgentSystemPrompt</span><span class="params">(String goal, String userId)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            你是一个自主智能体（Autonomous Agent），你的目标是完成用户委派的任务。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            ## 核心规则</span></span><br><span class="line"><span class="string">            1. **逐步推理**：每一步先分析当前状态（Thought），再决定行动（Action）</span></span><br><span class="line"><span class="string">            2. **使用工具**：你可以调用工具来获取信息或执行操作。选择合适的工具，精心构造参数</span></span><br><span class="line"><span class="string">            3. **观察结果**：每次工具调用后，仔细分析返回结果，判断是否需要进一步行动</span></span><br><span class="line"><span class="string">            4. **知道何时停止**：当你认为任务已经完成时，输出最终答案。如果信息不足无法完成，明确说明</span></span><br><span class="line"><span class="string">            5. **高效行动**：避免重复调用相同的工具，避免不必要的查询。每一步都要推动任务前进</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            ## 输出格式</span></span><br><span class="line"><span class="string">            - 当你需要调用工具时：直接调用（ChatClient 会自动处理 Function Calling）</span></span><br><span class="line"><span class="string">            - 当任务完成时：用自然语言给出完整的最终答案</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            ## 约束</span></span><br><span class="line"><span class="string">            - 最多 %d 步行动</span></span><br><span class="line"><span class="string">            - 当前用户 ID：%s（工具调用需要用户上下文时使用）</span></span><br><span class="line"><span class="string">            - 时间：%s</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>.formatted(MAX_STEPS, userId, Instant.now().toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理工具调用</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">handleToolCalls</span><span class="params">(AgentContext ctx, AiMessage aiMessage, <span class="type">int</span> step)</span> &#123;</span><br><span class="line">        List&lt;ToolCall&gt; toolCalls = aiMessage.getToolCalls();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 记录 AI 的思考和工具请求</span></span><br><span class="line">        ctx.getConversationHistory().add(aiMessage);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (ToolCall toolCall : toolCalls) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">toolName</span> <span class="operator">=</span> toolCall.getName();</span><br><span class="line">            <span class="type">String</span> <span class="variable">arguments</span> <span class="operator">=</span> toolCall.getArguments();</span><br><span class="line"></span><br><span class="line">            log.info(<span class="string">&quot;Agent step &#123;&#125;: calling tool &#123;&#125; with args &#123;&#125;&quot;</span>,</span><br><span class="line">                    step, toolName, arguments);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 执行工具</span></span><br><span class="line">            <span class="type">FunctionCallback</span> <span class="variable">tool</span> <span class="operator">=</span> toolRegistry.get(toolName);</span><br><span class="line">            String result;</span><br><span class="line">            <span class="keyword">if</span> (tool != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    result = tool.call(arguments);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    result = <span class="string">&quot;工具调用失败：&quot;</span> + e.getMessage();</span><br><span class="line">                    log.error(<span class="string">&quot;Tool execution failed: &#123;&#125;&quot;</span>, toolName, e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result = <span class="string">&quot;未知工具：&quot;</span> + toolName;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 记录工具执行</span></span><br><span class="line">            ctx.getToolExecutions().add(</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">AgentContext</span>.ToolExecution(toolName, arguments, result, step)</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 将工具返回结果注入对话</span></span><br><span class="line">            ctx.getConversationHistory().add(</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">ToolResponseMessage</span>(</span><br><span class="line">                            List.of(<span class="keyword">new</span> <span class="title class_">ToolResponseMessage</span>.ToolResponse(</span><br><span class="line">                                    toolCall.getId(), toolName, result</span><br><span class="line">                            ))</span><br><span class="line">                    )</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 更新工作记忆（Agent 可以在后续步骤中引用）</span></span><br><span class="line">            ctx.getWorkingMemory().put(<span class="string">&quot;lastToolResult:&quot;</span> + toolName, result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 超时总结</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">generateTimeoutSummary</span><span class="params">(AgentContext ctx)</span> &#123;</span><br><span class="line">        <span class="comment">// 用 LLM 基于当前已完成的工作生成阶段性总结</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">summaryPrompt</span> <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            任务执行已达到最大步数限制。基于以下已完成的工具调用记录，</span></span><br><span class="line"><span class="string">            生成一个阶段性总结，说明已经完成了哪些工作、哪些尚未完成。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            原始目标：%s</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            工具调用记录：</span></span><br><span class="line"><span class="string">            %s</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            请生成总结：&quot;&quot;&quot;</span>.formatted(</span><br><span class="line">                ctx.getGoal(),</span><br><span class="line">                ctx.getToolExecutions().stream()</span><br><span class="line">                        .map(e -&gt; String.format(<span class="string">&quot;[Step %d] %s(%s) → %s&quot;</span>,</span><br><span class="line">                                e.step(), e.toolName(), e.arguments(), e.result()))</span><br><span class="line">                        .collect(Collectors.joining(<span class="string">&quot;\n&quot;</span>))</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> chatClient.prompt().user(summaryPrompt).call().content();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-ReAct-Loop-的完整实现"><a href="#2-ReAct-Loop-的完整实现" class="headerlink" title="2. ReAct Loop 的完整实现"></a>2. ReAct Loop 的完整实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 可观测的 ReAct Agent（带完整的推理过程记录）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ObservableReActAgent</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AgentEngine agentEngine;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 执行任务并返回完整的推理链（用于 UI 展示和调试）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> ReActTrace <span class="title function_">executeWithTrace</span><span class="params">(String goal, String userId)</span> &#123;</span><br><span class="line">        <span class="comment">// 先让 Agent 生成简要计划</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">plan</span> <span class="operator">=</span> generatePlan(goal);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行 Agent 任务</span></span><br><span class="line">        <span class="type">AgentResult</span> <span class="variable">result</span> <span class="operator">=</span> agentEngine.execute(goal, userId);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 构建可观测的推理链</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ReActTrace</span>(</span><br><span class="line">                goal,</span><br><span class="line">                plan,</span><br><span class="line">                result.getToolExecutions().stream()</span><br><span class="line">                        .map(e -&gt; <span class="keyword">new</span> <span class="title class_">ReActStep</span>(</span><br><span class="line">                                e.step(),</span><br><span class="line">                                <span class="string">&quot;调用工具: &quot;</span> + e.toolName(),</span><br><span class="line">                                e.arguments(),</span><br><span class="line">                                e.result()</span><br><span class="line">                        ))</span><br><span class="line">                        .collect(Collectors.toList()),</span><br><span class="line">                result.getAnswer(),</span><br><span class="line">                result.getStepCount(),</span><br><span class="line">                result.isSuccess()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">generatePlan</span><span class="params">(String goal)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> chatClient.prompt()</span><br><span class="line">                .system(<span class="string">&quot;你是一个任务规划器。为以下目标制定简要的执行计划（3-5步）。&quot;</span>)</span><br><span class="line">                .user(goal)</span><br><span class="line">                .call()</span><br><span class="line">                .content();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可观测数据结构</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">ReActTrace</span><span class="params">(</span></span><br><span class="line"><span class="params">            String goal,</span></span><br><span class="line"><span class="params">            String plan,</span></span><br><span class="line"><span class="params">            List&lt;ReActStep&gt; steps,</span></span><br><span class="line"><span class="params">            String finalAnswer,</span></span><br><span class="line"><span class="params">            <span class="type">int</span> totalSteps,</span></span><br><span class="line"><span class="params">            <span class="type">boolean</span> success</span></span><br><span class="line"><span class="params">    )</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">ReActStep</span><span class="params">(<span class="type">int</span> step, String thought, String action, String observation)</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Agent-的流式执行与实时反馈"><a href="#3-Agent-的流式执行与实时反馈" class="headerlink" title="3. Agent 的流式执行与实时反馈"></a>3. Agent 的流式执行与实时反馈</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/api/agent&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AgentController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AgentEngine agentEngine;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * SSE 流式返回 Agent 的每一步执行状态</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostMapping(value = &quot;/execute&quot;, produces = MediaType.TEXT_EVENT_STREAM_VALUE)</span></span><br><span class="line">    <span class="keyword">public</span> Flux&lt;ServerSentEvent&lt;AgentStepEvent&gt;&gt; <span class="title function_">executeAgent</span><span class="params">(</span></span><br><span class="line"><span class="params">            <span class="meta">@RequestBody</span> AgentRequest request)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">userId</span> <span class="operator">=</span> SecurityContextHolder.getContext()</span><br><span class="line">                .getAuthentication().getName();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> agentEngine.executeStream(request.goal(), userId)</span><br><span class="line">                .map(step -&gt; ServerSentEvent.&lt;AgentStepEvent&gt;builder()</span><br><span class="line">                        .id(String.valueOf(step.step()))</span><br><span class="line">                        .event(<span class="string">&quot;agent-step&quot;</span>)</span><br><span class="line">                        .data(step)</span><br><span class="line">                        .build());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">AgentStepEvent</span><span class="params">(</span></span><br><span class="line"><span class="params">        <span class="type">int</span> step,</span></span><br><span class="line"><span class="params">        String type,      // &quot;thought&quot; / &quot;tool_call&quot; / &quot;tool_result&quot; / &quot;<span class="keyword">final</span>&quot;</span></span><br><span class="line"><span class="params">        String content,</span></span><br><span class="line"><span class="params">        Map&lt;String, Object&gt; metadata</span></span><br><span class="line"><span class="params">)</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="六、Java-后端实践：LangChain4j-Agent"><a href="#六、Java-后端实践：LangChain4j-Agent" class="headerlink" title="六、Java 后端实践：LangChain4j Agent"></a>六、Java 后端实践：LangChain4j Agent</h1><h2 id="1-AiServices-Agent-模式"><a href="#1-AiServices-Agent-模式" class="headerlink" title="1. AiServices Agent 模式"></a>1. AiServices Agent 模式</h2><p>LangChain4j 的 AiServices 在注册工具后，自动具备了 Agent 式的能力——它会自主判断何时调用工具、如何处理工具返回结果、何时输出最终答案。这本质上就是一个 ReAct Agent。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 声明式 Agent 接口</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">CustomerServiceAgent</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理客户服务请求</span></span><br><span class="line"><span class="comment">     * AiServices 自动执行 ReAct 循环：</span></span><br><span class="line"><span class="comment">     * 需要数据？ → 调用工具</span></span><br><span class="line"><span class="comment">     * 工具返回后？ → 分析结果，决定是否继续调用工具</span></span><br><span class="line"><span class="comment">     * 信息足够？ → 生成最终回复</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@SystemMessage(&quot;&quot;&quot;</span></span><br><span class="line"><span class="meta">        你是一个电商客服智能助手。你需要自主使用工具来回答用户问题。</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">        规则：</span></span><br><span class="line"><span class="meta">        1. 涉及订单、商品、库存等具体信息时，必须通过工具查询，不要编造</span></span><br><span class="line"><span class="meta">        2. 每一步行动前，思考这个行动能否帮助解决问题</span></span><br><span class="line"><span class="meta">        3. 当你获得足够信息后，给出完整、清晰的回答</span></span><br><span class="line"><span class="meta">        4. 如果多次尝试后仍无法获取所需信息，如实告知用户</span></span><br><span class="line"><span class="meta">        5. 取消订单等敏感操作，需要先向用户确认</span></span><br><span class="line"><span class="meta">        &quot;&quot;&quot;)</span></span><br><span class="line">    String <span class="title function_">chat</span><span class="params">(String userMessage)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AgentConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> CustomerServiceAgent <span class="title function_">customerServiceAgent</span><span class="params">(</span></span><br><span class="line"><span class="params">            ChatLanguageModel chatModel,</span></span><br><span class="line"><span class="params">            OrderTools orderTools,</span></span><br><span class="line"><span class="params">            ProductTools productTools,</span></span><br><span class="line"><span class="params">            TicketTools ticketTools)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> AiServices.builder(CustomerServiceAgent.class)</span><br><span class="line">                .chatLanguageModel(chatModel)</span><br><span class="line">                .tools(orderTools, productTools, ticketTools)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-多-Agent-编排"><a href="#2-多-Agent-编排" class="headerlink" title="2. 多 Agent 编排"></a>2. 多 Agent 编排</h2><p>LangChain4j 支持构建多 Agent 协作系统：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 主 Agent 接口（Orchestrator）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OrchestratorAgent</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SystemMessage(&quot;&quot;&quot;</span></span><br><span class="line"><span class="meta">        你是任务调度器。你会将用户的需求分解为子任务，</span></span><br><span class="line"><span class="meta">        并分配给合适的专业 Agent 处理，最后汇总结果。</span></span><br><span class="line"><span class="meta">        你拥有以下专业 Agent：</span></span><br><span class="line"><span class="meta">        - OrderAgent: 处理订单查询、取消、退款</span></span><br><span class="line"><span class="meta">        - ProductAgent: 处理商品搜索、对比、推荐</span></span><br><span class="line"><span class="meta">        - TicketAgent: 处理工单创建、查询、跟踪</span></span><br><span class="line"><span class="meta">        </span></span><br><span class="line"><span class="meta">        当用户需求跨多个领域时，依次调用对应的 Agent，</span></span><br><span class="line"><span class="meta">        汇总各 Agent 的结果后给出完整回答。</span></span><br><span class="line"><span class="meta">        &quot;&quot;&quot;)</span></span><br><span class="line">    Result&lt;String&gt; <span class="title function_">delegate</span><span class="params">(String userMessage)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 专业 Agent 1: 订单处理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">OrderAgent</span> &#123;</span><br><span class="line">    <span class="meta">@SystemMessage(&quot;你是订单处理专家...&quot;)</span></span><br><span class="line">    String <span class="title function_">handle</span><span class="params">(String orderRelatedRequest)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 专业 Agent 2: 商品处理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ProductAgent</span> &#123;</span><br><span class="line">    <span class="meta">@SystemMessage(&quot;你是商品搜索专家...&quot;)</span></span><br><span class="line">    String <span class="title function_">handle</span><span class="params">(String productRelatedRequest)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MultiAgentConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> OrchestratorAgent <span class="title function_">orchestratorAgent</span><span class="params">(</span></span><br><span class="line"><span class="params">            ChatLanguageModel chatModel,</span></span><br><span class="line"><span class="params">            OrderAgent orderAgent,</span></span><br><span class="line"><span class="params">            ProductAgent productAgent)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将专业 Agent 注册为 Orchestrator 的工具</span></span><br><span class="line">        <span class="keyword">return</span> AiServices.builder(OrchestratorAgent.class)</span><br><span class="line">                .chatLanguageModel(chatModel)</span><br><span class="line">                .tools(orderAgent, productAgent)  <span class="comment">// 专业 Agent 作为 Orchestrator 的 Tool</span></span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> OrderAgent <span class="title function_">orderAgent</span><span class="params">(</span></span><br><span class="line"><span class="params">            ChatLanguageModel chatModel,</span></span><br><span class="line"><span class="params">            OrderService orderService)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> AiServices.builder(OrderAgent.class)</span><br><span class="line">                .chatLanguageModel(chatModel)</span><br><span class="line">                .tools(<span class="keyword">new</span> <span class="title class_">OrderTools</span>(orderService))</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> ProductAgent <span class="title function_">productAgent</span><span class="params">(</span></span><br><span class="line"><span class="params">            ChatLanguageModel chatModel,</span></span><br><span class="line"><span class="params">            ProductService productService)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> AiServices.builder(ProductAgent.class)</span><br><span class="line">                .chatLanguageModel(chatModel)</span><br><span class="line">                .tools(<span class="keyword">new</span> <span class="title class_">ProductTools</span>(productService))</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-手动控制-Agent-循环"><a href="#3-手动控制-Agent-循环" class="headerlink" title="3. 手动控制 Agent 循环"></a>3. 手动控制 Agent 循环</h2><p>当需要对 Agent 的每一轮推理做精细控制时，可以绕过 AiServices 的自动循环，手动实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ManualAgentLoop</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ChatLanguageModel chatModel;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; tools;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手动实现 ReAct Agent 循环，提供完整的步骤控制和审计</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> AgentExecutionResult <span class="title function_">runReActLoop</span><span class="params">(String taskDescription, <span class="type">int</span> maxSteps)</span> &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;ChatMessage&gt; messages = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        messages.add(SystemMessage.from(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            你是 ReAct Agent。对每一步，按以下格式输出：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            Thought: 对当前状态的分析和下一步计划</span></span><br><span class="line"><span class="string">            Action: 要调用的工具名（如果不需要调用工具，输出 FINAL_ANSWER）</span></span><br><span class="line"><span class="string">            Action Input: 工具参数（JSON格式）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">            可用的工具：%s</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>.formatted(describeTools())));</span><br><span class="line"></span><br><span class="line">        messages.add(UserMessage.from(taskDescription));</span><br><span class="line"></span><br><span class="line">        List&lt;AgentStep&gt; steps = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; maxSteps; i++) &#123;</span><br><span class="line">            <span class="comment">// 调用 LLM</span></span><br><span class="line">            Response&lt;AiMessage&gt; response = chatModel.generate(messages);</span><br><span class="line">            <span class="type">String</span> <span class="variable">output</span> <span class="operator">=</span> response.content().text();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 解析 Thought / Action / Action Input</span></span><br><span class="line">            <span class="type">AgentStep</span> <span class="variable">step</span> <span class="operator">=</span> parseReActOutput(output);</span><br><span class="line">            steps.add(step);</span><br><span class="line">            messages.add(response.content());</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="string">&quot;FINAL_ANSWER&quot;</span>.equals(step.action())) &#123;</span><br><span class="line">                <span class="comment">// Agent 认为任务完成</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AgentExecutionResult</span>(<span class="literal">true</span>, step.thought(), steps);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 执行工具</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">toolResult</span> <span class="operator">=</span> executeTool(step.action(), step.actionInput());</span><br><span class="line">            messages.add(UserMessage.from(</span><br><span class="line">                    <span class="string">&quot;Observation: &quot;</span> + toolResult</span><br><span class="line">            ));</span><br><span class="line">            step.setObservation(toolResult);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 达到最大步数</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AgentExecutionResult</span>(<span class="literal">false</span>,</span><br><span class="line">                <span class="string">&quot;任务在 &quot;</span> + maxSteps + <span class="string">&quot; 步后仍未完成&quot;</span>, steps);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> AgentStep <span class="title function_">parseReActOutput</span><span class="params">(String output)</span> &#123;</span><br><span class="line">        <span class="comment">// 解析 Thought: ... / Action: ... / Action Input: ... 格式</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">thought</span> <span class="operator">=</span> extractSection(output, <span class="string">&quot;Thought&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">action</span> <span class="operator">=</span> extractSection(output, <span class="string">&quot;Action&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">actionInput</span> <span class="operator">=</span> extractSection(output, <span class="string">&quot;Action Input&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (action == <span class="literal">null</span> || action.isBlank()) &#123;</span><br><span class="line">            action = <span class="string">&quot;FINAL_ANSWER&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AgentStep</span>(thought, action, actionInput);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">executeTool</span><span class="params">(String toolName, String input)</span> &#123;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">tool</span> <span class="operator">=</span> tools.get(toolName);</span><br><span class="line">        <span class="keyword">if</span> (tool == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Error: 未知工具 &quot;</span> + toolName;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 通过反射或接口调用工具</span></span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;工具执行结果&quot;</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;Error: &quot;</span> + e.getMessage();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">AgentStep</span><span class="params">(String thought, String action,</span></span><br><span class="line"><span class="params">                              String actionInput, String observation)</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">AgentStep</span><span class="params">(String thought, String action, String actionInput)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>(thought, action, actionInput, <span class="literal">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setObservation</span><span class="params">(String obs)</span> &#123;</span><br><span class="line">            <span class="comment">// mutable for simplicity</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">record</span> <span class="title class_">AgentExecutionResult</span><span class="params">(<span class="type">boolean</span> success,</span></span><br><span class="line"><span class="params">                                        String conclusion,</span></span><br><span class="line"><span class="params">                                        List&lt;AgentStep&gt; steps)</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Spring-AI-与-LangChain4j-Agent-实现对比"><a href="#4-Spring-AI-与-LangChain4j-Agent-实现对比" class="headerlink" title="4. Spring AI 与 LangChain4j Agent 实现对比"></a>4. Spring AI 与 LangChain4j Agent 实现对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Spring AI Agent</th>
+<th>LangChain4j Agent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Agent 模式</td>
+<td>ChatClient + Function Calling → 手动构建循环</td>
+<td>AiServices 自动 ReAct 循环</td>
+</tr>
+<tr>
+<td>工具集成</td>
+<td><code>@Tool</code> &#x2F; <code>FunctionCallback</code></td>
+<td><code>@Tool</code> &#x2F; <code>ToolExecutor</code></td>
+</tr>
+<tr>
+<td>多 Agent</td>
+<td>手动编排</td>
+<td>AiServices 嵌套（Agent 作为 Tool）</td>
+</tr>
+<tr>
+<td>代码量</td>
+<td>需手动管理循环（~200 行）</td>
+<td>AiServices 声明式（~50 行）</td>
+</tr>
+<tr>
+<td>控制粒度</td>
+<td>完全控制每一步</td>
+<td>AiServices 自动循环，或手动模式</td>
+</tr>
+<tr>
+<td>流式输出</td>
+<td><code>Flux&lt;String&gt;</code> 原生支持</td>
+<td><code>StreamingChatLanguageModel</code> 支持</td>
+</tr>
+<tr>
+<td>生产成熟度</td>
+<td>需自建较多基础设施</td>
+<td>AiServices 开箱即用更完整</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="七、Agent-与业务系统的集成"><a href="#七、Agent-与业务系统的集成" class="headerlink" title="七、Agent 与业务系统的集成"></a>七、Agent 与业务系统的集成</h1><h2 id="1-Agent-调用微服务"><a href="#1-Agent-调用微服务" class="headerlink" title="1. Agent 调用微服务"></a>1. Agent 调用微服务</h2><p>Agent 的工具不仅是查询数据库和调用外部 API——更重要的场景是<strong>调用企业内部的微服务</strong>。Agent 通过调用微服务，能真正参与到业务流程的执行中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MicroserviceTools</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> OrderServiceClient orderClient;    <span class="comment">// Feign 客户端</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> InventoryServiceClient inventoryClient;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> TicketServiceClient ticketClient;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Agent 调用订单微服务</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Tool(description = &quot;查询用户订单。可以按状态、日期范围过滤&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;OrderDTO&gt; <span class="title function_">queryOrders</span><span class="params">(</span></span><br><span class="line"><span class="params">            <span class="meta">@ToolParam(description = &quot;订单状态: CREATED/PAID/SHIPPED/DELIVERED/CANCELLED&quot;)</span></span></span><br><span class="line"><span class="params">            String status,</span></span><br><span class="line"><span class="params">            <span class="meta">@ToolParam(description = &quot;开始日期 yyyy-MM-dd&quot;)</span> String startDate,</span></span><br><span class="line"><span class="params">            <span class="meta">@ToolParam(description = &quot;结束日期 yyyy-MM-dd&quot;)</span> String endDate)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 从 SecurityContext 获取当前用户（Agent 继承用户的身份）</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">userId</span> <span class="operator">=</span> SecurityContextHolder.getContext()</span><br><span class="line">                .getAuthentication().getName();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> orderClient.queryOrders(userId, status, startDate, endDate);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Agent 调用库存微服务</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Tool(description = &quot;查询商品库存信息&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> InventoryDTO <span class="title function_">checkInventory</span><span class="params">(</span></span><br><span class="line"><span class="params">            <span class="meta">@ToolParam(description = &quot;SKU编码&quot;)</span> String skuCode)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> inventoryClient.checkInventory(skuCode);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>微服务调用的安全考量</strong>：Agent 继承当前用户的身份调用微服务——Agent 不能有超越用户的权限。微服务网关层已经有的认证、鉴权、限流、熔断机制对 Agent 的调用同样生效，不需要额外的安全层。</p>
+<h2 id="2-Agent-与消息队列的集成"><a href="#2-Agent-与消息队列的集成" class="headerlink" title="2. Agent 与消息队列的集成"></a>2. Agent 与消息队列的集成</h2><p>对于需要异步处理或涉及多系统协作的任务，Agent 可以通过消息队列与业务系统解耦：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AsyncAgentTaskExecutor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RabbitTemplate rabbitTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Agent 提交异步任务（如批量处理）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Tool(description = &quot;提交一个异步批量处理任务，返回任务ID用于后续查询进度&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">submitBatchTask</span><span class="params">(</span></span><br><span class="line"><span class="params">            <span class="meta">@ToolParam(description = &quot;任务类型&quot;)</span> String taskType,</span></span><br><span class="line"><span class="params">            <span class="meta">@ToolParam(description = &quot;任务参数JSON&quot;)</span> String paramsJson)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">taskId</span> <span class="operator">=</span> UUID.randomUUID().toString();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 发送到消息队列，由专门的 Worker 异步处理</span></span><br><span class="line">        rabbitTemplate.convertAndSend(<span class="string">&quot;agent.tasks&quot;</span>, taskType,</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">AgentTaskMessage</span>(taskId, taskType, paramsJson,</span><br><span class="line">                        SecurityContextHolder.getContext().getAuthentication().getName())</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;任务已提交，任务ID: &quot;</span> + taskId + <span class="string">&quot;。可以通过 checkTaskStatus 查询进度。&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Agent-的治理与监控"><a href="#3-Agent-的治理与监控" class="headerlink" title="3. Agent 的治理与监控"></a>3. Agent 的治理与监控</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AgentGovernance</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Agent 执行策略：定义什么情况可以放行，什么情况需要降级</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> AgentPolicy <span class="title function_">evaluateTask</span><span class="params">(String taskDescription, <span class="type">int</span> estimatedComplexity)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 规则 1：简单任务（估计 &lt; 5 步）→ 完全自主</span></span><br><span class="line">        <span class="keyword">if</span> (estimatedComplexity &lt;= <span class="number">5</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> AgentPolicy.FULLY_AUTONOMOUS;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 规则 2：中等复杂任务 → 自主执行，但关键步骤需要日志记录</span></span><br><span class="line">        <span class="keyword">if</span> (estimatedComplexity &lt;= <span class="number">10</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> AgentPolicy.AUTONOMOUS_WITH_AUDIT;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 规则 3：复杂任务 → 先展示计划，用户确认后执行</span></span><br><span class="line">        <span class="keyword">if</span> (estimatedComplexity &lt;= <span class="number">20</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> AgentPolicy.PLAN_REVIEW_REQUIRED;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 规则 4：超复杂任务 → 转人工，不交给 Agent</span></span><br><span class="line">        <span class="keyword">return</span> AgentPolicy.ESCALATE_TO_HUMAN;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">AgentPolicy</span> &#123;</span><br><span class="line">        FULLY_AUTONOMOUS,           <span class="comment">// 完全自主</span></span><br><span class="line">        AUTONOMOUS_WITH_AUDIT,      <span class="comment">// 自主+审计</span></span><br><span class="line">        PLAN_REVIEW_REQUIRED,       <span class="comment">// 需审核计划</span></span><br><span class="line">        ESCALATE_TO_HUMAN           <span class="comment">// 转人工</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Agent 治理的核心不是”限制 Agent 的能力”，而是<strong>让 Agent 的能力发挥在合适的场景中</strong>——简单任务让它全自动跑，复杂任务让它先规划再执行，超出能力边界的任务主动转人工。这种分层治理策略让 Agent 既能充分发挥效率优势，又不会在力所不及的任务上产生不可控的输出。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+              <a href="/tags/Skills/" rel="tag"># Skills</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/13-%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%E4%B8%8E%E5%AE%9A%E5%88%B6%E5%8C%96/" rel="prev" title="模型微调与定制化">
+                  <i class="fa fa-angle-left"></i> 模型微调与定制化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/11-MCP%E4%B8%8EAI%E5%B7%A5%E5%85%B7%E7%94%9F%E6%80%81/" rel="next" title="MCP与AI工具生态">
+                  MCP与AI工具生态 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

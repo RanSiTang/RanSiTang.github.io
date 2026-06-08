@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、Embedding 的基本概念1. 什么是 EmbeddingEmbedding（向量嵌入）是将文本、图像、音频等非结构化数据映射为高维空间中的稠密向量（Dense Vector）的技术。所谓”稠密”，是指向量的每一维都是有意义的浮点数，共同编码了原始数据的语义信息。 用形象的方式来理解：想象语义空间是一张巨大的地图，Embedding 就是给每个文本在这张地图上分配一个坐标。语义相近的文本—">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Embedding与向量化">
+<meta property="og:url" content="http://example.com/2026/05/29/AI/04-Embedding%E4%B8%8E%E5%90%91%E9%87%8F%E5%8C%96/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、Embedding 的基本概念1. 什么是 EmbeddingEmbedding（向量嵌入）是将文本、图像、音频等非结构化数据映射为高维空间中的稠密向量（Dense Vector）的技术。所谓”稠密”，是指向量的每一维都是有意义的浮点数，共同编码了原始数据的语义信息。 用形象的方式来理解：想象语义空间是一张巨大的地图，Embedding 就是给每个文本在这张地图上分配一个坐标。语义相近的文本—">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T09:56:20.470Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Embedding">
+<meta property="article:tag" content="向量化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/05/29/AI/04-Embedding%E4%B8%8E%E5%90%91%E9%87%8F%E5%8C%96/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/05/29/AI/04-Embedding%E4%B8%8E%E5%90%91%E9%87%8F%E5%8C%96/","path":"2026/05/29/AI/04-Embedding与向量化/","title":"Embedding与向量化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Embedding与向量化 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Embedding-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-text">一、Embedding 的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Embedding"><span class="nav-text">1. 什么是 Embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-Embedding"><span class="nav-text">2. 为什么需要 Embedding</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%96%87%E6%9C%AC%E5%90%91%E9%87%8F%E5%8C%96%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5"><span class="nav-text">二、文本向量化的原理与实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Embedding-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">1. Embedding 模型的工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%91%E9%87%8F%E7%BB%B4%E5%BA%A6"><span class="nav-text">2. 向量维度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Embedding-%E7%9A%84%E6%89%B9%E9%87%8F%E8%B0%83%E7%94%A8"><span class="nav-text">3. Embedding 的批量调用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%96%87%E6%9C%AC%E5%88%87%E5%88%86%E7%AD%96%E7%95%A5"><span class="nav-text">三、文本切分策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%87%E6%9C%AC%E5%88%87%E5%88%86%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8F%82%E6%95%B0"><span class="nav-text">1. 文本切分的核心参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%87%E6%9C%AC%E5%88%87%E5%88%86%E7%AD%96%E7%95%A5"><span class="nav-text">2. 文本切分策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E4%BA%8E%E5%AD%97%E7%AC%A6%E7%9A%84%E5%88%87%E5%88%86%EF%BC%88Character-Splitter%EF%BC%89"><span class="nav-text">2.1 基于字符的切分（Character Splitter）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%9F%BA%E4%BA%8E%E5%88%86%E9%9A%94%E7%AC%A6%E7%9A%84%E9%80%92%E5%BD%92%E5%88%87%E5%88%86%EF%BC%88Recursive-Character-Splitter%EF%BC%89"><span class="nav-text">2.2 基于分隔符的递归切分（Recursive Character Splitter）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%9F%BA%E4%BA%8E%E8%AF%AD%E4%B9%89%E7%9A%84%E5%88%87%E5%88%86%EF%BC%88Semantic-Splitter%EF%BC%89"><span class="nav-text">2.3 基于语义的切分（Semantic Splitter）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%9F%BA%E4%BA%8E%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%84%E7%9A%84%E5%88%87%E5%88%86%EF%BC%88Document-Structure-Splitter%EF%BC%89"><span class="nav-text">2.4 基于文档结构的切分（Document Structure Splitter）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%9A%E7%B2%92%E5%BA%A6%E7%B4%A2%E5%BC%95%E7%AD%96%E7%95%A5"><span class="nav-text">3. 多粒度索引策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Java-%E4%B8%AD%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%87%E5%88%86%E5%AE%9E%E7%8E%B0"><span class="nav-text">4. Java 中的文本切分实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%90%91%E9%87%8F%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="nav-text">四、向量相似度计算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%89%E7%A7%8D%E4%B8%BB%E8%A6%81%E7%9A%84%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%BA%A6%E9%87%8F"><span class="nav-text">1. 三种主要的相似度度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%BA%A6%E9%87%8F%E9%80%89%E5%9E%8B"><span class="nav-text">2. 相似度度量选型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81Java-%E5%90%8E%E7%AB%AF%E4%B8%AD%E7%9A%84-Embedding-%E5%AE%9E%E8%B7%B5"><span class="nav-text">五、Java 后端中的 Embedding 实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Spring-AI-EmbeddingClient"><span class="nav-text">1. Spring AI EmbeddingClient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LangChain4j-EmbeddingModel"><span class="nav-text">2. LangChain4j EmbeddingModel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%89%B9%E9%87%8F-Embedding-%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">3. 批量 Embedding 的性能优化</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/29/AI/04-Embedding%E4%B8%8E%E5%90%91%E9%87%8F%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Embedding与向量化 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Embedding与向量化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-29T00:00:00+08:00">2026-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-07 17:56:20" itemprop="dateModified" datetime="2026-06-07T17:56:20+08:00">2026-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、Embedding-的基本概念"><a href="#一、Embedding-的基本概念" class="headerlink" title="一、Embedding 的基本概念"></a>一、Embedding 的基本概念</h1><h2 id="1-什么是-Embedding"><a href="#1-什么是-Embedding" class="headerlink" title="1. 什么是 Embedding"></a>1. 什么是 Embedding</h2><p>Embedding（向量嵌入）是将文本、图像、音频等非结构化数据<strong>映射为高维空间中的稠密向量</strong>（Dense Vector）的技术。所谓”稠密”，是指向量的每一维都是有意义的浮点数，共同编码了原始数据的语义信息。</p>
+<p>用形象的方式来理解：想象语义空间是一张巨大的地图，Embedding 就是给每个文本在这张地图上分配一个坐标。语义相近的文本——如”苹果很好吃”和”这个水果味道不错”——会被分配到地图上相邻的位置；而语义无关的文本——如”苹果很好吃”和”如何配置 Nginx”——则在地图上相距很远。</p>
+<p>Embedding 之所以是 AI 应用开发的核心基础设施，原因在于：<strong>计算机无法直接”理解”自然语言的语义，但它可以高效地计算向量之间的距离</strong>。Embedding 将”语义理解”这个人类擅长但计算机不擅长的问题，转化为了”向量相似度计算”这个计算机极其擅长的问题。</p>
+<p>从向量到距离再到相似度的转换，是 Embedding 工程实践的起点，后续所有关于检索、推荐和聚类的讨论都建立在这个基础之上。</p>
+<h2 id="2-为什么需要-Embedding"><a href="#2-为什么需要-Embedding" class="headerlink" title="2. 为什么需要 Embedding"></a>2. 为什么需要 Embedding</h2><p>在没有 Embedding 的时代，文本搜索主要依赖关键词匹配（如 MySQL 的 <code>LIKE</code>、Elasticsearch 的倒排索引）。关键词匹配存在几个难以克服的问题：</p>
+<ul>
+<li><strong>同义词问题</strong>：用户搜”笔记本”，无法匹配文档中的”笔记本电脑”</li>
+<li><strong>语义理解缺失</strong>：用户问”怎么退款”，无法匹配标题为”退货流程说明”的文档</li>
+<li><strong>多语言断裂</strong>：中文搜索”苹果”，无法匹配英文文档中的”Apple”</li>
+</ul>
+<p>Embedding 解决了这些问题：它不是匹配关键词，而是<strong>匹配语义</strong>。向量空间中距离相近的文本，语义就是相近的——不管用了什么词、什么语言。</p>
+<p>Embedding 与 LLM 的关系：LLM 是”生成答案”的大脑，Embedding 是”找到相关信息”的眼睛。在 RAG 架构中，Embedding 负责从海量文档中检索出最相关的片段，LLM 负责基于这些片段生成答案。两者各司其职。</p>
+<hr>
+<h1 id="二、文本向量化的原理与实践"><a href="#二、文本向量化的原理与实践" class="headerlink" title="二、文本向量化的原理与实践"></a>二、文本向量化的原理与实践</h1><h2 id="1-Embedding-模型的工作原理"><a href="#1-Embedding-模型的工作原理" class="headerlink" title="1. Embedding 模型的工作原理"></a>1. Embedding 模型的工作原理</h2><p>Embedding 模型是一种专门训练的神经网络，输入一段文本，输出一个固定长度的浮点数数组（向量）。这个向量就是文本在高维语义空间中的坐标。</p>
+<p>例如，输入”今天天气真好”，一个 1536 维的 Embedding 模型输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0.023, -0.145, 0.678, ..., 0.034]  // 1536 个浮点数</span><br></pre></td></tr></table></figure>
+
+<p><strong>Embedding 模型的训练目标</strong>：让语义相近的文本产生距离相近的向量，语义无关的文本产生距离远的向量。这个目标通过在大量文本对数据（如搜索结果点击数据、问答对数据）上训练来实现。</p>
+<p><strong>主流 Embedding 模型</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th align="center">维度</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI text-embedding-3-small</td>
+<td align="center">512&#x2F;1536</td>
+<td>性价比高，支持动态维度缩减</td>
+</tr>
+<tr>
+<td>OpenAI text-embedding-3-large</td>
+<td align="center">256&#x2F;1024&#x2F;3072</td>
+<td>精度最高，支持维度缩减</td>
+</tr>
+<tr>
+<td>Cohere Embed v3</td>
+<td align="center">1024</td>
+<td>多语言效果好，支持分类和聚类场景</td>
+</tr>
+<tr>
+<td>BGE-M3（BAAI）</td>
+<td align="center">1024</td>
+<td>开源模型，中英文表现优秀，支持稀疏+稠密混合检索</td>
+</tr>
+<tr>
+<td>Jina Embeddings v3</td>
+<td align="center">1024</td>
+<td>支持任务特定 LoRA 适配器</td>
+</tr>
+<tr>
+<td>GTE-Qwen2（阿里）</td>
+<td align="center">1536&#x2F;4096</td>
+<td>基于 Qwen 架构，中文表现最佳之一</td>
+</tr>
+</tbody></table>
+<p><strong>Embedding 模型与 LLM 的区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Embedding 模型</th>
+<th>LLM（Chat 模型）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入</td>
+<td>文本</td>
+<td>文本（Messages）</td>
+</tr>
+<tr>
+<td>输出</td>
+<td>固定长度向量</td>
+<td>可变长度文本</td>
+</tr>
+<tr>
+<td>用途</td>
+<td>语义搜索、聚类、分类</td>
+<td>对话、生成、推理</td>
+</tr>
+<tr>
+<td>调用方式</td>
+<td>单次请求&#x2F;响应</td>
+<td>单次或流式</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>极低（约为 LLM 调用的 1&#x2F;100）</td>
+<td>较高</td>
+</tr>
+</tbody></table>
+<p>Embedding 模型的核心价值是<strong>低成本地将语义转化为可计算的向量</strong>——它是 RAG 检索和语义搜索的基础引擎，而不是对话能力本身。</p>
+<h2 id="2-向量维度"><a href="#2-向量维度" class="headerlink" title="2. 向量维度"></a>2. 向量维度</h2><p>Embedding 向量的维度（Dimensions）是关键的工程决策参数。维度越高，语义编码越精细，但存储和计算成本也越高。</p>
+<p><strong>维度的直接影响</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>因素</th>
+<th>低维度（256-512）</th>
+<th>高维度（1536-3072）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>检索精度</td>
+<td>略低，但足够应对大多数场景</td>
+<td>最高</td>
+</tr>
+<tr>
+<td>存储空间</td>
+<td>每向量 1-2KB</td>
+<td>每向量 6-12KB</td>
+</tr>
+<tr>
+<td>检索速度</td>
+<td>更快（索引小，计算量小）</td>
+<td>更慢</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>简单语义匹配、大规模语料</td>
+<td>高精度检索、专业领域</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>存储规模估算</strong>：以 1536 维为例，一个向量占用 1536 × 4 字节（float32）&#x3D; 6KB。100 万条文档的向量索引约 6GB。如果切分后每个文档产生 3-5 个 Chunk，内存占用还会成倍增长</li>
+<li><strong>动态维度缩减</strong>：OpenAI 的 text-embedding-3 系列支持在 API 参数中指定 <code>dimensions</code>，例如将 3072 维缩减为 256 维，精度损失约 5%-10%，但存储和计算成本降低 90% 以上</li>
+<li><strong>精度损失的非线性特征</strong>：维度从 3072 降到 1536 时，精度损失通常不到 2%；但降到 256 以下时，损失开始明显加速。1024-1536 维是大多数场景的”甜点区”</li>
+</ul>
+<p><strong>选型建议</strong>：</p>
+<ul>
+<li>小型知识库（&lt; 10 万条）：直接使用 1536 维，无需优化</li>
+<li>中型知识库（10 万-100 万条）：使用 1024 维，或使用 1536 维 + 向量索引压缩</li>
+<li>大型知识库（&gt; 100 万条）：使用 256-768 维 + 多阶段检索（粗筛+精排）</li>
+</ul>
+<h2 id="3-Embedding-的批量调用"><a href="#3-Embedding-的批量调用" class="headerlink" title="3. Embedding 的批量调用"></a>3. Embedding 的批量调用</h2><p>实际项目中，初始化知识库时需要向量化大量文档（可能上万条）。逐条调用 Embedding API 会导致请求数爆炸和延迟过高。正确的做法是使用批量 API：</p>
+<p><strong>OpenAI 批量 Embedding API</strong>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text-embedding-3-small&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;第一段文本内容...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;第二段文本内容...&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;第三段文本内容...&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dimensions&quot;</span><span class="punctuation">:</span> <span class="number">1536</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>单次请求可以传入最多 2048 条文本，大幅减少 HTTP 往返次数。</p>
+<p><strong>批量处理的分组策略</strong>：</p>
+<ul>
+<li>每次请求 100-500 条文本，既能利用批量 API 的并行能力，又能控制单次请求的延迟和失败重试成本</li>
+<li>分组之间使用并发线程池并行发起多个批量请求，进一步加速</li>
+<li>对于超大规模向量化任务（百万级以上），使用异步消息队列拆分任务，分批次并行消费，同时做好断点续传和失败重试</li>
+</ul>
+<hr>
+<h1 id="三、文本切分策略"><a href="#三、文本切分策略" class="headerlink" title="三、文本切分策略"></a>三、文本切分策略</h1><p>在 RAG 应用中，文档通常很长（几页到几百页），而 Embedding 模型有输入长度限制（通常 512-8192 Token），且检索粒度越细结果越精准。因此需要将长文档切分为适当大小的文本块（Chunk）。</p>
+<p>文本切分，或称 Chunking，是 RAG 系统设计和运维中最重要的预处理步骤之一。切分方式直接决定了检索召回的质量——切得太粗（Chunk 太大），检索精度下降且浪费 Token；切得太细（Chunk 太小），语义断裂、上下文丢失。</p>
+<h2 id="1-文本切分的核心参数"><a href="#1-文本切分的核心参数" class="headerlink" title="1. 文本切分的核心参数"></a>1. 文本切分的核心参数</h2><p><strong>Chunk Size（文本块大小）</strong>：</p>
+<p>单个 Chunk 的 Token 数量上限。选择 Chunk Size 时需要在语义完整性和检索精度之间找到平衡：</p>
+<ul>
+<li><strong>过大（&gt; 2000 Token）</strong>：一个 Chunk 包含太多信息，检索时不够精准。而且大 Chunk 占用更多 Context Window 空间，减少了可注入的 Chunk 数量</li>
+<li><strong>过小（&lt; 100 Token）</strong>：语义不够完整。一个完整的段落可能被切成两半，导致下半部分失去上下文</li>
+<li><strong>推荐范围</strong>：对于大多数中文文档，256-1024 Token 是合理的区间。问答类应用推荐 256-512 Token；长文档分析类推荐 512-1024 Token</li>
+</ul>
+<p><strong>Overlap（重叠量）</strong>：</p>
+<p>相邻两个 Chunk 之间重叠的 Token 数量。Overlap 的目的是<strong>防止关键信息恰好出现在 Chunk 的边界处被切断</strong>。</p>
+<ul>
+<li><strong>过小</strong>：边界信息丢失风险增加。一个句子被切在两段之间，两段都无法完整表达句意</li>
+<li><strong>过大</strong>：存储冗余增加，且检索时可能返回内容高度重复的多个 Chunk</li>
+<li><strong>推荐范围</strong>：通常设为 Chunk Size 的 10%-20%。如 Chunk Size &#x3D; 512 Token，Overlap 设为 50-100 Token</li>
+</ul>
+<p><strong>Metadata（元数据）</strong>：</p>
+<p>每个 Chunk 携带的结构化附加信息，用于检索时的过滤和排序。Metadata 本身不参与向量化，但存储在向量数据库中，用于检索后的过滤。常见的 Metadata 包括：</p>
+<ul>
+<li>来源文档 ID 和标题</li>
+<li>Chunk 在原文中的页码或段落号</li>
+<li>文档类型（FAQ &#x2F; 手册 &#x2F; 合同 &#x2F; 研报）</li>
+<li>创建时间和更新时间</li>
+<li>权限标签（哪些用户组可以检索到此 Chunk）</li>
+</ul>
+<p>Metadata 的设计原则：<strong>在入库时多存，在检索时按需过滤</strong>。Metadata 不参与 Embedding 计算，存储成本极低，但能极大增强检索的灵活性和安全性。</p>
+<h2 id="2-文本切分策略"><a href="#2-文本切分策略" class="headerlink" title="2. 文本切分策略"></a>2. 文本切分策略</h2><p>文本切分有许多种策略，选择取决于文档类型、语义粒度和检索需求。以下是工程实践中最常用的几种策略及其适用条件。</p>
+<h3 id="2-1-基于字符的切分（Character-Splitter）"><a href="#2-1-基于字符的切分（Character-Splitter）" class="headerlink" title="2.1 基于字符的切分（Character Splitter）"></a>2.1 基于字符的切分（Character Splitter）</h3><p>最简单的切分方式，按字符数或 Token 数将文本切分为等长的块。</p>
+<p><strong>适用场景</strong>：格式规整的文档、初步验证时的快速切分、对检索精度要求不高的场景。</p>
+<p><strong>缺点</strong>：可能在句子中间切断，导致语义不完整。</p>
+<h3 id="2-2-基于分隔符的递归切分（Recursive-Character-Splitter）"><a href="#2-2-基于分隔符的递归切分（Recursive-Character-Splitter）" class="headerlink" title="2.2 基于分隔符的递归切分（Recursive Character Splitter）"></a>2.2 基于分隔符的递归切分（Recursive Character Splitter）</h3><p>这是<strong>目前最推荐、使用最广泛</strong>的切分策略。它会按照预设的分隔符优先级递归地切分文本：先尝试按段落（<code>\n\n</code>）切分，如果段落仍然太长，再按句子（<code>。</code>、<code>！</code>、<code>？</code>）切分，最后按从句或短语分隔符（<code>，</code>、<code>；</code>）切分。</p>
+<p><strong>适用场景</strong>：几乎所有文本类型，是 RAG 应用的默认首选策略。</p>
+<p><strong>优势</strong>：最大程度保留语义边界，尊重文档的自然结构。</p>
+<h3 id="2-3-基于语义的切分（Semantic-Splitter）"><a href="#2-3-基于语义的切分（Semantic-Splitter）" class="headerlink" title="2.3 基于语义的切分（Semantic Splitter）"></a>2.3 基于语义的切分（Semantic Splitter）</h3><p>使用 Embedding 模型计算相邻句子之间的语义相似度。当相似度显著下降时（即”话题切换”），在此处切分。语义切分的核心思路是让每个 Chunk 对应一个相对独立的话题或子主题。</p>
+<p><strong>适用场景</strong>：长文档、叙事性文本、会议记录等话题边界明显的文档。</p>
+<p><strong>代价</strong>：需要额外的 Embedding 计算，构建索引的时间是前两种方法的 2-3 倍。</p>
+<h3 id="2-4-基于文档结构的切分（Document-Structure-Splitter）"><a href="#2-4-基于文档结构的切分（Document-Structure-Splitter）" class="headerlink" title="2.4 基于文档结构的切分（Document Structure Splitter）"></a>2.4 基于文档结构的切分（Document Structure Splitter）</h3><p>根据文档自身的结构标记（如 Markdown 的 <code># ## ###</code> 标题层级、HTML 标签、PDF 的章节标记）进行切分。这种策略以文档的结构为切分边界，确保每个 Chunk 是文档中的一个逻辑单元。</p>
+<p><strong>适用场景</strong>：结构化良好的技术文档、API 文档、Markdown 文件。</p>
+<p><strong>优势</strong>：切分结果与文档的层级结构一致，检索结果更易于定位和追溯原文。</p>
+<h2 id="3-多粒度索引策略"><a href="#3-多粒度索引策略" class="headerlink" title="3. 多粒度索引策略"></a>3. 多粒度索引策略</h2><p>单一粒度的 Chunk 难以同时满足”精准检索”和”完整上下文”两个需求。多粒度索引是解决这个问题的工程方案：</p>
+<ul>
+<li><strong>小 Chunk（128-256 Token）</strong>：用于向量检索，提供精准的匹配</li>
+<li><strong>父文档（Parent Document）</strong>：小 Chunk 的来源文档或大段落，检索命中小 Chunk 后，将其父文档一起注入 LLM。也可以选择检索命中小 Chunk 后，向前后各扩展 N 个 Chunk（Context Window Expansion），作为上下文一起注入</li>
+<li><strong>摘要 Chunk</strong>：对整个文档或章节生成摘要并向量化。全局性问题（”这份文档讲了什么？”）命中摘要 Chunk 而非碎片化的小 Chunk</li>
+</ul>
+<p>这种策略在 LangChain 中称为 Parent Document Retriever，在 LlamaIndex 中称为 Hierarchical Node Parser。但策略本身与框架无关——核心思想是<strong>用不同粒度的索引处理不同粒度的查询</strong>。</p>
+<h2 id="4-Java-中的文本切分实现"><a href="#4-Java-中的文本切分实现" class="headerlink" title="4. Java 中的文本切分实现"></a>4. Java 中的文本切分实现</h2><p><strong>Spring AI 的 DocumentSplitter</strong>：</p>
+<p>Spring AI 提供了 <code>TokenTextSplitter</code>，基于 Token 数量进行智能切分：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建分句器（按语义边界切分）</span></span><br><span class="line"><span class="type">TokenTextSplitter</span> <span class="variable">splitter</span> <span class="operator">=</span> TokenTextSplitter.builder()</span><br><span class="line">    .withChunkSize(<span class="number">512</span>)          <span class="comment">// 每块 512 Token</span></span><br><span class="line">    .withChunkOverlap(<span class="number">50</span>)        <span class="comment">// 重叠 50 Token</span></span><br><span class="line">    .withMinChunkSizeChars(<span class="number">100</span>)  <span class="comment">// 最小块字符数（防止产生过小的碎片）</span></span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 切分文档</span></span><br><span class="line">List&lt;Document&gt; documents = splitter.split(originalDocument);</span><br></pre></td></tr></table></figure>
+
+<p><strong>LangChain4j 的 DocumentSplitter</strong>：</p>
+<p>LangChain4j 提供了多种切分器，其中最常用的是 <code>DocumentByParagraphSplitter</code> 和 <code>DocumentBySentenceSplitter</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 按段落切分（保留了最大的语义完整性）</span></span><br><span class="line"><span class="type">DocumentByParagraphSplitter</span> <span class="variable">paragraphSplitter</span> <span class="operator">=</span> </span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">DocumentByParagraphSplitter</span>(<span class="number">512</span>, <span class="number">50</span>); <span class="comment">// maxTokens, overlap</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 按句子切分（更细粒度，适合 FAQ 类文档）</span></span><br><span class="line"><span class="type">DocumentBySentenceSplitter</span> <span class="variable">sentenceSplitter</span> <span class="operator">=</span> </span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">DocumentBySentenceSplitter</span>(<span class="number">256</span>, <span class="number">30</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>切分策略的选型建议</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>文档类型</th>
+<th>推荐策略</th>
+<th align="center">推荐 Chunk Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>技术文档 &#x2F; API 文档</td>
+<td>Recursive Character + 标题层级感知</td>
+<td align="center">512-1024 Token</td>
+</tr>
+<tr>
+<td>FAQ &#x2F; 客服问答</td>
+<td>按句子切分</td>
+<td align="center">128-256 Token</td>
+</tr>
+<tr>
+<td>法律合同</td>
+<td>Recursive Character + 条款编号感知</td>
+<td align="center">512-768 Token</td>
+</tr>
+<tr>
+<td>会议记录 &#x2F; 访谈</td>
+<td>Semantic Splitter</td>
+<td align="center">256-512 Token</td>
+</tr>
+<tr>
+<td>产品手册</td>
+<td>Document Structure + Recursive Character</td>
+<td align="center">512-1024 Token</td>
+</tr>
+</tbody></table>
+<p><strong>通用实践建议</strong>：对于大多数中文文档场景，<code>RecursiveCharacterTextSplitter(chunkSize=512, overlap=50)</code> 是一个安全可靠的默认配置，可以覆盖 80% 以上的 RAG 检索需求。</p>
+<hr>
+<h1 id="四、向量相似度计算"><a href="#四、向量相似度计算" class="headerlink" title="四、向量相似度计算"></a>四、向量相似度计算</h1><p>向量化的目的不是为了”存储向量”，而是为了<strong>计算向量之间的相似度（距离）</strong>。相似度计算是语义搜索的数学基础。</p>
+<h2 id="1-三种主要的相似度度量"><a href="#1-三种主要的相似度度量" class="headerlink" title="1. 三种主要的相似度度量"></a>1. 三种主要的相似度度量</h2><p><strong>余弦相似度（Cosine Similarity）</strong>：</p>
+<p>衡量两个向量之间夹角的余弦值。这是 Embedding 场景中最常用的相似度度量。取值范围 [-1, 1]，1 表示方向完全一致（语义最接近），0 表示正交（无关），-1 表示方向完全相反。</p>
+<p>余弦相似度之所以最常用于 Embedding 比较，是因为它<strong>忽略向量的长度（模），只关注方向</strong>。在语义空间中，向量的方向编码了语义内容，长度编码了置信度或信息量。只比较方向意味着不管文本长短，只要语义相近就能被检索到。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">余弦相似度公式：</span><br><span class="line">cos(θ) = (A · B) / (||A|| × ||B||)</span><br><span class="line"></span><br><span class="line">Java 实现（使用浮点数数组）：</span><br><span class="line">double dotProduct = 0, normA = 0, normB = 0;</span><br><span class="line">for (int i = 0; i &lt; dim; i++) &#123;</span><br><span class="line">    dotProduct += a[i] * b[i];</span><br><span class="line">    normA += a[i] * a[i];</span><br><span class="line">    normB += b[i] * b[i];</span><br><span class="line">&#125;</span><br><span class="line">double cosine = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));</span><br></pre></td></tr></table></figure>
+
+<p><strong>欧氏距离（Euclidean Distance）</strong>：</p>
+<p>两个向量在多维空间中的直线距离。距离越小，语义越相近。欧氏距离受向量长度影响，推荐用于<strong>已做归一化处理的向量</strong>。</p>
+<p><strong>点积（Dot Product）</strong>：</p>
+<p>两个向量对应维度乘积之和。当向量已归一化（模为 1）时，点积等价于余弦相似度。部分向量数据库（如 Pinecone、Qdrant）默认使用点积作为相似度度量以提升计算效率。</p>
+<h2 id="2-相似度度量选型"><a href="#2-相似度度量选型" class="headerlink" title="2. 相似度度量选型"></a>2. 相似度度量选型</h2><table>
+<thead>
+<tr>
+<th>度量方式</th>
+<th>适用场景</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>余弦相似度</td>
+<td>通用语义搜索（默认首选）</td>
+<td>不受文本长度影响，只关注语义方向</td>
+</tr>
+<tr>
+<td>欧氏距离</td>
+<td>向量已归一化、需要严格的距离度量</td>
+<td>对向量长度敏感</td>
+</tr>
+<tr>
+<td>点积</td>
+<td>向量已归一化、追求极致性能</td>
+<td>计算效率最高</td>
+</tr>
+</tbody></table>
+<p><strong>实践建议</strong>：<strong>绝大多数场景下使用余弦相似度</strong>，它的语义区分能力最稳定。如果向量数据库只支持点积，确保 Embedding 向量已归一化即可等价替代。不要在这个环节过度优化——相似度度量之间的差异，远小于 Chunk 策略和 Embedding 模型选择带来的差异。</p>
+<h1 id="五、Java-后端中的-Embedding-实践"><a href="#五、Java-后端中的-Embedding-实践" class="headerlink" title="五、Java 后端中的 Embedding 实践"></a>五、Java 后端中的 Embedding 实践</h1><h2 id="1-Spring-AI-EmbeddingClient"><a href="#1-Spring-AI-EmbeddingClient" class="headerlink" title="1. Spring AI EmbeddingClient"></a>1. Spring AI EmbeddingClient</h2><p>Spring AI 通过 <code>EmbeddingClient</code> 接口统一了对不同 Embedding 模型的访问：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EmbeddingController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmbeddingClient embeddingClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EmbeddingController</span><span class="params">(EmbeddingClient embeddingClient)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.embeddingClient = embeddingClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 单条文本向量化</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/embed&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Double&gt; <span class="title function_">embed</span><span class="params">(<span class="meta">@RequestParam</span> String text)</span> &#123;</span><br><span class="line">        <span class="type">EmbeddingResponse</span> <span class="variable">response</span> <span class="operator">=</span> embeddingClient</span><br><span class="line">            .embedForResponse(List.of(text));</span><br><span class="line">        <span class="keyword">return</span> response.getResults().get(<span class="number">0</span>).getOutput();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 批量向量化</span></span><br><span class="line">    <span class="meta">@PostMapping(&quot;/embed/batch&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Double&gt;&gt; <span class="title function_">embedBatch</span><span class="params">(<span class="meta">@RequestBody</span> List&lt;String&gt; texts)</span> &#123;</span><br><span class="line">        <span class="type">EmbeddingResponse</span> <span class="variable">response</span> <span class="operator">=</span> embeddingClient</span><br><span class="line">            .embedForResponse(texts);</span><br><span class="line">        <span class="keyword">return</span> response.getResults().stream()</span><br><span class="line">            .map(Embedding::getOutput)</span><br><span class="line">            .toList();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>配置文件（application.yml）</strong>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">ai:</span></span><br><span class="line">    <span class="attr">openai:</span></span><br><span class="line">      <span class="attr">api-key:</span> <span class="string">$&#123;OPENAI_API_KEY&#125;</span></span><br><span class="line">      <span class="attr">embedding:</span></span><br><span class="line">        <span class="attr">options:</span></span><br><span class="line">          <span class="attr">model:</span> <span class="string">text-embedding-3-small</span></span><br><span class="line">          <span class="attr">dimensions:</span> <span class="number">1536</span>   <span class="comment"># 可选：动态维度缩减</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-LangChain4j-EmbeddingModel"><a href="#2-LangChain4j-EmbeddingModel" class="headerlink" title="2. LangChain4j EmbeddingModel"></a>2. LangChain4j EmbeddingModel</h2><p>LangChain4j 的 Embedding API 同样简洁统一：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造 Embedding 模型实例</span></span><br><span class="line"><span class="type">OpenAiEmbeddingModel</span> <span class="variable">embeddingModel</span> <span class="operator">=</span> OpenAiEmbeddingModel.builder()</span><br><span class="line">    .apiKey(System.getenv(<span class="string">&quot;OPENAI_API_KEY&quot;</span>))</span><br><span class="line">    .modelName(<span class="string">&quot;text-embedding-3-small&quot;</span>)</span><br><span class="line">    .build();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 单条向量化</span></span><br><span class="line"><span class="type">Embedding</span> <span class="variable">embedding</span> <span class="operator">=</span> embeddingModel.embed(<span class="string">&quot;今天天气真好&quot;</span>).content();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 批量向量化</span></span><br><span class="line">List&lt;Embedding&gt; embeddings = embeddingModel.embedAll(</span><br><span class="line">    List.of(TextSegment.from(<span class="string">&quot;文本1&quot;</span>), TextSegment.from(<span class="string">&quot;文本2&quot;</span>))</span><br><span class="line">).content();</span><br></pre></td></tr></table></figure>
+
+<p><strong>Spring Boot 集成</strong>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">langchain4j:</span></span><br><span class="line">  <span class="attr">open-ai:</span></span><br><span class="line">    <span class="attr">embedding-model:</span></span><br><span class="line">      <span class="attr">model-name:</span> <span class="string">text-embedding-3-small</span></span><br><span class="line">      <span class="attr">dimensions:</span> <span class="number">1536</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-批量-Embedding-的性能优化"><a href="#3-批量-Embedding-的性能优化" class="headerlink" title="3. 批量 Embedding 的性能优化"></a>3. 批量 Embedding 的性能优化</h2><p>初始化知识库时可能需要向量化数十万条文档，性能优化至关重要。以下方案按优化力度从小到大排列：</p>
+<ul>
+<li><strong>使用批量 API</strong>：所有主流的 Embedding API 都支持一次请求传入多条文本（通常最多 2048 条）。批量 API 的吞吐远高于逐条调用，因为节省了大量 HTTP 往返开销</li>
+<li><strong>并发请求</strong>：使用线程池并行发起多个批量请求，用 <code>CompletableFuture</code> 或 Reactor 管理并发和结果汇总，充分利用 API 提供商的并发容量</li>
+<li><strong>本地缓存</strong>：对于重复出现的文本片段（如常见的文档模板、法律条文引用），缓存其向量结果，避免重复调用 API</li>
+<li><strong>异步 + 断点续传</strong>：超大规模向量化任务（百万级）使用消息队列拆分任务，多消费者并行处理。每个任务记录处理进度，失败时从断点继续</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/Embedding/" rel="tag"># Embedding</a>
+              <a href="/tags/%E5%90%91%E9%87%8F%E5%8C%96/" rel="tag"># 向量化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/05-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="向量数据库">
+                  <i class="fa fa-angle-left"></i> 向量数据库
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/02-%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8/" rel="next" title="大模型基础与模型调用">
+                  大模型基础与模型调用 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

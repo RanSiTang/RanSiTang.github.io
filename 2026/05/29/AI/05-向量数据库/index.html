@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、向量数据库的核心问题与定位1. 什么是向量数据库向量数据库（Vector Database）是专门用于存储、索引和检索高维向量数据的数据库系统。与传统数据库操作结构化字段（如 WHERE age &gt; 18）不同，向量数据库的核心操作是相似性检索（Similarity Search）——给定一个查询向量，在海量向量中找到最相似的 TopK 个结果。 用更直观的方式理解：传统数据库回答的是”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="向量数据库">
+<meta property="og:url" content="http://example.com/2026/05/29/AI/05-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、向量数据库的核心问题与定位1. 什么是向量数据库向量数据库（Vector Database）是专门用于存储、索引和检索高维向量数据的数据库系统。与传统数据库操作结构化字段（如 WHERE age &gt; 18）不同，向量数据库的核心操作是相似性检索（Similarity Search）——给定一个查询向量，在海量向量中找到最相似的 TopK 个结果。 用更直观的方式理解：传统数据库回答的是”">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-07T09:57:30.210Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="RAG">
+<meta property="article:tag" content="向量数据库">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/05/29/AI/05-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/05/29/AI/05-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/","path":"2026/05/29/AI/05-向量数据库/","title":"向量数据库"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>向量数据库 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98%E4%B8%8E%E5%AE%9A%E4%BD%8D"><span class="nav-text">一、向量数据库的核心问题与定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">1. 什么是向量数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%B8%93%E7%94%A8%E7%9A%84%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">2. 为什么需要专用的向量数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9C%A8-AI-%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-text">3. 向量数据库在 AI 架构中的位置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%90%91%E9%87%8F%E5%AD%98%E5%82%A8%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-text">二、向量存储与数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-text">1. 向量数据库的基本数据模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%91%E9%87%8F%E5%AD%98%E5%82%A8%E6%A0%BC%E5%BC%8F"><span class="nav-text">2. 向量存储格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A0%87%E9%87%8F%E5%AD%98%E5%82%A8%E4%B8%8E%E5%85%83%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86"><span class="nav-text">3. 标量存储与元数据管理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95%EF%BC%9AANN-%E8%BF%91%E4%BC%BC%E6%9C%80%E8%BF%91%E9%82%BB%E6%90%9C%E7%B4%A2"><span class="nav-text">三、向量索引：ANN 近似最近邻搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%B2%BE%E7%A1%AE%E6%A3%80%E7%B4%A2-vs-%E8%BF%91%E4%BC%BC%E6%A3%80%E7%B4%A2"><span class="nav-text">1. 精确检索 vs 近似检索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BB%E6%B5%81%E5%90%91%E9%87%8F%E7%B4%A2%E5%BC%95%E7%AE%97%E6%B3%95"><span class="nav-text">2. 主流向量索引算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E4%BA%8E%E5%9B%BE%E7%9A%84%E7%B4%A2%E5%BC%95%EF%BC%9AHNSW"><span class="nav-text">2.1 基于图的索引：HNSW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%9F%BA%E4%BA%8E%E9%87%8F%E5%8C%96%E7%9A%84%E7%B4%A2%E5%BC%95%EF%BC%9AIVF-PQ"><span class="nav-text">2.2 基于量化的索引：IVF-PQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%9F%BA%E4%BA%8E%E6%A0%91%E7%9A%84%E7%B4%A2%E5%BC%95%EF%BC%9AAnnoy"><span class="nav-text">2.3 基于树的索引：Annoy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E5%9F%BA%E4%BA%8E%E5%93%88%E5%B8%8C%E7%9A%84%E7%B4%A2%E5%BC%95%EF%BC%9ALSH"><span class="nav-text">2.4 基于哈希的索引：LSH</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%B4%A2%E5%BC%95%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94%E4%B8%8E%E9%80%89%E5%9E%8B"><span class="nav-text">3. 索引算法对比与选型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%BA%A6%E9%87%8F%E4%B8%8E%E6%A3%80%E7%B4%A2%E7%AD%96%E7%95%A5"><span class="nav-text">四、相似度度量与检索策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%BA%A6%E9%87%8F"><span class="nav-text">1. 相似度度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-TopK-%E6%A3%80%E7%B4%A2"><span class="nav-text">2. TopK 检索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Metadata-Filter%EF%BC%88%E6%A0%87%E9%87%8F%E8%BF%87%E6%BB%A4%EF%BC%89"><span class="nav-text">3. Metadata Filter（标量过滤）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Hybrid-Search%EF%BC%88%E6%B7%B7%E5%90%88%E6%90%9C%E7%B4%A2%EF%BC%89"><span class="nav-text">4. Hybrid Search（混合搜索）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%A4%9A%E5%90%91%E9%87%8F%E6%A3%80%E7%B4%A2%E4%B8%8E%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="nav-text">5. 多向量检索与重排序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%BB%E6%B5%81%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94"><span class="nav-text">五、主流向量数据库方案对比</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%93%E7%94%A8%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">1. 专用向量数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Milvus"><span class="nav-text">1.1 Milvus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Qdrant"><span class="nav-text">1.2 Qdrant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Weaviate"><span class="nav-text">1.3 Weaviate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-Pinecone"><span class="nav-text">1.4 Pinecone</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%90%91%E9%87%8F%E6%89%A9%E5%B1%95"><span class="nav-text">2. 传统数据库的向量扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-pgvector"><span class="nav-text">2.1 pgvector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Elasticsearch-Vector"><span class="nav-text">2.2 Elasticsearch Vector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Redis-Vector-Search"><span class="nav-text">2.3 Redis Vector Search</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E6%A1%86%E6%9E%B6"><span class="nav-text">3. 向量数据库选型决策框架</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81Java-%E5%90%8E%E7%AB%AF%E5%AE%9E%E8%B7%B5%EF%BC%9ASpring-AI-VectorStore"><span class="nav-text">六、Java 后端实践：Spring AI VectorStore</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Spring-AI-VectorStore-%E6%8A%BD%E8%B1%A1%E5%B1%82%E8%AE%BE%E8%AE%A1"><span class="nav-text">1. Spring AI VectorStore 抽象层设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Spring-AI-Milvus-%E9%9B%86%E6%88%90%E7%A4%BA%E4%BE%8B"><span class="nav-text">2. Spring AI + Milvus 集成示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%BE%9D%E8%B5%96%E9%85%8D%E7%BD%AE"><span class="nav-text">2.1 依赖配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%9F%A5%E8%AF%86%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%90%91%E9%87%8F%E5%86%99%E5%85%A5"><span class="nav-text">2.2 知识库初始化与向量写入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E8%AF%AD%E4%B9%89%E6%A3%80%E7%B4%A2%E6%9C%8D%E5%8A%A1"><span class="nav-text">2.3 语义检索服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E4%BD%BF%E7%94%A8-Milvus-%E5%8E%9F%E7%94%9F-Client-%E7%9A%84%E9%AB%98%E7%BA%A7%E6%93%8D%E4%BD%9C"><span class="nav-text">2.4 使用 Milvus 原生 Client 的高级操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Spring-AI-pgvector-%E9%9B%86%E6%88%90%E7%A4%BA%E4%BE%8B"><span class="nav-text">3. Spring AI + pgvector 集成示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%BE%9D%E8%B5%96%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="nav-text">3.1 依赖与配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-pgvector-%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="nav-text">3.2 pgvector 的自动表结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-pgvector-%E7%9A%84%E7%8B%AC%E7%89%B9%E4%BC%98%E5%8A%BF%EF%BC%9ASQL-%E5%90%91%E9%87%8F%E6%B7%B7%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-text">3.3 pgvector 的独特优势：SQL + 向量混合查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Spring-AI-Elasticsearch-Vector-%E9%9B%86%E6%88%90%E7%A4%BA%E4%BE%8B"><span class="nav-text">4. Spring AI + Elasticsearch Vector 集成示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-LangChain4j-EmbeddingStore-%E6%96%B9%E6%A1%88"><span class="nav-text">5. LangChain4j EmbeddingStore 方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%A4%9A%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%87%E6%8D%A2%E7%AD%96%E7%95%A5"><span class="nav-text">6. 多向量数据库切换策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5%E8%A6%81%E7%82%B9"><span class="nav-text">七、向量数据库的工程实践要点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%B4%A2%E5%BC%95%E6%9E%84%E5%BB%BA%E7%9A%84%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="nav-text">1. 索引构建的性能调优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%E8%80%83%E9%87%8F"><span class="nav-text">2. 数据一致性考量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%91%E6%8E%A7%E4%B8%8E%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7"><span class="nav-text">3. 监控与可观测性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%B8%8E%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%8D%8F%E5%90%8C%E5%B7%A5%E4%BD%9C"><span class="nav-text">4. 与关系数据库的协同工作</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/05/29/AI/05-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="向量数据库 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          向量数据库
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2026-05-29T00:00:00+08:00">2026-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-06-07 17:57:30" itemprop="dateModified" datetime="2026-06-07T17:57:30+08:00">2026-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、向量数据库的核心问题与定位"><a href="#一、向量数据库的核心问题与定位" class="headerlink" title="一、向量数据库的核心问题与定位"></a>一、向量数据库的核心问题与定位</h1><h2 id="1-什么是向量数据库"><a href="#1-什么是向量数据库" class="headerlink" title="1. 什么是向量数据库"></a>1. 什么是向量数据库</h2><p>向量数据库（Vector Database）是专门用于<strong>存储、索引和检索高维向量数据</strong>的数据库系统。与传统数据库操作结构化字段（如 <code>WHERE age &gt; 18</code>）不同，向量数据库的核心操作是<strong>相似性检索</strong>（Similarity Search）——给定一个查询向量，在海量向量中找到最相似的 TopK 个结果。</p>
+<p>用更直观的方式理解：传统数据库回答的是”精确匹配”问题——“找出所有年龄等于 25 的用户”；向量数据库回答的是”语义相似”问题——“找出与这段话含义最接近的 10 篇文档”。传统数据库的查询结果是确定性的（要么满足条件，要么不满足）；向量数据库的查询结果是近似性的（每个结果有一个相似度分数，分数越高越相关）。</p>
+<p>向量数据库与 Embedding 模型的关系是<strong>上下游协作</strong>：Embedding 模型负责将非结构化数据（文本、图像、音频）转换为向量；向量数据库负责存储这些向量，并在需要时快速找到最相似的向量。两者组合起来，构成了 AI 应用中<strong>语义检索</strong>的基础设施。</p>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>传统数据库（MySQL&#x2F;PostgreSQL）</th>
+<th>向量数据库（Milvus&#x2F;Qdrant）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>核心查询</td>
+<td>精确匹配、范围查询</td>
+<td>相似性检索（ANN）</td>
+</tr>
+<tr>
+<td>索引结构</td>
+<td>B-Tree、Hash、倒排索引</td>
+<td>HNSW、IVF、PQ 等向量索引</td>
+</tr>
+<tr>
+<td>查询结果</td>
+<td>确定性（满足条件&#x2F;不满足）</td>
+<td>近似性（相似度分数排序）</td>
+</tr>
+<tr>
+<td>典型操作</td>
+<td><code>WHERE</code>, <code>JOIN</code>, <code>GROUP BY</code></td>
+<td><code>search(vector, topK)</code></td>
+</tr>
+<tr>
+<td>适用数据</td>
+<td>结构化数据</td>
+<td>非结构化数据的向量表示</td>
+</tr>
+</tbody></table>
+<h2 id="2-为什么需要专用的向量数据库"><a href="#2-为什么需要专用的向量数据库" class="headerlink" title="2. 为什么需要专用的向量数据库"></a>2. 为什么需要专用的向量数据库</h2><p>一个自然的疑问是：传统数据库不能存向量吗？PostgreSQL 可以用 <code>float[]</code> 或 <code>ARRAY</code> 类型存储向量，然后手动计算相似度。然而这种”手工”方案在数据量超过十万级时会遇到无法克服的性能瓶颈。</p>
+<p><strong>传统数据库存储向量的局限</strong>：</p>
+<p>当数据量达到 10 万条时，用 PostgreSQL 做一次暴力全表扫描的相似度计算需要遍历所有向量，单次查询耗时可能达到数百毫秒甚至秒级。当数据量增长到百万级，暴力扫描变得不可接受——它是 O(n) 复杂度，且每增加一个维度，计算成本线性增长。</p>
+<p><strong>向量数据库的解决思路</strong>：使用 ANN（Approximate Nearest Neighbor，近似最近邻）算法。ANN 的核心思想是：<strong>不需要扫描所有向量，而是通过索引结构快速定位到向量空间中”可能包含最近邻”的局部区域</strong>，只在该区域内计算精确相似度。ANN 将检索复杂度从 O(n) 降低到 O(log n) 甚至更低，同时将检索精度损失控制在 1%-5% 以内。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>传统数据库暴力扫描</th>
+<th>向量数据库 ANN 索引</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>检索复杂度</td>
+<td>O(n)</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td>10 万向量检索</td>
+<td>~100ms</td>
+<td>~5ms</td>
+</tr>
+<tr>
+<td>100 万向量检索</td>
+<td>~1s</td>
+<td>~10ms</td>
+</tr>
+<tr>
+<td>1 亿向量检索</td>
+<td>~100s（不可用）</td>
+<td>~50ms</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>100%（精确）</td>
+<td>95%-99%（近似）</td>
+</tr>
+</tbody></table>
+<p><strong>专用向量数据库的额外能力</strong>：</p>
+<ul>
+<li><strong>向量索引的优化存储</strong>：向量数据以紧凑的二进制格式存储，支持内存映射（mmap），最大化 I&#x2F;O 吞吐</li>
+<li><strong>标量过滤与向量检索的融合</strong>：在向量检索的同时过滤元数据条件（如”只检索 2024 年之后的文档”），这比”先向量检索再应用过滤”高效得多</li>
+<li><strong>CRUD 与索引动态更新</strong>：支持增删改向量而不需要重建整个索引</li>
+<li><strong>水平扩展</strong>：原生支持分片（Sharding）和副本（Replication），数据量增长时可以横向扩展</li>
+</ul>
+<h2 id="3-向量数据库在-AI-架构中的位置"><a href="#3-向量数据库在-AI-架构中的位置" class="headerlink" title="3. 向量数据库在 AI 架构中的位置"></a>3. 向量数据库在 AI 架构中的位置</h2><p>在典型的 RAG（Retrieval-Augmented Generation，检索增强生成）架构中，向量数据库处于<strong>检索层</strong>的核心位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│                      用户提问                          │</span><br><span class="line">└──────────────────────────────────────────────────────┘</span><br><span class="line">                         │</span><br><span class="line">                         ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│              Embedding 模型（向量化查询）               │</span><br><span class="line">└──────────────────────────────────────────────────────┘</span><br><span class="line">                         │</span><br><span class="line">                         ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│          向量数据库（相似性检索 TopK 文档片段）          │</span><br><span class="line">│    ┌──────────────────────────────────────────┐     │</span><br><span class="line">│    │ 索引结构（HNSW / IVF / PQ）               │     │</span><br><span class="line">│    │  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐    │     │</span><br><span class="line">│    │  │向量+  │ │向量+ │ │向量+ │ │向量+  │    │     │</span><br><span class="line">│    │  │元数据 │ │元数据 │ │元数据│ │元数据 │    │     │</span><br><span class="line">│    │  └──────┘ └──────┘ └──────┘ └──────┘    │     │</span><br><span class="line">│    └──────────────────────────────────────────┘     │</span><br><span class="line">└──────────────────────────────────────────────────────┘</span><br><span class="line">                         │</span><br><span class="line">                         ▼ （检索结果：TopK 文档片段 + 相似度分数）</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│           LLM（基于检索结果生成答案）                    │</span><br><span class="line">└──────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>向量数据库不是一个”存了就完”的组件。它的检索质量直接决定了 RAG 系统的<strong>召回率</strong>（Recall）——即相关文档中有多少比例被成功检索到。如果向量数据库的检索召回率低，后面的 LLM 再强也无法给出正确答案，因为”巧妇难为无米之炊”。</p>
+<hr>
+<h1 id="二、向量存储与数据模型"><a href="#二、向量存储与数据模型" class="headerlink" title="二、向量存储与数据模型"></a>二、向量存储与数据模型</h1><h2 id="1-向量数据库的基本数据模型"><a href="#1-向量数据库的基本数据模型" class="headerlink" title="1. 向量数据库的基本数据模型"></a>1. 向量数据库的基本数据模型</h2><p>向量数据库的数据模型通常围绕以下几个核心概念构建：</p>
+<p><strong>Collection（集合）</strong>：向量数据库中最高层级的组织单位，类似于关系数据库中的”表”（Table）。一个 Collection 包含一组具有相同维度和相同 Schema 的向量数据。例如，一个 RAG 应用可能创建 <code>documents</code> 和 <code>images</code> 两个 Collection，分别存储文档 Embedding 和图片 Embedding。</p>
+<p><strong>Vector（向量）</strong>：Collection 的核心字段，是固定维度的浮点数数组。每个向量代表一条数据在语义空间中的位置。向量的维度由 Embedding 模型决定，一旦 Collection 创建并指定了维度，就不能再改变。</p>
+<p><strong>Payload &#x2F; Metadata（负载&#x2F;元数据）</strong>：除向量外，每条数据可以附带结构化字段（标量数据），如标题、作者、创建时间、分类标签等。这些元数据有两个关键作用：一是在检索时支持标量过滤（”只返回分类为’技术文档’的结果”），二是在检索结果返回后提供上下文信息（显示给用户看的文档标题和来源）。</p>
+<p><strong>ID（标识符）</strong>：每条向量数据的唯一标识，通常使用 UUID 或业务自定义 ID。ID 用于向量的增删改操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Collection: knowledge_base</span><br><span class="line">├─ Schema</span><br><span class="line">│  ├─ id: String (主键)</span><br><span class="line">│  ├─ vector: Float[1536] (向量字段)</span><br><span class="line">│  └─ metadata: &#123; title, category, create_time, source &#125;</span><br><span class="line">│</span><br><span class="line">├─ [Row 1]  id=&quot;doc-001&quot;  vector=[0.02, -0.15, ...]  metadata=&#123;title:&quot;产品手册&quot;, category:&quot;文档&quot;&#125;</span><br><span class="line">├─ [Row 2]  id=&quot;doc-002&quot;  vector=[0.31, 0.07, ...]   metadata=&#123;title:&quot;技术规范&quot;, category:&quot;文档&quot;&#125;</span><br><span class="line">├─ [Row 3]  id=&quot;doc-003&quot;  vector=[-0.12, 0.88, ...]  metadata=&#123;title:&quot;FAQ&quot;, category:&quot;客服&quot;&#125;</span><br><span class="line">└─ ...</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-向量存储格式"><a href="#2-向量存储格式" class="headerlink" title="2. 向量存储格式"></a>2. 向量存储格式</h2><p>向量数据库在底层需要高效地存储高维浮点数数组。存储格式的选择直接影响 I&#x2F;O 性能和内存占用。</p>
+<p><strong>Float32（FP32）</strong>：每个维度使用 4 字节 IEEE 754 单精度浮点数。这是最常见也是默认的存储格式。1536 维向量占用 6KB。精度无损，适用于大多数场景。</p>
+<p><strong>Float16（FP16 &#x2F; 半精度）</strong>：每个维度使用 2 字节。存储空间减半，但精度有所损失。现代 GPU 原生支持 FP16 运算，在某些 GPU 加速向量数据库中可以获得更好的吞吐。</p>
+<p><strong>Binary（二值化向量）</strong>：将每个维度的浮点数量化为 0 或 1（根据符号或阈值），存储空间大幅降低（每维度 1 bit），检索使用汉明距离（Hamming Distance）。适用于对精度要求不高但数据量极大的场景（如数十亿级去重）。</p>
+<p><strong>Scalar Quantization（标量量化）</strong>：将 Float32 映射为 Int8（1 字节&#x2F;维度），存储空间降为原来的 1&#x2F;4。大多数向量数据库支持此选项，精度损失可控（通常 1%-3%）。</p>
+<table>
+<thead>
+<tr>
+<th>存储格式</th>
+<th align="center">每维度字节数</th>
+<th align="center">1536维向量大小</th>
+<th>精度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Float32</td>
+<td align="center">4</td>
+<td align="center">6 KB</td>
+<td>无损</td>
+<td>默认选择</td>
+</tr>
+<tr>
+<td>Float16</td>
+<td align="center">2</td>
+<td align="center">3 KB</td>
+<td>微量损失</td>
+<td>GPU 加速场景</td>
+</tr>
+<tr>
+<td>Int8（标量量化）</td>
+<td align="center">1</td>
+<td align="center">1.5 KB</td>
+<td>1%-3% 损失</td>
+<td>大规模低成本存储</td>
+</tr>
+<tr>
+<td>Binary</td>
+<td align="center">1 bit</td>
+<td align="center">192 B</td>
+<td>损失较大</td>
+<td>数十亿级去重&#x2F;粗筛</td>
+</tr>
+</tbody></table>
+<p><strong>存储容量评估公式</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">总存储 ≈ 向量数 × 维度 × 每维度字节数 + 向量数 × 元数据平均大小 + 索引结构开销（通常 20%-50%）</span><br></pre></td></tr></table></figure>
+
+<p>例如，100 万条 1536 维 Float32 向量，元数据平均 500 字节：</p>
+<ul>
+<li>向量数据：100万 × 1536 × 4B &#x3D; 5.76 GB</li>
+<li>元数据：100万 × 500B &#x3D; 0.5 GB</li>
+<li>索引开销：约 2-3 GB</li>
+<li>总计：约 8-10 GB</li>
+</ul>
+<h2 id="3-标量存储与元数据管理"><a href="#3-标量存储与元数据管理" class="headerlink" title="3. 标量存储与元数据管理"></a>3. 标量存储与元数据管理</h2><p>向量数据库不仅仅存储向量，还需要高效管理元数据（标量字段）。元数据管理的两个核心能力是<strong>标量索引</strong>和<strong>过滤下推</strong>。</p>
+<p><strong>标量索引</strong>：向量数据库通常为元数据字段建立倒排索引或 B-Tree 索引，以加速标量过滤条件。例如，<code>WHERE category = &#39;技术文档&#39;</code> 会使用倒排索引快速定位到满足条件的向量。</p>
+<p><strong>过滤下推（Predicate Push-Down）</strong>：在向量检索之前先应用标量过滤，缩小检索范围。高效的向量数据库会同时利用标量索引和向量索引，在索引遍历过程中就排除不满足标量条件的向量，而不是”先搜出 1000 条再过滤掉 900 条”。</p>
+<p><strong>元数据 Schema 设计建议</strong>：</p>
+<ul>
+<li>为高频过滤字段（如 <code>category</code>、<code>status</code>）建立标量索引</li>
+<li>避免将大段文本放入元数据，元数据应仅包含检索过滤和结果展示所需的最小字段集合</li>
+<li>枚举值优于自由文本（<code>category: &quot;technical&quot;</code> 比 <code>description: &quot;这是一篇技术文档...&quot;</code> 更适合做过滤条件）</li>
+</ul>
+<hr>
+<h1 id="三、向量索引：ANN-近似最近邻搜索"><a href="#三、向量索引：ANN-近似最近邻搜索" class="headerlink" title="三、向量索引：ANN 近似最近邻搜索"></a>三、向量索引：ANN 近似最近邻搜索</h1><h2 id="1-精确检索-vs-近似检索"><a href="#1-精确检索-vs-近似检索" class="headerlink" title="1. 精确检索 vs 近似检索"></a>1. 精确检索 vs 近似检索</h2><p><strong>精确最近邻检索（KNN, K-Nearest Neighbors）</strong> 是对数据库中所有向量逐一计算与查询向量的距离，然后排序返回 TopK。精确检索的精度是 100%，但复杂度是 O(n × d)，其中 n 是向量总数，d 是维度。当 n 达到百万级时，KNN 已经不可接受。</p>
+<p><strong>近似最近邻检索（ANN, Approximate Nearest Neighbors）</strong> 的核心思想是：<strong>牺牲少量精度，换取数量级的性能提升</strong>。ANN 不扫描所有向量，而是通过精巧的索引结构快速定位到高概率包含最近邻的局部区域，只在该区域内做精确距离计算。</p>
+<p>ANN 算法的核心权衡是<strong>精度 vs 速度 vs 内存</strong>的三角矛盾：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">         精度（Recall）</span><br><span class="line">           /\</span><br><span class="line">          /  \</span><br><span class="line">         /    \</span><br><span class="line">        /      \</span><br><span class="line">       /  ANN   \</span><br><span class="line">      /  算法选型 \</span><br><span class="line">     /____________\</span><br><span class="line">速度（QPS）      内存（存储开销）</span><br></pre></td></tr></table></figure>
+
+<p>任何一个 ANN 算法在这三个维度上都有取舍。例如：</p>
+<ul>
+<li><strong>HNSW</strong>：精度高、速度快，但内存开销大（需要存储图结构）</li>
+<li><strong>IVF-PQ</strong>：内存省，但精度和速度相对较低</li>
+<li><strong>DiskANN</strong>：内存极省（依赖磁盘），但速度较慢</li>
+</ul>
+<h2 id="2-主流向量索引算法"><a href="#2-主流向量索引算法" class="headerlink" title="2. 主流向量索引算法"></a>2. 主流向量索引算法</h2><h3 id="2-1-基于图的索引：HNSW"><a href="#2-1-基于图的索引：HNSW" class="headerlink" title="2.1 基于图的索引：HNSW"></a>2.1 基于图的索引：HNSW</h3><p>HNSW（Hierarchical Navigable Small World，分层可导航小世界图）是当前最广泛使用的向量索引算法，被 Milvus、Qdrant、Weaviate 等几乎所有向量数据库支持。</p>
+<p><strong>原理</strong>：HNSW 构建一个多层图结构。每一层是一个近邻图（每个向量连接其最近的 M 个邻居），层级越高节点越稀疏。检索时，从最高层（最稀疏的层）开始，沿着图结构快速下降到最底层（最稠密的层），在最底层进行精细搜索。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HNSW 分层结构示意：</span><br><span class="line"></span><br><span class="line">Layer 2 (稀疏, 节点少):    ○ ─────── ○</span><br><span class="line">                           │</span><br><span class="line">Layer 1 (中等):    ○ ─── ○ ─── ○ ─── ○</span><br><span class="line">                   │      │      │</span><br><span class="line">Layer 0 (稠密):  ○─○─○─○─○─○─○─○─○─○  （最底层，精度最高）</span><br></pre></td></tr></table></figure>
+
+<p>HNSW 的核心参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th align="center">建议值</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M</td>
+<td>每个节点的最大连接数</td>
+<td align="center">16-64</td>
+<td>M 越大，精度越高，但内存和构建时间增加</td>
+</tr>
+<tr>
+<td>efConstruction</td>
+<td>构建时的搜索宽度</td>
+<td align="center">100-500</td>
+<td>越大精度越高，构建越慢</td>
+</tr>
+<tr>
+<td>efSearch</td>
+<td>检索时的搜索宽度</td>
+<td align="center">64-512</td>
+<td>越大精度越高，检索越慢</td>
+</tr>
+</tbody></table>
+<p><strong>HNSW 的特点</strong>：</p>
+<ul>
+<li><strong>增量构建</strong>：支持在线插入新向量，不需要重建索引</li>
+<li><strong>检索速度极快</strong>：在内存中的检索延迟通常在毫秒级</li>
+<li><strong>高召回率</strong>：通常可以达到 95%-99% 的召回率</li>
+<li><strong>内存开销大</strong>：图结构本身占用额外内存，约为向量数据的 100%-200%</li>
+</ul>
+<h3 id="2-2-基于量化的索引：IVF-PQ"><a href="#2-2-基于量化的索引：IVF-PQ" class="headerlink" title="2.2 基于量化的索引：IVF-PQ"></a>2.2 基于量化的索引：IVF-PQ</h3><p>IVF-PQ（Inverted File with Product Quantization，倒排文件+乘积量化）是将聚类和量化结合的两阶段索引。它是大规模向量检索场景中性价比最高的方案之一。</p>
+<p><strong>原理</strong>：</p>
+<ul>
+<li><strong>IVF（Inverted File）</strong>：使用 K-Means 将所有向量聚类为 N 个簇（Cluster），每个簇有一个质心（Centroid）。检索时，只搜索与查询向量最近的几个簇（<code>nprobe</code> 参数控制搜索的簇数量），而不是全部簇</li>
+<li><strong>PQ（Product Quantization）</strong>：将高维向量切分为多个子段，每个子段独立做聚类和量化。向量不存储原始浮点数，而是存储每个子段所属的聚类 ID（一个很小的整数），极大压缩了存储</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">IVF-PQ 检索流程：</span><br><span class="line"></span><br><span class="line">查询向量 → 计算与 N 个质心的距离 → 选择最近的 nprobe 个簇</span><br><span class="line">                                          │</span><br><span class="line">                                          ▼</span><br><span class="line">                              只在这些簇内做 PQ 编码的近似距离计算</span><br><span class="line">                                          │</span><br><span class="line">                                          ▼</span><br><span class="line">                                    返回 TopK 结果</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nlist（簇数）</td>
+<td>K-Means 聚类数量</td>
+<td>越大检索越快，但精度越低；推荐 <code>sqrt(n)</code> ~ <code>4 × sqrt(n)</code></td>
+</tr>
+<tr>
+<td>nprobe</td>
+<td>检索时搜索的簇数</td>
+<td>越大精度越高，速度越慢</td>
+</tr>
+<tr>
+<td>M（PQ 子段数）</td>
+<td>向量切分为多少子段</td>
+<td>必须是维度的因子；越大精度越高，压缩率越低</td>
+</tr>
+</tbody></table>
+<p><strong>IVF-PQ 的特点</strong>：</p>
+<ul>
+<li>存储压缩率高（可以将 1536 维 Float32 向量从 6KB 压缩到几十字节）</li>
+<li>适合<strong>离线批量构建</strong>（K-Means 聚类需要全量数据），不支持高效的在线增量插入</li>
+<li>精度低于 HNSW，但对于超大规模场景（十亿级），往往是唯一可行的方案</li>
+</ul>
+<h3 id="2-3-基于树的索引：Annoy"><a href="#2-3-基于树的索引：Annoy" class="headerlink" title="2.3 基于树的索引：Annoy"></a>2.3 基于树的索引：Annoy</h3><p>Annoy（Approximate Nearest Neighbors Oh Yeah）是 Spotify 开源的基于树的 ANN 算法。原理是递归地使用随机超平面将向量空间二分，构建一棵二叉树。每棵树的构建是随机的，通过构建多棵树来提高检索精度。</p>
+<p>Annoy 的特点是实现简单、内存友好，但精度和速度都不如 HNSW，现代向量数据库已较少将其作为默认索引。</p>
+<h3 id="2-4-基于哈希的索引：LSH"><a href="#2-4-基于哈希的索引：LSH" class="headerlink" title="2.4 基于哈希的索引：LSH"></a>2.4 基于哈希的索引：LSH</h3><p>LSH（Locality-Sensitive Hashing，局部敏感哈希）是最早的 ANN 算法之一。原理是通过哈希函数将向量映射到不同的哈希桶中，使得相似的向量有更高的概率被映射到同一个桶。检索时只计算同一桶内的向量距离。</p>
+<p>LSH 的优点是理论优雅、支持动态增删，但精度明显低于 HNSW 和 IVF-PQ，在现代向量数据库中已很少作为主力索引。</p>
+<h2 id="3-索引算法对比与选型"><a href="#3-索引算法对比与选型" class="headerlink" title="3. 索引算法对比与选型"></a>3. 索引算法对比与选型</h2><table>
+<thead>
+<tr>
+<th>算法</th>
+<th align="center">精度</th>
+<th align="center">检索速度</th>
+<th align="center">内存占用</th>
+<th align="center">增量插入</th>
+<th>适用规模</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HNSW</td>
+<td align="center">★★★★★</td>
+<td align="center">★★★★★</td>
+<td align="center">★★☆☆☆</td>
+<td align="center">✅ 好</td>
+<td>十万~亿级</td>
+</tr>
+<tr>
+<td>IVF-PQ</td>
+<td align="center">★★★☆☆</td>
+<td align="center">★★★★☆</td>
+<td align="center">★★★★★</td>
+<td align="center">❌ 差</td>
+<td>亿~十亿级</td>
+</tr>
+<tr>
+<td>IVF-Flat</td>
+<td align="center">★★★★☆</td>
+<td align="center">★★★☆☆</td>
+<td align="center">★★★☆☆</td>
+<td align="center">✅ 中等</td>
+<td>百万~亿级</td>
+</tr>
+<tr>
+<td>DiskANN</td>
+<td align="center">★★★★☆</td>
+<td align="center">★★★☆☆</td>
+<td align="center">★★★★★</td>
+<td align="center">❌ 差</td>
+<td>十亿级（磁盘）</td>
+</tr>
+<tr>
+<td>Annoy</td>
+<td align="center">★★★☆☆</td>
+<td align="center">★★★☆☆</td>
+<td align="center">★★★★☆</td>
+<td align="center">❌ 差</td>
+<td>百万~千万级</td>
+</tr>
+<tr>
+<td>LSH</td>
+<td align="center">★★☆☆☆</td>
+<td align="center">★★★☆☆</td>
+<td align="center">★★★★☆</td>
+<td align="center">✅ 好</td>
+<td>百万级</td>
+</tr>
+</tbody></table>
+<p><strong>选型决策路径</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">数据量 &lt; 100万？</span><br><span class="line">  ├─ 是 → HNSW（精度最高，内存够用）</span><br><span class="line">  └─ 否 → 数据量 &gt; 1亿？</span><br><span class="line">            ├─ 是 → IVF-PQ 或 DiskANN（内存有限，必须压缩）</span><br><span class="line">            └─ 否 → 是否需要频繁增量插入？</span><br><span class="line">                      ├─ 是 → HNSW</span><br><span class="line">                      └─ 否 → IVF-Flat（平衡选择）</span><br></pre></td></tr></table></figure>
+
+<p>在 Java 后端实践中，大多数企业级 RAG 应用的数据量在十万到千万级，HNSW 是默认也是最优选择。只有在处理数十亿级数据（如大规模的网页索引、电商商品向量检索）时，才需要评估 IVF-PQ 等压缩索引方案。</p>
+<hr>
+<h1 id="四、相似度度量与检索策略"><a href="#四、相似度度量与检索策略" class="headerlink" title="四、相似度度量与检索策略"></a>四、相似度度量与检索策略</h1><h2 id="1-相似度度量"><a href="#1-相似度度量" class="headerlink" title="1. 相似度度量"></a>1. 相似度度量</h2><p>向量数据库支持多种相似度（距离）度量方式。度量方式的选择取决于 Embedding 模型的训练方式——大多数现代 Embedding 模型使用余弦相似度（Cosine Similarity）进行训练，因此将其作为默认推荐。</p>
+<p><strong>余弦相似度（Cosine Similarity）</strong>：衡量两个向量在方向上的相似程度，值域 [-1, 1]，1 表示完全相同方向，0 表示正交（无关），-1 表示完全相反。余弦相似度消除了向量长度的影响，只关注方向——这对于文本 Embedding 特别重要，因为文本长度不应影响语义相似度判断。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cosine_similarity(A, B) = (A · B) / (||A|| × ||B||)</span><br></pre></td></tr></table></figure>
+
+<p><strong>欧氏距离（Euclidean Distance &#x2F; L2）</strong>：衡量两个向量在空间中的直线距离，值域 [0, ∞)，0 表示完全相同。欧氏距离受向量长度影响大，适用于向量长度本身有意义的场景（如图像特征向量）。</p>
+<p><strong>内积（Inner Product &#x2F; Dot Product）</strong>：向量点积，值域 (-∞, ∞)。内积同时受向量方向和长度影响。某些经过归一化训练的 Embedding 模型使用内积作为相似度度量。对于归一化向量（长度为 1），内积等于余弦相似度。</p>
+<table>
+<thead>
+<tr>
+<th>度量方式</th>
+<th>值域</th>
+<th align="center">受向量长度影响</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>余弦相似度</td>
+<td>[-1, 1]</td>
+<td align="center">否</td>
+<td>文本 Embedding（推荐）</td>
+</tr>
+<tr>
+<td>欧氏距离</td>
+<td>[0, ∞)</td>
+<td align="center">是</td>
+<td>图像特征、位置坐标</td>
+</tr>
+<tr>
+<td>内积</td>
+<td>(-∞, ∞)</td>
+<td align="center">是</td>
+<td>归一化向量、推荐系统</td>
+</tr>
+</tbody></table>
+<p>在向量数据库中选择度量方式的实践原则：<strong>与 Embedding 模型的训练目标保持一致</strong>。OpenAI、BGE、Cohere 等主流文本 Embedding 模型都使用余弦相似度，因此 RAG 应用几乎统一使用余弦相似度。</p>
+<h2 id="2-TopK-检索"><a href="#2-TopK-检索" class="headerlink" title="2. TopK 检索"></a>2. TopK 检索</h2><p>TopK 检索是向量数据库最基本的查询操作：给定一个查询向量，返回相似度最高的 K 个结果。</p>
+<p><strong>TopK 的参数设计</strong>：</p>
+<ul>
+<li><strong>K 值太小</strong>（如 K&#x3D;1 或 K&#x3D;2）：可能遗漏相关信息，特别是在知识库中有多篇内容相关的文档时</li>
+<li><strong>K 值太大</strong>（如 K&#x3D;50 或 K&#x3D;100）：虽然不容易遗漏信息，但会引入大量噪声，增加 LLM 的推理成本和干扰。且超大的 K 值意味着更多的 Context Window 消耗</li>
+<li><strong>K 值的”双重作用”</strong>：K 不只控制返回数量，它还是<strong>检索深度</strong>和<strong>搜索结果多样性</strong>的控制参数</li>
+</ul>
+<p>对于 RAG 场景，推荐的 K 值范围是 3-10。具体选择取决于：</p>
+<ul>
+<li>Chunk 大小：Chunk 越小，K 可以稍微增大</li>
+<li>知识库规模：知识库越大，信息来源越分散，K 需适当增大</li>
+<li>LLM Context Window：窗口越大，可以接受更多的检索结果</li>
+</ul>
+<p><strong>相似度阈值（Score Threshold）</strong>：除了限制数量，还可以限制质量——只返回相似度高于某个阈值的结果。例如设置阈值为 0.7，排除相似度低于 0.7 的结果。这样即使设定 K&#x3D;10，如果只有 3 条结果超过阈值，就只返回 3 条。阈值过滤可以防止 LLM 基于不相关内容”强行作答”。</p>
+<h2 id="3-Metadata-Filter（标量过滤）"><a href="#3-Metadata-Filter（标量过滤）" class="headerlink" title="3. Metadata Filter（标量过滤）"></a>3. Metadata Filter（标量过滤）</h2><p>纯语义检索在某些场景下不足——例如用户只想搜索”2024 年之后的文档”或”某个特定作者的文章”。这些条件无法通过语义向量表达，需要<strong>标量过滤</strong>与语义检索结合。</p>
+<p><strong>Metadata Filter（标量过滤）的核心能力</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────┐</span><br><span class="line">│          向量检索 + 标量过滤的融合               │</span><br><span class="line">│                                              │</span><br><span class="line">│  search(vector, topK=10)                     │</span><br><span class="line">│    .filter(                                   │</span><br><span class="line">│      category == &quot;技术文档&quot;  ← 标量过滤         │</span><br><span class="line">│      AND create_time &gt; &quot;2024-01-01&quot;           │</span><br><span class="line">│      AND status == &quot;published&quot;               │</span><br><span class="line">│    )                                         │</span><br><span class="line">│                                              │</span><br><span class="line">│  结果：满足所有标量条件的 TopK 语义相似文档      │</span><br><span class="line">└──────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>过滤策略的两种实现方式</strong>：</p>
+<ul>
+<li><strong>Pre-filtering（前置过滤）</strong>：先用标量索引筛选出满足条件的候选集，再在候选集中做向量检索。优点是保证结果一定满足过滤条件；缺点是如果过滤条件筛选出的候选集非常小，可能影响语义检索的多样性</li>
+<li><strong>Post-filtering（后置过滤）</strong>：先做向量检索获取 TopK 结果，再从结果中过滤掉不满足标量条件的。缺点是可能过滤后结果不足 K 个——极端情况向量检索返回的 K 个结果全都不满足过滤条件</li>
+</ul>
+<p>现代向量数据库（Milvus、Qdrant 等）已经实现了<strong>融合过滤</strong>——在向量索引遍历的过程中同步应用标量过滤，兼顾效率和结果质量。</p>
+<h2 id="4-Hybrid-Search（混合搜索）"><a href="#4-Hybrid-Search（混合搜索）" class="headerlink" title="4. Hybrid Search（混合搜索）"></a>4. Hybrid Search（混合搜索）</h2><p>Hybrid Search（混合搜索）是同时使用<strong>语义检索</strong>（向量相似度）和<strong>关键词检索</strong>（倒排索引&#x2F;BM25）的搜索策略，融合两者的优势。</p>
+<p><strong>为什么需要混合搜索</strong>：</p>
+<ul>
+<li>纯向量检索在长尾查询、精确名称匹配（如型号”ThinkPad T480”）上表现欠佳——这些查询包含独特的专有名词，向量模型可能没有充分学习</li>
+<li>纯关键词检索无法理解语义——用户搜”笔记本散热问题”，关键词匹配找不到”笔记本电脑温度过高”的文档</li>
+<li>混合搜索结合两者：关键词检索负责精确匹配（专有名词、代码、编号），向量检索负责语义覆盖（同义词、语义相近的表达）</li>
+</ul>
+<p><strong>混合搜索的融合方式</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">最终分数 = α × 语义相似度分数 + (1 - α) × BM25 分数</span><br><span class="line"></span><br><span class="line">α = 0.7  → 偏重语义</span><br><span class="line">α = 0.3  → 偏重关键词</span><br><span class="line">α = 0.5  → 均衡</span><br></pre></td></tr></table></figure>
+
+<p>更精细的做法是使用 RRF（Reciprocal Rank Fusion，倒数排名融合）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RRF_score(doc) = Σ 1 / (k + rank_i(doc))</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>rank_i</code> 是文档在第 i 个排序列表中的排名，k 是一个常数（通常取 60）。RRF 不需要分数归一化，对排名合并更加稳定。</p>
+<table>
+<thead>
+<tr>
+<th>对比</th>
+<th align="center">纯向量检索</th>
+<th align="center">纯关键词检索</th>
+<th align="center">混合搜索</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语义理解</td>
+<td align="center">★★★★★</td>
+<td align="center">☆☆☆☆☆</td>
+<td align="center">★★★★★</td>
+</tr>
+<tr>
+<td>精确匹配</td>
+<td align="center">★★★☆☆</td>
+<td align="center">★★★★★</td>
+<td align="center">★★★★★</td>
+</tr>
+<tr>
+<td>专有名词</td>
+<td align="center">★★☆☆☆</td>
+<td align="center">★★★★★</td>
+<td align="center">★★★★☆</td>
+</tr>
+<tr>
+<td>多语言跨语言</td>
+<td align="center">★★★★★</td>
+<td align="center">☆☆☆☆☆</td>
+<td align="center">★★★★☆</td>
+</tr>
+<tr>
+<td>长尾查询</td>
+<td align="center">★★★★☆</td>
+<td align="center">★★☆☆☆</td>
+<td align="center">★★★★★</td>
+</tr>
+</tbody></table>
+<h2 id="5-多向量检索与重排序"><a href="#5-多向量检索与重排序" class="headerlink" title="5. 多向量检索与重排序"></a>5. 多向量检索与重排序</h2><p><strong>多向量检索（Multi-Vector Retrieval）</strong>：对于某些复杂场景，单一的查询向量不足以表达用户的检索意图。可以生成多个不同角度的查询向量，分别检索后合并结果。例如，用户的原始问题是”如何优化 Spring Boot 应用的启动速度”，可以生成两个变体查询——“Spring Boot 启动优化方法”和”Spring Boot 慢启动原因分析”——分别检索后合并去重。</p>
+<p><strong>重排序（Re-ranking）</strong>：向量检索的 TopK 结果是基于向量相似度的初步排序。在某些高精度场景中，可以加一个重排序步骤——用一个更强大的模型（如 Cross-Encoder）对 TopK 结果重新打分排序。Cross-Encoder 同时接收查询和文档作为输入，输出精确的相关性分数，比向量相似度更准确，但计算成本也更高。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">向量检索（粗筛，速度快）→ TopK=100</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">重排序（精排，Cross-Encoder）→ 最终 TopK=5</span><br></pre></td></tr></table></figure>
+
+<p>这种”粗筛+精排”的两阶段策略在 Google、Bing 等搜索引擎中广泛使用，也适用于对检索质量要求极高的企业 RAG 系统。</p>
+<hr>
+<h1 id="五、主流向量数据库方案对比"><a href="#五、主流向量数据库方案对比" class="headerlink" title="五、主流向量数据库方案对比"></a>五、主流向量数据库方案对比</h1><h2 id="1-专用向量数据库"><a href="#1-专用向量数据库" class="headerlink" title="1. 专用向量数据库"></a>1. 专用向量数据库</h2><h3 id="1-1-Milvus"><a href="#1-1-Milvus" class="headerlink" title="1.1 Milvus"></a>1.1 Milvus</h3><p>Milvus 是 LF AI &amp; Data 基金会旗下的开源向量数据库（由 Zilliz 主导开发），是目前功能最全面、社区最活跃的向量数据库之一。采用云原生架构，支持存算分离、多租户和数据持久化。</p>
+<p><strong>核心特性</strong>：</p>
+<ul>
+<li>支持多种索引类型：HNSW、IVF-Flat、IVF-PQ、DiskANN 等 10+ 种索引</li>
+<li>支持标量过滤、混合搜索（向量 + BM25）、范围检索、多向量字段</li>
+<li>原生支持分片（Sharding）和副本（Replication），可水平扩展</li>
+<li>SDK 覆盖 Python、Java、Go、Node.js 等主流语言</li>
+<li>提供 Milvus Lite（嵌入式版本）和 Zilliz Cloud（全托管版本）</li>
+</ul>
+<p><strong>架构层次</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────┐</span><br><span class="line">│            SDK / API 层               │</span><br><span class="line">├──────────────────────────────────────┤</span><br><span class="line">│          Coordinator（协调器）         │</span><br><span class="line">│    ┌─────────┬─────────┬────────┐   │</span><br><span class="line">│    │ Query   │  Data   │ Index  │   │</span><br><span class="line">│    │ Node    │  Node   │ Node   │   │</span><br><span class="line">│    └─────────┴─────────┴────────┘   │</span><br><span class="line">├──────────────────────────────────────┤</span><br><span class="line">│   Storage: 对象存储(S3/MinIO) +       │</span><br><span class="line">│   消息队列(Pulsar/Kafka) +           │</span><br><span class="line">│   元数据存储(ETCD/MySQL)              │</span><br><span class="line">└──────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>Milvus 适合需要存算分离、大规模扩展的生产环境。部署复杂度较高（需要 ETCD、MinIO、Pulsar 等中间件），但 Milvus Lite 版本降低了入门门槛。</p>
+<h3 id="1-2-Qdrant"><a href="#1-2-Qdrant" class="headerlink" title="1.2 Qdrant"></a>1.2 Qdrant</h3><p>Qdrant 是用 Rust 语言编写的开源向量数据库，以<strong>单二进制部署、API 设计优雅、性能出色</strong>著称。</p>
+<p><strong>核心特性</strong>：</p>
+<ul>
+<li>单二进制文件部署，无需外部依赖，运维成本极低</li>
+<li>默认使用 HNSW 索引，检索性能优秀</li>
+<li>原生支持稀疏向量（Sparse Vector）和稠密向量（Dense Vector），可以原生实现混合搜索</li>
+<li>支持 Payload 标量过滤、全文检索、地理位置检索</li>
+<li>内置 Snapshots 快照备份和恢复</li>
+</ul>
+<p><strong>与 Milvus 的部署复杂度对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="center">Milvus（分布式版）</th>
+<th align="center">Qdrant</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>部署依赖</td>
+<td align="center">ETCD + MinIO + Pulsar</td>
+<td align="center">无（单二进制）</td>
+</tr>
+<tr>
+<td>最小内存</td>
+<td align="center">8 GB+</td>
+<td align="center">256 MB</td>
+</tr>
+<tr>
+<td>水平扩展</td>
+<td align="center">原生支持</td>
+<td align="center">Qdrant Cloud 支持</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td align="center">大规模生产环境</td>
+<td align="center">中小规模 &#x2F; 快速启动</td>
+</tr>
+</tbody></table>
+<p>Qdrant 特别适合中小规模（千万级以下）的向量检索场景，以及在 Docker Compose 或 K8s 中快速搭建的私有化部署需求。</p>
+<h3 id="1-3-Weaviate"><a href="#1-3-Weaviate" class="headerlink" title="1.3 Weaviate"></a>1.3 Weaviate</h3><p>Weaviate 是一个同时支持向量检索和 GraphQL 查询的开源向量数据库，特色是支持<strong>原生混合搜索</strong>和<strong>多模态数据</strong>。</p>
+<p><strong>核心特性</strong>：</p>
+<ul>
+<li><strong>Hybrid Search 原生内置</strong>：不需要额外组件，单次查询即可融合 <code>hybrid</code> 搜索（向量 + BM25），通过 <code>alpha</code> 参数调节权重</li>
+<li><strong>多模态支持</strong>：内置多模态模块，可以直接存储和检索图片、文本、音频</li>
+<li><strong>GraphQL API</strong>：查询语言基于 GraphQL，表达能力强</li>
+<li><strong>模块化设计</strong>：通过插件模块集成外部 Embedding 模型（如 OpenAI、Cohere、HuggingFace），能在数据写入时自动向量化</li>
+</ul>
+<p>Weaviate 的设计哲学是”一站式 AI 数据基础平台”，适合需要密集使用混合搜索和多模态数据的场景。其 GraphQL 查询方式和模块化 Embedding 集成对于快速开发非常友好。</p>
+<h3 id="1-4-Pinecone"><a href="#1-4-Pinecone" class="headerlink" title="1.4 Pinecone"></a>1.4 Pinecone</h3><p>Pinecone 是一个全托管的云向量数据库服务，<strong>不开源，不可私有化部署</strong>。</p>
+<p><strong>核心特性</strong>：</p>
+<ul>
+<li>零运维负担，创建 Index 后即可使用</li>
+<li>自动索引优化和扩缩容</li>
+<li>集成主流 Embedding 提供商和 LLM 框架</li>
+<li>支持 Serverless 计费模式</li>
+</ul>
+<p>Pinecone 适合希望完全免运维、愿意使用云托管服务的团队。缺点在于数据无法本地化部署（合规性受限），且大规模使用成本可能显著高于自建方案。</p>
+<h2 id="2-传统数据库的向量扩展"><a href="#2-传统数据库的向量扩展" class="headerlink" title="2. 传统数据库的向量扩展"></a>2. 传统数据库的向量扩展</h2><h3 id="2-1-pgvector"><a href="#2-1-pgvector" class="headerlink" title="2.1 pgvector"></a>2.1 pgvector</h3><p>pgvector 是 PostgreSQL 的向量检索扩展插件，让你可以在现有的 PostgreSQL 中直接存储和检索向量，无需引入新的数据库。</p>
+<p><strong>核心特性</strong>：</p>
+<ul>
+<li>在 PostgreSQL 中新增 <code>vector</code> 数据类型和 <code>ivfflat</code>、<code>hnsw</code> 索引</li>
+<li>支持余弦相似度、欧氏距离、内积三种距离度量</li>
+<li>向量检索可以与 SQL 的 WHERE、JOIN、ORDER BY 等标准语法无缝结合</li>
+<li>利用 PostgreSQL 的事务、备份、权限管理等成熟基础设施</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建向量扩展</span></span><br><span class="line"><span class="keyword">CREATE</span> EXTENSION vector;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建包含向量字段的表</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> documents (</span><br><span class="line">    id SERIAL <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    title TEXT,</span><br><span class="line">    content TEXT,</span><br><span class="line">    embedding vector(<span class="number">1536</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 创建 HNSW 索引</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX <span class="keyword">ON</span> documents <span class="keyword">USING</span> hnsw (embedding vector_cosine_ops);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 向量检索 + 标量过滤</span></span><br><span class="line"><span class="keyword">SELECT</span> id, title, <span class="number">1</span> <span class="operator">-</span> (embedding <span class="operator">&lt;=&gt;</span> <span class="string">&#x27;[0.02, -0.15, ...]&#x27;</span>) <span class="keyword">AS</span> similarity</span><br><span class="line"><span class="keyword">FROM</span> documents</span><br><span class="line"><span class="keyword">WHERE</span> category <span class="operator">=</span> <span class="string">&#x27;技术文档&#x27;</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> embedding <span class="operator">&lt;=&gt;</span> <span class="string">&#x27;[0.02, -0.15, ...]&#x27;</span></span><br><span class="line">LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>pgvector 的优势与局限</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>零额外部署成本（已有 PG 即可）</td>
+<td>索引构建速度不如专用向量数据库</td>
+</tr>
+<tr>
+<td>SQL + 向量检索天然融合</td>
+<td>十亿级规模不如 Milvus 等专业方案</td>
+</tr>
+<tr>
+<td>事务保证（ACID）</td>
+<td>HNSW 索引内存占用较高</td>
+</tr>
+<tr>
+<td>运维成熟（备份、监控、HA）</td>
+<td>缺少多向量字段、混合搜索等高级功能</td>
+</tr>
+</tbody></table>
+<p>pgvector 对于已经在使用 PostgreSQL 且向量检索规模在千万级以下的 Java 后端项目，是性价比最高的选择。</p>
+<h3 id="2-2-Elasticsearch-Vector"><a href="#2-2-Elasticsearch-Vector" class="headerlink" title="2.2 Elasticsearch Vector"></a>2.2 Elasticsearch Vector</h3><p>Elasticsearch 从 8.0 版本开始原生支持向量检索（<code>dense_vector</code> 字段类型和 <code>knn</code> 查询）。</p>
+<p><strong>核心特性</strong>：</p>
+<ul>
+<li>在 Elasticsearch 中存储 <code>dense_vector</code> 字段，支持 HNSW 索引</li>
+<li>向量检索 + ES 原生查询（全文检索、聚合、过滤）可以在一条查询中融合</li>
+<li>ES 的分布式架构提供天然的水平扩展能力</li>
+<li>将向量检索、全文检索、日志分析、指标聚合统一到一个平台上</li>
+</ul>
+<p>Elasticsearch 向量检索适合已经使用 ELK 技术栈、需要在同一个平台上同时做传统搜索和语义搜索的团队。但 ES 的向量检索性能不如专用向量数据库，且内存开销较大。</p>
+<h3 id="2-3-Redis-Vector-Search"><a href="#2-3-Redis-Vector-Search" class="headerlink" title="2.3 Redis Vector Search"></a>2.3 Redis Vector Search</h3><p>Redis 从 Redis Stack（Redis 7.2+）开始提供向量检索能力，通过 RediSearch 模块实现。</p>
+<p><strong>核心特性</strong>：</p>
+<ul>
+<li>使用 FLAT（暴力）或 HNSW 索引</li>
+<li>低延迟（Redis 是内存数据库，检索延迟极低）</li>
+<li>适合实时性要求极高的场景（如推荐系统的在线检索召回）</li>
+<li>与 Redis 的 Hash、JSON 等数据结构结合使用</li>
+</ul>
+<p>Redis Vector Search 适合对延迟极其敏感的场景（毫秒级甚至亚毫秒级），但由于所有数据在内存中，不适合海量低成本存储。</p>
+<h2 id="3-向量数据库选型决策框架"><a href="#3-向量数据库选型决策框架" class="headerlink" title="3. 向量数据库选型决策框架"></a>3. 向量数据库选型决策框架</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">                    向量检索规模是多少？</span><br><span class="line"></span><br><span class="line">         &lt; 100万              100万 - 1000万          &gt; 1000万</span><br><span class="line">           │                      │                      │</span><br><span class="line">           ▼                      ▼                      ▼</span><br><span class="line">    是否已有 PG？          需要高级特性？           需要什么级别的运维？</span><br><span class="line">           │                 │                      │</span><br><span class="line">    ┌────┴────┐        ┌────┴────┐           ┌─────┴─────┐</span><br><span class="line">    │是     │否│        │是     │否│           │全托管  │自建│</span><br><span class="line">    ▼       ▼        ▼       ▼           ▼        ▼</span><br><span class="line">pgvector  Qdrant   Milvus  Qdrant     Pinecone  Milvus</span><br><span class="line">(或ES)              Weaviate 或               (云)   (分布式)</span><br><span class="line">                    pgvector</span><br></pre></td></tr></table></figure>
+
+<p><strong>Java 后端项目的推荐方向</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方案</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>快速原型 &#x2F; 小项目</td>
+<td>pgvector</td>
+<td>复用现有 PG，零额外运维</td>
+</tr>
+<tr>
+<td>中型 RAG 应用（&lt; 1000 万）</td>
+<td>Qdrant 或 Milvus Lite</td>
+<td>部署简单，性能好</td>
+</tr>
+<tr>
+<td>大型生产系统（&gt; 1000 万）</td>
+<td>Milvus（分布式）</td>
+<td>存算分离、水平扩展</td>
+</tr>
+<tr>
+<td>已有 ES 技术栈</td>
+<td>Elasticsearch Vector</td>
+<td>技术栈统一，减少维护成本</td>
+</tr>
+<tr>
+<td>不可私有化部署</td>
+<td>Pinecone</td>
+<td>免运维，按需付费</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="六、Java-后端实践：Spring-AI-VectorStore"><a href="#六、Java-后端实践：Spring-AI-VectorStore" class="headerlink" title="六、Java 后端实践：Spring AI VectorStore"></a>六、Java 后端实践：Spring AI VectorStore</h1><h2 id="1-Spring-AI-VectorStore-抽象层设计"><a href="#1-Spring-AI-VectorStore-抽象层设计" class="headerlink" title="1. Spring AI VectorStore 抽象层设计"></a>1. Spring AI VectorStore 抽象层设计</h2><p>Spring AI 提供了一套统一的 <code>VectorStore</code> 抽象层，让你可以用相同的 API 操作不同的向量数据库，实现<strong>面向接口编程，向量数据库可插拔</strong>。</p>
+<p><strong>VectorStore 接口体系</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">VectorStore</span> &#123;</span><br><span class="line">    <span class="comment">// 写入向量（单条或多条）</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(List&lt;Document&gt; documents)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 向量相似性检索</span></span><br><span class="line">    List&lt;Document&gt; <span class="title function_">similaritySearch</span><span class="params">(SearchRequest request)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 删除向量</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">delete</span><span class="params">(List&lt;String&gt; idList)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SearchRequest</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String query;           <span class="comment">// 查询文本（自动 Embedding）</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">topK</span> <span class="operator">=</span> <span class="number">4</span>;          <span class="comment">// 返回结果数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">double</span> <span class="variable">similarityThreshold</span> <span class="operator">=</span> <span class="number">0.0</span>;  <span class="comment">// 相似度阈值</span></span><br><span class="line">    <span class="keyword">private</span> FilterExpression filterExpression; <span class="comment">// 标量过滤条件</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">FilterExpression</span> &#123;</span><br><span class="line">    <span class="comment">// 链式构建过滤条件：key(&quot;category&quot;).eq(&quot;技术文档&quot;).and(key(&quot;year&quot;).gte(2024))</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>核心设计思想：</p>
+<ul>
+<li><strong>VectorStore 是核心抽象接口</strong>：所有向量数据库实现（Milvus、pgvector、Elasticsearch、Qdrant 等）都实现此接口，上层业务代码无需关心底层是哪个数据库</li>
+<li><strong>Spring Boot Auto-Configuration 自动装配</strong>：根据 classpath 中的依赖自动选择对应的 VectorStore 实现。例如 classpath 中有 <code>milvus-spring-boot-starter</code>，则自动创建 <code>MilvusVectorStore</code> Bean</li>
+<li><strong>EmbeddingClient 自动集成</strong>：VectorStore 配合 <code>EmbeddingClient</code>（Embedding 服务提供者抽象），将用户查询文本自动向量化后执行检索，调用者只需传入查询文本而无需手动调用 Embedding 服务</li>
+<li><strong>FilterExpression 统一过滤</strong>：提供一套统一的标量过滤 DSL，消除不同向量数据库的过滤 API 差异</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│                   业务代码                             │</span><br><span class="line">│   vectorStore.similaritySearch(                       │</span><br><span class="line">│     SearchRequest.query(&quot;如何配置数据库连接池&quot;)          │</span><br><span class="line">│       .withTopK(5)                                   │</span><br><span class="line">│       .withFilterExpression(                          │</span><br><span class="line">│         key(&quot;category&quot;).eq(&quot;数据库&quot;))                  │</span><br><span class="line">│   )                                                  │</span><br><span class="line">└──────────────────────────────────────────────────────┘</span><br><span class="line">                         │</span><br><span class="line">                         ▼</span><br><span class="line">┌──────────────────────────────────────────────────────┐</span><br><span class="line">│              VectorStore 接口                          │</span><br><span class="line">│                                                      │</span><br><span class="line">│  ┌──────────┐  ┌──────────┐  ┌───────────┐         │</span><br><span class="line">│  │ Milvus   │  │ pgvector │  │ Elastic-  │  ...    │</span><br><span class="line">│  │ Vector   │  │ Vector   │  │ search    │         │</span><br><span class="line">│  │ Store    │  │ Store    │  │ Vector    │         │</span><br><span class="line">│  └──────────┘  └──────────┘  └───────────┘         │</span><br><span class="line">└──────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Spring-AI-Milvus-集成示例"><a href="#2-Spring-AI-Milvus-集成示例" class="headerlink" title="2. Spring AI + Milvus 集成示例"></a>2. Spring AI + Milvus 集成示例</h2><h3 id="2-1-依赖配置"><a href="#2-1-依赖配置" class="headerlink" title="2.1 依赖配置"></a>2.1 依赖配置</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- pom.xml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.ai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-ai-milvus-store-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.ai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-ai-openai-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># application.yml</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">ai:</span></span><br><span class="line">    <span class="attr">openai:</span></span><br><span class="line">      <span class="attr">api-key:</span> <span class="string">$&#123;OPENAI_API_KEY&#125;</span></span><br><span class="line">      <span class="attr">embedding:</span></span><br><span class="line">        <span class="attr">model:</span> <span class="string">text-embedding-3-small</span></span><br><span class="line">    <span class="attr">milvus:</span></span><br><span class="line">      <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">19530</span></span><br><span class="line">      <span class="attr">database:</span> <span class="string">default</span></span><br><span class="line">      <span class="attr">collection-name:</span> <span class="string">knowledge_base</span></span><br><span class="line">      <span class="attr">embedding-dimension:</span> <span class="number">1536</span></span><br><span class="line">      <span class="attr">metric-type:</span> <span class="string">COSINE</span></span><br><span class="line">      <span class="attr">index-type:</span> <span class="string">HNSW</span></span><br><span class="line">      <span class="attr">index-params:</span></span><br><span class="line">        <span class="attr">M:</span> <span class="number">16</span></span><br><span class="line">        <span class="attr">efConstruction:</span> <span class="number">200</span></span><br><span class="line">      <span class="attr">search-params:</span></span><br><span class="line">        <span class="attr">ef:</span> <span class="number">128</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-知识库初始化与向量写入"><a href="#2-2-知识库初始化与向量写入" class="headerlink" title="2.2 知识库初始化与向量写入"></a>2.2 知识库初始化与向量写入</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">KnowledgeBaseInitializer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> VectorStore vectorStore;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmbeddingClient embeddingClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">KnowledgeBaseInitializer</span><span class="params">(VectorStore vectorStore,</span></span><br><span class="line"><span class="params">                                     EmbeddingClient embeddingClient)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.vectorStore = vectorStore;</span><br><span class="line">        <span class="built_in">this</span>.embeddingClient = embeddingClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将文档切分并写入向量数据库</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ingestDocuments</span><span class="params">(List&lt;String&gt; rawDocuments, String category)</span> &#123;</span><br><span class="line">        <span class="comment">// 文本切分（TokenTextSplitter 基于 Token 数切分）</span></span><br><span class="line">        <span class="type">TokenTextSplitter</span> <span class="variable">splitter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TokenTextSplitter</span>();</span><br><span class="line">        splitter.setDefaultChunkSize(<span class="number">512</span>);</span><br><span class="line">        splitter.setMinChunkSizeChars(<span class="number">100</span>);</span><br><span class="line">        splitter.setMinChunkLengthToEmbed(<span class="number">50</span>);</span><br><span class="line">        splitter.setMaxNumChunks(<span class="number">10000</span>);</span><br><span class="line">        splitter.setKeepSeparator(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        List&lt;Document&gt; documents = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (String raw : rawDocuments) &#123;</span><br><span class="line">            <span class="comment">// 切分为 Chunk</span></span><br><span class="line">            List&lt;Document&gt; chunks = splitter.split(</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">Document</span>(raw)</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 为每个 Chunk 附加元数据（来源追踪和过滤用）</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; chunks.size(); i++) &#123;</span><br><span class="line">                <span class="type">Document</span> <span class="variable">chunk</span> <span class="operator">=</span> chunks.get(i);</span><br><span class="line">                chunk.getMetadata().put(<span class="string">&quot;category&quot;</span>, category);</span><br><span class="line">                chunk.getMetadata().put(<span class="string">&quot;chunk_index&quot;</span>, i);</span><br><span class="line">                chunk.getMetadata().put(<span class="string">&quot;chunk_total&quot;</span>, chunks.size());</span><br><span class="line">                chunk.getMetadata().put(<span class="string">&quot;ingest_time&quot;</span>, Instant.now().toString());</span><br><span class="line">            &#125;</span><br><span class="line">            documents.addAll(chunks);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 批量写入向量数据库（VectorStore 内部调用 EmbeddingClient 自动向量化）</span></span><br><span class="line">        vectorStore.add(documents);</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">&quot;Ingested &#123;&#125; documents into category: &#123;&#125;&quot;</span>, documents.size(), category);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-语义检索服务"><a href="#2-3-语义检索服务" class="headerlink" title="2.3 语义检索服务"></a>2.3 语义检索服务</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SemanticSearchService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> VectorStore vectorStore;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SemanticSearchService</span><span class="params">(VectorStore vectorStore)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.vectorStore = vectorStore;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 纯语义检索</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Document&gt; <span class="title function_">semanticSearch</span><span class="params">(String query, <span class="type">int</span> topK)</span> &#123;</span><br><span class="line">        <span class="type">SearchRequest</span> <span class="variable">request</span> <span class="operator">=</span> SearchRequest.query(query)</span><br><span class="line">                .withTopK(topK)</span><br><span class="line">                .withSimilarityThreshold(<span class="number">0.7</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> vectorStore.similaritySearch(request);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 语义检索 + 标量过滤</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Document&gt; <span class="title function_">filteredSearch</span><span class="params">(String query, String category, <span class="type">int</span> topK)</span> &#123;</span><br><span class="line">        <span class="type">FilterExpression</span> <span class="variable">filter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FilterExpressionBuilder</span>()</span><br><span class="line">                .eq(<span class="string">&quot;category&quot;</span>, category)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="type">SearchRequest</span> <span class="variable">request</span> <span class="operator">=</span> SearchRequest.query(query)</span><br><span class="line">                .withTopK(topK)</span><br><span class="line">                .withSimilarityThreshold(<span class="number">0.7</span>)</span><br><span class="line">                .withFilterExpression(filter);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> vectorStore.similaritySearch(request);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 带相似度分数的检索（用于结果展示和调试）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;SearchResult&gt; <span class="title function_">searchWithScores</span><span class="params">(String query, <span class="type">int</span> topK)</span> &#123;</span><br><span class="line">        List&lt;Document&gt; docs = semanticSearch(query, topK);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> docs.stream()</span><br><span class="line">                .map(doc -&gt; <span class="keyword">new</span> <span class="title class_">SearchResult</span>(</span><br><span class="line">                        doc.getContent(),</span><br><span class="line">                        doc.getMetadata().get(<span class="string">&quot;category&quot;</span>),</span><br><span class="line">                        (Double) doc.getMetadata().getOrDefault(<span class="string">&quot;distance&quot;</span>, <span class="number">0.0</span>)</span><br><span class="line">                ))</span><br><span class="line">                .collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-使用-Milvus-原生-Client-的高级操作"><a href="#2-4-使用-Milvus-原生-Client-的高级操作" class="headerlink" title="2.4 使用 Milvus 原生 Client 的高级操作"></a>2.4 使用 Milvus 原生 Client 的高级操作</h3><p>当 Spring AI 的 VectorStore 抽象不满足需求时（如需要自定义索引参数、管理 Collection 生命周期），可以直接注入 Milvus 原生 Client：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MilvusAdvancedOperations</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MilvusServiceClient milvusClient;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MilvusAdvancedOperations</span><span class="params">(MilvusServiceClient milvusClient)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.milvusClient = milvusClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 自定义创建 Collection（配置 HNSW 索引参数）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createCustomCollection</span><span class="params">(String collectionName, <span class="type">int</span> dimension)</span> &#123;</span><br><span class="line">        <span class="comment">// 定义字段 Schema</span></span><br><span class="line">        <span class="type">FieldType</span> <span class="variable">idField</span> <span class="operator">=</span> FieldType.newBuilder()</span><br><span class="line">                .withName(<span class="string">&quot;id&quot;</span>)</span><br><span class="line">                .withDataType(DataType.Int64)</span><br><span class="line">                .withPrimaryKey(<span class="literal">true</span>)</span><br><span class="line">                .withAutoID(<span class="literal">true</span>)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="type">FieldType</span> <span class="variable">vectorField</span> <span class="operator">=</span> FieldType.newBuilder()</span><br><span class="line">                .withName(<span class="string">&quot;embedding&quot;</span>)</span><br><span class="line">                .withDataType(DataType.FloatVector)</span><br><span class="line">                .withDimension(dimension)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="type">FieldType</span> <span class="variable">titleField</span> <span class="operator">=</span> FieldType.newBuilder()</span><br><span class="line">                .withName(<span class="string">&quot;title&quot;</span>)</span><br><span class="line">                .withDataType(DataType.VarChar)</span><br><span class="line">                .withMaxLength(<span class="number">256</span>)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="type">FieldType</span> <span class="variable">categoryField</span> <span class="operator">=</span> FieldType.newBuilder()</span><br><span class="line">                .withName(<span class="string">&quot;category&quot;</span>)</span><br><span class="line">                .withDataType(DataType.VarChar)</span><br><span class="line">                .withMaxLength(<span class="number">64</span>)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 Collection Schema</span></span><br><span class="line">        <span class="type">CollectionSchema</span> <span class="variable">schema</span> <span class="operator">=</span> CollectionSchema.newBuilder()</span><br><span class="line">                .withName(collectionName)</span><br><span class="line">                .withDescription(<span class="string">&quot;RAG 知识库&quot;</span>)</span><br><span class="line">                .addFieldType(idField)</span><br><span class="line">                .addFieldType(vectorField)</span><br><span class="line">                .addFieldType(titleField)</span><br><span class="line">                .addFieldType(categoryField)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 Collection</span></span><br><span class="line">        <span class="type">CreateCollectionParam</span> <span class="variable">createParam</span> <span class="operator">=</span> CreateCollectionParam.newBuilder()</span><br><span class="line">                .withCollectionName(collectionName)</span><br><span class="line">                .withSchema(schema)</span><br><span class="line">                .build();</span><br><span class="line">        milvusClient.createCollection(createParam);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建 HNSW 索引</span></span><br><span class="line">        <span class="type">IndexParam</span> <span class="variable">indexParam</span> <span class="operator">=</span> IndexParam.newBuilder()</span><br><span class="line">                .withCollectionName(collectionName)</span><br><span class="line">                .withFieldName(<span class="string">&quot;embedding&quot;</span>)</span><br><span class="line">                .withIndexType(IndexType.HNSW)</span><br><span class="line">                .withMetricType(MetricType.COSINE)</span><br><span class="line">                .withExtraParam(JSON.toJSONString(Map.of(</span><br><span class="line">                        <span class="string">&quot;M&quot;</span>, <span class="number">16</span>,</span><br><span class="line">                        <span class="string">&quot;efConstruction&quot;</span>, <span class="number">200</span></span><br><span class="line">                )))</span><br><span class="line">                .build();</span><br><span class="line">        milvusClient.createIndex(indexParam);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 加载 Collection 到内存</span></span><br><span class="line">        milvusClient.loadCollection(</span><br><span class="line">                LoadCollectionParam.newBuilder()</span><br><span class="line">                        .withCollectionName(collectionName)</span><br><span class="line">                        .build()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Spring-AI-pgvector-集成示例"><a href="#3-Spring-AI-pgvector-集成示例" class="headerlink" title="3. Spring AI + pgvector 集成示例"></a>3. Spring AI + pgvector 集成示例</h2><p>pgvector 是已有 PostgreSQL 基础设施的团队的首选方案。</p>
+<h3 id="3-1-依赖与配置"><a href="#3-1-依赖与配置" class="headerlink" title="3.1 依赖与配置"></a>3.1 依赖与配置</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.ai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-ai-pgvector-store-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.postgresql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>postgresql<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:postgresql://localhost:5432/rag_db</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">$&#123;DB_USER&#125;</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">$&#123;DB_PASSWORD&#125;</span></span><br><span class="line">  <span class="attr">ai:</span></span><br><span class="line">    <span class="attr">pgvector:</span></span><br><span class="line">      <span class="attr">initialize-schema:</span> <span class="literal">true</span>       <span class="comment"># 自动建表</span></span><br><span class="line">      <span class="attr">table-name:</span> <span class="string">vector_store</span></span><br><span class="line">      <span class="attr">dimensions:</span> <span class="number">1536</span></span><br><span class="line">      <span class="attr">index-type:</span> <span class="string">hnsw</span></span><br><span class="line">      <span class="attr">schema-name:</span> <span class="string">public</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-pgvector-的自动表结构"><a href="#3-2-pgvector-的自动表结构" class="headerlink" title="3.2 pgvector 的自动表结构"></a>3.2 pgvector 的自动表结构</h3><p>pgvector starter 会自动创建如下表结构：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> EXTENSION IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> vector;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> IF <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> vector_store (</span><br><span class="line">    id UUID <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    content TEXT,</span><br><span class="line">    metadata JSON,</span><br><span class="line">    embedding vector(<span class="number">1536</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> INDEX <span class="keyword">ON</span> vector_store</span><br><span class="line">    <span class="keyword">USING</span> hnsw (embedding vector_cosine_ops)</span><br><span class="line">    <span class="keyword">WITH</span> (m <span class="operator">=</span> <span class="number">16</span>, ef_construction <span class="operator">=</span> <span class="number">200</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-pgvector-的独特优势：SQL-向量混合查询"><a href="#3-3-pgvector-的独特优势：SQL-向量混合查询" class="headerlink" title="3.3 pgvector 的独特优势：SQL + 向量混合查询"></a>3.3 pgvector 的独特优势：SQL + 向量混合查询</h3><p>pgvector 的最大优势是可以直接在 SQL 查询中融合向量检索和传统 SQL 操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PgVectorDao</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> JdbcTemplate jdbcTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PgVectorDao</span><span class="params">(JdbcTemplate jdbcTemplate)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.jdbcTemplate = jdbcTemplate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用原生 SQL 实现复杂查询：向量检索 + JOIN + 聚合</span></span><br><span class="line"><span class="comment">     * 这是专用向量数据库难以实现的</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;DocumentWithAuthor&gt; <span class="title function_">searchWithAuthorInfo</span><span class="params">(</span></span><br><span class="line"><span class="params">            <span class="type">float</span>[] queryEmbedding, <span class="type">int</span> topK)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">            SELECT</span></span><br><span class="line"><span class="string">                d.id, d.content, d.metadata,</span></span><br><span class="line"><span class="string">                a.name AS author_name,</span></span><br><span class="line"><span class="string">                a.department,</span></span><br><span class="line"><span class="string">                1 - (d.embedding &lt;=&gt; ?::vector) AS similarity</span></span><br><span class="line"><span class="string">            FROM vector_store d</span></span><br><span class="line"><span class="string">            JOIN document_authors a ON d.metadata-&gt;&gt;&#x27;author_id&#x27; = a.id::text</span></span><br><span class="line"><span class="string">            WHERE d.metadata-&gt;&gt;&#x27;status&#x27; = &#x27;published&#x27;</span></span><br><span class="line"><span class="string">            ORDER BY d.embedding &lt;=&gt; ?::vector</span></span><br><span class="line"><span class="string">            LIMIT ?</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">PGvector</span> <span class="variable">vector</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PGvector</span>(queryEmbedding);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> jdbcTemplate.query(sql,</span><br><span class="line">                (rs, rowNum) -&gt; <span class="keyword">new</span> <span class="title class_">DocumentWithAuthor</span>(</span><br><span class="line">                        rs.getString(<span class="string">&quot;id&quot;</span>),</span><br><span class="line">                        rs.getString(<span class="string">&quot;content&quot;</span>),</span><br><span class="line">                        rs.getString(<span class="string">&quot;author_name&quot;</span>),</span><br><span class="line">                        rs.getString(<span class="string">&quot;department&quot;</span>),</span><br><span class="line">                        rs.getDouble(<span class="string">&quot;similarity&quot;</span>)</span><br><span class="line">                ),</span><br><span class="line">                vector, vector, topK</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种”向量检索 + SQL JOIN”的能力是 pgvector 相比专用向量数据库的核心差异化优势——你可以在一次查询中同时完成语义搜索、关联查询和条件过滤，享受完整的 ACID 事务保证。</p>
+<h2 id="4-Spring-AI-Elasticsearch-Vector-集成示例"><a href="#4-Spring-AI-Elasticsearch-Vector-集成示例" class="headerlink" title="4. Spring AI + Elasticsearch Vector 集成示例"></a>4. Spring AI + Elasticsearch Vector 集成示例</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.ai<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-ai-elasticsearch-store-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">elasticsearch:</span></span><br><span class="line">    <span class="attr">uris:</span> <span class="string">http://localhost:9200</span></span><br><span class="line">  <span class="attr">ai:</span></span><br><span class="line">    <span class="attr">elasticsearch:</span></span><br><span class="line">      <span class="attr">vector-store:</span></span><br><span class="line">        <span class="attr">index-name:</span> <span class="string">knowledge_base</span></span><br><span class="line">        <span class="attr">dimensions:</span> <span class="number">1536</span></span><br><span class="line">        <span class="attr">similarity:</span> <span class="string">cosine</span></span><br></pre></td></tr></table></figure>
+
+<p>Elasticsearch 方案的核心优势是<strong>统一的搜索平台</strong>：向量语义检索和传统全文检索在同一个 Elasticsearch 集群中运行，共享集群资源和管理工具。对于已经深度使用 ELK 技术栈的团队，引入 Elasticsearch Vector 是最自然的选择。</p>
+<h2 id="5-LangChain4j-EmbeddingStore-方案"><a href="#5-LangChain4j-EmbeddingStore-方案" class="headerlink" title="5. LangChain4j EmbeddingStore 方案"></a>5. LangChain4j EmbeddingStore 方案</h2><p>如果项目使用的是 LangChain4j 而非 Spring AI，对应的向量数据库抽象是 <code>EmbeddingStore</code> 接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LangChain4j 的向量存储抽象</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">EmbeddingStore</span>&lt;Embedded&gt; &#123;</span><br><span class="line">    String <span class="title function_">add</span><span class="params">(Embedding embedding, TextSegment segment)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addAll</span><span class="params">(List&lt;Embedding&gt; embeddings, List&lt;TextSegment&gt; segments)</span>;</span><br><span class="line">    List&lt;EmbeddingMatch&lt;TextSegment&gt;&gt; <span class="title function_">findRelevant</span><span class="params">(</span></span><br><span class="line"><span class="params">        Embedding referenceEmbedding, <span class="type">int</span> maxResults, <span class="type">double</span> minScore)</span>;</span><br><span class="line">    List&lt;EmbeddingMatch&lt;TextSegment&gt;&gt; <span class="title function_">findRelevant</span><span class="params">(</span></span><br><span class="line"><span class="params">        Embedding referenceEmbedding, <span class="type">int</span> maxResults,</span></span><br><span class="line"><span class="params">        <span class="type">double</span> minScore, MetadataFilter filter)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- LangChain4j + pgvector --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>dev.langchain4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>langchain4j-pgvector<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LangChain4jVectorConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> EmbeddingStore&lt;TextSegment&gt; <span class="title function_">embeddingStore</span><span class="params">(</span></span><br><span class="line"><span class="params">            <span class="meta">@Value(&quot;$&#123;pgvector.host&#125;&quot;)</span> String host,</span></span><br><span class="line"><span class="params">            <span class="meta">@Value(&quot;$&#123;pgvector.port&#125;&quot;)</span> <span class="type">int</span> port,</span></span><br><span class="line"><span class="params">            <span class="meta">@Value(&quot;$&#123;pgvector.database&#125;&quot;)</span> String database,</span></span><br><span class="line"><span class="params">            <span class="meta">@Value(&quot;$&#123;pgvector.user&#125;&quot;)</span> String user,</span></span><br><span class="line"><span class="params">            <span class="meta">@Value(&quot;$&#123;pgvector.password&#125;&quot;)</span> String password)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">PgVectorEmbeddingStore</span> <span class="variable">store</span> <span class="operator">=</span> PgVectorEmbeddingStore.builder()</span><br><span class="line">                .host(host)</span><br><span class="line">                .port(port)</span><br><span class="line">                .database(database)</span><br><span class="line">                .user(user)</span><br><span class="line">                .password(password)</span><br><span class="line">                .table(<span class="string">&quot;knowledge_embeddings&quot;</span>)</span><br><span class="line">                .dimension(<span class="number">1536</span>)</span><br><span class="line">                .useIndex(<span class="literal">true</span>)           <span class="comment">// 自动创建索引</span></span><br><span class="line">                .indexListSize(<span class="number">100</span>)        <span class="comment">// IVF 索引的 cluster 数</span></span><br><span class="line">                .createTable(<span class="literal">true</span>)         <span class="comment">// 自动建表</span></span><br><span class="line">                .dropTableFirst(<span class="literal">false</span>)     <span class="comment">// 不删除已有表</span></span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> store;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> EmbeddingModel <span class="title function_">embeddingModel</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">OpenAiEmbeddingModel</span>(</span><br><span class="line">                OpenAiEmbeddingModel.builder()</span><br><span class="line">                        .apiKey(System.getenv(<span class="string">&quot;OPENAI_API_KEY&quot;</span>))</span><br><span class="line">                        .modelName(<span class="string">&quot;text-embedding-3-small&quot;</span>)</span><br><span class="line">                        .build()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LangChain4jRagService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmbeddingStore&lt;TextSegment&gt; embeddingStore;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EmbeddingModel embeddingModel;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">LangChain4jRagService</span><span class="params">(EmbeddingStore&lt;TextSegment&gt; embeddingStore,</span></span><br><span class="line"><span class="params">                                  EmbeddingModel embeddingModel)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.embeddingStore = embeddingStore;</span><br><span class="line">        <span class="built_in">this</span>.embeddingModel = embeddingModel;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 文档入库</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ingest</span><span class="params">(String content, Map&lt;String, String&gt; metadata)</span> &#123;</span><br><span class="line">        <span class="type">TextSegment</span> <span class="variable">segment</span> <span class="operator">=</span> TextSegment.from(content, <span class="keyword">new</span> <span class="title class_">dev</span>.langchain4j.data.message.Metadata(metadata));</span><br><span class="line">        <span class="type">Embedding</span> <span class="variable">embedding</span> <span class="operator">=</span> embeddingModel.embed(content).content();</span><br><span class="line">        embeddingStore.add(embedding, segment);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 检索</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;String&gt; <span class="title function_">search</span><span class="params">(String query, <span class="type">int</span> maxResults, <span class="type">double</span> minScore)</span> &#123;</span><br><span class="line">        <span class="type">Embedding</span> <span class="variable">queryEmbedding</span> <span class="operator">=</span> embeddingModel.embed(query).content();</span><br><span class="line">        List&lt;EmbeddingMatch&lt;TextSegment&gt;&gt; matches =</span><br><span class="line">                embeddingStore.findRelevant(queryEmbedding, maxResults, minScore);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> matches.stream()</span><br><span class="line">                .map(m -&gt; m.embedded().text())</span><br><span class="line">                .collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-多向量数据库切换策略"><a href="#6-多向量数据库切换策略" class="headerlink" title="6. 多向量数据库切换策略"></a>6. 多向量数据库切换策略</h2><p>Spring AI 的 VectorStore 抽象让切换向量数据库变得简单——只要修改 Maven 依赖和配置文件，业务代码无需改动。但在实际项目中，更实用的做法是<strong>通过配置开关控制向量数据库的实现</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VectorStoreRoutingConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConditionalOnProperty(name = &quot;vector.store.type&quot;, havingValue = &quot;milvus&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> VectorStore <span class="title function_">milvusVectorStore</span><span class="params">(MilvusServiceClient milvusClient,</span></span><br><span class="line"><span class="params">                                          EmbeddingClient embeddingClient)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MilvusVectorStore</span>(milvusClient, embeddingClient);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConditionalOnProperty(name = &quot;vector.store.type&quot;, havingValue = &quot;pgvector&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> VectorStore <span class="title function_">pgVectorStore</span><span class="params">(JdbcTemplate jdbcTemplate,</span></span><br><span class="line"><span class="params">                                      EmbeddingClient embeddingClient)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">PgVectorStore</span>(jdbcTemplate, embeddingClient);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConditionalOnProperty(name = &quot;vector.store.type&quot;, havingValue = &quot;elasticsearch&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> VectorStore <span class="title function_">esVectorStore</span><span class="params">(RestClient restClient,</span></span><br><span class="line"><span class="params">                                      EmbeddingClient embeddingClient)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ElasticsearchVectorStore</span>(restClient, embeddingClient);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开发环境：pgvector（方便，复用本地 PG）</span></span><br><span class="line"><span class="attr">vector:</span></span><br><span class="line">  <span class="attr">store:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">pgvector</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="comment"># 生产环境：Milvus（高性能，独立扩展）</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">config:</span></span><br><span class="line">    <span class="attr">activate:</span></span><br><span class="line">      <span class="attr">on-profile:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">vector:</span></span><br><span class="line">  <span class="attr">store:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">milvus</span></span><br></pre></td></tr></table></figure>
+
+<p>这种设计在不同环境使用不同向量数据库——开发环境用 pgvector 方便调试，生产环境用 Milvus 追求性能——且在代码层面完全透明。</p>
+<hr>
+<h1 id="七、向量数据库的工程实践要点"><a href="#七、向量数据库的工程实践要点" class="headerlink" title="七、向量数据库的工程实践要点"></a>七、向量数据库的工程实践要点</h1><h2 id="1-索引构建的性能调优"><a href="#1-索引构建的性能调优" class="headerlink" title="1. 索引构建的性能调优"></a>1. 索引构建的性能调优</h2><p>向量索引的构建是一个计算密集型任务，涉及大量的距离计算和图结构构建。对于大规模数据入库（百万级以上），索引构建可能成为瓶颈。</p>
+<p><strong>批量入库的建议策略</strong>：</p>
+<ul>
+<li><strong>分批写入</strong>：每批 1000-5000 条向量，批次之间给索引构建留出时间</li>
+<li><strong>先写入后建索引</strong>：大批量写入时，先关闭索引构建，等数据全部写入后再触发全量索引构建（大部分向量数据库支持此模式）</li>
+<li><strong>索引参数的分级设置</strong>：初始入库时降低 <code>efConstruction</code> 等参数以加快构建速度；入库完成后在线调整参数提高检索精度</li>
+</ul>
+<h2 id="2-数据一致性考量"><a href="#2-数据一致性考量" class="headerlink" title="2. 数据一致性考量"></a>2. 数据一致性考量</h2><p>向量数据库在数据一致性模型上各有不同：</p>
+<ul>
+<li><strong>pgvector</strong>：享有 PostgreSQL 的 ACID 事务保证，向量和元数据写入是事务性的</li>
+<li><strong>Milvus</strong>：默认是最终一致性，flush 后数据可查</li>
+<li><strong>Qdrant</strong>：写入后立即可查（单节点模式）</li>
+<li><strong>Elasticsearch Vector</strong>：近实时（默认每秒 refresh）</li>
+</ul>
+<p>对于需要强一致性的场景（如文档删除后必须立即在检索结果中不可见），pgvector 是唯一保证 ACID 的选择。</p>
+<h2 id="3-监控与可观测性"><a href="#3-监控与可观测性" class="headerlink" title="3. 监控与可观测性"></a>3. 监控与可观测性</h2><p>向量数据库的核心监控指标：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>含义</th>
+<th>关注阈值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>检索延迟（P99）</td>
+<td>99% 的检索请求延迟</td>
+<td>&lt; 50ms 优秀，&lt; 200ms 可接受</td>
+</tr>
+<tr>
+<td>检索 QPS</td>
+<td>每秒检索请求数</td>
+<td>根据业务需求设定</td>
+</tr>
+<tr>
+<td>索引内存占用</td>
+<td>索引结构占用的内存</td>
+<td>不超过可用内存的 70%</td>
+</tr>
+<tr>
+<td>召回率</td>
+<td>检索结果与暴力全扫描的重叠率</td>
+<td>&gt; 95%</td>
+</tr>
+<tr>
+<td>Collection 向量数</td>
+<td>当前存储的向量总数</td>
+<td>监控增长趋势，预判扩容时机</td>
+</tr>
+</tbody></table>
+<h2 id="4-与关系数据库的协同工作"><a href="#4-与关系数据库的协同工作" class="headerlink" title="4. 与关系数据库的协同工作"></a>4. 与关系数据库的协同工作</h2><p>在实际 Java 后端项目中，向量数据库几乎不会孤立使用。典型的数据流是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────────────────────────────────────────────────┐</span><br><span class="line">│                    业务数据层                              │</span><br><span class="line">│  ┌──────────────────────┐    ┌──────────────────────┐   │</span><br><span class="line">│  │ PostgreSQL / MySQL    │    │ 向量数据库              │   │</span><br><span class="line">│  │  - 用户信息            │    │  - 文档向量             │   │</span><br><span class="line">│  │  - 文档元数据/状态     │    │  - 语义索引             │   │</span><br><span class="line">│  │  - 业务关系            │    │  - 相似度分数           │   │</span><br><span class="line">│  └──────────────────────┘    └──────────────────────┘   │</span><br><span class="line">│            │                           │                 │</span><br><span class="line">│            └───────────┬───────────────┘                 │</span><br><span class="line">│                        │                                 │</span><br><span class="line">│  ┌─────────────────────▼─────────────────────────────┐  │</span><br><span class="line">│  │              Java 应用层                            │  │</span><br><span class="line">│  │  - 关系数据查询（JPA/MyBatis）                      │  │</span><br><span class="line">│  │  - 向量检索引擎（VectorStore）                      │  │</span><br><span class="line">│  │  - 结果聚合：向量检索 → 获取 ID → 查 PG 获取详情     │  │</span><br><span class="line">│  └───────────────────────────────────────────────────┘  │</span><br><span class="line">└──────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>在实践中，向量数据库通常只存储<strong>向量 + 检索所需的最少元数据</strong>（如标题、分类、来源等），而完整的业务数据仍然存储在关系数据库中。检索结果返回后，通过 ID 回查关系数据库获取详情。这种”两地存储”模式兼顾了检索性能和业务数据完整性。</p>
+<p>这种协作关系意味着技术选型不是”选哪个数据库”，而是”如何组合数据库以满足应用的不同数据需求”——关系数据库管理业务真相，向量数据库管理语义索引。两者的 ID 映射和元数据同步是需要特别关注的设计问题。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+              <a href="/tags/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 向量数据库</a>
+              <a href="/tags/RAG/" rel="tag"># RAG</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/06-RAG%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90/" rel="prev" title="RAG检索增强生成">
+                  <i class="fa fa-angle-left"></i> RAG检索增强生成
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/05/29/AI/04-Embedding%E4%B8%8E%E5%90%91%E9%87%8F%E5%8C%96/" rel="next" title="Embedding与向量化">
+                  Embedding与向量化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
