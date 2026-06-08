@@ -2067,7 +2067,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-08 18:35:10" itemprop="dateModified" datetime="2026-06-08T18:35:10+08:00">2026-06-08</time>
+      <time title="修改时间：2026-06-08 21:42:06" itemprop="dateModified" datetime="2026-06-08T21:42:06+08:00">2026-06-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -2093,10 +2093,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="一、数据库基础核心"><a href="#一、数据库基础核心" class="headerlink" title="一、数据库基础核心"></a>一、数据库基础核心</h1><h2 id="1-数据库基本概念"><a href="#1-数据库基本概念" class="headerlink" title="1. 数据库基本概念"></a>1. 数据库基本概念</h2><blockquote>
-<p><strong>通用 SQL 基础知识</strong>（数据库定义、DBMS、SQL 语言分类、数据模型、数据库分类等）已整理至 <strong>SQL.md</strong> 第一、二章，本文档聚焦 MySQL 特有的内容。</p>
-</blockquote>
-<p>MySQL 是目前最流行的开源关系型数据库管理系统（RDBMS），由 Oracle 公司维护。它基于<strong>关系模型</strong>，使用标准 SQL 作为查询语言，默认存储引擎为 <strong>InnoDB</strong>。MySQL 的核心定位是 <strong>OLTP（联机事务处理）</strong> 场景，在 Web 应用、电商、SaaS 等领域占据主导地位。</p>
+          <h1 id="一、数据库基础核心"><a href="#一、数据库基础核心" class="headerlink" title="一、数据库基础核心"></a>一、数据库基础核心</h1><h2 id="1-数据库基本概念"><a href="#1-数据库基本概念" class="headerlink" title="1. 数据库基本概念"></a>1. 数据库基本概念</h2><h3 id="1-1-MySQL概述"><a href="#1-1-MySQL概述" class="headerlink" title="1.1 MySQL概述"></a>1.1 MySQL概述</h3><p>MySQL 是目前最流行的开源关系型数据库管理系统（RDBMS），由 Oracle 公司维护。它基于<strong>关系模型</strong>，使用标准 SQL 作为查询语言，默认存储引擎为 <strong>InnoDB</strong>。MySQL 的核心定位是 <strong>OLTP（联机事务处理）</strong> 场景，在 Web 应用、电商、SaaS 等领域占据主导地位。</p>
 <p><strong>MySQL 的关键特性：</strong></p>
 <ul>
 <li><strong>插件式存储引擎架构</strong>：支持多种存储引擎（InnoDB、MyISAM、Memory 等），可根据场景选择</li>
@@ -2105,7 +2102,7 @@
 <li><strong>丰富的生态工具</strong>：mysqldump、Percona Toolkit、MySQL Router 等</li>
 </ul>
 <hr>
-<h3 id="1-4-MySQL-架构简介"><a href="#1-4-MySQL-架构简介" class="headerlink" title="1.4 MySQL 架构简介"></a>1.4 MySQL 架构简介</h3><h4 id="1-4-1-逻辑架构"><a href="#1-4-1-逻辑架构" class="headerlink" title="1.4.1 逻辑架构"></a>1.4.1 逻辑架构</h4><p>通常，MySQL 的逻辑架构可以分为三到四层，这里我们采用更清晰的四层模型进行讲解。</p>
+<h3 id="1-2-MySQL-架构简介"><a href="#1-2-MySQL-架构简介" class="headerlink" title="1.2 MySQL 架构简介"></a>1.2 MySQL 架构简介</h3><h4 id="1-2-1-逻辑架构"><a href="#1-2-1-逻辑架构" class="headerlink" title="1.2.1 逻辑架构"></a>1.2.1 逻辑架构</h4><p>通常，MySQL 的逻辑架构可以分为三到四层，这里我们采用更清晰的四层模型进行讲解。</p>
 <pre><code class="highlight mermaid">flowchart TD
     %% --- 样式定义 ---
     classDef client fill:#f9f9f9,stroke:#333,stroke-width:2px;
@@ -2289,7 +2286,7 @@
 </li>
 </ul>
 <hr>
-<h4 id="1-4-2-存储引擎"><a href="#1-4-2-存储引擎" class="headerlink" title="1.4.2 存储引擎"></a>1.4.2 存储引擎</h4><p>存储引擎是基于表的，而不是基于数据库的。这意味着，你可以在同一个数据库中，为不同的表使用不同的存储引擎，以适应各自独特的业务需求。这种<strong>可插拔式架构 (Pluggable Architecture)</strong> 是 MySQL 的一个核心特性。</p>
+<h4 id="1-2-2-存储引擎"><a href="#1-2-2-存储引擎" class="headerlink" title="1.2.2 存储引擎"></a>1.2.2 存储引擎</h4><p>存储引擎是基于表的，而不是基于数据库的。这意味着，你可以在同一个数据库中，为不同的表使用不同的存储引擎，以适应各自独特的业务需求。这种<strong>可插拔式架构 (Pluggable Architecture)</strong> 是 MySQL 的一个核心特性。</p>
 <h5 id="1-存储引擎的常见操作"><a href="#1-存储引擎的常见操作" class="headerlink" title="1. 存储引擎的常见操作"></a>1. 存储引擎的常见操作</h5><p>可以通过简单的 SQL 命令来查看和管理存储引擎。</p>
 <ol>
 <li><p><strong>查看当前数据库支持的存储引擎</strong></p>
@@ -2433,29 +2430,9 @@
 </ul>
 <hr>
 <h5 id="4-如何选择存储引擎？"><a href="#4-如何选择存储引擎？" class="headerlink" title="4. 如何选择存储引擎？"></a>4. 如何选择存储引擎？</h5><ul>
-<li><strong>InnoDB</strong>: 你的默认和首选。适用于 99% 的应用场景，提供了数据安全、高并发和强大的功能。</li>
-<li><strong>MyISAM</strong>: 除非你的应用是纯读取，且能容忍数据丢失的风险，否则不推荐。对于需要快速 <code>COUNT(*)</code> 的场景，可以考虑，但通常有更好的解决方案（如缓存）。</li>
-<li><strong>Memory</strong>: 当你需要一个生命周期短、速度要求极致的临时数据存放地时，它是绝佳选择。</li>
-</ul>
-<hr>
-<h3 id="1-5-核心优势"><a href="#1-5-核心优势" class="headerlink" title="1.5 核心优势"></a>1.5 核心优势</h3><p>我们为什么不直接把数据存放在 <code>.txt</code> 或 <code>.json</code> 文件里？因为数据库管理系统 (DBMS) 提供了四个无可替代的核心优势</p>
-<p><strong>数据持久化 (Data Persistence)</strong></p>
-<ul>
-<li><p><strong>核心定义</strong>:</p>
-<p>持久化意味着数据一旦被写入，就不会因为程序的关闭、服务器的重启或断电而丢失。数据被安全地存储在非易失性存储介质上（如硬盘或 SSD），实现了永久保存。</p>
-</li>
-</ul>
-<p><strong>数据管理 (Data Management)</strong></p>
-<ul>
-<li><strong>核心定义</strong>:<br>数据库不仅是存储数据，更重要的是提供了一套<strong>高效、结构化</strong>的管理机制。它允许我们以一种有组织的方式定义数据、插入数据、查询数据和维护数据。</li>
-</ul>
-<p><strong>并发控制 (Concurrency Control)</strong></p>
-<ul>
-<li><strong>核心定义</strong>:<br>并发控制是指在多个用户或应用程序<strong>同时</strong>对数据库进行读写操作时，数据库系统有能力保证操作的正确性和数据的完整性，避免因同时操作而导致的数据混乱或错误。</li>
-</ul>
-<p><strong>数据一致性 (Data Consistency)</strong></p>
-<ul>
-<li><strong>核心定义</strong>:<br>数据一致性确保数据库中的数据始终处于一种逻辑上正确的、自洽的状态。这通常通过<strong>事务 (Transaction)</strong> 来保证，即一系列操作要么全部成功执行，要么全部失败回滚，不会停留在中间的某个“不完整”状态。</li>
+<li><strong>InnoDB</strong>: 默认和首选。适用于 99% 的应用场景，提供了数据安全、高并发和强大的功能。</li>
+<li><strong>MyISAM</strong>: 除非应用是纯读取，且能容忍数据丢失的风险，否则不推荐。对于需要快速 <code>COUNT(*)</code> 的场景，可以考虑，但通常有更好的解决方案（如缓存）。</li>
+<li><strong>Memory</strong>: 当需要一个生命周期短、速度要求极致的临时数据存放地时，它是绝佳选择。</li>
 </ul>
 <hr>
 <h2 id="2-MySQL-SQL-方言与独有语法"><a href="#2-MySQL-SQL-方言与独有语法" class="headerlink" title="2. MySQL SQL 方言与独有语法"></a>2. MySQL SQL 方言与独有语法</h2><blockquote>
@@ -2659,17 +2636,17 @@
 </thead>
 <tbody><tr>
 <td><strong>InnoDB</strong></td>
-<td>✅ 完整支持</td>
+<td>完整支持</td>
 <td>MySQL 5.5+ 默认引擎，支持 ACID 事务</td>
 </tr>
 <tr>
 <td><strong>MyISAM</strong></td>
-<td>❌ 不支持</td>
+<td>不支持</td>
 <td>无事务，无外键，崩溃后可能丢数据</td>
 </tr>
 <tr>
 <td><strong>Memory</strong></td>
-<td>❌ 不支持</td>
+<td>不支持</td>
 <td>数据在内存中，重启丢失</td>
 </tr>
 </tbody></table>
@@ -2823,7 +2800,7 @@
 </tr>
 <tr>
 <td><code>BINARY(16)</code></td>
-<td><strong>16 字节</strong> ✅</td>
+<td><strong>16 字节</strong></td>
 <td>好（二进制比较，配合 <code>UUID_TO_BIN(UUID(), 1)</code> 可优化）</td>
 </tr>
 </tbody></table>
