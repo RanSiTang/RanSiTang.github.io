@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="模型微调与定制化本文主要介绍 模型微调的基本概念 微调与 RAG 的区别 SFT、LoRA、QLoRA、模型蒸馏等常见概念 什么场景适合微调，什么场景更适合 RAG 或 Prompt 工程 Java 后端工程师需要了解的模型定制化边界（数据准备、微调触发时机、模型上线流程） 微调后模型的部署方式与调用切换策略（模型注册中心、A&#x2F;B流量切换、灰度发布）">
+    <meta name="description" content="一、模型微调的基本概念与定位1. 什么是模型微调模型微调（Fine-tuning）是指在预训练好的大语言模型（基座模型）基础上，使用特定领域的数据对模型进行额外训练，使其更好地适应特定任务、领域知识或输出风格的过程。 用一个类比来理解： 12345基座模型（Base Model）          微调后模型（Fine-tuned Model）        │">
 <meta property="og:type" content="article">
 <meta property="og:title" content="模型微调与定制化">
 <meta property="og:url" content="http://example.com/2026/05/29/AI/13-%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%E4%B8%8E%E5%AE%9A%E5%88%B6%E5%8C%96/index.html">
 <meta property="og:site_name" content="冉的技术宝典">
-<meta property="og:description" content="模型微调与定制化本文主要介绍 模型微调的基本概念 微调与 RAG 的区别 SFT、LoRA、QLoRA、模型蒸馏等常见概念 什么场景适合微调，什么场景更适合 RAG 或 Prompt 工程 Java 后端工程师需要了解的模型定制化边界（数据准备、微调触发时机、模型上线流程） 微调后模型的部署方式与调用切换策略（模型注册中心、A&#x2F;B流量切换、灰度发布）">
+<meta property="og:description" content="一、模型微调的基本概念与定位1. 什么是模型微调模型微调（Fine-tuning）是指在预训练好的大语言模型（基座模型）基础上，使用特定领域的数据对模型进行额外训练，使其更好地适应特定任务、领域知识或输出风格的过程。 用一个类比来理解： 12345基座模型（Base Model）          微调后模型（Fine-tuned Model）        │">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-05-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-06T08:34:18.607Z">
+<meta property="article:modified_time" content="2026-06-09T02:21:40.267Z">
 <meta property="article:author" content="冉丝堂">
 <meta property="article:tag" content="AI">
 <meta property="article:tag" content="Fine-tuning">
@@ -132,7 +132,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%E4%B8%8E%E5%AE%9A%E5%88%B6%E5%8C%96"><span class="nav-text">模型微调与定制化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E6%96%87%E4%B8%BB%E8%A6%81%E4%BB%8B%E7%BB%8D"><span class="nav-text">本文主要介绍</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9A%E4%BD%8D"><span class="nav-text">一、模型微调的基本概念与定位</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E5%9E%8B%E5%BE%AE%E8%B0%83"><span class="nav-text">1. 什么是模型微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%BE%AE%E8%B0%83"><span class="nav-text">2. 为什么需要微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BE%AE%E8%B0%83%E4%B8%8E-Prompt-%E5%B7%A5%E7%A8%8B%E3%80%81RAG-%E7%9A%84%E4%B8%89%E8%80%85%E5%85%B3%E7%B3%BB"><span class="nav-text">3. 微调与 Prompt 工程、RAG 的三者关系</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%BE%AE%E8%B0%83%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E6%96%B9%E6%B3%95"><span class="nav-text">二、微调的核心技术方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%85%A8%E5%8F%82%E6%95%B0%E5%BE%AE%E8%B0%83%EF%BC%88Full-Fine-tuning%EF%BC%89"><span class="nav-text">1. 全参数微调（Full Fine-tuning）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83%EF%BC%88PEFT%EF%BC%89"><span class="nav-text">2. 参数高效微调（PEFT）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-LoRA%EF%BC%88Low-Rank-Adaptation%EF%BC%89"><span class="nav-text">2.1 LoRA（Low-Rank Adaptation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-QLoRA%EF%BC%88Quantized-LoRA%EF%BC%89"><span class="nav-text">2.2 QLoRA（Quantized LoRA）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%85%B6%E4%BB%96-PEFT-%E6%96%B9%E6%B3%95%E7%AE%80%E4%BB%8B"><span class="nav-text">2.3 其他 PEFT 方法简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F%EF%BC%88Knowledge-Distillation%EF%BC%89"><span class="nav-text">3. 模型蒸馏（Knowledge Distillation）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%BE%AE%E8%B0%83%E7%9A%84%E5%AE%8C%E6%95%B4%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">三、微调的完整工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87"><span class="nav-text">1. 数据准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%BE%AE%E8%B0%83%E6%95%B0%E6%8D%AE%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="nav-text">1.1 微调数据的格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%95%B0%E6%8D%AE%E8%B4%A8%E9%87%8F%E8%A6%81%E6%B1%82"><span class="nav-text">1.2 数据质量要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87%E6%B5%81%E7%A8%8B"><span class="nav-text">1.3 数据准备流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AE%AD%E7%BB%83%E6%A1%86%E6%9E%B6%E4%B8%8E%E5%B7%A5%E5%85%B7"><span class="nav-text">2. 训练框架与工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%AE%AD%E7%BB%83%E8%B6%85%E5%8F%82%E6%95%B0%EF%BC%88Hyperparameters%EF%BC%89%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5"><span class="nav-text">3. 训练超参数（Hyperparameters）关键概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%95%88%E6%9E%9C%E8%AF%84%E4%BC%B0"><span class="nav-text">4. 效果评估</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%BE%AE%E8%B0%83%E5%90%8E%E7%9A%84%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2"><span class="nav-text">四、微调后的模型部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%EF%BC%88Model-Registry%EF%BC%89"><span class="nav-text">1. 模型注册中心（Model Registry）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1%EF%BC%88Model-Serving%EF%BC%89"><span class="nav-text">2. 模型部署服务（Model Serving）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8%E5%88%87%E6%8D%A2%E7%AD%96%E7%95%A5"><span class="nav-text">3. 模型调用切换策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-A-B-%E6%B5%81%E9%87%8F%E5%88%86%E5%89%B2"><span class="nav-text">3.1 A&#x2F;B 流量分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B"><span class="nav-text">3.2 灰度发布流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%9B%9E%E6%BB%9A%E7%AD%96%E7%95%A5"><span class="nav-text">3.3 回滚策略</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%BE%AE%E8%B0%83%E5%9C%A8%E5%85%B8%E5%9E%8B%E5%9C%BA%E6%99%AF%E4%B8%AD%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5"><span class="nav-text">五、微调在典型场景中的工程实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9C%BA%E6%99%AF%E5%86%B3%E7%AD%96%EF%BC%9A%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BA%94%E8%AF%A5%E5%BE%AE%E8%B0%83"><span class="nav-text">1. 场景决策：什么时候应该微调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BE%AE%E8%B0%83%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%E7%AD%96%E7%95%A5"><span class="nav-text">2. 微调数据生成策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%88%A9%E7%94%A8%E5%BC%BA%E6%A8%A1%E5%9E%8B%E7%94%9F%E6%88%90%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE"><span class="nav-text">2.1 利用强模型生成训练数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E4%BB%8E%E7%94%9F%E4%BA%A7%E6%97%A5%E5%BF%97%E4%B8%AD%E6%8C%96%E6%8E%98%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE"><span class="nav-text">2.2 从生产日志中挖掘训练数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%8A%80%E6%9C%AF"><span class="nav-text">2.3 数据增强技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%9F%BA%E5%BA%A7%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B"><span class="nav-text">3. 基座模型选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E7%9B%91%E6%8E%A7"><span class="nav-text">4. 训练过程中的监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%BE%AE%E8%B0%83-vs-RAG-vs-Prompt-%E5%B7%A5%E7%A8%8B%EF%BC%9A%E7%BB%88%E6%9E%81%E5%86%B3%E7%AD%96%E6%8C%87%E5%8D%97"><span class="nav-text">六、微调 vs RAG vs Prompt 工程：终极决策指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%9E%81%E5%86%B3%E7%AD%96%E7%9F%A9%E9%98%B5"><span class="nav-text">终极决策矩阵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%9C%9F%E5%AE%9E%E7%9A%84%E6%B8%90%E8%BF%9B%E5%BC%8F%E8%B7%AF%E5%BE%84"><span class="nav-text">一个真实的渐进式路径</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81Java-%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%9A%84%E5%BE%AE%E8%B0%83%E4%B8%8E%E6%A8%A1%E5%9E%8B%E5%AE%9A%E5%88%B6%E5%8C%96%E5%AE%9E%E6%88%98%E8%A6%81%E7%82%B9"><span class="nav-text">七、Java 后端工程师的微调与模型定制化实战要点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9F%A5%E9%81%93%E7%9A%84%E5%BE%AE%E8%B0%83%E2%80%9D%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA%E2%80%9D"><span class="nav-text">1. 你需要知道的微调”触发时机”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%8E%E7%AB%AF%E7%B3%BB%E7%BB%9F%E4%B8%AD%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8%E7%9A%84%E5%B7%A5%E7%A8%8B%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 后端系统中模型调用的工程架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%A4%9A%E6%A8%A1%E5%9E%8B%E7%AE%A1%E7%90%86%E7%9A%84%E5%85%B3%E9%94%AE%E8%AE%BE%E8%AE%A1"><span class="nav-text">3. 多模型管理的关键设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%BE%AE%E8%B0%83%E7%9A%84%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87%E2%80%94%E2%80%94%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E5%8F%AF%E4%BB%A5%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">4. 微调的数据准备——后端工程师可以做什么</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -218,7 +218,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-06 16:34:18" itemprop="dateModified" datetime="2026-06-06T16:34:18+08:00">2026-06-06</time>
+      <time title="修改时间：2026-06-09 10:21:40" itemprop="dateModified" datetime="2026-06-09T10:21:40+08:00">2026-06-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -239,13 +239,808 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="模型微调与定制化"><a href="#模型微调与定制化" class="headerlink" title="模型微调与定制化"></a>模型微调与定制化</h1><h2 id="本文主要介绍"><a href="#本文主要介绍" class="headerlink" title="本文主要介绍"></a>本文主要介绍</h2><ul>
-<li>模型微调的基本概念</li>
-<li>微调与 RAG 的区别</li>
-<li>SFT、LoRA、QLoRA、模型蒸馏等常见概念</li>
-<li>什么场景适合微调，什么场景更适合 RAG 或 Prompt 工程</li>
-<li>Java 后端工程师需要了解的模型定制化边界（数据准备、微调触发时机、模型上线流程）</li>
-<li>微调后模型的部署方式与调用切换策略（模型注册中心、A&#x2F;B流量切换、灰度发布）</li>
+    <div class="post-body" itemprop="articleBody"><h1 id="一、模型微调的基本概念与定位"><a href="#一、模型微调的基本概念与定位" class="headerlink" title="一、模型微调的基本概念与定位"></a>一、模型微调的基本概念与定位</h1><h2 id="1-什么是模型微调"><a href="#1-什么是模型微调" class="headerlink" title="1. 什么是模型微调"></a>1. 什么是模型微调</h2><p>模型微调（Fine-tuning）是指在预训练好的大语言模型（基座模型）基础上，使用特定领域的数据对模型进行额外训练，使其更好地适应特定任务、领域知识或输出风格的过程。</p>
+<p>用一个类比来理解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">基座模型（Base Model）          微调后模型（Fine-tuned Model）</span><br><span class="line">        │                              │</span><br><span class="line">  &quot;一个博学通才的大学毕业生&quot;    →    &quot;一个经过岗前培训、熟悉公司业务的正式员工&quot;</span><br><span class="line">        │                              │</span><br><span class="line">  知识面广但缺乏针对性            在通用能力基础上获得了特定领域的专业能力</span><br></pre></td></tr></table></figure>
+
+<p>基座模型（如 GPT-4o、Qwen、Llama）用海量互联网数据训练，掌握了通用语言能力、常识推理和广泛的知识面。但它不知道你公司的内部业务规则、不了解你的产品文档、不会按照你团队的特定格式输出。微调的目标就是补齐这一块——在通用能力之上叠加特定领域的知识和行为模式。</p>
+<p>从技术角度看，微调的本质是<strong>在预训练权重的基础上，进行第二阶段的训练</strong>——通常使用比预训练小几个数量级的数据集，以较小的学习率（Learning Rate）对模型参数进行更新。因为基座模型已经学到了通用的语言表征，微调阶段只需要”教”它特定的新知识或新行为，而不需要从头学语言。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">预训练（Pre-training）                    微调（Fine-tuning）</span><br><span class="line">        │                                       │</span><br><span class="line">  数据量：数万亿 Token                        数据量：数千 ~ 数百万条样本</span><br><span class="line">  目标：学习语言、常识、推理                     目标：学习特定任务、领域、格式</span><br><span class="line">  耗时：数周 ~ 数月                            耗时：数小时 ~ 数天</span><br><span class="line">  成本：数百万 ~ 数千万美元                     成本：数十 ~ 数万美元</span><br><span class="line">  输出：通用基座模型                           输出：领域/任务专用模型</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-为什么需要微调"><a href="#2-为什么需要微调" class="headerlink" title="2. 为什么需要微调"></a>2. 为什么需要微调</h2><p>通用 LLM 在很多任务上已经表现不错，但在以下情况下会暴露明显短板：</p>
+<p><strong>（1）领域知识缺失</strong></p>
+<p>公司内部的业务逻辑、私有 API 文档、内部系统间的交互规则——这些信息不在通用模型的训练数据中。虽然可以通过 RAG 注入（检索相关文档放入 Prompt），但当领域知识量巨大或推理链条很长时，RAG 的方式会受到上下文窗口限制，且每次请求都要额外消耗 Token 进行检索和阅读。</p>
+<p><strong>（2）输出格式不稳定</strong></p>
+<p>通用模型擅长生成自然语言，但对于严格的输出格式要求（如特定 JSON Schema、固定字段的代码生成、符合公司规范的配置模板），即使通过 Prompt 约束，也可能偶尔”跑偏”。微调可以让模型”内化”格式要求，大幅提升格式遵守率。</p>
+<p><strong>（3）特定风格&#x2F;语气</strong></p>
+<p>法律文书需要严谨客观，客服回复需要热情亲切，技术文档需要简洁准确——这些风格特征通过 Prompt 描述可以部分实现，但微调能让模型”从骨子里”掌握这些风格，不需要每次都浪费 Token 在 Prompt 中描述风格。</p>
+<p><strong>（4）复杂推理模式</strong></p>
+<p>某些专业领域有特定的推理逻辑——如医疗诊断路径、法律判例适用、金融风控决策树。这些推理模式通过 Prompt 引导效果有限，通过微调可以固化为模型的”思维习惯”。</p>
+<p><strong>（5）降低延迟与成本</strong></p>
+<p>如果用一个超大通用模型（如 GPT-4o）通过复杂的系统 Prompt 和多轮对话来实现一个任务，每次调用消耗大量 Token。微调后可以换用更小的模型（如 Qwen-7B），在保持效果的同时大幅降低成本。</p>
+<h2 id="3-微调与-Prompt-工程、RAG-的三者关系"><a href="#3-微调与-Prompt-工程、RAG-的三者关系" class="headerlink" title="3. 微调与 Prompt 工程、RAG 的三者关系"></a>3. 微调与 Prompt 工程、RAG 的三者关系</h2><p>在 AI 应用开发中，Prompt 工程、RAG 和微调是三种不同的”知识注入”和”行为控制”手段，它们不是三选一的互斥关系，而是从轻到重的渐进关系：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">                  成本与复杂度递增</span><br><span class="line">  ┌──────────────────────────────────────────────────→</span><br><span class="line">  │</span><br><span class="line">  Prompt 工程          RAG              微调（Fine-tuning）</span><br><span class="line">  │                    │                      │</span><br><span class="line">  修改输入文本          注入外部知识            修改模型参数</span><br><span class="line">  零成本、即时生效     低成本、分钟级更新      高成本、小时~天级更新</span><br><span class="line">  控制力有限            控制力中等             控制力强</span><br><span class="line">  │                    │                      │</span><br><span class="line">  ▼                    ▼                      ▼</span><br><span class="line">&quot;我们应该用哪种策略？&quot;</span><br><span class="line"></span><br><span class="line">答案：先用 Prompt 工程，不够再加 RAG，还不够再考虑微调。</span><br><span class="line">三者可以叠加使用：微调模型 + RAG + 精心设计的 Prompt。</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Prompt 工程</th>
+<th>RAG</th>
+<th>微调</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>原理</strong></td>
+<td>修改输入文本，引导模型行为</td>
+<td>检索外部知识，注入 Prompt</td>
+<td>修改模型参数，内化知识&#x2F;行为</td>
+</tr>
+<tr>
+<td><strong>知识来源</strong></td>
+<td>无新增知识</td>
+<td>外部知识库</td>
+<td>训练数据集</td>
+</tr>
+<tr>
+<td><strong>生效速度</strong></td>
+<td>即时</td>
+<td>即时（修改知识库立即生效）</td>
+<td>慢（需要训练）</td>
+</tr>
+<tr>
+<td><strong>成本</strong></td>
+<td>几乎为零</td>
+<td>低~中（检索 + embedding 存储）</td>
+<td>高（GPU 训练成本）</td>
+</tr>
+<tr>
+<td><strong>适配范围</strong></td>
+<td>单次对话级</td>
+<td>知识查询级</td>
+<td>模型行为级</td>
+</tr>
+<tr>
+<td><strong>可逆性</strong></td>
+<td>完全可逆</td>
+<td>完全可逆</td>
+<td>不可逆（或需要保留基座模型备份）</td>
+</tr>
+<tr>
+<td><strong>控制粒度</strong></td>
+<td>粗</td>
+<td>中</td>
+<td>细</td>
+</tr>
+<tr>
+<td><strong>典型场景</strong></td>
+<td>角色设定、任务描述</td>
+<td>企业内部 QA、文档问答</td>
+<td>特定风格写作、格式输出、复杂推理</td>
+</tr>
+</tbody></table>
+<p><strong>决策框架</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">你的核心需求是什么？</span><br><span class="line">        │</span><br><span class="line">        ├─→ 控制模型这次怎么回答 ──→ Prompt 工程就够了</span><br><span class="line">        │</span><br><span class="line">        ├─→ 让模型知道最新/私有的事实信息 ──→ RAG</span><br><span class="line">        │</span><br><span class="line">        ├─→ 让模型学会特定的&quot;做事方式&quot;（风格、格式、推理模式） ──→ 微调</span><br><span class="line">        │</span><br><span class="line">        └─→ 既要最新事实，又要特定做事方式 ──→ 微调 + RAG 组合</span><br></pre></td></tr></table></figure>
+
+<p>一个关键认知：<strong>微调解决的是”怎么做”（How to do），RAG 解决的是”知道什么”（What to know），Prompt 工程解决的是”这次要什么”（What to ask for）</strong>。三者是不同层面的工具，不应混为一谈。</p>
+<hr>
+<h1 id="二、微调的核心技术方法"><a href="#二、微调的核心技术方法" class="headerlink" title="二、微调的核心技术方法"></a>二、微调的核心技术方法</h1><h2 id="1-全参数微调（Full-Fine-tuning）"><a href="#1-全参数微调（Full-Fine-tuning）" class="headerlink" title="1. 全参数微调（Full Fine-tuning）"></a>1. 全参数微调（Full Fine-tuning）</h2><p>全参数微调（Full Fine-tuning，也称为 SFT - Supervised Fine-Tuning）是最经典、最直接的微调方式。它的做法是：<strong>使用标注好的”输入-输出”数据集，更新模型的所有参数</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">全参数微调流程：</span><br><span class="line"></span><br><span class="line">┌─────────────────┐     ┌──────────────────┐     ┌──────────────────┐</span><br><span class="line">│ 训练数据准备     │     │ 前向传播 + 反向传播 │     │ 模型更新         │</span><br><span class="line">│                 │     │                  │     │                  │</span><br><span class="line">│ &#123;&quot;instruction&quot;: │     │  input → model   │     │  更新所有层      │</span><br><span class="line">│  &quot;将以下中文翻译  │ ──→ │  → output        │ ──→ │  的所有参数       │</span><br><span class="line">│   为英文：你好&quot;,  │     │  → loss(预测,标注)│     │  θ ← θ - lr·∇L  │</span><br><span class="line">│  &quot;output&quot;:      │     │  → ∇L 反向传播    │     │                  │</span><br><span class="line">│  &quot;Hello&quot;&#125;       │     │                  │     │                  │</span><br><span class="line">└─────────────────┘     └──────────────────┘     └──────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>全参数微调的优势是效果好——所有参数都可以针对目标任务进行优化，理论上能达到该模型能力的天花板。但代价同样明显：</p>
+<ul>
+<li><strong>GPU 显存需求巨大</strong>：训练一个 7B 参数的模型，使用 FP32 需要约 28GB 显存存储参数，加上优化器状态（AdamW 需要额外 2 倍参数量的显存 &#x3D; 56GB）、梯度（1 倍 &#x3D; 28GB）、激活值等，总计约 120GB+。即使是 7B 的小模型，全参数微调也需要多张 A100（80GB）才能跑起来</li>
+<li><strong>训练成本高</strong>：数据量大时训练时间长，GPU 租赁费用不菲</li>
+<li><strong>灾难性遗忘风险</strong>：如果训练数据过于集中或训练轮次过多，模型可能”忘记”在预训练阶段学到的通用能力</li>
+<li><strong>部署成本高</strong>：每个微调任务产出一个完整的模型副本，存储和管理多个微调版本的成本线性增长</li>
+</ul>
+<p>全参数微调适用于数据量充足（数万条以上）、对效果要求极高的场景，且通常由专业的 AI 团队或平台来执行。</p>
+<h2 id="2-参数高效微调（PEFT）"><a href="#2-参数高效微调（PEFT）" class="headerlink" title="2. 参数高效微调（PEFT）"></a>2. 参数高效微调（PEFT）</h2><p>全参数微调的成本太高，催生了 PEFT（Parameter-Efficient Fine-Tuning，参数高效微调）的一系列方法。PEFT 的核心思想是：<strong>不修改基座模型的大部分参数，只训练极少量的额外参数或修改少量参数，达到接近全参数微调的效果</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">全参数微调 vs PEFT 的参数量对比：</span><br><span class="line"></span><br><span class="line">全参数微调：        ████████████████████████████████   100% 参数更新（7B = 7000M 参数）</span><br><span class="line">                                                      </span><br><span class="line">PEFT（如 LoRA）：   ██                                  0.1%~1% 参数更新（7B = 7~70M 参数）</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-LoRA（Low-Rank-Adaptation）"><a href="#2-1-LoRA（Low-Rank-Adaptation）" class="headerlink" title="2.1 LoRA（Low-Rank Adaptation）"></a>2.1 LoRA（Low-Rank Adaptation）</h3><p>LoRA 是当前最流行、最实用的 PEFT 方法。它的核心原理基于一个关键发现：<strong>模型微调时的参数更新矩阵（ΔW）具有低秩（Low-Rank）特性</strong>——也就是说，参数的变化可以用两个小矩阵的乘积来表示。</p>
+<p><strong>LoRA 的核心原理</strong>：</p>
+<p>对于模型中需要微调的权重矩阵 W（维度为 d × k），LoRA 不直接修改 W，而是在其旁边添加一个旁路（adapter），用两个小矩阵 A 和 B 的乘积来近似表示参数更新：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">传统前向传播：  h = W·x</span><br><span class="line"></span><br><span class="line">LoRA 前向传播： h = W·x + B·A·x</span><br><span class="line">                      ↑</span><br><span class="line">                  基座参数冻结    ↑</span><br><span class="line">                              LoRA 旁路（可训练）</span><br><span class="line">                              </span><br><span class="line">    </span><br><span class="line">其中：W ∈ R^(d×k)， A ∈ R^(r×k)， B ∈ R^(d×r)</span><br><span class="line">r 为秩（rank），通常取 8 ~ 64，远小于 d 和 k</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数量对比</strong>：以 Qwen-7B 为例，假设在 Attention 的 Q、K、V 投影层加 LoRA（r&#x3D;16），需要训练的参数约为 15M（1500 万），只占全参数量 7B（70 亿）的 ~0.2%。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">┌───────────────────────────────────────────────────────────────┐</span><br><span class="line">│                      LoRA 工作原理                            │</span><br><span class="line">│                                                               │</span><br><span class="line">│                      输入 x                                   │</span><br><span class="line">│                        │                                      │</span><br><span class="line">│                        ├──────────┬─────────────┐             │</span><br><span class="line">│                        ▼          ▼             ▼             │</span><br><span class="line">│                   ┌─────────┐  ┌─────────┐  ┌─────────┐      │</span><br><span class="line">│                   │W（冻结）│  │W（冻结） │  │W（冻结） │      │</span><br><span class="line">│                   │不需要梯度│  │不需要梯度 │  │不需要梯度 │      │</span><br><span class="line">│                   └────┬────┘  └────┬────┘  └────┬────┘      │</span><br><span class="line">│                        │            │            │            │</span><br><span class="line">│                        │      ┌─────▼─────┐      │            │</span><br><span class="line">│                        │      │A (r×k)   │      │            │</span><br><span class="line">│                        │      │  可训练    │      │            │</span><br><span class="line">│                        │      └─────┬─────┘      │            │</span><br><span class="line">│                        │            │            │            │</span><br><span class="line">│                        │      ┌─────▼─────┐      │            │</span><br><span class="line">│                        │      │B (d×r)   │      │            │</span><br><span class="line">│                        │      │  可训练    │      │            │</span><br><span class="line">│                        │      └─────┬─────┘      │            │</span><br><span class="line">│                        │            │            │            │</span><br><span class="line">│                        ▼            ▼            ▼            │</span><br><span class="line">│                        └────────────┼────────────┘            │</span><br><span class="line">│                                     ▼                        │</span><br><span class="line">│                              输出 h（相加）                    │</span><br><span class="line">│                                                               │</span><br><span class="line">│  LoRA 的关键参数：                                            │</span><br><span class="line">│  - r（秩）：控制可训练参数量，r 越大模型表达能力越强               │</span><br><span class="line">│  - α（缩放因子）：控制 LoRA 增量对原始输出的影响程度              │</span><br><span class="line">│  - target_modules：在哪些层添加 LoRA（通常选 Attention 层）     │</span><br><span class="line">└───────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>LoRA 的优势</strong>：</p>
+<ul>
+<li><strong>显存占用极低</strong>：以 Qwen-7B + LoRA（r&#x3D;16）为例，4-bit 量化后基座仅需约 5GB 显存，加上 LoRA 参数和训练状态，单张 RTX 4090（24GB）即可训练</li>
+<li><strong>训练速度快</strong>：可训练参数少，前向和反向传播的计算量大幅减少</li>
+<li><strong>无推理延迟增加</strong>：训练完成后，可以将 LoRA 参数合并（merge）到基座模型权重中（W’ &#x3D; W + B·A），推理时与原始模型完全一致，无额外计算开销</li>
+<li><strong>多任务复用</strong>：一个基座模型可以挂载多个 LoRA 适配器，不同任务使用不同的 LoRA 权重，在推理时动态切换</li>
+</ul>
+<p><strong>LoRA 的局限性</strong>：</p>
+<ul>
+<li>理论上表达能力略弱于全参数微调（但在绝大多数实际场景差异不大）</li>
+<li>对需要学习全新知识（不在预训练语料中的概念）的场景效果可能不如全参数微调</li>
+</ul>
+<h3 id="2-2-QLoRA（Quantized-LoRA）"><a href="#2-2-QLoRA（Quantized-LoRA）" class="headerlink" title="2.2 QLoRA（Quantized LoRA）"></a>2.2 QLoRA（Quantized LoRA）</h3><p>QLoRA 是 LoRA 的”省显存进阶版”。它在 LoRA 的基础上增加了两个关键技术：</p>
+<p><strong>（1）4-bit NormalFloat（NF4）量化</strong></p>
+<p>将基座模型的权重从 16 位浮点数（FP16&#x2F;BF16，每个参数占 2 字节）量化到 4 位（每个参数占 0.5 字节），模型加载时的显存占用降为原来的 1&#x2F;4。NF4 是一种针对正态分布权重优化的量化格式，信息损失比普通 4-bit 量化更小。</p>
+<p><strong>（2）双重量化（Double Quantization）</strong></p>
+<p>量化过程中产生的额外参数（缩放因子等）本身也被压缩量化，进一步节省 ~0.4 bit&#x2F;参数的显存。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">显存占用对比（以 Llama-2-7B 为例）：</span><br><span class="line"></span><br><span class="line">全参数微调（BF16）：     ████████████████████████████████████  ~120 GB（需要多卡）</span><br><span class="line">LoRA（BF16）：           ██████████████████                    ~28 GB（单张 A100）</span><br><span class="line">QLoRA（NF4）：           ██████                                ~9 GB（单张 RTX 3090）</span><br></pre></td></tr></table></figure>
+
+<p><strong>QLoRA 的意义</strong>：它将微调的门槛从”需要一张或多张 A100（$1.5+&#x2F;小时每张）”降低到”一台高端消费级游戏显卡（RTX 3090&#x2F;4090）即可训练”，极大地降低了个人和小团队的微调成本。你甚至可以用一张 RTX 4090（24GB）微调 30B+ 参数的模型。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">QLoRA 技术栈层次：</span><br><span class="line"></span><br><span class="line">┌─────────────────────────────────────────┐</span><br><span class="line">│              LoRA 适配器（可训练）         │  ← 少量参数，FP16 精度</span><br><span class="line">├─────────────────────────────────────────┤</span><br><span class="line">│           4-bit NormalFloat 量化权重      │  ← 基座模型，冻结</span><br><span class="line">│           + 双重量化压缩                   │</span><br><span class="line">├─────────────────────────────────────────┤</span><br><span class="line">│            分页优化器状态                  │  ← 当显存不够时，将优化器状态</span><br><span class="line">│            (Paged Optimizers)             │     自动换出到 CPU 内存</span><br><span class="line">└─────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-其他-PEFT-方法简介"><a href="#2-3-其他-PEFT-方法简介" class="headerlink" title="2.3 其他 PEFT 方法简介"></a>2.3 其他 PEFT 方法简介</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>原理</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Adapter</strong></td>
+<td>在 Transformer 层之间插入小型网络层</td>
+<td>最早期的 PEFT 方法，会增加推理延迟</td>
+<td>已被 LoRA 基本替代</td>
+</tr>
+<tr>
+<td><strong>Prefix Tuning</strong></td>
+<td>在输入前添加可学习的虚拟 Token（prefix）</td>
+<td>只修改输入层，参数极少</td>
+<td>适合轻量级任务适配</td>
+</tr>
+<tr>
+<td><strong>P-Tuning v2</strong></td>
+<td>在每层都添加可学习的虚拟 Token</td>
+<td>比 Prefix Tuning 效果好，接近 LoRA</td>
+<td>中文 NLP 领域常用</td>
+</tr>
+<tr>
+<td><strong>IA³</strong></td>
+<td>对激活值做元素级的可学习缩放</td>
+<td>极简 PEFT，参数量仅为 LoRA 的 1&#x2F;10</td>
+<td>资源极度受限的场景</td>
+</tr>
+</tbody></table>
+<p>在当前实践中，<strong>LoRA &#x2F; QLoRA 是微调的主流选择</strong>，大多数团队不需要关注其他方法，除非有非常特殊的资源约束或工程要求。</p>
+<h2 id="3-模型蒸馏（Knowledge-Distillation）"><a href="#3-模型蒸馏（Knowledge-Distillation）" class="headerlink" title="3. 模型蒸馏（Knowledge Distillation）"></a>3. 模型蒸馏（Knowledge Distillation）</h2><p>模型蒸馏是与微调不同的另一种模型定制方式。它的核心思想是：<strong>用一个”大模型”（教师模型，Teacher）的输出去训练一个”小模型”（学生模型，Student），让小模型学会大模型的推理能力</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">模型蒸馏流程：</span><br><span class="line"></span><br><span class="line">  ┌─────────────────────┐</span><br><span class="line">  │   教师模型（Teacher） │   大模型（如 GPT-4o、Claude Opus）</span><br><span class="line">  │   参数量：数百B~数千B  │   能力强、成本高、速度慢</span><br><span class="line">  └──────────┬──────────┘</span><br><span class="line">             │</span><br><span class="line">             │ 1. 把训练数据发给教师模型</span><br><span class="line">             │ 2. 教师模型生成高质量的&quot;标注&quot;（输出 + 概率分布）</span><br><span class="line">             │</span><br><span class="line">             ▼</span><br><span class="line">  ┌─────────────────────┐</span><br><span class="line">  │   训练学生模型        │   小模型（如 Qwen-7B、Llama-8B）</span><br><span class="line">  │   参数量：数B~数十B   │   用教师模型的输出作为训练目标</span><br><span class="line">  └──────────┬──────────┘</span><br><span class="line">             │</span><br><span class="line">             ▼</span><br><span class="line">  ┌─────────────────────┐</span><br><span class="line">  │   学生模型（Student） │   继承了教师模型的推理能力</span><br><span class="line">  │                      │   同时兼具小模型的低延迟、低成本优势</span><br><span class="line">  └─────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>蒸馏的核心技术点</strong>：</p>
+<ul>
+<li><strong>软标签（Soft Labels）</strong>：不只是用教师模型最终输出的 Token，而是使用 Teacher 对每个 Token 的概率分布（logits）作为训练信号。这个概率分布包含了教师模型的”不确定判断”——哪些选项接近但次优、哪些选项完全错误——这是比硬标签丰富得多的训练信号</li>
+<li><strong>温度（Temperature）</strong>：在蒸馏时通常使用较高的 Temperature（如 T&#x3D;2~4），将概率分布”软化”，让学生模型学到更细致的决策边界</li>
+<li><strong>数据增强</strong>：蒸馏通常使用大量未标注数据，由教师模型自动生成标签</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th>模型微调</th>
+<th>模型蒸馏</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>目标</strong></td>
+<td>让模型学会特定任务&#x2F;领域</td>
+<td>让大模型的能力迁移到小模型</td>
+</tr>
+<tr>
+<td><strong>训练数据</strong></td>
+<td>人工标注或自动生成的”输入-输出”对</td>
+<td>教师模型输出的概率分布</td>
+</tr>
+<tr>
+<td><strong>模型变化</strong></td>
+<td>基座模型体重调整</td>
+<td>产出全新的小模型</td>
+</tr>
+<tr>
+<td><strong>核心收益</strong></td>
+<td>提升特定任务的效果</td>
+<td>在保持能力的前提下降低模型体积和成本</td>
+</tr>
+<tr>
+<td><strong>典型场景</strong></td>
+<td>企业内部领域适配</td>
+<td>将 GPT-4o 能力蒸馏到开源 7B 模型</td>
+</tr>
+</tbody></table>
+<p>蒸馏和微调可以组合使用：例如先用 GPT-4o 生成高质量微调数据，再用这些数据去微调 Qwen-7B，这本质上就是一种蒸馏思路；或者先在一组任务上做全参数微调得到一个好模型，再蒸馏到更小的模型实现降本。</p>
+<hr>
+<h1 id="三、微调的完整工作流"><a href="#三、微调的完整工作流" class="headerlink" title="三、微调的完整工作流"></a>三、微调的完整工作流</h1><p>微调不只是”跑训练脚本”——它是一个完整的工程流程，涉及数据准备、训练执行、效果评估、模型部署等多个环节。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">微调完整工作流：</span><br><span class="line"></span><br><span class="line">1. 需求分析       2. 数据准备         3. 训练配置         4. 训练执行</span><br><span class="line">   │                │                  │                  │</span><br><span class="line">   ▼                ▼                  ▼                  ▼</span><br><span class="line">┌──────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐</span><br><span class="line">│ 明确微调  │  │ 收集+清洗+   │  │ 选择微调方法  │  │ 启动训练任务  │</span><br><span class="line">│ 的目标   │→ │ 标注训练数据  │→ │ 设置超参数    │→ │ 监控 loss     │</span><br><span class="line">│ 指标     │  │ 划分train/   │  │ LoRA r=?     │  │ 保存 checkpoint│</span><br><span class="line">│          │  │ val/test集   │  │ lr=? epochs=?│  │               │</span><br><span class="line">└──────────┘  └──────────────┘  └──────────────┘  └──────────────┘</span><br><span class="line">                                                          │</span><br><span class="line">                                                          ▼</span><br><span class="line">5. 评测验收       6. 部署上线       7. 持续迭代</span><br><span class="line">   │                │                  │</span><br><span class="line">   ▼                ▼                  ▼</span><br><span class="line">┌──────────┐  ┌──────────────┐  ┌──────────────┐</span><br><span class="line">│ 在测试集上  │  │ 模型注册+     │  │ 收集 badcase │</span><br><span class="line">│ 评估效果    │→ │ 灰度发布+     │→ │ 补充训练数据  │</span><br><span class="line">│ 对比基座    │  │ A/B 对比      │  │ 重新微调迭代  │</span><br><span class="line">└──────────┘  └──────────────┘  └──────────────┘</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-数据准备"><a href="#1-数据准备" class="headerlink" title="1. 数据准备"></a>1. 数据准备</h2><p>数据是微调中最重要但最容易被低估的环节。业界有句经验之谈：<strong>“高质量的数据比更高级的训练技巧更重要”</strong>。</p>
+<h3 id="1-1-微调数据的格式"><a href="#1-1-微调数据的格式" class="headerlink" title="1.1 微调数据的格式"></a>1.1 微调数据的格式</h3><p>微调数据通常是”指令-回答”对（Instruction-Response Pair），常见格式如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你是一个专业的后端工程师。请根据以下需求生成符合 RESTful 规范的 API 接口定义。\n\n需求：设计一个用户管理模块的 API，包含用户的增删改查功能。使用 Java Spring Boot 框架。&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;以下是用户管理模块的 RESTful API 设计：\n\n## 1. 创建用户\n```java\n@PostMapping(\&quot;/api/users\&quot;)\npublic ResponseEntity&lt;User&gt; createUser(@Valid @RequestBody CreateUserRequest request) &#123;\n    User user = userService.createUser(request);\n    return ResponseEntity.status(HttpStatus.CREATED).body(user);\n&#125;\n```\n...&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意几点：</p>
+<ul>
+<li><code>instruction</code> 应清晰描述任务和约束条件</li>
+<li><code>input</code> 是可选的额外上下文信息</li>
+<li><code>output</code> 是期望模型学习的目标输出</li>
+<li>数据格式需与训练框架（如 LLaMA-Factory、Axolotl）兼容</li>
+</ul>
+<h3 id="1-2-数据质量要求"><a href="#1-2-数据质量要求" class="headerlink" title="1.2 数据质量要求"></a>1.2 数据质量要求</h3><table>
+<thead>
+<tr>
+<th>质量维度</th>
+<th>说明</th>
+<th>常见问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>准确性</strong></td>
+<td>答案必须正确无误</td>
+<td>防止”垃圾进垃圾出”——低质量数据微调出的模型会更差</td>
+</tr>
+<tr>
+<td><strong>一致性</strong></td>
+<td>相同类型问题应有相同格式的回答</td>
+<td>同一问题的两种不同回答会让模型混淆</td>
+</tr>
+<tr>
+<td><strong>多样性</strong></td>
+<td>覆盖各种输入变体，单不重复</td>
+<td>100 条”你好”的变体对训练帮助有限</td>
+</tr>
+<tr>
+<td><strong>代表性</strong></td>
+<td>数据应反映实际使用场景的分布</td>
+<td>训练全是”生成代码”，实际使用时却是”解释代码”</td>
+</tr>
+<tr>
+<td><strong>干净度</strong></td>
+<td>去除 HTML 标签、特殊字符、格式错误</td>
+<td>格式噪音会被模型学去并复现</td>
+</tr>
+</tbody></table>
+<h3 id="1-3-数据准备流程"><a href="#1-3-数据准备流程" class="headerlink" title="1.3 数据准备流程"></a>1.3 数据准备流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">原始数据</span><br><span class="line">    │</span><br><span class="line">    ▼</span><br><span class="line">┌────────────────┐</span><br><span class="line">│ 数据清洗        │  去除无效、重复、格式错误的数据</span><br><span class="line">│ - 去重          │</span><br><span class="line">│ - 格式标准化    │</span><br><span class="line">│ - 去除敏感信息  │</span><br><span class="line">└───────┬────────┘</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">┌────────────────┐</span><br><span class="line">│ 数据标注        │  人工标注或使用强模型（GPT-4o）生成标注</span><br><span class="line">│ - 人工标注：     │  → 质量最高，成本最高</span><br><span class="line">│   领域专家标注  │  → 适合需要极高准确率的场景</span><br><span class="line">│ - 自动标注：     │  → 成本低，但需要人工抽查和修正</span><br><span class="line">│   使用强模型    │</span><br><span class="line">│   生成答案      │</span><br><span class="line">└───────┬────────┘</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">┌────────────────┐</span><br><span class="line">│ 质量审核        │  抽样检查，验证数据准确率和格式一致性</span><br><span class="line">│ - 随机抽样      │  → 建议至少审核 10% 的数据</span><br><span class="line">│ - 自动化检查    │  → 格式验证、长度分布分析、关键字段检查</span><br><span class="line">└───────┬────────┘</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">┌────────────────┐</span><br><span class="line">│ 数据集划分      │  训练集 : 验证集 : 测试集</span><br><span class="line">│ train 80%      │  → 用于更新模型参数</span><br><span class="line">│ val 10%        │  → 用于训练过程中的效果监控和早停</span><br><span class="line">│ test 10%       │  → 用于最终效果评估（不可在训练中使用）</span><br><span class="line">└────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>数据规模参考</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>建议数据量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输出格式微调</td>
+<td>500 ~ 1000 条</td>
+<td>教模型输出特定 JSON Schema 等</td>
+</tr>
+<tr>
+<td>领域风格微调</td>
+<td>1000 ~ 5000 条</td>
+<td>教模型模仿特定写作风格</td>
+</tr>
+<tr>
+<td>知识注入（简单领域）</td>
+<td>5000 ~ 10000 条</td>
+<td>教模型掌握一个新领域的知识</td>
+</tr>
+<tr>
+<td>知识注入（复杂领域）</td>
+<td>10000 ~ 50000+ 条</td>
+<td>如医疗、法律等专业领域</td>
+</tr>
+<tr>
+<td>推理能力迁移</td>
+<td>5000 ~ 20000 条</td>
+<td>教模型掌握特定推理模式（如法律推理）</td>
+</tr>
+</tbody></table>
+<h2 id="2-训练框架与工具"><a href="#2-训练框架与工具" class="headerlink" title="2. 训练框架与工具"></a>2. 训练框架与工具</h2><p>当前主流的微调框架都已高度成熟，对 Java 后端工程师而言，只需了解它们的存在和基础使用方式即可：</p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LLaMA-Factory</strong></td>
+<td>国产最流行框架，Web UI 友好，支持 100+ 模型，LoRA&#x2F;QLoRA&#x2F;全参数微调</td>
+<td>快速上手，中小规模微调</td>
+</tr>
+<tr>
+<td><strong>Axolotl</strong></td>
+<td>配置驱动的微调框架，YAML 配置清晰</td>
+<td>追求可复现、配置即文档的场景</td>
+</tr>
+<tr>
+<td><strong>Unsloth</strong></td>
+<td>极致性能优化，比标准实现快 2-5 倍，显存更省</td>
+<td>消费级显卡微调，追求效率</td>
+</tr>
+<tr>
+<td><strong>Hugging Face TRL</strong></td>
+<td>Hugging Face 官方库，生态最完善</td>
+<td>与 HF 生态深度集成的场景</td>
+</tr>
+<tr>
+<td><strong>Firefly</strong></td>
+<td>中文优化，支持中文大模型微调</td>
+<td>中文场景专属</td>
+</tr>
+</tbody></table>
+<p><strong>LLaMA-Factory 快速示例</strong>（配置方式，Web UI 操作更简单）：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模型配置</span></span><br><span class="line"><span class="attr">model_name_or_path:</span> <span class="string">Qwen/Qwen2.5-7B-Instruct</span></span><br><span class="line"><span class="attr">template:</span> <span class="string">qwen</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 微调方法</span></span><br><span class="line"><span class="attr">finetuning_type:</span> <span class="string">lora</span></span><br><span class="line"><span class="attr">lora_rank:</span> <span class="number">16</span></span><br><span class="line"><span class="attr">lora_alpha:</span> <span class="number">32</span></span><br><span class="line"><span class="attr">lora_target:</span> <span class="string">all</span></span><br><span class="line"><span class="attr">lora_dropout:</span> <span class="number">0.1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练数据</span></span><br><span class="line"><span class="attr">dataset:</span> <span class="string">my_custom_dataset</span></span><br><span class="line"><span class="attr">dataset_dir:</span> <span class="string">data</span></span><br><span class="line"><span class="attr">val_size:</span> <span class="number">0.1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练参数</span></span><br><span class="line"><span class="attr">output_dir:</span> <span class="string">saves/qwen2.5-7b-lora</span></span><br><span class="line"><span class="attr">logging_steps:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">save_steps:</span> <span class="number">500</span></span><br><span class="line"><span class="attr">num_train_epochs:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">per_device_train_batch_size:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">gradient_accumulation_steps:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">learning_rate:</span> <span class="number">5.0e-5</span></span><br><span class="line"><span class="attr">lr_scheduler_type:</span> <span class="string">cosine</span></span><br><span class="line"><span class="attr">warmup_ratio:</span> <span class="number">0.1</span></span><br><span class="line"><span class="attr">bf16:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练方式</span></span><br><span class="line"><span class="attr">do_train:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-训练超参数（Hyperparameters）关键概念"><a href="#3-训练超参数（Hyperparameters）关键概念" class="headerlink" title="3. 训练超参数（Hyperparameters）关键概念"></a>3. 训练超参数（Hyperparameters）关键概念</h2><p>虽然大多数微调框架提供了合理的默认值，但理解这些关键参数有助于在效果不佳时进行调整：</p>
+<table>
+<thead>
+<tr>
+<th>超参数</th>
+<th>含义</th>
+<th>典型值（QLoRA）</th>
+<th>调整建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>learning_rate</strong></td>
+<td>学习率，控制每次参数更新的步长</td>
+<td>1e-4 ~ 5e-5</td>
+<td>过大→不收敛；过小→学习太慢。LoRA 通常比全参数微调用稍大的学习率</td>
+</tr>
+<tr>
+<td><strong>num_train_epochs</strong></td>
+<td>训练轮数</td>
+<td>1 ~ 5</td>
+<td>数据量越大，需要的轮数越少。过拟合表现：val loss 上升而 train loss 下降</td>
+</tr>
+<tr>
+<td><strong>batch_size</strong></td>
+<td>每步训练的样本数</td>
+<td>2 ~ 8（per device）</td>
+<td>受显存限制。配合 gradient_accumulation_steps 模拟更大的 batch</td>
+</tr>
+<tr>
+<td><strong>gradient_accumulation_steps</strong></td>
+<td>梯度累积步数</td>
+<td>2 ~ 8</td>
+<td>有效 batch &#x3D; device_batch × grad_accum_steps × num_gpus。可弥补单卡 batch 太小的问题</td>
+</tr>
+<tr>
+<td><strong>lora_rank (r)</strong></td>
+<td>LoRA 矩阵的秩</td>
+<td>8 ~ 64</td>
+<td>r 越大模型容量越大，但训练越慢。r&#x3D;8 适合简单格式微调，r&#x3D;64 适合复杂知识注入</td>
+</tr>
+<tr>
+<td><strong>lora_alpha</strong></td>
+<td>LoRA 输出的缩放系数</td>
+<td>r × 2</td>
+<td>通常设为 r 的 2 倍。增大 alpha → LoRA 的影响更大</td>
+</tr>
+<tr>
+<td><strong>max_length</strong></td>
+<td>输入序列最大长度（Token 数）</td>
+<td>512 ~ 4096</td>
+<td>取决于任务需求。过长消耗更多显存且训练变慢</td>
+</tr>
+<tr>
+<td><strong>warmup_ratio</strong></td>
+<td>前 N% 步逐步增大学习率</td>
+<td>0.03 ~ 0.1</td>
+<td>防止训练初期的不稳定，稳定收敛</td>
+</tr>
+</tbody></table>
+<p><strong>过拟合的判断</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Loss 曲线分析：</span><br><span class="line"></span><br><span class="line"> loss ↑</span><br><span class="line">  │                                                     </span><br><span class="line">  │   ┌──────────────────────┐                          </span><br><span class="line">  │   │  训练 loss            │  理想：train 和 val 都趋稳                 </span><br><span class="line">  │   └──────────────────────┘                          </span><br><span class="line">  │         ┌──────────────────────────┐                  </span><br><span class="line">  │         │  验证 loss                │                  </span><br><span class="line">  │         └──────────────────────────┘                  </span><br><span class="line">  │                                                     </span><br><span class="line">  └──────────────────────────────────────→ epoch        </span><br><span class="line">                                                      </span><br><span class="line"> loss ↑</span><br><span class="line">  │                                                     </span><br><span class="line">  │   ┌──────────────────────┐                          </span><br><span class="line">  │   │  训练 loss（持续下降）  │  过拟合：train 在降，val 在升                      </span><br><span class="line">  │   └──────────────────────┘                          </span><br><span class="line">  │         ┌──────────────────────────┐                  </span><br><span class="line">  │         │  验证 loss（开始回升）     │    ← 此时应停止训练！          </span><br><span class="line">  │         └──────────────────────────┘                  </span><br><span class="line">  │                                                     </span><br><span class="line">  └──────────────────────────────────────→ epoch        </span><br></pre></td></tr></table></figure>
+
+<h2 id="4-效果评估"><a href="#4-效果评估" class="headerlink" title="4. 效果评估"></a>4. 效果评估</h2><p>微调完成后，需要系统性评估效果，不能仅凭几条人工评测的感受下结论。</p>
+<p><strong>评估维度</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>评估方式</th>
+<th>指标</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>格式遵守率</strong></td>
+<td>自动检查</td>
+<td>输出是否符合预期格式（JSON Schema、Markdown 结构等）</td>
+</tr>
+<tr>
+<td><strong>事实准确率</strong></td>
+<td>人工 + 自动</td>
+<td>回答中关键事实的准确性</td>
+</tr>
+<tr>
+<td><strong>BLEU &#x2F; ROUGE</strong></td>
+<td>自动</td>
+<td>与参考答案的文本相似度（适合翻译、摘要等任务）</td>
+</tr>
+<tr>
+<td><strong>人工评测</strong></td>
+<td>人工对比</td>
+<td>盲测对比基座模型和微调模型的输出质量</td>
+</tr>
+<tr>
+<td><strong>业务指标</strong></td>
+<td>生产环境</td>
+<td>用户满意度、任务完成率、人工干预率</td>
+</tr>
+</tbody></table>
+<p><strong>评估方法</strong>：</p>
+<ol>
+<li><strong>测试集评估</strong>：在划分好的测试集上运行推理，计算各项指标</li>
+<li><strong>A&#x2F;B 对照测试</strong>：同一批输入，对比微调模型 vs 基座模型的输出</li>
+<li><strong>GPT-as-Judge</strong>：使用强模型（如 GPT-4o）对两个模型的回答进行打分和对比</li>
+<li><strong>人工盲测</strong>：让人工评估者在不告知模型身份的情况下，对回答质量打分</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">评估流程：</span><br><span class="line"></span><br><span class="line"> ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐</span><br><span class="line"> │ 测试集推理 │ ──→ │ 自动评估  │ ──→ │ 人工抽检  │ ──→ │ 决策上线  │</span><br><span class="line"> │          │     │ (指标计算)│     │ (质量验证)│     │ /回炉重练  │</span><br><span class="line"> └──────────┘     └──────────┘     └──────────┘     └──────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="四、微调后的模型部署"><a href="#四、微调后的模型部署" class="headerlink" title="四、微调后的模型部署"></a>四、微调后的模型部署</h1><p>微调产出的 LoRA 权重或全参数模型，需要经过部署才能在生产环境中使用。部署有自己的工程挑战：如何管理多个模型版本、如何安全切换流量、如何保证服务不中断。</p>
+<h2 id="1-模型注册中心（Model-Registry）"><a href="#1-模型注册中心（Model-Registry）" class="headerlink" title="1. 模型注册中心（Model Registry）"></a>1. 模型注册中心（Model Registry）</h2><p>在企业环境下，模型注册中心是管理微调后模型的中枢设施。它类似于 Maven 的 Central Repository 或 Docker Registry——开发者或训练平台将微调后模型注册到中心，业务系统从中心拉取模型进行推理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">模型注册中心的作用：</span><br><span class="line"></span><br><span class="line">  ┌──────────────────────────────────────────────────┐</span><br><span class="line">  │                  模型注册中心                      │</span><br><span class="line">  │                                                  │</span><br><span class="line">  │  ┌──────────┐  ┌──────────┐  ┌──────────┐       │</span><br><span class="line">  │  │ Model v1 │  │ Model v2 │  │ Model v3 │       │</span><br><span class="line">  │  │ base:    │  │ base:    │  │ base:    │       │</span><br><span class="line">  │  │ qwen-7b  │  │ qwen-7b  │  │ qwen-14b │       │</span><br><span class="line">  │  ├──────────┤  ├──────────┤  ├──────────┤       │</span><br><span class="line">  │  │ status:  │  │ status:  │  │ status:  │       │</span><br><span class="line">  │  │ staging  │  │ prod     │  │ dev      │       │</span><br><span class="line">  │  ├──────────┤  ├──────────┤  ├──────────┤       │</span><br><span class="line">  │  │ metrics: │  │ metrics: │  │ metrics: │       │</span><br><span class="line">  │  │ acc:0.92 │  │ acc:0.95 │  │ acc:0.93 │       │</span><br><span class="line">  │  └──────────┘  └──────────┘  └──────────┘       │</span><br><span class="line">  │                                                  │</span><br><span class="line">  │  支持的模型格式：                                  │</span><br><span class="line">  │  - Hugging Face 格式（含 config.json）            │</span><br><span class="line">  │  - GGUF / GPTQ 量化格式                           │</span><br><span class="line">  │  - vLLM / TGI 兼容格式                            │</span><br><span class="line">  │  - LoRA adapter 权重（配合基座模型版本）            │</span><br><span class="line">  └──────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>模型注册中心的核心功能</strong>：</p>
+<ul>
+<li><strong>版本管理</strong>：追踪每次微调产出的模型版本（训练时间、数据集、超参数、评估指标等元信息）</li>
+<li><strong>状态标记</strong>：标记模型的可用状态（experimental → staging → production → archived）</li>
+<li><strong>血缘追踪（Lineage）</strong>：记录”基座模型 → 微调数据集 → 微调权重”的完整链路</li>
+<li><strong>访问控制</strong>：控制哪些应用可以调用哪些模型版本</li>
+</ul>
+<h2 id="2-模型部署服务（Model-Serving）"><a href="#2-模型部署服务（Model-Serving）" class="headerlink" title="2. 模型部署服务（Model Serving）"></a>2. 模型部署服务（Model Serving）</h2><p>模型注册中心管理”存”的问题，模型部署服务解决”用”的问题——将模型以一个高性能的推理 API 暴露出来。</p>
+<table>
+<thead>
+<tr>
+<th>部署框架</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>vLLM</strong></td>
+<td>吞吐量极高，PagedAttention 实现高并发推理</td>
+<td>在线服务，对吞吐要求高</td>
+</tr>
+<tr>
+<td><strong>Ollama</strong></td>
+<td>极简部署，一条命令启动模型</td>
+<td>开发测试，小规模使用</td>
+</tr>
+<tr>
+<td><strong>SGLang</strong></td>
+<td>灵活的推理后端，支持结构化输出</td>
+<td>需要高定制化推理逻辑</td>
+</tr>
+<tr>
+<td><strong>Xinference</strong></td>
+<td>国产分布式推理平台，GUI 管理</td>
+<td>企业级多模型管理</td>
+</tr>
+<tr>
+<td><strong>OpenAI 兼容 API</strong></td>
+<td>直接通过 OpenAI 的 Fine-tuning API 部署</td>
+<td>使用 OpenAI 生态，零运维负担</td>
+</tr>
+</tbody></table>
+<p><strong>对于 Java 后端工程师</strong>：大多数情况下你不需要直接管理模型部署——要么使用 AI 平台提供的微调 + 部署一站式服务（如 OpenAI Fine-tuning API、阿里云百炼平台），要么公司内部的 AI 平台团队会提供统一的模型推理服务。你需要关注的是服务的接入方式和流量切换策略。</p>
+<h2 id="3-模型调用切换策略"><a href="#3-模型调用切换策略" class="headerlink" title="3. 模型调用切换策略"></a>3. 模型调用切换策略</h2><p>微调模型上线时，最关键的操作不是”部署模型”，而是”安全地把流量从旧模型切换到新模型”。这需要一套工程化的切换策略：</p>
+<h3 id="3-1-A-B-流量分割"><a href="#3-1-A-B-流量分割" class="headerlink" title="3.1 A&#x2F;B 流量分割"></a>3.1 A&#x2F;B 流量分割</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">A/B 流量切换：</span><br><span class="line"></span><br><span class="line">                    ┌──────────────┐</span><br><span class="line">                    │   负载均衡器   │</span><br><span class="line">                    │  (API Gateway) │</span><br><span class="line">                    └──────┬───────┘</span><br><span class="line">                           │</span><br><span class="line">              ┌────────────┼────────────┐</span><br><span class="line">              │            │            │</span><br><span class="line">              ▼            ▼            ▼</span><br><span class="line">        ┌──────────┐ ┌──────────┐ ┌──────────┐</span><br><span class="line">        │ 模型 A    │ │ 模型 B    │ │ 模型 C    │</span><br><span class="line">        │ (当前线上) │ │ (新微调)   │ │ (备选)    │</span><br><span class="line">        │ 90% 流量  │ │ 5% 流量   │ │ 5% 流量   │</span><br><span class="line">        └──────────┘ └──────────┘ └──────────┘</span><br><span class="line">              │            │            │</span><br><span class="line">              └────────────┼────────────┘</span><br><span class="line">                           │</span><br><span class="line">                    评估效果对比</span><br><span class="line">                    (成功率、满意度、延迟)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Java 后端实现要点</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模型路由器的核心设计思路（简化示例）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ModelRouter</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ModelRegistry registry;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据灰度策略选择目标模型。</span></span><br><span class="line"><span class="comment">     * 策略可以是：固定用户比例、用户 ID 哈希、白名单等</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">selectModel</span><span class="params">(String userId, String taskType)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 检查是否有全量发布的新模型</span></span><br><span class="line">        <span class="type">ModelVersion</span> <span class="variable">fullRelease</span> <span class="operator">=</span> registry.getFullReleaseModel(taskType);</span><br><span class="line">        <span class="keyword">if</span> (fullRelease != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> fullRelease.getEndpoint();</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 灰度发布：按用户 ID 哈希决定走哪个模型</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">hash</span> <span class="operator">=</span> Math.abs(userId.hashCode() % <span class="number">100</span>);</span><br><span class="line">        <span class="type">GrayscaleConfig</span> <span class="variable">config</span> <span class="operator">=</span> registry.getGrayscaleConfig(taskType);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (hash &lt; config.getCanaryPercent()) &#123;</span><br><span class="line">            <span class="keyword">return</span> config.getCanaryModelEndpoint();  <span class="comment">// 金丝雀模型</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3. 默认走稳定版模型</span></span><br><span class="line">        <span class="keyword">return</span> config.getStableModelEndpoint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-灰度发布流程"><a href="#3-2-灰度发布流程" class="headerlink" title="3.2 灰度发布流程"></a>3.2 灰度发布流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">微调模型灰度发布标准流程：</span><br><span class="line"></span><br><span class="line">Step 1: 内部评测通过</span><br><span class="line">  │</span><br><span class="line">  ▼</span><br><span class="line">Step 2: 部署到 Staging 环境，跑自动化评测集</span><br><span class="line">  │  通过条件：评测指标不低于当前线上模型</span><br><span class="line">  │</span><br><span class="line">  ▼</span><br><span class="line">Step 3: 金丝雀发布（Canary Release）</span><br><span class="line">  │  → 1% 流量切到新模型</span><br><span class="line">  │  → 观察 30 分钟：错误率、P99 延迟、业务指标</span><br><span class="line">  │</span><br><span class="line">  ▼</span><br><span class="line">Step 4: 小比例灰度（5% → 10% → 25%）</span><br><span class="line">  │  每个阶段观察 2~4 小时</span><br><span class="line">  │  → 对比新老模型的业务指标（任务成功率、回答好评率）</span><br><span class="line">  │</span><br><span class="line">  ▼</span><br><span class="line">Step 5: 半量验证（50%）</span><br><span class="line">  │  → 观察 24 小时</span><br><span class="line">  │  → 确认无异常</span><br><span class="line">  │</span><br><span class="line">  ▼</span><br><span class="line">Step 6: 全量切换（100%）</span><br><span class="line">  │  → 保留旧模型 7 天作为回滚热备</span><br><span class="line">  │</span><br><span class="line">  ▼</span><br><span class="line">Step 7: 归档旧模型</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-回滚策略"><a href="#3-3-回滚策略" class="headerlink" title="3.3 回滚策略"></a>3.3 回滚策略</h3><p>回滚策略是微调保障的最后一道防线。一个安全的上线方案必然包含明确的回滚条件和操作流程：</p>
+<p><strong>自动回滚触发条件</strong>（建议配置）：</p>
+<ul>
+<li>错误率 &gt; 基线的 2 倍</li>
+<li>P99 延迟 &gt; 基线的 1.5 倍</li>
+<li>空输出率 &gt; 1%</li>
+<li>下游业务关键指标异常</li>
+</ul>
+<p><strong>回滚操作</strong>：</p>
+<ul>
+<li>将流量权重 100% 切回旧模型（通常可以在 API 网关上秒级完成）</li>
+<li>问题模型保留现场以便排查，不要立即删除</li>
+<li>问题修复后重新走灰度流程</li>
+</ul>
+<hr>
+<h1 id="五、微调在典型场景中的工程实践"><a href="#五、微调在典型场景中的工程实践" class="headerlink" title="五、微调在典型场景中的工程实践"></a>五、微调在典型场景中的工程实践</h1><h2 id="1-场景决策：什么时候应该微调"><a href="#1-场景决策：什么时候应该微调" class="headerlink" title="1. 场景决策：什么时候应该微调"></a>1. 场景决策：什么时候应该微调</h2><p>本章节提供一套可操作的决策框架，帮助团队判断在当前阶段是否应该投入微调。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">决策流程图：</span><br><span class="line"></span><br><span class="line">                    你的核心诉求是什么？</span><br><span class="line">                           │</span><br><span class="line">           ┌───────────────┼────────────────┐</span><br><span class="line">           ▼               ▼                ▼</span><br><span class="line">      需要模型          需要模型        需要降低模型</span><br><span class="line">      &quot;知道新知识&quot;      &quot;以特定方式做&quot;   推理成本</span><br><span class="line">           │               │                │</span><br><span class="line">           ▼               ▼                ▼</span><br><span class="line">       知识量大？        可以用         当前模型是否</span><br><span class="line">       更新频繁？       Prompt解决？     太大/太贵？</span><br><span class="line">           │               │                │</span><br><span class="line">    ┌──────┴──────┐   ┌────┴────┐      ┌────┴────┐</span><br><span class="line">    │是   │   否  │   │是│   否  │      │是│   否  │</span><br><span class="line">    ▼     ▼    ▼     ▼  ▼    ▼  ▼      ▼  ▼    ▼  ▼</span><br><span class="line">   RAG  微调  微调   Prompt 微调 Prompt  蒸馏 微调 不需要</span><br><span class="line">                    +RAG              /微调     微调</span><br><span class="line">                                    +蒸馏</span><br></pre></td></tr></table></figure>
+
+<p><strong>适合微调的场景</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>具体示例</th>
+<th>为什么不是 RAG 或 Prompt 工程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>格式化输出</td>
+<td>将自然语言转为特定 JSON Schema、生成固定模板的 YAML 配置</td>
+<td>Prompt 约束不够稳定，尤其是长输出时容易”跑偏”</td>
+</tr>
+<tr>
+<td>代码风格定制</td>
+<td>训练模型统一生成符合公司代码规范的代码</td>
+<td>代码规范条目多（几百条），全放 Prompt 里 Token 不可控且效果不佳</td>
+</tr>
+<tr>
+<td>特定语气&#x2F;人设</td>
+<td>客服机器人需用品牌特有的语气回复</td>
+<td>语气是”感觉”而非规则，Prompt 描述难以精准传达</td>
+</tr>
+<tr>
+<td>领域推理</td>
+<td>法律判例推理、医疗诊断路径</td>
+<td>推理链条复杂，RAG 检索到的信息需要模型”理解”后推理，而非简单引述</td>
+</tr>
+<tr>
+<td>多轮对话模式</td>
+<td>特定的话术流程（如销售话术的阶段推进）</td>
+<td>多轮逻辑复杂，Prompt 控制容易在前一轮被模型遗忘</td>
+</tr>
+<tr>
+<td>降本增效</td>
+<td>用 GPT-4o 大量生成训练数据微调开源 7B 模型，替代 GPT-4o 的部分调用</td>
+<td>微调小模型推理成本是大模型的 1&#x2F;10 ~ 1&#x2F;100</td>
+</tr>
+</tbody></table>
+<p><strong>不适合微调的场景</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>更好的方案</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>知识频繁更新（周级以下）</td>
+<td>RAG</td>
+<td>微调的训练周期跟不上知识更新速度</td>
+</tr>
+<tr>
+<td>需精确还原的事实</td>
+<td>RAG</td>
+<td>微调将知识”模糊化”，不如 RAG 直接引用原文片段准确</td>
+</tr>
+<tr>
+<td>数据量不足（&lt; 200 条）</td>
+<td>Prompt 工程</td>
+<td>数据太少微调效果差，反而可能降低模型原有效果</td>
+</tr>
+<tr>
+<td>需要逐条可解释性</td>
+<td>RAG</td>
+<td>RAG 可溯源到具体文档，微调无法解释”这段知识从哪来的”</td>
+</tr>
+<tr>
+<td>快速试错阶段</td>
+<td>Prompt 工程</td>
+<td>微调周期长，不适合快速迭代探索</td>
+</tr>
+</tbody></table>
+<h2 id="2-微调数据生成策略"><a href="#2-微调数据生成策略" class="headerlink" title="2. 微调数据生成策略"></a>2. 微调数据生成策略</h2><p>在实际工程中，高质量微调数据的获取往往是最困难的环节。以下是几种实用的数据生成策略：</p>
+<h3 id="2-1-利用强模型生成训练数据"><a href="#2-1-利用强模型生成训练数据" class="headerlink" title="2.1 利用强模型生成训练数据"></a>2.1 利用强模型生成训练数据</h3><p>这是当前最常见的策略——用 GPT-4o 或 Claude Opus 等强模型作为”数据标注师”：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">强模型生成微调数据的流程：</span><br><span class="line"></span><br><span class="line">1. 准备种子数据（几十条人工标注的高质量样例）</span><br><span class="line">         │</span><br><span class="line">         ▼</span><br><span class="line">2. 使用强模型（GPT-4o/Claude Opus）根据种子数据生成更多相似样本</span><br><span class="line">   - 在 Prompt 中提供种子样例作为格式和质量的参考</span><br><span class="line">   - 要求强模型进行变体生成（换表述、换场景、换参数）</span><br><span class="line">         │</span><br><span class="line">         ▼</span><br><span class="line">3. 人工抽检 + 自动过滤</span><br><span class="line">   - 人工审核 10%~20% 的生成数据</span><br><span class="line">   - 自动过滤掉格式异常、长度异常、包含敏感词的数据</span><br><span class="line">         │</span><br><span class="line">         ▼</span><br><span class="line">4. 使用过滤后的数据微调目标模型</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-从生产日志中挖掘训练数据"><a href="#2-2-从生产日志中挖掘训练数据" class="headerlink" title="2.2 从生产日志中挖掘训练数据"></a>2.2 从生产日志中挖掘训练数据</h3><p>如果应用已经在运行（通过 RAG + Prompt 工程），可以从生产日志中提取高质量的训练数据：</p>
+<ul>
+<li><strong>用户满意的回答</strong>：用户在对话后点击”有用”或”已解决”标记的回答</li>
+<li><strong>人工修正的回答</strong>：客服场景中，人工坐席对 AI 回答的修正版本</li>
+<li><strong>未被后续追问的回答</strong>：用户获得回答后没有继续追问，暗示回答已满足需求</li>
+</ul>
+<h3 id="2-3-数据增强技术"><a href="#2-3-数据增强技术" class="headerlink" title="2.3 数据增强技术"></a>2.3 数据增强技术</h3><table>
+<thead>
+<tr>
+<th>增强方法</th>
+<th>说明</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>回译（Back Translation）</strong></td>
+<td>原文 → 翻译成英文 → 翻译回中文，获得等价但不同表述的样本</td>
+<td>增加表达多样性</td>
+</tr>
+<tr>
+<td><strong>同义替换</strong></td>
+<td>用同义词或近义词替换输入中的词汇</td>
+<td>增强模型对同义输入的理解</td>
+</tr>
+<tr>
+<td><strong>输入扰动</strong></td>
+<td>在输入中加入常见错误（错别字、口语化表达）</td>
+<td>增强模型的鲁棒性</td>
+</tr>
+<tr>
+<td><strong>模板扩充</strong></td>
+<td>基于数据模板批量生成变体数据</td>
+<td>覆盖更多输入变体</td>
+</tr>
+</tbody></table>
+<h2 id="3-基座模型选型"><a href="#3-基座模型选型" class="headerlink" title="3. 基座模型选型"></a>3. 基座模型选型</h2><p>微调的效果很大程度上取决于基座模型的选择。选择错误的基座模型，微调数据再多也是事倍功半。</p>
+<p><strong>选型考量维度</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>基座能力</strong></td>
+<td>基座模型在目标相关任务上的 baseline 效果。基座太弱，微调也难以弥补</td>
+</tr>
+<tr>
+<td><strong>可训练性</strong></td>
+<td>模型是否对微调友好。有些模型对 LoRA 敏感，有些则不敏感</td>
+</tr>
+<tr>
+<td><strong>许可证</strong></td>
+<td>开源模型的许可证是否允许商用微调？（如 Llama、Qwen 允许，但部分模型有限制）</td>
+</tr>
+<tr>
+<td><strong>生态支持</strong></td>
+<td>微调框架（LLaMA-Factory、Axolotl 等）对模型的适配程度</td>
+</tr>
+<tr>
+<td><strong>推理成本</strong></td>
+<td>微调后模型的部署和推理成本</td>
+</tr>
+<tr>
+<td><strong>中文能力</strong></td>
+<td>如果面向中文场景，基座的中文理解与生成能力是否够好</td>
+</tr>
+</tbody></table>
+<p><strong>常见基座模型微调推荐</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>基座模型</th>
+<th>推荐场景</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Qwen 2.5 &#x2F; Qwen 3</td>
+<td>中文场景通用首选</td>
+<td>中文能力优秀，生态完善，LLaMA-Factory 深度适配</td>
+</tr>
+<tr>
+<td>Llama 3 &#x2F; Llama 4</td>
+<td>英文&#x2F;多语言场景</td>
+<td>开源社区最活跃，LoRA 表现稳定，文档和教程最丰富</td>
+</tr>
+<tr>
+<td>DeepSeek-V3</td>
+<td>需要强推理能力</td>
+<td>推理能力在开源模型中领先，适合需要复杂推理的场景</td>
+</tr>
+<tr>
+<td>GLM-4</td>
+<td>中文企业级场景</td>
+<td>国内模型，合规性好，中文理解扎实</td>
+</tr>
+<tr>
+<td>Mistral</td>
+<td>欧洲市场&#x2F;多语言</td>
+<td>多语言能力均衡，模型体积小巧</td>
+</tr>
+</tbody></table>
+<h2 id="4-训练过程中的监控"><a href="#4-训练过程中的监控" class="headerlink" title="4. 训练过程中的监控"></a>4. 训练过程中的监控</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">训练监控核心指标：</span><br><span class="line"></span><br><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│  训练 Loss        │  持续下降并趋于平稳 → 正常            │</span><br><span class="line">│                   │  Loss 不降 → 学习率可能太大/数据问题   │</span><br><span class="line">│                   │  Loss 震荡剧烈 → batch size 可能太小  │</span><br><span class="line">├───────────────────┼──────────────────────────────────────┤</span><br><span class="line">│  验证 Loss        │  与训练 Loss 同步下降 → 正常           │</span><br><span class="line">│                   │  验证 Loss 回升 → 过拟合，应停止训练    │</span><br><span class="line">├───────────────────┼──────────────────────────────────────┤</span><br><span class="line">│  GPU 利用率        │  如持续 &lt; 80% → 可能数据加载成为瓶颈   │</span><br><span class="line">│                   │  如达到 100% → normal，训练正常进行     │</span><br><span class="line">├───────────────────┼──────────────────────────────────────┤</span><br><span class="line">│  Token/秒         │  训练吞吐指标，用于估算总训练时长        │</span><br><span class="line">├───────────────────┼──────────────────────────────────────┤</span><br><span class="line">│  Checkpoint 保存  │  定时保存 + 保存最佳验证 Loss 的检查点   │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="六、微调-vs-RAG-vs-Prompt-工程：终极决策指南"><a href="#六、微调-vs-RAG-vs-Prompt-工程：终极决策指南" class="headerlink" title="六、微调 vs RAG vs Prompt 工程：终极决策指南"></a>六、微调 vs RAG vs Prompt 工程：终极决策指南</h1><p>回到本章最核心的问题：在什么情况下选择哪种策略？</p>
+<h2 id="终极决策矩阵"><a href="#终极决策矩阵" class="headerlink" title="终极决策矩阵"></a>终极决策矩阵</h2><table>
+<thead>
+<tr>
+<th>你的情况</th>
+<th>推荐方案</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>知识频繁更新（天&#x2F;周级）</td>
+<td>RAG</td>
+<td>微调跟不上更新节奏</td>
+</tr>
+<tr>
+<td>需要逐条可溯源</td>
+<td>RAG</td>
+<td>微调无法回溯”这段知识从哪学的”</td>
+</tr>
+<tr>
+<td>需回答精确事实数据</td>
+<td>RAG</td>
+<td>微调将事实”模糊化”，精确度不如 RAG</td>
+</tr>
+<tr>
+<td>输出格式要求严格且复杂</td>
+<td>微调</td>
+<td>Prompt 约束不够稳定</td>
+</tr>
+<tr>
+<td>需要特定的”做事风格”</td>
+<td>微调</td>
+<td>风格是直觉，Prompt 描述难以传达</td>
+</tr>
+<tr>
+<td>推理链路长且领域特定</td>
+<td>微调 + RAG</td>
+<td>微调掌握推理框架，RAG 提供最新事实</td>
+</tr>
+<tr>
+<td>快速试错阶段</td>
+<td>Prompt 工程</td>
+<td>成本最低，迭代最快</td>
+</tr>
+<tr>
+<td>已有充足标注数据且追求极致效果</td>
+<td>微调 + RAG + Prompt</td>
+<td>三者叠加，效果最大化</td>
+</tr>
+<tr>
+<td>预算有限、数据量少</td>
+<td>Prompt + RAG</td>
+<td>微调需要数据 + GPU 投入</td>
+</tr>
+</tbody></table>
+<h2 id="一个真实的渐进式路径"><a href="#一个真实的渐进式路径" class="headerlink" title="一个真实的渐进式路径"></a>一个真实的渐进式路径</h2><p>大多数团队不需要在一开始就投入微调。以下是推荐的渐进式演进路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">阶段一：Prompt 工程（第 1~2 周）</span><br><span class="line">  └→ 用精心设计的 Prompt 满足 70% 的需求</span><br><span class="line">  └→ 如果效果不够，进入阶段二</span><br><span class="line"></span><br><span class="line">阶段二：RAG（第 3~4 周）</span><br><span class="line">  └→ 搭建知识库，用 RAG 解决知识缺失问题</span><br><span class="line">  └→ 如果还需要更强的风格/格式控制，进入阶段三</span><br><span class="line"></span><br><span class="line">阶段三：小规模微调（第 5~8 周）</span><br><span class="line">  └→ 收集阶段一和阶段二中积累的 badcase 作为微调数据</span><br><span class="line">  └→ 用 QLoRA 微调一个 7B 开源模型（成本 $50~$500）</span><br><span class="line">  └→ 对比微调模型效果，评估 ROI</span><br><span class="line"></span><br><span class="line">阶段四：微调 + RAG 组合（第 9 周后）</span><br><span class="line">  └→ 微调模型负责&quot;做事方式&quot;</span><br><span class="line">  └→ RAG 负责&quot;最新知识&quot;</span><br><span class="line">  └→ Prompt 工程负责&quot;本次具体要求&quot;</span><br><span class="line">  └→ 三者各司其职，效果最大化</span><br></pre></td></tr></table></figure>
+
+<p>这个渐进路径的核心优势是：<strong>每个阶段的投入都有明确的 ROI 判断点，不会在方向错误时造成大量浪费</strong>。</p>
+<hr>
+<h1 id="七、Java-后端工程师的微调与模型定制化实战要点"><a href="#七、Java-后端工程师的微调与模型定制化实战要点" class="headerlink" title="七、Java 后端工程师的微调与模型定制化实战要点"></a>七、Java 后端工程师的微调与模型定制化实战要点</h1><p>作为 Java 后端工程师，你可能不需要亲自执行微调（这通常由算法工程师或 AI 平台负责），但你需要理解微调的工程边界，知道如何在系统中接入和切换微调模型，以及什么情况下应该推动团队考虑微调。</p>
+<h2 id="1-你需要知道的微调”触发时机”"><a href="#1-你需要知道的微调”触发时机”" class="headerlink" title="1. 你需要知道的微调”触发时机”"></a>1. 你需要知道的微调”触发时机”</h2><p>以下信号意味着 Prompt 工程 + RAG 可能已经不够了，应该推动团队考虑微调：</p>
+<table>
+<thead>
+<tr>
+<th>信号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prompt 长度持续膨胀</td>
+<td>系统 Prompt 越来越长，包含了大量风格、格式、规则描述</td>
+</tr>
+<tr>
+<td>输出格式违规率居高不下</td>
+<td>尽管多次优化 Prompt，模型仍然偶尔不按格式输出</td>
+</tr>
+<tr>
+<td>“同样的要求”反复写在 Prompt 中</td>
+<td>每次调用都要用大量 Token 重复描述给模型的约束</td>
+</tr>
+<tr>
+<td>人工修正率高</td>
+<td>用户频繁修改模型的输出，修正行为具有规律性</td>
+</tr>
+<tr>
+<td>模型推理成本过高</td>
+<td>使用 GPT-4o 处理大量简单但需特定格式的任务</td>
+</tr>
+</tbody></table>
+<h2 id="2-后端系统中模型调用的工程架构"><a href="#2-后端系统中模型调用的工程架构" class="headerlink" title="2. 后端系统中模型调用的工程架构"></a>2. 后端系统中模型调用的工程架构</h2><p>微调完成后，Java 后端需要具备相应的模型路由和管理能力：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 微调模型管理器 — 核心接口设计示例</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">FineTunedModelManager</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注册微调模型版本</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">registerModel</span><span class="params">(ModelVersion version)</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户和任务类型选择目标模型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    ModelEndpoint <span class="title function_">selectModel</span><span class="params">(String userId, TaskType taskType)</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 设置灰度发布策略</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setGrayscaleConfig</span><span class="params">(TaskType taskType, GrayscaleConfig config)</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 回滚到指定版本</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">rollback</span><span class="params">(TaskType taskType, String targetVersion)</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取当前线上各版本流量分布</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Map&lt;String, Double&gt; <span class="title function_">getTrafficDistribution</span><span class="params">(TaskType taskType)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 模型调用的统一入口 — 屏蔽底层是 Prompt 工程、RAG 还是微调模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AIServiceFacade</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PromptTemplateEngine promptEngine;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RAGRetriever ragRetriever;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ModelRouter modelRouter;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> AIResponse <span class="title function_">process</span><span class="params">(AIRequest request)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 确定使用哪个模型（可能是微调模型、也可能是通用模型）</span></span><br><span class="line">        <span class="type">ModelEndpoint</span> <span class="variable">model</span> <span class="operator">=</span> modelRouter.selectModel(</span><br><span class="line">            request.getUserId(), </span><br><span class="line">            request.getTaskType()</span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 是否需要 RAG 检索（微调模型也可以搭配 RAG）</span></span><br><span class="line">        List&lt;Document&gt; context = request.requiresKnowledge() </span><br><span class="line">            ? ragRetriever.retrieve(request.getQuery()) </span><br><span class="line">            : List.of();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 3. 组装最终 Prompt</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">finalPrompt</span> <span class="operator">=</span> promptEngine.build(</span><br><span class="line">            request.getTaskType(),</span><br><span class="line">            request.getQuery(),</span><br><span class="line">            context</span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 4. 调用模型</span></span><br><span class="line">        <span class="keyword">return</span> model.invoke(finalPrompt, request.getParameters());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-多模型管理的关键设计"><a href="#3-多模型管理的关键设计" class="headerlink" title="3. 多模型管理的关键设计"></a>3. 多模型管理的关键设计</h2><p>在企业环境下，你可能需要同时管理多个微调模型版本和基座模型版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">模型管理的关键数据模型：</span><br><span class="line"></span><br><span class="line">┌─────────────────────────┐</span><br><span class="line">│      ModelVersion        │</span><br><span class="line">├─────────────────────────┤</span><br><span class="line">│ - modelId: String       │  ← 唯一标识，如 &quot;qwen7b-code-gen-v2.1&quot;</span><br><span class="line">│ - baseModel: String     │  ← 基座模型，如 &quot;Qwen/Qwen2.5-7B-Instruct&quot;</span><br><span class="line">│ - fineTuneMethod: Enum  │  ← LORA / FULL / QLORA</span><br><span class="line">│ - status: Enum          │  ← EXPERIMENTAL / STAGING / PRODUCTION / ARCHIVED</span><br><span class="line">│ - metrics: Map          │  ← &#123;&quot;format_adherence&quot;: 0.97, &quot;bleu&quot;: 0.85, ...&#125;</span><br><span class="line">│ - datasetVersion: String│  ← 训练数据集版本</span><br><span class="line">│ - createdAt: DateTime   │</span><br><span class="line">│ - endpoint: String      │  ← 推理服务地址</span><br><span class="line">│ - adapterPath: String?  │  ← LoRA adapter 路径（如果是 LoRA 模型）</span><br><span class="line">└─────────────────────────┘</span><br><span class="line">         │</span><br><span class="line">         │ 1:N</span><br><span class="line">         ▼</span><br><span class="line">┌─────────────────────────┐</span><br><span class="line">│    GrayscaleConfig       │</span><br><span class="line">├─────────────────────────┤</span><br><span class="line">│ - taskType: TaskType    │  任务类型</span><br><span class="line">│ - stableModelId: String │  当前线上稳定版</span><br><span class="line">│ - canaryModelId: String │  金丝雀版（新微调版）</span><br><span class="line">│ - canaryPercent: int    │  金丝雀流量百分比（0~100）</span><br><span class="line">│ - rollbackThresholds    │  自动回滚条件</span><br><span class="line">└─────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-微调的数据准备——后端工程师可以做什么"><a href="#4-微调的数据准备——后端工程师可以做什么" class="headerlink" title="4. 微调的数据准备——后端工程师可以做什么"></a>4. 微调的数据准备——后端工程师可以做什么</h2><p>即使你不做训练，你也可以在数据准备阶段发挥重要作用：</p>
+<ul>
+<li><strong>利用业务日志构建训练集</strong>：从生产环境的对话日志中提取高质量问答对</li>
+<li><strong>利用 API 自动化构建</strong>：使用 Java 调用大模型 API，批量生成微调训练数据</li>
+<li><strong>数据质量校验</strong>：编写自动化的格式校验和内容过滤脚本</li>
 </ul>
 
     </div>
@@ -265,13 +1060,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2026/05/29/AI/15-AI%E5%BA%94%E7%94%A8%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="prev" title="AI应用工程化">
-                  <i class="fa fa-angle-left"></i> AI应用工程化
+                <a href="/2026/05/29/AI/14-AI%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8/" rel="prev" title="AI应用安全">
+                  <i class="fa fa-angle-left"></i> AI应用安全
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/05/29/AI/09-Agent%E6%99%BA%E8%83%BD%E4%BD%93/" rel="next" title="Agent智能体">
-                  Agent智能体 <i class="fa fa-angle-right"></i>
+                <a href="/2026/05/29/AI/12-%E5%A4%9A%E6%A8%A1%E6%80%81AI%E5%BA%94%E7%94%A8/" rel="next" title="多模态AI应用">
+                  多模态AI应用 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
