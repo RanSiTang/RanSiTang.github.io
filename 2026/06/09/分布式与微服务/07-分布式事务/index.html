@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、从单机事务到分布式事务1. 单机数据库 ACID 的回顾与局限性2. 🔗 已有内容：ACID&#x2F;MVCC&#x2F;锁机制基础 → 数据库与持久化&#x2F;关系型数据库&#x2F;Mysql.md3. 微服务拆分制造了分布式事务问题：一个订单需要操作多个独立数据库4. 刚性事务 vs 柔性事务二、Seata 框架深度解析1. Seata 的三大组件：TC&#x2F;TM&#x2F;RM2. Seata">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务">
+<meta property="og:url" content="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/07-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、从单机事务到分布式事务1. 单机数据库 ACID 的回顾与局限性2. 🔗 已有内容：ACID&#x2F;MVCC&#x2F;锁机制基础 → 数据库与持久化&#x2F;关系型数据库&#x2F;Mysql.md3. 微服务拆分制造了分布式事务问题：一个订单需要操作多个独立数据库4. 刚性事务 vs 柔性事务二、Seata 框架深度解析1. Seata 的三大组件：TC&#x2F;TM&#x2F;RM2. Seata">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-09T08:38:04.404Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="Saga">
+<meta property="article:tag" content="Seata">
+<meta property="article:tag" content="TCC">
+<meta property="article:tag" content="事务消息">
+<meta property="article:tag" content="分布式事务">
+<meta property="article:tag" content="最终一致性">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/07-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/07-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/","path":"2026/06/09/分布式与微服务/07-分布式事务/","title":"分布式事务"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>分布式事务 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%8E%E5%8D%95%E6%9C%BA%E4%BA%8B%E5%8A%A1%E5%88%B0%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-text">一、从单机事务到分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8D%95%E6%9C%BA%E6%95%B0%E6%8D%AE%E5%BA%93-ACID-%E7%9A%84%E5%9B%9E%E9%A1%BE%E4%B8%8E%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-text">1. 单机数据库 ACID 的回顾与局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%F0%9F%94%97-%E5%B7%B2%E6%9C%89%E5%86%85%E5%AE%B9%EF%BC%9AACID-MVCC-%E9%94%81%E6%9C%BA%E5%88%B6%E5%9F%BA%E7%A1%80-%E2%86%92-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E6%8C%81%E4%B9%85%E5%8C%96-%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93-Mysql-md"><span class="nav-text">2. 🔗 已有内容：ACID&#x2F;MVCC&#x2F;锁机制基础 → 数据库与持久化&#x2F;关系型数据库&#x2F;Mysql.md</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%88%B6%E9%80%A0%E4%BA%86%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98%EF%BC%9A%E4%B8%80%E4%B8%AA%E8%AE%A2%E5%8D%95%E9%9C%80%E8%A6%81%E6%93%8D%E4%BD%9C%E5%A4%9A%E4%B8%AA%E7%8B%AC%E7%AB%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">3. 微服务拆分制造了分布式事务问题：一个订单需要操作多个独立数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%88%9A%E6%80%A7%E4%BA%8B%E5%8A%A1-vs-%E6%9F%94%E6%80%A7%E4%BA%8B%E5%8A%A1"><span class="nav-text">4. 刚性事务 vs 柔性事务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Seata-%E6%A1%86%E6%9E%B6%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90"><span class="nav-text">二、Seata 框架深度解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Seata-%E7%9A%84%E4%B8%89%E5%A4%A7%E7%BB%84%E4%BB%B6%EF%BC%9ATC-TM-RM"><span class="nav-text">1. Seata 的三大组件：TC&#x2F;TM&#x2F;RM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Seata-AT-%E6%A8%A1%E5%BC%8F%EF%BC%9A%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E7%9A%84%E6%94%B9%E8%89%AF%E7%89%88"><span class="nav-text">2. Seata AT 模式：两阶段提交的改良版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Seata-TCC-%E6%A8%A1%E5%BC%8F%EF%BC%9ATry-Confirm-Cancel-%E4%B8%89%E9%98%B6%E6%AE%B5"><span class="nav-text">3. Seata TCC 模式：Try-Confirm-Cancel 三阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Seata-Saga-%E6%A8%A1%E5%BC%8F%EF%BC%9A%E7%8A%B6%E6%80%81%E6%9C%BA%E7%BC%96%E6%8E%92%E9%95%BF%E4%BA%8B%E5%8A%A1"><span class="nav-text">4. Seata Saga 模式：状态机编排长事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Seata-XA-%E6%A8%A1%E5%BC%8F%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93-XA-%E6%A0%87%E5%87%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-text">5. Seata XA 模式：数据库 XA 标准的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AF%B9%E6%AF%94%E7%9F%A9%E9%98%B5%EF%BC%88%E4%B8%80%E8%87%B4%E6%80%A7-%E6%80%A7%E8%83%BD-%E4%B8%9A%E5%8A%A1%E4%BE%B5%E5%85%A5-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="nav-text">6. 四种模式的对比矩阵（一致性&#x2F;性能&#x2F;业务侵入&#x2F;适用场景）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81TCC-%E6%B7%B1%E5%85%A5"><span class="nav-text">三、TCC 深入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%B5%84%E6%BA%90%E9%A2%84%E7%95%99-vs-%E7%9B%B4%E6%8E%A5%E6%8F%90%E4%BA%A4%EF%BC%9ATCC-%E7%9A%84%E6%9C%AC%E8%B4%A8%E6%80%9D%E8%80%83"><span class="nav-text">1. 资源预留 vs 直接提交：TCC 的本质思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%B9%82%E7%AD%89%E6%80%A7%E8%AE%BE%E8%AE%A1%EF%BC%9AConfirm-Cancel-%E5%BF%85%E9%A1%BB%E5%B9%82%E7%AD%89"><span class="nav-text">2. 幂等性设计：Confirm&#x2F;Cancel 必须幂等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%A9%BA%E5%9B%9E%E6%BB%9A%E4%B8%8E%E6%82%AC%E6%8C%82%E9%97%AE%E9%A2%98"><span class="nav-text">3. 空回滚与悬挂问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-TCC-%E7%9A%84%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%EF%BC%9A%E8%B4%A6%E6%88%B7%E8%BD%AC%E8%B4%A6-%E5%BA%93%E5%AD%98%E6%89%A3%E5%87%8F"><span class="nav-text">4. TCC 的实战案例：账户转账&#x2F;库存扣减</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="nav-text">四、事务消息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF%E7%9A%84%E2%80%9D%E5%8D%8A%E6%B6%88%E6%81%AF%E2%80%9D%E6%9C%BA%E5%88%B6"><span class="nav-text">1. 事务消息的”半消息”机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-RocketMQ-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF%E8%AF%A6%E8%A7%A3"><span class="nav-text">2. RocketMQ 事务消息详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF-vs-%E6%9C%AC%E5%9C%B0%E6%B6%88%E6%81%AF%E8%A1%A8"><span class="nav-text">3. 事务消息 vs 本地消息表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%BA%8B%E5%8A%A1%E5%9B%9E%E6%9F%A5%E6%9C%BA%E5%88%B6"><span class="nav-text">4. 事务回查机制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E5%AE%9E%E6%88%98%E6%A8%A1%E5%BC%8F"><span class="nav-text">五、最终一致性的实战模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%80%E5%A4%A7%E5%8A%AA%E5%8A%9B%E9%80%9A%E7%9F%A5%E6%96%B9%E6%A1%88"><span class="nav-text">1. 最大努力通知方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9C%AC%E5%9C%B0%E6%B6%88%E6%81%AF%E8%A1%A8%E6%96%B9%E6%A1%88"><span class="nav-text">2. 本地消息表方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AF%B9%E8%B4%A6%E4%B8%8E%E8%A1%A5%E5%81%BF%E6%9C%BA%E5%88%B6"><span class="nav-text">3. 对账与补偿机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%F0%9F%94%97-%E5%B7%B2%E6%9C%89%E5%86%85%E5%AE%B9%EF%BC%9A%E5%B9%82%E7%AD%89%E6%80%A7%E8%AE%BE%E8%AE%A1%E5%B0%86%E7%8B%AC%E7%AB%8B%E5%B1%95%E5%BC%80%E5%9C%A8-08-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E3%80%81ID%E7%94%9F%E6%88%90%E4%B8%8E%E5%B9%82%E7%AD%89%E6%80%A7-md"><span class="nav-text">4. 🔗 已有内容：幂等性设计将独立展开在 08-分布式锁、ID生成与幂等性.md</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96"><span class="nav-text">六、分布式事务的选型决策</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF%E7%9C%9F%E7%9A%84%E9%9C%80%E8%A6%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-text">1. 哪些场景真的需要分布式事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9F%BA%E4%BA%8E%E4%B8%9A%E5%8A%A1%E5%AE%B9%E5%BF%8D%E5%BA%A6%E7%9A%84%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9"><span class="nav-text">2. 基于业务容忍度的方案选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%9A%84%E4%BB%A3%E4%BB%B7%E4%B8%8E%E6%9B%BF%E4%BB%A3%E6%96%B9%E6%A1%88"><span class="nav-text">3. 分布式事务的代价与替代方案</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">63</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">113</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/07-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="分布式事务 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          分布式事务
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：16:38:04" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式与微服务</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、从单机事务到分布式事务"><a href="#一、从单机事务到分布式事务" class="headerlink" title="一、从单机事务到分布式事务"></a>一、从单机事务到分布式事务</h1><h2 id="1-单机数据库-ACID-的回顾与局限性"><a href="#1-单机数据库-ACID-的回顾与局限性" class="headerlink" title="1. 单机数据库 ACID 的回顾与局限性"></a>1. 单机数据库 ACID 的回顾与局限性</h2><h2 id="2-🔗-已有内容：ACID-MVCC-锁机制基础-→-数据库与持久化-关系型数据库-Mysql-md"><a href="#2-🔗-已有内容：ACID-MVCC-锁机制基础-→-数据库与持久化-关系型数据库-Mysql-md" class="headerlink" title="2. 🔗 已有内容：ACID&#x2F;MVCC&#x2F;锁机制基础 → 数据库与持久化/关系型数据库/Mysql.md"></a>2. 🔗 已有内容：ACID&#x2F;MVCC&#x2F;锁机制基础 → <code>数据库与持久化/关系型数据库/Mysql.md</code></h2><h2 id="3-微服务拆分制造了分布式事务问题：一个订单需要操作多个独立数据库"><a href="#3-微服务拆分制造了分布式事务问题：一个订单需要操作多个独立数据库" class="headerlink" title="3. 微服务拆分制造了分布式事务问题：一个订单需要操作多个独立数据库"></a>3. 微服务拆分制造了分布式事务问题：一个订单需要操作多个独立数据库</h2><h2 id="4-刚性事务-vs-柔性事务"><a href="#4-刚性事务-vs-柔性事务" class="headerlink" title="4. 刚性事务 vs 柔性事务"></a>4. 刚性事务 vs 柔性事务</h2><h1 id="二、Seata-框架深度解析"><a href="#二、Seata-框架深度解析" class="headerlink" title="二、Seata 框架深度解析"></a>二、Seata 框架深度解析</h1><h2 id="1-Seata-的三大组件：TC-TM-RM"><a href="#1-Seata-的三大组件：TC-TM-RM" class="headerlink" title="1. Seata 的三大组件：TC&#x2F;TM&#x2F;RM"></a>1. Seata 的三大组件：TC&#x2F;TM&#x2F;RM</h2><h2 id="2-Seata-AT-模式：两阶段提交的改良版"><a href="#2-Seata-AT-模式：两阶段提交的改良版" class="headerlink" title="2. Seata AT 模式：两阶段提交的改良版"></a>2. Seata AT 模式：两阶段提交的改良版</h2><h2 id="3-Seata-TCC-模式：Try-Confirm-Cancel-三阶段"><a href="#3-Seata-TCC-模式：Try-Confirm-Cancel-三阶段" class="headerlink" title="3. Seata TCC 模式：Try-Confirm-Cancel 三阶段"></a>3. Seata TCC 模式：Try-Confirm-Cancel 三阶段</h2><h2 id="4-Seata-Saga-模式：状态机编排长事务"><a href="#4-Seata-Saga-模式：状态机编排长事务" class="headerlink" title="4. Seata Saga 模式：状态机编排长事务"></a>4. Seata Saga 模式：状态机编排长事务</h2><h2 id="5-Seata-XA-模式：数据库-XA-标准的实现"><a href="#5-Seata-XA-模式：数据库-XA-标准的实现" class="headerlink" title="5. Seata XA 模式：数据库 XA 标准的实现"></a>5. Seata XA 模式：数据库 XA 标准的实现</h2><h2 id="6-四种模式的对比矩阵（一致性-性能-业务侵入-适用场景）"><a href="#6-四种模式的对比矩阵（一致性-性能-业务侵入-适用场景）" class="headerlink" title="6. 四种模式的对比矩阵（一致性&#x2F;性能&#x2F;业务侵入&#x2F;适用场景）"></a>6. 四种模式的对比矩阵（一致性&#x2F;性能&#x2F;业务侵入&#x2F;适用场景）</h2><h1 id="三、TCC-深入"><a href="#三、TCC-深入" class="headerlink" title="三、TCC 深入"></a>三、TCC 深入</h1><h2 id="1-资源预留-vs-直接提交：TCC-的本质思考"><a href="#1-资源预留-vs-直接提交：TCC-的本质思考" class="headerlink" title="1. 资源预留 vs 直接提交：TCC 的本质思考"></a>1. 资源预留 vs 直接提交：TCC 的本质思考</h2><h2 id="2-幂等性设计：Confirm-Cancel-必须幂等"><a href="#2-幂等性设计：Confirm-Cancel-必须幂等" class="headerlink" title="2. 幂等性设计：Confirm&#x2F;Cancel 必须幂等"></a>2. 幂等性设计：Confirm&#x2F;Cancel 必须幂等</h2><h2 id="3-空回滚与悬挂问题"><a href="#3-空回滚与悬挂问题" class="headerlink" title="3. 空回滚与悬挂问题"></a>3. 空回滚与悬挂问题</h2><h2 id="4-TCC-的实战案例：账户转账-库存扣减"><a href="#4-TCC-的实战案例：账户转账-库存扣减" class="headerlink" title="4. TCC 的实战案例：账户转账&#x2F;库存扣减"></a>4. TCC 的实战案例：账户转账&#x2F;库存扣减</h2><h1 id="四、事务消息"><a href="#四、事务消息" class="headerlink" title="四、事务消息"></a>四、事务消息</h1><h2 id="1-事务消息的”半消息”机制"><a href="#1-事务消息的”半消息”机制" class="headerlink" title="1. 事务消息的”半消息”机制"></a>1. 事务消息的”半消息”机制</h2><h2 id="2-RocketMQ-事务消息详解"><a href="#2-RocketMQ-事务消息详解" class="headerlink" title="2. RocketMQ 事务消息详解"></a>2. RocketMQ 事务消息详解</h2><h2 id="3-事务消息-vs-本地消息表"><a href="#3-事务消息-vs-本地消息表" class="headerlink" title="3. 事务消息 vs 本地消息表"></a>3. 事务消息 vs 本地消息表</h2><h2 id="4-事务回查机制"><a href="#4-事务回查机制" class="headerlink" title="4. 事务回查机制"></a>4. 事务回查机制</h2><h1 id="五、最终一致性的实战模式"><a href="#五、最终一致性的实战模式" class="headerlink" title="五、最终一致性的实战模式"></a>五、最终一致性的实战模式</h1><h2 id="1-最大努力通知方案"><a href="#1-最大努力通知方案" class="headerlink" title="1. 最大努力通知方案"></a>1. 最大努力通知方案</h2><h2 id="2-本地消息表方案"><a href="#2-本地消息表方案" class="headerlink" title="2. 本地消息表方案"></a>2. 本地消息表方案</h2><h2 id="3-对账与补偿机制"><a href="#3-对账与补偿机制" class="headerlink" title="3. 对账与补偿机制"></a>3. 对账与补偿机制</h2><h2 id="4-🔗-已有内容：幂等性设计将独立展开在-08-分布式锁、ID生成与幂等性-md"><a href="#4-🔗-已有内容：幂等性设计将独立展开在-08-分布式锁、ID生成与幂等性-md" class="headerlink" title="4. 🔗 已有内容：幂等性设计将独立展开在 08-分布式锁、ID生成与幂等性.md"></a>4. 🔗 已有内容：幂等性设计将独立展开在 <code>08-分布式锁、ID生成与幂等性.md</code></h2><h1 id="六、分布式事务的选型决策"><a href="#六、分布式事务的选型决策" class="headerlink" title="六、分布式事务的选型决策"></a>六、分布式事务的选型决策</h1><h2 id="1-哪些场景真的需要分布式事务"><a href="#1-哪些场景真的需要分布式事务" class="headerlink" title="1. 哪些场景真的需要分布式事务"></a>1. 哪些场景真的需要分布式事务</h2><h2 id="2-基于业务容忍度的方案选择"><a href="#2-基于业务容忍度的方案选择" class="headerlink" title="2. 基于业务容忍度的方案选择"></a>2. 基于业务容忍度的方案选择</h2><h2 id="3-分布式事务的代价与替代方案"><a href="#3-分布式事务的代价与替代方案" class="headerlink" title="3. 分布式事务的代价与替代方案"></a>3. 分布式事务的代价与替代方案</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag"># 分布式事务</a>
+              <a href="/tags/Seata/" rel="tag"># Seata</a>
+              <a href="/tags/Saga/" rel="tag"># Saga</a>
+              <a href="/tags/TCC/" rel="tag"># TCC</a>
+              <a href="/tags/%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7/" rel="tag"># 最终一致性</a>
+              <a href="/tags/%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF/" rel="tag"># 事务消息</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/03-%E6%9C%8D%E5%8A%A1%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5/" rel="prev" title="服务间通信：同步与异步">
+                  <i class="fa fa-angle-left"></i> 服务间通信：同步与异步
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/01-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" rel="next" title="分布式系统理论基础">
+                  分布式系统理论基础 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
