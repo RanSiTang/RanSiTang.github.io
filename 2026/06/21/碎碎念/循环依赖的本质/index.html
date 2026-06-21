@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、这篇文章想解决什么问题1. 你大概率见过这样的场景两个 Service，互相需要对方： 123456789101112@Servicepublic class PlantingService &#123;    private final AlertService alertService;    public void updatePlantingInfo(PlantingData data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="循环依赖的本质不是注入问题，而是职责耦合问题">
+<meta property="og:url" content="http://example.com/2026/06/21/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E6%9C%AC%E8%B4%A8/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、这篇文章想解决什么问题1. 你大概率见过这样的场景两个 Service，互相需要对方： 123456789101112@Servicepublic class PlantingService &#123;    private final AlertService alertService;    public void updatePlantingInfo(PlantingData data">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-21T04:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-21T14:04:31.664Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="事件驱动">
+<meta property="article:tag" content="循环依赖">
+<meta property="article:tag" content="解耦">
+<meta property="article:tag" content="设计思想">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/06/21/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E6%9C%AC%E8%B4%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/06/21/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E6%9C%AC%E8%B4%A8/","path":"2026/06/21/碎碎念/循环依赖的本质/","title":"循环依赖的本质不是注入问题，而是职责耦合问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>循环依赖的本质不是注入问题，而是职责耦合问题 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E6%83%B3%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98"><span class="nav-text">一、这篇文章想解决什么问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%A0%E5%A4%A7%E6%A6%82%E7%8E%87%E8%A7%81%E8%BF%87%E8%BF%99%E6%A0%B7%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="nav-text">1. 你大概率见过这样的场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E4%B8%8D%E8%AE%B2%E4%BB%80%E4%B9%88"><span class="nav-text">2. 这篇文章不讲什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E8%AE%B2%E4%BB%80%E4%B9%88"><span class="nav-text">3. 这篇文章讲什么</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E4%B8%8D%E6%98%AF%E6%8A%80%E6%9C%AF%E9%97%AE%E9%A2%98%EF%BC%8C%E8%80%8C%E6%98%AF%E8%AE%BE%E8%AE%A1%E4%BF%A1%E5%8F%B7"><span class="nav-text">二、循环依赖不是技术问题，而是设计信号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E5%8F%AB%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="nav-text">1. 什么叫循环依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%80%9A%E5%B8%B8%E4%B8%8D%E6%98%AF%E5%A5%BD%E4%BA%8B"><span class="nav-text">2. 为什么循环依赖通常不是好事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A0%B8%E5%BF%83%E8%A7%82%E7%82%B9"><span class="nav-text">3. 核心观点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%AF%8A%E6%96%AD%E6%A1%86%E6%9E%B6%EF%BC%9AA-%E2%86%94-B-%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E7%B1%BB%E9%97%AE%E9%A2%98"><span class="nav-text">三、诊断框架：A ↔ B 到底是哪类问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9B%9B%E7%B1%BB%E5%85%B8%E5%9E%8B%E5%9C%BA%E6%99%AF"><span class="nav-text">1. 四类典型场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%85%B1%E4%BA%AB%E8%83%BD%E5%8A%9B%E5%9E%8B"><span class="nav-text">1.1 共享能力型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E6%B5%81%E7%A8%8B%E5%8D%8F%E4%BD%9C%E5%9E%8B"><span class="nav-text">1.2 流程协作型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E8%81%8C%E8%B4%A3%E6%8B%86%E5%88%86%E8%BF%87%E7%BB%86%E5%9E%8B"><span class="nav-text">1.3 职责拆分过细型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E5%8E%86%E5%8F%B2%E6%BC%94%E5%8C%96%E5%9E%8B"><span class="nav-text">1.4 历史演化型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%89%E4%B8%AA%E8%AF%8A%E6%96%AD%E9%97%AE%E9%A2%98"><span class="nav-text">2. 三个诊断问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%AF%8A%E6%96%AD%E7%BB%93%E8%AE%BA-%E2%86%92-%E8%A7%A3%E6%B3%95%E6%98%A0%E5%B0%84"><span class="nav-text">3. 诊断结论 → 解法映射</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%9B%9B%E7%A7%8D%E8%A7%A3%E8%80%A6%E6%96%B9%E5%BC%8F%E5%8F%8A%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-text">四、四种解耦方式及选择指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E6%8A%BD%E5%8F%96%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%EF%BC%88%E5%85%B1%E4%BA%AB%E8%83%BD%E5%8A%9B%E7%9A%84%E8%A7%A3%E6%B3%95%EF%BC%89"><span class="nav-text">1. 方式一：抽取第三方模块（共享能力的解法）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">1.1 核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">1.2 适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">1.3 代码示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E4%BC%98%E7%82%B9"><span class="nav-text">1.4 优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E7%BC%BA%E7%82%B9"><span class="nav-text">1.5 缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-%E5%88%A4%E6%96%AD%E6%A0%87%E5%87%86"><span class="nav-text">1.6 判断标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%EF%BC%88%E6%B5%81%E7%A8%8B%E9%80%9A%E7%9F%A5%E7%9A%84%E8%A7%A3%E6%B3%95%EF%BC%89"><span class="nav-text">2. 方式二：事件驱动（流程通知的解法）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">2.1 核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">2.2 适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.3 代码示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E4%BC%98%E7%82%B9"><span class="nav-text">2.4 优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%E7%BC%BA%E7%82%B9"><span class="nav-text">2.5 缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-%E4%BA%8B%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-text">2.6 事件设计最重要的原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-%E5%88%A4%E6%96%AD%E6%A0%87%E5%87%86"><span class="nav-text">2.7 判断标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%96%B9%E5%BC%8F%E4%B8%89%EF%BC%9A%E9%87%8D%E6%96%B0%E5%88%92%E5%88%86%E8%81%8C%E8%B4%A3%E8%BE%B9%E7%95%8C%EF%BC%88%E8%81%8C%E8%B4%A3%E6%B7%B7%E4%B9%B1%E7%9A%84%E8%A7%A3%E6%B3%95%EF%BC%89"><span class="nav-text">3. 方式三：重新划分职责边界（职责混乱的解法）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">3.1 核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">3.2 适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%8F%AF%E9%80%89%E5%A4%84%E7%90%86"><span class="nav-text">3.3 可选处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-%E5%90%88%E5%B9%B6%E6%A8%A1%E5%9D%97"><span class="nav-text">3.3.1 合并模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-%E9%87%8D%E6%96%B0%E5%88%86%E5%B1%82"><span class="nav-text">3.3.2 重新分层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-3-%E5%88%86%E7%A6%BB%E7%8A%B6%E6%80%81%E4%B8%8E%E8%A7%84%E5%88%99"><span class="nav-text">3.3.3 分离状态与规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%88%A4%E6%96%AD%E6%A0%87%E5%87%86"><span class="nav-text">3.4 判断标准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%96%B9%E5%BC%8F%E5%9B%9B%EF%BC%9A%E5%BB%B6%E8%BF%9F%E6%B3%A8%E5%85%A5-%E9%9D%9E%E6%9E%84%E9%80%A0%E5%99%A8%E6%B3%A8%E5%85%A5%EF%BC%88%E5%AE%9E%E5%9C%A8%E6%94%B9%E4%B8%8D%E5%8A%A8%E7%9A%84%E8%BF%87%E6%B8%A1%E6%96%B9%E6%A1%88%EF%BC%89"><span class="nav-text">4. 方式四：延迟注入 &#x2F; 非构造器注入（实在改不动的过渡方案）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-text">4.1 核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">4.2 适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%B8%B8%E8%A7%81%E5%81%9A%E6%B3%95"><span class="nav-text">4.3 常见做法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E4%BC%98%E7%82%B9"><span class="nav-text">4.4 优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E7%BC%BA%E7%82%B9"><span class="nav-text">4.5 缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%E5%AE%9A%E6%80%A7"><span class="nav-text">4.6 定性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%B8%80%E5%8F%A5%E8%AF%9D%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97"><span class="nav-text">5. 一句话选择指南</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%EF%BC%9A%E7%A7%8D%E6%A4%8D%E6%A8%A1%E5%9D%97-%E2%86%94-%E9%A2%84%E8%AD%A6%E6%A8%A1%E5%9D%97"><span class="nav-text">五、实战案例：种植模块 ↔ 预警模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9C%BA%E6%99%AF%E8%BF%98%E5%8E%9F"><span class="nav-text">1. 场景还原</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%94%A8%E8%AF%8A%E6%96%AD%E6%A1%86%E6%9E%B6%E5%88%86%E6%9E%90"><span class="nav-text">2. 用诊断框架分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E9%80%82%E5%90%88%E6%8A%BD%E7%AC%AC%E4%B8%89%E6%96%B9"><span class="nav-text">3. 为什么不适合抽第三方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1"><span class="nav-text">4. 事件驱动方案设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%85%B3%E9%94%AE%E8%AE%BE%E8%AE%A1%E8%A6%81%E7%82%B9"><span class="nav-text">5. 关键设计要点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="nav-text">六、常见误区</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AF%AF%E5%8C%BA%E4%B8%80%EF%BC%9A%E2%80%9D%E8%83%BD%E8%B7%91%E5%B0%B1%E7%AE%97%E8%A7%A3%E5%86%B3%E4%BA%86%E2%80%9D"><span class="nav-text">1. 误区一：”能跑就算解决了”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%AF%AF%E5%8C%BA%E4%BA%8C%EF%BC%9A%E2%80%9D%E6%9C%89%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E5%B0%B1%E4%B8%80%E5%AE%9A%E6%8A%BD%E7%AC%AC%E4%B8%89%E6%96%B9%E2%80%9D"><span class="nav-text">2. 误区二：”有循环依赖就一定抽第三方”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%AF%AF%E5%8C%BA%E4%B8%89%EF%BC%9A%E2%80%9D%E7%94%A8%E4%BA%86%E4%BA%8B%E4%BB%B6%E5%B0%B1%E4%B8%80%E5%AE%9A%E9%AB%98%E7%BA%A7%E2%80%9D"><span class="nav-text">3. 误区三：”用了事件就一定高级”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%AF%AF%E5%8C%BA%E5%9B%9B%EF%BC%9A%E2%80%9D%E6%8A%8A%E4%BA%8B%E4%BB%B6%E5%BD%93%E5%91%BD%E4%BB%A4%E2%80%9D"><span class="nav-text">4. 误区四：”把事件当命令”</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-text">七、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E7%BB%93%E8%AE%BA"><span class="nav-text">1. 核心结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%A7%A3%E8%80%A6%E7%9A%84%E7%9C%9F%E6%AD%A3%E7%9B%AE%E6%A0%87"><span class="nav-text">2. 解耦的真正目标</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/21/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E6%9C%AC%E8%B4%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="循环依赖的本质不是注入问题，而是职责耦合问题 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          循环依赖的本质不是注入问题，而是职责耦合问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-21 12:00:00 / 修改时间：22:04:31" itemprop="dateCreated datePublished" datetime="2026-06-21T12:00:00+08:00">2026-06-21</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、这篇文章想解决什么问题"><a href="#一、这篇文章想解决什么问题" class="headerlink" title="一、这篇文章想解决什么问题"></a>一、这篇文章想解决什么问题</h1><h2 id="1-你大概率见过这样的场景"><a href="#1-你大概率见过这样的场景" class="headerlink" title="1. 你大概率见过这样的场景"></a>1. 你大概率见过这样的场景</h2><p>两个 Service，互相需要对方：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AlertService alertService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updatePlantingInfo</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        <span class="comment">// 先更新种植信息</span></span><br><span class="line">        saveOrUpdate(data);</span><br><span class="line">        <span class="comment">// 然后触发预警</span></span><br><span class="line">        alertService.checkAndAlert(data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlertService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PlantingService plantingService;  <span class="comment">// 又调回去了</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">checkAndAlert</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        <span class="comment">// 处理预警逻辑</span></span><br><span class="line">        <span class="type">AlertResult</span> <span class="variable">result</span> <span class="operator">=</span> doAlert(data);</span><br><span class="line">        <span class="comment">// 处理完需要回写种植模块的状态</span></span><br><span class="line">        plantingService.updateAlertStatus(data.getId(), result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后 Spring 启动——</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌─────┐</span><br><span class="line">|  plantingService defined in file [...]</span><br><span class="line">↑     ↓</span><br><span class="line">|  alertService defined in file [...]</span><br><span class="line">└─────┘</span><br><span class="line"></span><br><span class="line">UnsatisfiedDependencyException: Error creating bean with name &#x27;plantingService&#x27;...</span><br></pre></td></tr></table></figure>
+
+<p>于是你开始自救：加 <code>@Lazy</code> 先跑起来再说；或者把构造器注入改成字段注入，假装没看见这个环；再不行就换成 Setter 注入，至少不报错了。</p>
+<p>代码能跑了。但你心里清楚：<strong>这事没完。</strong></p>
+<hr>
+<h2 id="2-这篇文章不讲什么"><a href="#2-这篇文章不讲什么" class="headerlink" title="2. 这篇文章不讲什么"></a>2. 这篇文章不讲什么</h2><ul>
+<li>不讲 Spring 三级缓存是怎么”容忍”循环依赖的</li>
+<li>不讲 Bean 的生命周期和提前暴露半成品对象的原理</li>
+<li>不讲 <code>@Lazy</code> 在框架底层是怎么生成代理的</li>
+</ul>
+<p>这些内容网上已经有大量优秀的文章。它们回答的问题是——<strong>“Spring 是怎么让你勉强跑起来的。”</strong></p>
+<hr>
+<h2 id="3-这篇文章讲什么"><a href="#3-这篇文章讲什么" class="headerlink" title="3. 这篇文章讲什么"></a>3. 这篇文章讲什么</h2><p>这篇文章回答的是另一个问题——<strong>“为什么你会走到需要 Spring 帮你擦屁股这一步。”</strong></p>
+<p>具体来说，会讲清楚四件事：</p>
+<ol>
+<li>循环依赖出现的<strong>本质原因</strong>——不是注入方式的问题，而是职责边界的问题</li>
+<li>遇到 A ↔ B 时，<strong>从设计上怎么拆</strong>——不是怎么绕过去，而是怎么解开</li>
+<li>不同的解耦方式<strong>适合什么场景</strong>——不是只有”抽第三方”一种答案</li>
+<li>怎么判断<strong>该选哪一种</strong>——一个能直接套用的决策框架</li>
+</ol>
+<hr>
+<h1 id="二、循环依赖不是技术问题，而是设计信号"><a href="#二、循环依赖不是技术问题，而是设计信号" class="headerlink" title="二、循环依赖不是技术问题，而是设计信号"></a>二、循环依赖不是技术问题，而是设计信号</h1><h2 id="1-什么叫循环依赖"><a href="#1-什么叫循环依赖" class="headerlink" title="1. 什么叫循环依赖"></a>1. 什么叫循环依赖</h2><p>一句话：<strong>A 依赖 B，B 又依赖 A，两者形成闭环。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A ──→ B</span><br><span class="line">↑     │</span><br><span class="line">└─────┘</span><br></pre></td></tr></table></figure>
+
+<p>在代码层面，它可以是构造器注入的互相引用（启动就炸），也可以是字段注入的互相引用（启动不炸，但逻辑上是环），还可以是方法调用的互相调用（A 调 B 的某个方法，B 又回来调 A 的某个方法）。表现形式不同，本质都一样：<strong>两个模块互相知道对方，谁也离不开谁。</strong></p>
+<hr>
+<h2 id="2-为什么循环依赖通常不是好事"><a href="#2-为什么循环依赖通常不是好事" class="headerlink" title="2. 为什么循环依赖通常不是好事"></a>2. 为什么循环依赖通常不是好事</h2><p>循环依赖不是”语法错误”，它完全可以通过框架机制运行起来。但它是一个<strong>设计坏味道</strong>。</p>
+<ul>
+<li><strong>职责边界不清：</strong><br>当 A 需要调 B，B 也需要调 A，说明两个模块没有清晰的“谁管什么”的约定。它们像两个互相插手的部门——A 要做的事有一部分藏在 B 里，B 要做的有一部分又绕回 A。</li>
+<li><strong>模块之间知道得太多：</strong><br>A 不仅知道自己该干什么，还知道 B 的存在、B 的接口、B 的调用时机。B 也一样。这违背了“最少知识原则”——每个模块本应该只和它真正需要的协作者打交道，而不是和“因为历史原因绑在一起的邻居”深度纠缠。</li>
+<li><strong>单独测试几乎不可能：</strong><br>想测 <code>PlantingService</code>？你得先把 <code>AlertService</code> 准备好。想测 <code>AlertService</code>？<code>PlantingService</code> 又不能少。就算用 Mock，你也要同时 Mock 两个互相引用的对象——单元测试的门槛被大幅抬高。</li>
+<li><strong>改一处，牵动另一处：</strong><br>循环依赖把两个模块焊在了一起。你改 A 的逻辑，B 的行为可能悄悄发生变化；你在 B 里加一个新功能，A 可能莫名其妙地受到影响。<strong>变更成本 &#x3D; 两个模块的认知成本之和。</strong></li>
+</ul>
+<hr>
+<h2 id="3-核心观点"><a href="#3-核心观点" class="headerlink" title="3. 核心观点"></a>3. 核心观点</h2><blockquote>
+<p><strong>真正要解决的，不是”怎么让循环依赖跑起来”，而是”为什么这两个模块必须互相调用”。</strong></p>
+</blockquote>
+<p>循环依赖是代码在对你喊一句话：<strong>“我的职责划错了，你听到了吗？”</strong></p>
+<p>框架可以帮你容忍这个环，但它不能帮你消除这个环背后的设计问题。<code>@Lazy</code> 不是解药，是止痛药。</p>
+<hr>
+<h1 id="三、诊断框架：A-↔-B-到底是哪类问题"><a href="#三、诊断框架：A-↔-B-到底是哪类问题" class="headerlink" title="三、诊断框架：A ↔ B 到底是哪类问题"></a>三、诊断框架：A ↔ B 到底是哪类问题</h1><p>面对一个循环依赖，大多数人的第一反应是——“能不能抽一个公共类出来？”但这不是标准答案，甚至不一定是正确答案。</p>
+<p><strong>在动手解耦之前，先搞清楚它属于哪类问题。</strong></p>
+<h2 id="1-四类典型场景"><a href="#1-四类典型场景" class="headerlink" title="1. 四类典型场景"></a>1. 四类典型场景</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>典型特征</th>
+<th>本质</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>共享能力型</strong></td>
+<td>A 和 B 都需要同一段逻辑，但这段逻辑历史上只写在了一方，导致另一方”借用”</td>
+<td>公共能力没抽出来</td>
+</tr>
+<tr>
+<td><strong>流程协作型</strong></td>
+<td>A 触发 B 做一件事，B 做完需要把结果回写&#x2F;通知 A</td>
+<td>状态流转缺少机制</td>
+</tr>
+<tr>
+<td><strong>职责拆分过细型</strong></td>
+<td>本来是一件事，被硬拆成两个类，拆分后反而互相高度依赖</td>
+<td>边界画错了</td>
+</tr>
+<tr>
+<td><strong>历史演化型</strong></td>
+<td>最初 A 很单纯，后来加了需求 A 调 B，再后来 B 又因为新需求反向依赖 A，慢慢”长”成环</td>
+<td>没及时重构</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="1-1-共享能力型"><a href="#1-1-共享能力型" class="headerlink" title="1.1 共享能力型"></a>1.1 共享能力型</h3><p><strong>典型场景：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// OrderService 里写了一段地址校验逻辑</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isValidAddress(order.getAddress())) &#123;  <span class="comment">// 校验逻辑在这里</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BusinessException</span>(<span class="string">&quot;地址无效&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 创建订单...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">isValidAddress</span><span class="params">(String address)</span> &#123;</span><br><span class="line">        <span class="comment">// 一段比较复杂的地址格式校验</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// UserService 也需要校验地址，但它没有这段逻辑，于是——</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> OrderService orderService;  <span class="comment">// 仅仅为了借用地址校验</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateAddress</span><span class="params">(Long userId, String newAddress)</span> &#123;</span><br><span class="line">        <span class="comment">// 借用 OrderService 的方法来校验</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>本质</strong>：地址校验是一段<strong>公共能力</strong>，它不属于 <code>OrderService</code> 也不属于 <code>UserService</code>。只是历史上最先写在了 <code>OrderService</code> 里，后来者只能”借用”，借用多了就变成了环。</p>
+<hr>
+<h3 id="1-2-流程协作型"><a href="#1-2-流程协作型" class="headerlink" title="1.2 流程协作型"></a>1.2 流程协作型</h3><p><strong>典型场景</strong>：就是引言里的种植—预警例子。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">种植模块更新信息 → 需要触发预警</span><br><span class="line">预警模块处理完 → 需要回写种植模块的状态</span><br></pre></td></tr></table></figure>
+
+<p><strong>本质</strong>：两个模块之间是<strong>状态流转</strong>的关系——“你变了，我处理；我处理完，通知你”。它们不是在共享一段逻辑，而是在协作完成一个流程。问题是，<strong>协作不等于互相直接调用。</strong></p>
+<hr>
+<h3 id="1-3-职责拆分过细型"><a href="#1-3-职责拆分过细型" class="headerlink" title="1.3 职责拆分过细型"></a>1.3 职责拆分过细型</h3><p><strong>典型场景：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 把&quot;订单审批&quot;拆成两个类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderApprovalService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> OrderApprovalValidator validator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">approve</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        validator.validate(order);  <span class="comment">// 校验</span></span><br><span class="line">        <span class="comment">// 审批逻辑...</span></span><br><span class="line">        validator.recordApproval(order);  <span class="comment">// 校验类还要记录审批结果？？</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderApprovalValidator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> OrderApprovalService approvalService;  <span class="comment">// 又回去了</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">validate</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        <span class="comment">// 校验不通过时，又回调审批服务去更新状态</span></span><br><span class="line">        <span class="keyword">if</span> (fail) &#123;</span><br><span class="line">            approvalService.reject(order);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>本质</strong>：拆分的人本意是好的——想把”校验”和”审批”分开。但实际上，这两个职责在业务上根本无法独立存在。校验的结果直接影响审批流程，审批的状态又反过来影响校验的判断。<strong>强行拆分的代价，就是制造了一个环。</strong></p>
+<hr>
+<h3 id="1-4-历史演化型"><a href="#1-4-历史演化型" class="headerlink" title="1.4 历史演化型"></a>1.4 历史演化型</h3><p><strong>典型场景</strong>：不是一次性设计出来的，而是”长”出来的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">V1.0：OrderService 很简单，只管创建订单</span><br><span class="line">V1.1：需求——订单创建后要通知物流，于是 OrderService → LogisticsService</span><br><span class="line">V1.2：需求——物流发货后要更新订单状态，于是 LogisticsService → OrderService</span><br><span class="line">V1.3：需求——订单取消后要通知物流停发，互相调用的方法又多了一个</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><strong>本质</strong>：每一个需求单独看都合理，但没有人站在全局视角问一句——<strong>“这两个模块的关系，是不是已经越过边界了？”</strong> 循环依赖往往不是设计出来的，而是”欠下的设计债”。</p>
+<hr>
+<h2 id="2-三个诊断问题"><a href="#2-三个诊断问题" class="headerlink" title="2. 三个诊断问题"></a>2. 三个诊断问题</h2><p>拿到一个循环依赖，先别急着动手。问自己三句话：</p>
+<p><strong>问题一：A 调 B，是为了让 B “帮忙做一件事”，还是为了”拿 B 的结果”？</strong></p>
+<ul>
+<li>“帮忙做一件事”——比如校验、转换、查询——说明 A 和 B <strong>共享了一段能力</strong></li>
+<li>“拿 B 的结果”——比如触发处理、获取返回值——说明 A 和 B 是<strong>流程协作</strong>关系</li>
+</ul>
+<p><strong>问题二：B 再调 A，是因为 B “必须控制 A”，还是只想”把结果通知 A”？</strong></p>
+<ul>
+<li>“必须控制 A”——比如直接修改 A 的状态、调用 A 的核心方法——说明职责边界可能画错了</li>
+<li>“把结果通知 A”——比如”我做完了，你看着办”——说明缺少一个通知机制</li>
+</ul>
+<p><strong>问题三：这两个模块之间，共享的是”能力”、”状态流转”，还是”职责根本就没拆清”？</strong></p>
+<ul>
+<li>共享能力 → 拆出去</li>
+<li>状态流转 → 用事件</li>
+<li>职责重叠 → 重新画边界</li>
+</ul>
+<hr>
+<h2 id="3-诊断结论-→-解法映射"><a href="#3-诊断结论-→-解法映射" class="headerlink" title="3. 诊断结论 → 解法映射"></a>3. 诊断结论 → 解法映射</h2><table>
+<thead>
+<tr>
+<th>诊断结论</th>
+<th>解法方向</th>
+<th>详细展开</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>共享能力</td>
+<td>抽取第三方模块</td>
+<td>见第四节 1</td>
+</tr>
+<tr>
+<td>流程通知</td>
+<td>事件驱动</td>
+<td>见第四节 2</td>
+</tr>
+<tr>
+<td>职责重叠</td>
+<td>重新划分边界</td>
+<td>见第四节 3</td>
+</tr>
+<tr>
+<td>短期改不动</td>
+<td>延迟注入 &#x2F; 框架补丁（过渡方案）</td>
+<td>见第四节 4</td>
+</tr>
+</tbody></table>
+<hr>
+<h1 id="四、四种解耦方式及选择指南"><a href="#四、四种解耦方式及选择指南" class="headerlink" title="四、四种解耦方式及选择指南"></a>四、四种解耦方式及选择指南</h1><h2 id="1-方式一：抽取第三方模块（共享能力的解法）"><a href="#1-方式一：抽取第三方模块（共享能力的解法）" class="headerlink" title="1. 方式一：抽取第三方模块（共享能力的解法）"></a>1. 方式一：抽取第三方模块（共享能力的解法）</h2><h3 id="1-1-核心思想"><a href="#1-1-核心思想" class="headerlink" title="1.1 核心思想"></a>1.1 核心思想</h3><p>把 A 和 B <strong>互相需要的那部分能力</strong>，抽到一个独立的 C 中。让依赖关系从”环”变成”星”：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">抽之前：                    抽之后：</span><br><span class="line">A ←→ B                     A → C ← B</span><br></pre></td></tr></table></figure>
+
+<p>A 和 B 不再互相知道对方。它们都只依赖 C。</p>
+<h3 id="1-2-适用场景"><a href="#1-2-适用场景" class="headerlink" title="1.2 适用场景"></a>1.2 适用场景</h3><ul>
+<li>公共校验（地址校验、参数校验、业务规则校验）</li>
+<li>公共查询（按相同条件查同一张表、组装相同的 VO）</li>
+<li>公共规则计算（折扣计算、税率计算、积分计算）</li>
+<li>公共转换逻辑（DTO ↔ Entity ↔ VO 的映射）</li>
+</ul>
+<h3 id="1-3-代码示例"><a href="#1-3-代码示例" class="headerlink" title="1.3 代码示例"></a>1.3 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 抽之前：OrderService 和 UserService 互相借用地址校验</span></span><br><span class="line"><span class="comment">// 抽之后：</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AddressValidator</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isValid</span><span class="params">(String address)</span> &#123;</span><br><span class="line">        <span class="comment">// 集中管理地址校验逻辑</span></span><br><span class="line">        <span class="keyword">return</span> address != <span class="literal">null</span> &amp;&amp; address.matches(<span class="string">&quot;...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AddressValidator addressValidator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!addressValidator.isValid(order.getAddress())) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BusinessException</span>(<span class="string">&quot;地址无效&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AddressValidator addressValidator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateAddress</span><span class="params">(Long userId, String newAddress)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!addressValidator.isValid(newAddress)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BusinessException</span>(<span class="string">&quot;地址无效&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>三个类的关系变成了：<code>OrderService → AddressValidator ← UserService</code>。环消失了。</p>
+<h3 id="1-4-优点"><a href="#1-4-优点" class="headerlink" title="1.4 优点"></a>1.4 优点</h3><ul>
+<li>职责最清晰——<code>AddressValidator</code> 只做一件事，所有人都知道去哪找它</li>
+<li>最容易理解和维护——新人看代码不会困惑”为什么 OrderService 要注 UserService”</li>
+<li>依赖关系从环变成星型，测试变得轻松</li>
+</ul>
+<h3 id="1-5-缺点"><a href="#1-5-缺点" class="headerlink" title="1.5 缺点"></a>1.5 缺点</h3><ul>
+<li><strong>不是所有场景都适合抽</strong>。如果你抽出来的 C 叫 <code>PlantingAlertCoordinator</code>，里面做的事是”先调种植、再调预警、再回调种植”——那你这不叫抽取，叫<strong>把环换了个地方放</strong></li>
+<li>强行抽会造成”万能中间类”或”协调器垃圾桶”——一个类依赖所有人，所有人依赖一个类，只是把环换成了辐射状混乱</li>
+</ul>
+<h3 id="1-6-判断标准"><a href="#1-6-判断标准" class="headerlink" title="1.6 判断标准"></a>1.6 判断标准</h3><blockquote>
+<p><strong>如果 A 和 B 互相调用是因为”都需要同一块能力”，优先抽第三方。如果不是，不要硬抽。</strong></p>
+</blockquote>
+<hr>
+<h2 id="2-方式二：事件驱动（流程通知的解法）"><a href="#2-方式二：事件驱动（流程通知的解法）" class="headerlink" title="2. 方式二：事件驱动（流程通知的解法）"></a>2. 方式二：事件驱动（流程通知的解法）</h2><h3 id="2-1-核心思想"><a href="#2-1-核心思想" class="headerlink" title="2.1 核心思想"></a>2.1 核心思想</h3><p>不直接调用对方。而是<strong>发布一个”已经发生的事实”</strong>，由关心这个事实的模块自行处理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">调之前：A 直接调 B，B 直接调 A</span><br><span class="line">调之后：A 发布事件 → B 监听处理 → B 发布事件 → A 监听处理</span><br></pre></td></tr></table></figure>
+
+<p>A 和 B 之间不再有直接的代码依赖。它们只依赖<strong>事件对象</strong>本身。</p>
+<h3 id="2-2-适用场景"><a href="#2-2-适用场景" class="headerlink" title="2.2 适用场景"></a>2.2 适用场景</h3><ul>
+<li>A 的变化需要触发 B 的处理，B 处理完又需要影响 A</li>
+<li>但双方在业务语义上<strong>不应该直接控制彼此</strong></li>
+<li>未来可能还有其他模块也需要关心这些变化（扩展性需求）</li>
+</ul>
+<h3 id="2-3-代码示例"><a href="#2-3-代码示例" class="headerlink" title="2.3 代码示例"></a>2.3 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义事件（表达事实，不表达命令）</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingInfoUpdatedEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long plantingId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PlantingData updatedData;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PlantingInfoUpdatedEvent</span><span class="params">(Long plantingId, PlantingData updatedData)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.plantingId = plantingId;</span><br><span class="line">        <span class="built_in">this</span>.updatedData = updatedData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlertCompletedEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long plantingId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AlertResult result;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AlertCompletedEvent</span><span class="params">(Long plantingId, AlertResult result)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.plantingId = plantingId;</span><br><span class="line">        <span class="built_in">this</span>.result = result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 种植模块：只做自己的事，做完发事件</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ApplicationEventPublisher publisher;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updatePlantingInfo</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        saveOrUpdate(data);</span><br><span class="line">        <span class="comment">// 发布事实：&quot;种植信息已经更新了&quot;</span></span><br><span class="line">        publisher.publishEvent(<span class="keyword">new</span> <span class="title class_">PlantingInfoUpdatedEvent</span>(data.getId(), data));</span><br><span class="line">        <span class="comment">// 种植模块不知道谁会监听，也不关心</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAlertCompleted</span><span class="params">(AlertCompletedEvent event)</span> &#123;</span><br><span class="line">        <span class="comment">// 监听事实：&quot;预警处理完了&quot;</span></span><br><span class="line">        <span class="comment">// 种植模块自己决定要不要更新、怎么更新</span></span><br><span class="line">        updateAlertStatus(event.getPlantingId(), event.getResult());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 预警模块：只做自己的事，做完也发事件</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlertService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ApplicationEventPublisher publisher;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onPlantingInfoUpdated</span><span class="params">(PlantingInfoUpdatedEvent event)</span> &#123;</span><br><span class="line">        <span class="comment">// 监听事实：&quot;种植信息更新了&quot;</span></span><br><span class="line">        <span class="comment">// 预警模块自己决定要不要触发预警</span></span><br><span class="line">        <span class="type">AlertResult</span> <span class="variable">result</span> <span class="operator">=</span> doAlert(event.getUpdatedData());</span><br><span class="line">        <span class="comment">// 发布事实：&quot;预警处理完成了&quot;</span></span><br><span class="line">        publisher.publishEvent(<span class="keyword">new</span> <span class="title class_">AlertCompletedEvent</span>(event.getPlantingId(), result));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> AlertResult <span class="title function_">doAlert</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        <span class="comment">// 预警规则计算逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个 Service 之间<strong>没有任何直接的代码依赖</strong>。<code>PlantingService</code> 的 import 列表里不会出现 <code>AlertService</code>，反之亦然。</p>
+<h3 id="2-4-优点"><a href="#2-4-优点" class="headerlink" title="2.4 优点"></a>2.4 优点</h3><ul>
+<li><strong>彻底解耦</strong>：两个模块在代码层面不再互相知道对方</li>
+<li><strong>扩展性极强</strong>：后续第三个模块需要关心种植更新，加一个 <code>@EventListener</code> 即可，无需改动现有代码</li>
+<li><strong>符合业务语义</strong>：”你变了，我处理；我处理完，通知你”——这种关系天然就是事件驱动，而不是互相调用</li>
+</ul>
+<h3 id="2-5-缺点"><a href="#2-5-缺点" class="headerlink" title="2.5 缺点"></a>2.5 缺点</h3><ul>
+<li><strong>调用链不再直观</strong>：直接调用的代码，<code>Ctrl+Click</code> 可以一路跟下去。事件的调用链是”发布—订阅”，IDE 无法直接追踪”谁在监听这个事件”</li>
+<li><strong>调试难度更高</strong>：出问题时，你需要在日志中关联事件发布和事件处理的时间线</li>
+<li><strong>需要设计好事件语义</strong>：事件名字不好，解耦就变成换了一种形式的耦合</li>
+</ul>
+<h3 id="2-6-事件设计最重要的原则"><a href="#2-6-事件设计最重要的原则" class="headerlink" title="2.6 事件设计最重要的原则"></a>2.6 事件设计最重要的原则</h3><blockquote>
+<p><strong>事件表达的是”事实”，不是”命令”。</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>错误的事件命名</th>
+<th>正确的事件命名</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>请修改种植信息事件</code></td>
+<td><code>预警处理完成事件</code></td>
+<td>前者是命令，后者是事实</td>
+</tr>
+<tr>
+<td><code>触发预警事件</code></td>
+<td><code>种植信息已更新事件</code></td>
+<td>前者在指挥别人做事，后者在陈述发生了什么</td>
+</tr>
+<tr>
+<td><code>回写状态事件</code></td>
+<td><code>预警结果已产生事件</code></td>
+<td>前者是”你去做 XXX”，后者是”XXX 已经发生了”</td>
+</tr>
+</tbody></table>
+<p><strong>“请修改 XX 信息事件”本质还是隐式耦合</strong>——你只是把”直接调方法”换成了”发事件指挥别人”。真正的解耦是：<strong>我只说我经历了什么，谁关心谁自己来处理。</strong></p>
+<h3 id="2-7-判断标准"><a href="#2-7-判断标准" class="headerlink" title="2.7 判断标准"></a>2.7 判断标准</h3><blockquote>
+<p><strong>如果两个模块是”你变了我处理，我处理完再通知你”的关系，用事件驱动，而不是直接互调。</strong></p>
+</blockquote>
+<hr>
+<h2 id="3-方式三：重新划分职责边界（职责混乱的解法）"><a href="#3-方式三：重新划分职责边界（职责混乱的解法）" class="headerlink" title="3. 方式三：重新划分职责边界（职责混乱的解法）"></a>3. 方式三：重新划分职责边界（职责混乱的解法）</h2><h3 id="3-1-核心思想"><a href="#3-1-核心思想" class="headerlink" title="3.1 核心思想"></a>3.1 核心思想</h3><p>不是加一层，不是换一种注入方式，而是<strong>承认一个事实：A 和 B 现在的边界画错了。</strong></p>
+<p>有时候，循环依赖不是”缺少某个机制”，而是<strong>模块划分本身就是错的</strong>。</p>
+<h3 id="3-2-适用场景"><a href="#3-2-适用场景" class="headerlink" title="3.2 适用场景"></a>3.2 适用场景</h3><ul>
+<li>A 和 B 的方法<strong>互相频繁调用</strong>，你中有我我中有你</li>
+<li>尝试抽第三方，但发现<strong>抽不干净</strong>——剩下的逻辑还是互相依赖</li>
+<li>在业务语义上，A 和 B <strong>本来就是一个整体</strong>，只是被人为切开了</li>
+<li>两个模块之间的<strong>方法调用不像是协作，更像是”你帮我干半件事，我再帮你干半件事”</strong></li>
+</ul>
+<h3 id="3-3-可选处理"><a href="#3-3-可选处理" class="headerlink" title="3.3 可选处理"></a>3.3 可选处理</h3><h4 id="3-3-1-合并模块"><a href="#3-3-1-合并模块" class="headerlink" title="3.3.1 合并模块"></a>3.3.1 合并模块</h4><p>如果两个类拆开后反而耦合更重，那说明<strong>它们根本不该拆</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 拆之前（过度拆分）：</span></span><br><span class="line">OrderValidator ↔ OrderApprovalService  <span class="comment">// 循环依赖</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 合并后：</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderApprovalService</span> &#123;</span><br><span class="line">    <span class="comment">// 校验和审批本身就是一个完整的业务流程</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">approve</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        validate(order);    <span class="comment">// 内部方法，不是外部调用</span></span><br><span class="line">        doApprove(order);</span><br><span class="line">        recordResult(order);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">validate</span><span class="params">(Order order)</span> &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">doApprove</span><span class="params">(Order order)</span> &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">recordResult</span><span class="params">(Order order)</span> &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个类的内部可以自由调用自己的私有方法，不存在循环依赖。<strong>单一职责原则说的是”一个类只负责一件事”——“审批订单”就是一件事。”校验”和”执行”是这件事的两个步骤，不一定是两个类的职责。</strong></p>
+<h4 id="3-3-2-重新分层"><a href="#3-3-2-重新分层" class="headerlink" title="3.3.2 重新分层"></a>3.3.2 重新分层</h4><p>如果 A 和 B 不是该不该拆的问题，而是<strong>谁管谁的问题</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">原来的边界（错的）：</span><br><span class="line">  PlantingService：管理状态 + 触发预警</span><br><span class="line">  AlertService：处理预警 + 回写状态</span><br><span class="line"></span><br><span class="line">重新分层后：</span><br><span class="line">  PlantingService：只管种植的状态（增删改查 + 状态机）</span><br><span class="line">  AlertService：只管预警的规则和计算</span><br><span class="line">  PlantingAlertCoordinator：协调&quot;种植变化 → 预警 → 回写&quot;这个流程</span><br></pre></td></tr></table></figure>
+
+<p><code>PlantingAlertCoordinator</code> 依赖 <code>PlantingService</code> 和 <code>AlertService</code>，但后两者<strong>彼此不互相依赖</strong>。环变成了有向无环图（DAG）。</p>
+<h4 id="3-3-3-分离状态与规则"><a href="#3-3-3-分离状态与规则" class="headerlink" title="3.3.3 分离状态与规则"></a>3.3.3 分离状态与规则</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 常见的职责混乱模式：</span></span><br><span class="line"><span class="comment">// &quot;种植模块&quot;既管数据又管规则 → 预警模块不得不回调它来改数据</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 重新划分后：</span></span><br><span class="line"><span class="comment">// PlantingRepository：只负责数据的持久化和查询（纯状态）</span></span><br><span class="line"><span class="comment">// PlantingRuleEngine：只负责种植相关的规则计算（纯逻辑）</span></span><br><span class="line"><span class="comment">// AlertService：只负责预警规则</span></span><br><span class="line"><span class="comment">// 三者之间没有循环依赖</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-判断标准"><a href="#3-4-判断标准" class="headerlink" title="3.4 判断标准"></a>3.4 判断标准</h3><blockquote>
+<p><strong>如果两个模块在业务语义上高度绑定，拆不干净、抽不干净，那不是解耦技巧的问题，是边界画错了。有些循环依赖不是”需要解耦”，而是”需要重新建模”。</strong></p>
+</blockquote>
+<hr>
+<h2 id="4-方式四：延迟注入-非构造器注入（实在改不动的过渡方案）"><a href="#4-方式四：延迟注入-非构造器注入（实在改不动的过渡方案）" class="headerlink" title="4. 方式四：延迟注入 &#x2F; 非构造器注入（实在改不动的过渡方案）"></a>4. 方式四：延迟注入 &#x2F; 非构造器注入（实在改不动的过渡方案）</h2><h3 id="4-1-核心思想"><a href="#4-1-核心思想" class="headerlink" title="4.1 核心思想"></a>4.1 核心思想</h3><p>借助框架机制，让依赖”晚一点拿到手”。技术上让环能跑起来，设计上<strong>心里清楚这是妥协</strong>。</p>
+<h3 id="4-2-适用场景"><a href="#4-2-适用场景" class="headerlink" title="4.2 适用场景"></a>4.2 适用场景</h3><ul>
+<li>老系统改造，涉及 30 个模块、50 个调用链，重构成本过高</li>
+<li>临时止血——线上问题需要快速修复，不能花两周重构</li>
+<li>团队对业务理解还不够深，不确定怎么拆最合理——先跑着，想清楚了再动</li>
+</ul>
+<h3 id="4-3-常见做法"><a href="#4-3-常见做法" class="headerlink" title="4.3 常见做法"></a>4.3 常见做法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方式一：@Lazy</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AlertService alertService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PlantingService</span><span class="params">(<span class="meta">@Lazy</span> AlertService alertService)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.alertService = alertService;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式二：Setter 注入</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> AlertService alertService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAlertService</span><span class="params">(AlertService alertService)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.alertService = alertService;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式三：ApplicationContext 手动获取（最不推荐）</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingService</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ApplicationContext context;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">AlertService</span> <span class="variable">alertService</span> <span class="operator">=</span> context.getBean(AlertService.class);</span><br><span class="line">        alertService.checkAndAlert(...);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-优点"><a href="#4-4-优点" class="headerlink" title="4.4 优点"></a>4.4 优点</h3><ul>
+<li>快速，改动小，先让系统跑起来</li>
+<li>对现有代码几乎零影响</li>
+</ul>
+<h3 id="4-5-缺点"><a href="#4-5-缺点" class="headerlink" title="4.5 缺点"></a>4.5 缺点</h3><ul>
+<li><strong>没有解决任何设计问题</strong>——环还在，只是框架帮你藏起来了</li>
+<li><strong>容易隐藏风险</strong>——启动不报错不代表设计没问题，下次加功能可能就炸</li>
+<li><strong>Setter 注入和 ApplicationContext 获取让依赖关系不再显式</strong>——你无法通过构造器一眼看出这个类依赖谁</li>
+</ul>
+<h3 id="4-6-定性"><a href="#4-6-定性" class="headerlink" title="4.6 定性"></a>4.6 定性</h3><blockquote>
+<p><strong>这不是解耦，这是容忍耦合。</strong> 你可以用，但要把它当作 <strong>“TODO：重构”</strong> 的标记，而不是最终的答案。每一次 <code>@Lazy</code> 都是一张欠条——欠的是未来的重构成本。</p>
+</blockquote>
+<hr>
+<h2 id="5-一句话选择指南"><a href="#5-一句话选择指南" class="headerlink" title="5. 一句话选择指南"></a>5. 一句话选择指南</h2><blockquote>
+<p><strong>共享能力，抽第三方；状态通知，用事件；职责混乱，重划边界；实在改不动，再用框架补丁。</strong></p>
+</blockquote>
+<pre><code class="highlight mermaid">graph TD
+    A[&quot;遇到 A ↔ B 循环依赖&quot;] --&gt; B&#123;&quot;A 和 B 互相调用&lt;br/&gt;是因为什么？&quot;&#125;
+    B --&gt;|&quot;都需要同一块能力&lt;br/&gt;（校验/转换/查询）&quot;| C[&quot;抽取第三方模块&quot;]
+    B --&gt;|&quot;你变了我处理&lt;br/&gt;我处理完通知你&quot;| D[&quot;事件驱动&quot;]
+    B --&gt;|&quot;本来是一件事&lt;br/&gt;被硬拆成两部分&quot;| E[&quot;重新划分职责边界&quot;]
+    B --&gt;|&quot;老代码太重&lt;br/&gt;短期实在改不动&quot;| F[&quot;@Lazy / Setter 注入&lt;br/&gt;（标记 TODO）&quot;]</code></pre>
+
+<hr>
+<h1 id="五、实战案例：种植模块-↔-预警模块"><a href="#五、实战案例：种植模块-↔-预警模块" class="headerlink" title="五、实战案例：种植模块 ↔ 预警模块"></a>五、实战案例：种植模块 ↔ 预警模块</h1><h2 id="1-场景还原"><a href="#1-场景还原" class="headerlink" title="1. 场景还原"></a>1. 场景还原</h2><p>这是一个农业信息化系统中的真实场景：</p>
+<ul>
+<li><strong>种植模块（PlantingService）</strong>：管理种植信息的增删改查，包括种植面积、作物类型、生长阶段等</li>
+<li><strong>预警模块（AlertService）</strong>：根据预设规则（如”连续 3 天未浇水”、”温度超过阈值”）自动生成预警</li>
+</ul>
+<p>业务流程是：</p>
+<ol>
+<li>种植信息发生变更（如管理员更新了生长阶段）</li>
+<li>需要触发预警模块，让它根据新信息重新评估是否需要预警</li>
+<li>预警模块处理完后，需要将预警结果（如”产生了 1 条高温预警”）回写到种植记录中</li>
+</ol>
+<p>于是代码变成了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AlertService alertService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updatePlanting</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        plantingMapper.update(data);</span><br><span class="line">        <span class="comment">// 触发预警</span></span><br><span class="line">        alertService.evaluateAlert(data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateAlertStatus</span><span class="params">(Long plantingId, AlertResult result)</span> &#123;</span><br><span class="line">        <span class="comment">// 预警模块会回调这个方法</span></span><br><span class="line">        plantingMapper.updateAlertInfo(plantingId, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlertService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PlantingService plantingService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">evaluateAlert</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        <span class="type">AlertResult</span> <span class="variable">result</span> <span class="operator">=</span> doEvaluate(data);</span><br><span class="line">        <span class="comment">// 回写种植模块</span></span><br><span class="line">        plantingService.updateAlertStatus(data.getId(), result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构造器注入 → 启动报错 → 加 <code>@Lazy</code> → 跑起来了。但每一次加新功能，两个模块的边界就更模糊一点。</p>
+<hr>
+<h2 id="2-用诊断框架分析"><a href="#2-用诊断框架分析" class="headerlink" title="2. 用诊断框架分析"></a>2. 用诊断框架分析</h2><p>套用第三节的三个问题：</p>
+<p><strong>问题一：种植调预警，是为了让预警”帮忙做一件事”，还是为了”拿预警的结果”？</strong></p>
+<p>是为了触发预警的处理——种植模块不关心预警的计算细节，它只是说”我的信息变了，你该重新评估了”。这是<strong>流程触发</strong>，不是共享能力。</p>
+<p><strong>问题二：预警调种植，是因为”必须控制种植”，还是只想”把结果通知种植”？</strong></p>
+<p>预警模块只是想把处理结果写回去——它并不想控制种植模块的其他行为。本质是<strong>结果通知</strong>，不是控制。</p>
+<p><strong>问题三：两个模块共享的是”能力”、”状态流转”，还是”职责没拆清”？</strong></p>
+<p>种植和预警是两个独立的业务域。种植管”种了什么、长到哪了”，预警管”什么情况下需要提醒”。它们的关系是<strong>状态流转</strong>——不是共享逻辑，也不是职责重叠。</p>
+<p><strong>诊断结论</strong>：典型的流程协作型，适合<strong>事件驱动</strong>。</p>
+<hr>
+<h2 id="3-为什么不适合抽第三方"><a href="#3-为什么不适合抽第三方" class="headerlink" title="3. 为什么不适合抽第三方"></a>3. 为什么不适合抽第三方</h2><p>有人会说：”那抽一个 <code>PlantingAlertService</code> 出来，把互相调用的逻辑都放进去不就行了？”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这种方式的问题：</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingAlertCoordinator</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PlantingService plantingService;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AlertService alertService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onPlantingUpdated</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        plantingService.update(data);</span><br><span class="line">        <span class="type">AlertResult</span> <span class="variable">result</span> <span class="operator">=</span> alertService.evaluate(data);</span><br><span class="line">        plantingService.updateAlertStatus(data.getId(), result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看起来环消失了，但实际上：</p>
+<ul>
+<li><code>PlantingAlertCoordinator</code> 这个类本身<strong>没有业务含义</strong>——它只是一个”流程拼装器”</li>
+<li>种植和预警的流程不是一成不变的——需求增加（如”预警后还可能要生成工单”），这个类会越来越臃肿</li>
+<li>种植模块和预警模块依然通过 <code>PlantingAlertCoordinator</code> <strong>间接耦合</strong>——只是把环从两个类之间移到了三个类之间</li>
+</ul>
+<blockquote>
+<p><strong>抽第三方的本质是把”共同的能力”提出来。</strong> 但这里种植和预警没有共同的能力——它们有共同的<strong>流程</strong>。流程不应该被”抽出来”，应该被<strong>编排</strong>。事件驱动就是一种编排方式。</p>
+</blockquote>
+<hr>
+<h2 id="4-事件驱动方案设计"><a href="#4-事件驱动方案设计" class="headerlink" title="4. 事件驱动方案设计"></a>4. 事件驱动方案设计</h2><p><strong>定义事件：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 事件一：种植信息已更新（事实）</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingInfoUpdatedEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long plantingId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PlantingData updatedData;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PlantingInfoUpdatedEvent</span><span class="params">(Long plantingId, PlantingData updatedData)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.plantingId = plantingId;</span><br><span class="line">        <span class="built_in">this</span>.updatedData = updatedData;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 事件二：预警评估已完成（事实）</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlertEvaluationCompletedEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long plantingId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AlertResult result;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AlertEvaluationCompletedEvent</span><span class="params">(Long plantingId, AlertResult result)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.plantingId = plantingId;</span><br><span class="line">        <span class="built_in">this</span>.result = result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意命名——<strong>“已更新”、”已完成”</strong>——表达的是事实，不是命令。</p>
+<p><strong>重构种植模块：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlantingService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PlantingMapper plantingMapper;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ApplicationEventPublisher eventPublisher;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updatePlanting</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        plantingMapper.update(data);</span><br><span class="line">        <span class="comment">// 发布事实：&quot;我更新完了&quot;，仅此而已</span></span><br><span class="line">        eventPublisher.publishEvent(</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">PlantingInfoUpdatedEvent</span>(data.getId(), data)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听事实：&quot;预警处理完了&quot;</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAlertEvaluationCompleted</span><span class="params">(AlertEvaluationCompletedEvent event)</span> &#123;</span><br><span class="line">        plantingMapper.updateAlertInfo(</span><br><span class="line">            event.getPlantingId(),</span><br><span class="line">            event.getResult()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重构预警模块：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlertService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ApplicationEventPublisher eventPublisher;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听事实：&quot;种植信息更新了&quot;</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onPlantingInfoUpdated</span><span class="params">(PlantingInfoUpdatedEvent event)</span> &#123;</span><br><span class="line">        <span class="type">AlertResult</span> <span class="variable">result</span> <span class="operator">=</span> doEvaluate(event.getUpdatedData());</span><br><span class="line">        <span class="comment">// 发布事实：&quot;我评估完了&quot;</span></span><br><span class="line">        eventPublisher.publishEvent(</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">AlertEvaluationCompletedEvent</span>(event.getPlantingId(), result)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> AlertResult <span class="title function_">doEvaluate</span><span class="params">(PlantingData data)</span> &#123;</span><br><span class="line">        <span class="comment">// 预警规则计算逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>重构后的依赖关系：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PlantingService  ──→  PlantingInfoUpdatedEvent</span><br><span class="line">PlantingService  ──→  AlertEvaluationCompletedEvent</span><br><span class="line">AlertService     ──→  PlantingInfoUpdatedEvent</span><br><span class="line">AlertService     ──→  AlertEvaluationCompletedEvent</span><br></pre></td></tr></table></figure>
+
+<p><code>PlantingService</code> 和 <code>AlertService</code> 之间<strong>没有任何直接的代码依赖</strong>。它们都只依赖事件类和 Spring 的事件发布&#x2F;监听机制。</p>
+<hr>
+<h2 id="5-关键设计要点"><a href="#5-关键设计要点" class="headerlink" title="5. 关键设计要点"></a>5. 关键设计要点</h2><p><strong>第一：事件表达事实，不表达命令</strong></p>
+<ul>
+<li><code>PlantingInfoUpdatedEvent</code>（种植信息已更新）——这是一个事实</li>
+<li><code>TriggerAlertEvent</code>（触发预警）——这是在命令别人做事</li>
+</ul>
+<p>前者是”我发生了什么”；后者是”你给我做什么”。<strong>事件的精髓是前者。</strong></p>
+<p><strong>第二：每个模块只关心自己的职责</strong></p>
+<ul>
+<li>种植模块只关心”种植信息的增删改查”和”响应预警结果”——它不需要知道预警怎么算的</li>
+<li>预警模块只关心”根据信息评估预警”——它不需要知道种植的增删改查逻辑</li>
+</ul>
+<p><strong>第三：从”互相控制”变成”基于事实的协作”</strong></p>
+<p>旧的代码是”我调你、你调我”，双方牢牢绑在一起。新的代码是”我发布我的事实，你发布你的事实，各自决定要响应什么”。<strong>这是一种更松散、更有弹性的协作方式。</strong></p>
+<hr>
+<h1 id="六、常见误区"><a href="#六、常见误区" class="headerlink" title="六、常见误区"></a>六、常见误区</h1><h2 id="1-误区一：”能跑就算解决了”"><a href="#1-误区一：”能跑就算解决了”" class="headerlink" title="1. 误区一：”能跑就算解决了”"></a>1. 误区一：”能跑就算解决了”</h2><p>用字段注入或 <code>@Lazy</code> 让代码跑起来，不代表设计合理。</p>
+<p>Spring 的三级缓存机制可以让循环依赖不报错，这本质上是框架在帮你<strong>容忍技术层面的耦合</strong>，而不是帮你消除设计层面的问题。环还在，你每次改代码时依然要同时理解两个模块；你每次写测试依然要 Mock 两个互相依赖的对象。</p>
+<blockquote>
+<p><strong>“不报错” ≠ “没问题”。跑起来的循环依赖只是没有症状的病。</strong></p>
+</blockquote>
+<hr>
+<h2 id="2-误区二：”有循环依赖就一定抽第三方”"><a href="#2-误区二：”有循环依赖就一定抽第三方”" class="headerlink" title="2. 误区二：”有循环依赖就一定抽第三方”"></a>2. 误区二：”有循环依赖就一定抽第三方”</h2><p>这是最常见的条件反射——看到环就想抽一个 C 出来。</p>
+<p>但如果是流程协作型（A 触发 B，B 回写 A），抽第三方只会把一个”两两之间的环”变成一个”三人之间的环”——<code>PlantingAlertCoordinator</code> 看起来像是个新模块，实际上只是把环换了个地方放。</p>
+<blockquote>
+<p><strong>抽第三方的前提是”它们在共享能力”。如果它们是在协作流程，该用的不是抽第三方，是事件驱动。</strong></p>
+</blockquote>
+<hr>
+<h2 id="3-误区三：”用了事件就一定高级”"><a href="#3-误区三：”用了事件就一定高级”" class="headerlink" title="3. 误区三：”用了事件就一定高级”"></a>3. 误区三：”用了事件就一定高级”</h2><p>事件不是银弹。</p>
+<p>如果你的场景是 <code>OrderService</code> 调 <code>UserService.getUserName()</code> 只是为了显示一个名字——这不需要事件。加事件只会让一个本来 <code>Ctrl+Click</code> 就能跟过去的方法调用，变得需要搜事件名才能找到处理者。</p>
+<blockquote>
+<p><strong>事件的代价是”调用链不再直观”。这份代价应该花在值得的地方——流程协作、一对多通知、跨模块解耦。如果只是一个简单的同步查询，直接调用就行。</strong></p>
+</blockquote>
+<hr>
+<h2 id="4-误区四：”把事件当命令”"><a href="#4-误区四：”把事件当命令”" class="headerlink" title="4. 误区四：”把事件当命令”"></a>4. 误区四：”把事件当命令”</h2><p>这是事件驱动中最隐蔽的坑。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 本质还是命令</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ModifyPlantingStatusEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long plantingId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String newStatus;  <span class="comment">// &quot;去把状态改成这个值&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 表达事实</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AlertEvaluationCompletedEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long plantingId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AlertResult result;  <span class="comment">// &quot;预警结果是这样的&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>区别在于：前者在<strong>指挥别人做事</strong>，后者在<strong>告诉别人发生了什么</strong>。前者只是把 <code>plantingService.updateStatus()</code> 换成了 <code>eventPublisher.publishEvent(new ModifyPlantingStatusEvent(...))</code>——调用方式变了，耦合的本质没变。</p>
+<blockquote>
+<p><strong>如果你发事件时心里想的是”去让那个模块做 XXX”，那这个事件大概率是命令，不是事实。发事件时你应该想的是”我这边发生了什么，关心的人自己来处理”。</strong></p>
+</blockquote>
+<hr>
+<h1 id="七、总结"><a href="#七、总结" class="headerlink" title="七、总结"></a>七、总结</h1><h2 id="1-核心结论"><a href="#1-核心结论" class="headerlink" title="1. 核心结论"></a>1. 核心结论</h2><blockquote>
+<p><strong>循环依赖通常不是注入方式的问题，而是职责边界和协作方式的问题。</strong></p>
+</blockquote>
+<p>框架提供了很多方法让你”容忍”循环依赖——<code>@Lazy</code>、Setter 注入、三级缓存、提前暴露半成品对象。但它们都是在技术层面帮你的设计问题兜底。</p>
+<p>真正的解法不是问**”Spring 怎么才能让我跑起来”<strong>，而是问</strong>“我为什么会写出 A 和 B 互相依赖的代码”**。</p>
+<hr>
+<h2 id="2-解耦的真正目标"><a href="#2-解耦的真正目标" class="headerlink" title="2. 解耦的真正目标"></a>2. 解耦的真正目标</h2><p>解耦不是”让他们不再互相引用”就完事了。解耦有三个层次：</p>
+<ol>
+<li><strong>代码层面的解耦</strong>：消除直接的 import 依赖，让模块可以独立编译、独立测试</li>
+<li><strong>认知层面的解耦</strong>：让开发者理解 A 时不需要同时理解 B，降低心智负担</li>
+<li><strong>演化层面的解耦</strong>：让 A 的变化不牵动 B，B 的增加不阻塞 A</li>
+</ol>
+<p>事件驱动、抽第三方、重划边界——这些手段的意义不是为了”消除一个环”，而是为了达到这三个层次的目标。</p>
+<blockquote>
+<p><strong>解耦的本质，是把”互相控制”变成”基于边界的协作”。</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>真正优秀的设计，不是让 A 和 B 勉强能互相注入，而是让 A 和 B 即使彼此不知道对方，也能把业务协作完成。</strong></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8/" rel="tag"># 事件驱动</a>
+              <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" rel="tag"># 循环依赖</a>
+              <a href="/tags/%E8%A7%A3%E8%80%A6/" rel="tag"># 解耦</a>
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3/" rel="tag"># 设计思想</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/21/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%BA%93/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6-SpringEvent/" rel="prev" title="Spring全家桶-SpringEvent">
+                  <i class="fa fa-angle-left"></i> Spring全家桶-SpringEvent
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

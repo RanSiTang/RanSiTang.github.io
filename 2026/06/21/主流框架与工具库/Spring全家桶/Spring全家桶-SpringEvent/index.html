@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="一、Spring 事件机制概述1. 什么是 Spring 事件Spring 事件（Spring Events）是 Spring 框架内置的事件驱动编程模型，本质上是观察者模式（Observer Pattern）在容器级别的实现。它允许不同的 Bean 之间通过事件进行通信，而发布者和监听者之间完全解耦——发布者不知道谁在监听，监听者也不关心事件从何而来。 核心价值：  模块解耦：核心业务逻辑与旁路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring全家桶-SpringEvent">
+<meta property="og:url" content="http://example.com/2026/06/21/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%BA%93/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6-SpringEvent/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="一、Spring 事件机制概述1. 什么是 Spring 事件Spring 事件（Spring Events）是 Spring 框架内置的事件驱动编程模型，本质上是观察者模式（Observer Pattern）在容器级别的实现。它允许不同的 Bean 之间通过事件进行通信，而发布者和监听者之间完全解耦——发布者不知道谁在监听，监听者也不关心事件从何而来。 核心价值：  模块解耦：核心业务逻辑与旁路">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-21T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-21T12:47:25.244Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="SpringEvent">
+<meta property="article:tag" content="事件驱动">
+<meta property="article:tag" content="观察者模式">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/06/21/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%BA%93/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6-SpringEvent/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/06/21/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%BA%93/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6-SpringEvent/","path":"2026/06/21/主流框架与工具库/Spring全家桶/Spring全家桶-SpringEvent/","title":"Spring全家桶-SpringEvent"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Spring全家桶-SpringEvent | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Spring-%E4%BA%8B%E4%BB%B6%E6%9C%BA%E5%88%B6%E6%A6%82%E8%BF%B0"><span class="nav-text">一、Spring 事件机制概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Spring-%E4%BA%8B%E4%BB%B6"><span class="nav-text">1. 什么是 Spring 事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-text">2. 核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%AE%BE%E8%AE%A1%E5%93%B2%E5%AD%A6%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%BF%9B%E7%A8%8B%E5%86%85%E4%BA%8B%E4%BB%B6%EF%BC%9F"><span class="nav-text">3. 设计哲学：为什么需要进程内事件？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B"><span class="nav-text">二、快速上手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%9C%80%E7%AE%80%E7%A4%BA%E4%BE%8B"><span class="nav-text">1. 最简示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6"><span class="nav-text">1.1 定义事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%AE%9A%E4%B9%89%E7%9B%91%E5%90%AC%E5%99%A8%EF%BC%88%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="nav-text">1.2 定义监听器（注解方式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%8F%91%E5%B8%83%E4%BA%8B%E4%BB%B6"><span class="nav-text">1.3 发布事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%94%B9%E7%94%A8-POJO-%E4%BA%8B%E4%BB%B6"><span class="nav-text">1.2 改用 POJO 事件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E7%9A%84%E6%A0%B8%E5%BF%83%E6%96%B9%E5%BC%8F"><span class="nav-text">三、事件监听的核心方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E6%B3%A8%E8%A7%A3%E5%BC%8F-%E2%80%94%E2%80%94-EventListener%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-text">1. 方式一：注解式 —— @EventListener（推荐）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-condition-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%A6%E8%A7%A3"><span class="nav-text">1.1 condition 表达式详解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E6%8E%A5%E5%8F%A3%E5%BC%8F-%E2%80%94%E2%80%94-ApplicationListener"><span class="nav-text">2. 方式二：接口式 —— ApplicationListener</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8F%91%E5%B8%83%E4%BA%8B%E4%BB%B6%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-text">3. 发布事件的方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%BA%8B%E4%BB%B6%E5%B9%BF%E6%92%AD%E5%8E%9F%E7%90%86"><span class="nav-text">四、事件广播原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B9%BF%E6%92%AD%E5%99%A8%EF%BC%9AApplicationEventMulticaster"><span class="nav-text">1. 广播器：ApplicationEventMulticaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%8B%E4%BB%B6%E5%8F%91%E5%B8%83%E5%85%A8%E6%B5%81%E7%A8%8B"><span class="nav-text">2. 事件发布全流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%9B%91%E5%90%AC%E5%99%A8%E6%B3%A8%E5%86%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">3. 监听器注册流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%BA%8B%E4%BB%B6%E5%B1%82%E6%AC%A1%E4%B8%8E%E7%B1%BB%E5%9E%8B"><span class="nav-text">五、事件层次与类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Spring-%E5%86%85%E7%BD%AE%E4%BA%8B%E4%BB%B6"><span class="nav-text">1. Spring 内置事件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%85%B3%E9%94%AE%E4%BA%8B%E4%BB%B6%E5%AF%B9%E6%AF%94"><span class="nav-text">1.1 关键事件对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%9B%91%E5%90%AC%E5%86%85%E7%BD%AE%E4%BA%8B%E4%BB%B6%E7%A4%BA%E4%BE%8B"><span class="nav-text">1.2 监听内置事件示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%E5%B1%82%E6%AC%A1"><span class="nav-text">2. 自定义事件层次</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6"><span class="nav-text">六、异步事件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6"><span class="nav-text">1. 为什么需要异步事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6"><span class="nav-text">2. 配置异步事件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%90%AF%E7%94%A8-Async-%E6%94%AF%E6%8C%81"><span class="nav-text">2.1 启用 @Async 支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%87%E8%AE%B0%E5%BC%82%E6%AD%A5%E7%9B%91%E5%90%AC%E5%99%A8"><span class="nav-text">2.2 标记异步监听器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6%E7%9A%84%E4%B8%89%E4%B8%AA%E9%99%B7%E9%98%B1"><span class="nav-text">3. 异步事件的三个陷阱</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%BA%8B%E5%8A%A1%E4%B8%8A%E4%B8%8B%E6%96%87%E4%B8%A2%E5%A4%B1"><span class="nav-text">3.1 事务上下文丢失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%BC%82%E5%B8%B8%E9%9D%99%E9%BB%98%E4%B8%A2%E5%A4%B1"><span class="nav-text">3.2 异常静默丢失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%85%88%E5%90%8E%E9%A1%BA%E5%BA%8F%E4%B8%8D%E5%8F%AF%E6%8E%A7"><span class="nav-text">3.3 先后顺序不可控</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E4%BA%8B%E5%8A%A1%E6%84%9F%E7%9F%A5%E4%BA%8B%E4%BB%B6%EF%BC%9A-TransactionalEventListener"><span class="nav-text">七、事务感知事件：@TransactionalEventListener</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%BA%8B%E5%8A%A1%E6%84%9F%E7%9F%A5"><span class="nav-text">1. 为什么需要事务感知</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A0%B8%E5%BF%83%E7%94%A8%E6%B3%95"><span class="nav-text">2. 核心用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-TransactionalEventListener-vs-EventListener"><span class="nav-text">3. @TransactionalEventListener vs @EventListener</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E7%AE%80%E6%9E%90"><span class="nav-text">4. 实现原理简析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E4%BA%8B%E4%BB%B6%E9%A1%BA%E5%BA%8F%E4%B8%8E%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text">八、事件顺序与优先级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Order-%E6%8E%A7%E5%88%B6%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-text">1. @Order 控制执行顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%8B%E4%BB%B6%E6%8E%92%E5%BA%8F%E6%80%BB%E7%BB%93"><span class="nav-text">2. 事件排序总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%B3%9B%E5%9E%8B%E4%BA%8B%E4%BB%B6"><span class="nav-text">九、泛型事件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">十、高级技巧与最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BA%8B%E4%BB%B6%E8%BF%94%E5%9B%9E%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%9C%EF%BC%88Spring-5-0-8-0-%EF%BC%89"><span class="nav-text">1. 事件返回处理结果（Spring 5.0+&#x2F;8.0+）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%8B%E4%BB%B6%E4%BD%9C%E4%B8%BA%E2%80%9D%E5%86%85%E9%83%A8%E8%A7%A3%E8%80%A6%E2%80%9D%E6%89%8B%E6%AE%B5%EF%BC%88%E6%A8%A1%E5%BC%8F%E5%AF%B9%E6%AF%94%EF%BC%89"><span class="nav-text">2. 事件作为”内部解耦”手段（模式对比）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%B8%85%E5%8D%95"><span class="nav-text">3. 最佳实践清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%8C%E6%95%B4%E5%AE%9E%E6%88%98%E7%A4%BA%E4%BE%8B%EF%BC%9A%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C%E8%A7%A3%E8%80%A6"><span class="nav-text">4. 完整实战示例：用户注册解耦</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E9%81%BF%E5%9D%91"><span class="nav-text">十一、常见问题与避坑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BA%8B%E5%8A%A1%E5%86%85%E5%8F%91%E5%B8%83%E4%BA%8B%E4%BB%B6%E4%BD%86%E7%9B%91%E5%90%AC%E5%99%A8%E8%AF%BB%E4%B8%8D%E5%88%B0%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="nav-text">1. 事务内发布事件但监听器读不到新数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BE%AA%E7%8E%AF%E4%BA%8B%E4%BB%B6%EF%BC%88A-%E2%86%92-B-%E2%86%92-A%EF%BC%89"><span class="nav-text">2. 循环事件（A → B → A）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-EventListener-%E4%B8%8D%E7%94%9F%E6%95%88%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">3. @EventListener 不生效排查清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E4%BA%8B%E4%BB%B6%E8%BF%87%E5%A4%9A%E5%AF%BC%E8%87%B4%E5%90%AF%E5%8A%A8%E5%8F%98%E6%85%A2"><span class="nav-text">4. 事件过多导致启动变慢</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/21/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%BA%93/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6-SpringEvent/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Spring全家桶-SpringEvent | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring全家桶-SpringEvent
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-21 10:00:00 / 修改时间：20:47:25" itemprop="dateCreated datePublished" datetime="2026-06-21T10:00:00+08:00">2026-06-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6%E4%B8%8E%E7%94%9F%E6%80%81/" itemprop="url" rel="index"><span itemprop="name">开发框架与生态</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6%E4%B8%8E%E7%94%9F%E6%80%81/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6/" itemprop="url" rel="index"><span itemprop="name">Spring全家桶</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="一、Spring-事件机制概述"><a href="#一、Spring-事件机制概述" class="headerlink" title="一、Spring 事件机制概述"></a>一、Spring 事件机制概述</h1><h2 id="1-什么是-Spring-事件"><a href="#1-什么是-Spring-事件" class="headerlink" title="1. 什么是 Spring 事件"></a>1. 什么是 Spring 事件</h2><p>Spring 事件（Spring Events）是 Spring 框架内置的<strong>事件驱动编程模型</strong>，本质上是<strong>观察者模式（Observer Pattern）<strong>在容器级别的实现。它允许不同的 Bean 之间通过事件进行通信，而</strong>发布者和监听者之间完全解耦</strong>——发布者不知道谁在监听，监听者也不关心事件从何而来。</p>
+<p><strong>核心价值：</strong></p>
+<ul>
+<li><strong>模块解耦</strong>：核心业务逻辑与旁路逻辑（通知、日志、审计）彻底分离</li>
+<li><strong>可扩展性</strong>：新增监听器无需修改原有业务代码，符合开闭原则</li>
+<li><strong>事务感知</strong>：Spring 提供了事务绑定事件，确保事件处理与事务提交原子化</li>
+<li><strong>容器原生</strong>：无需引入消息队列等外部依赖，适合单体应用内的异步解耦</li>
+</ul>
+<p><strong>典型场景：</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>用户注册</strong></td>
+<td>注册成功 → 发邮件、送积分、创建初始订单</td>
+</tr>
+<tr>
+<td><strong>订单状态变更</strong></td>
+<td>订单完成 → 发送通知、更新统计、清理缓存</td>
+</tr>
+<tr>
+<td><strong>操作审计</strong></td>
+<td>敏感操作 → 记录审计日志，与业务逻辑解耦</td>
+</tr>
+<tr>
+<td><strong>缓存更新</strong></td>
+<td>数据变更 → 发布事件 → 清除相关缓存项</td>
+</tr>
+<tr>
+<td><strong>事务后处理</strong></td>
+<td>事务提交后 → 发送 MQ 消息、调用第三方接口</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>注意区分</strong>：Spring Event 是<strong>进程内</strong>的事件机制，不跨 JVM。跨服务通信应使用 RabbitMQ、Kafka 等消息中间件。</p>
+</blockquote>
+<hr>
+<h2 id="2-核心组件"><a href="#2-核心组件" class="headerlink" title="2. 核心组件"></a>2. 核心组件</h2><p>Spring 事件机制由三大组件构成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">┌────────────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    Spring 事件驱动模型                              │</span><br><span class="line">│                                                                    │</span><br><span class="line">│   ┌──────────────────────┐                                        │</span><br><span class="line">│   │ ApplicationEvent     │  ← 事件本身（携带数据）                  │</span><br><span class="line">│   │  (What — &quot;发生了什么&quot;) │                                       │</span><br><span class="line">│   └──────────┬───────────┘                                        │</span><br><span class="line">│              │                                                     │</span><br><span class="line">│   ┌──────────▼───────────┐                                        │</span><br><span class="line">│   │ ApplicationContext   │  ← 事件发布者（广播者）                  │</span><br><span class="line">│   │  (Who — &quot;谁发布的&quot;)   │   ApplicationContext 实现了             │</span><br><span class="line">│   │                      │   ApplicationEventPublisher 接口        │</span><br><span class="line">│   └──────────┬───────────┘                                        │</span><br><span class="line">│              │  publishEvent(event)                                │</span><br><span class="line">│              ▼                                                     │</span><br><span class="line">│   ┌──────────────────────────────────────────┐                     │</span><br><span class="line">│   │      ApplicationEventMulticaster         │  ← 事件广播器        │</span><br><span class="line">│   │         (How — &quot;怎么广播的&quot;)              │                     │</span><br><span class="line">│   │                                          │                     │</span><br><span class="line">│   │   ┌──────────┐  ┌──────────┐  ┌───────┐ │                     │</span><br><span class="line">│   │   │Listener A│  │Listener B│  │ ...   │ │  ← 监听者            │</span><br><span class="line">│   │   └──────────┘  └──────────┘  └───────┘ │    (观察者)          │</span><br><span class="line">│   └──────────────────────────────────────────┘                     │</span><br><span class="line">│                                                                    │</span><br><span class="line">│   ┌──────────────────────────────────────────┐                     │</span><br><span class="line">│   │         ApplicationListener              │  ← 监听器接口       │</span><br><span class="line">│   │     (Observer — &quot;谁关心这件事&quot;)           │   (JDK 1.0 起的基类)│</span><br><span class="line">│   └──────────────────────────────────────────┘                     │</span><br><span class="line">└────────────────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>角色</th>
+<th>对应观察者模式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>ApplicationEvent</code></strong></td>
+<td>事件</td>
+<td>Event</td>
+<td>封装事件数据，继承自 <code>java.util.EventObject</code></td>
+</tr>
+<tr>
+<td><strong><code>ApplicationEventPublisher</code></strong></td>
+<td>发布者</td>
+<td>Subject</td>
+<td><code>ApplicationContext</code> 实现了该接口</td>
+</tr>
+<tr>
+<td><strong><code>ApplicationListener</code></strong></td>
+<td>监听者</td>
+<td>Observer</td>
+<td>对某一类事件做出响应的回调接口</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-设计哲学：为什么需要进程内事件？"><a href="#3-设计哲学：为什么需要进程内事件？" class="headerlink" title="3. 设计哲学：为什么需要进程内事件？"></a>3. 设计哲学：为什么需要进程内事件？</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">            请求-响应（同步调用）</span><br><span class="line">Service A ──────直接调用──────▶ Service B</span><br><span class="line">     │                             │</span><br><span class="line">     ▼                             ▼</span><br><span class="line">强耦合：A 必须知道 B 的存在      修改 B 可能影响 A</span><br><span class="line"></span><br><span class="line">            事件驱动（观察者模式）</span><br><span class="line">Service A ────publishEvent───▶ ApplicationEventMulticaster</span><br><span class="line">                                   │</span><br><span class="line">                      ┌────────────┼────────────┐</span><br><span class="line">                      ▼            ▼            ▼</span><br><span class="line">                 Listener 1  Listener 2  Listener 3</span><br><span class="line">                      │            │            │</span><br><span class="line">                      ▼            ▼            ▼</span><br><span class="line">松耦合：A 不知道谁在监听       新增监听器无需修改 A</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>核心判断</strong>：当你发现某个操作触发后需要执行多个”附加动作”，且这些附加动作与核心逻辑没有数据依赖时——就该考虑事件驱动。</p>
+</blockquote>
+<hr>
+<h1 id="二、快速上手"><a href="#二、快速上手" class="headerlink" title="二、快速上手"></a>二、快速上手</h1><h2 id="1-最简示例"><a href="#1-最简示例" class="headerlink" title="1. 最简示例"></a>1. 最简示例</h2><h3 id="1-1-定义事件"><a href="#1-1-定义事件" class="headerlink" title="1.1 定义事件"></a>1.1 定义事件</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationEvent;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 自定义事件 —— 携带订单数据</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * ApplicationEvent 是 Spring 所有事件的基类，</span></span><br><span class="line"><span class="comment"> * 继承它即成为一个&quot;可被 Spring 广播的事件&quot;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderCreatedEvent</span> <span class="keyword">extends</span> <span class="title class_">ApplicationEvent</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long orderId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String userId;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> source 事件源（通常是发布者自身，即 this）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">OrderCreatedEvent</span><span class="params">(Object source, Long orderId, String userId)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(source);</span><br><span class="line">        <span class="built_in">this</span>.orderId = orderId;</span><br><span class="line">        <span class="built_in">this</span>.userId = userId;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意</strong>：从 Spring 4.2 开始，自定义事件<strong>不必再继承 <code>ApplicationEvent</code></strong>——任何普通 POJO 都可以作为事件对象。参考 <a href="#12-%E6%94%B9%E7%94%A8-pojo-%E4%BA%8B%E4%BB%B6">1.2 改用 POJO 事件</a>。</p>
+</blockquote>
+<h3 id="1-2-定义监听器（注解方式）"><a href="#1-2-定义监听器（注解方式）" class="headerlink" title="1.2 定义监听器（注解方式）"></a>1.2 定义监听器（注解方式）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.context.event.EventListener;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderEventListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@EventListener</span> 标记方法为事件监听器</span></span><br><span class="line"><span class="comment">     * 方法参数类型即&quot;监听的事件类型&quot;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleOrderCreated</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;订单创建成功，发送通知: orderId=&#123;&#125;, userId=&#123;&#125;&quot;</span>, </span><br><span class="line">                 event.getOrderId(), event.getUserId());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 业务逻辑：发短信、记录日志、送积分...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-发布事件"><a href="#1-3-发布事件" class="headerlink" title="1.3 发布事件"></a>1.3 发布事件</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ApplicationEventPublisher eventPublisher;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(OrderCreateRequest request)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 核心业务：创建订单</span></span><br><span class="line">        <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> orderMapper.insert(buildOrder(request));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 发布事件——不关心谁在监听</span></span><br><span class="line">        eventPublisher.publishEvent(</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">OrderCreatedEvent</span>(<span class="built_in">this</span>, order.getId(), request.getUserId())</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>运行效果</strong>：<code>OrderService</code> 调用 <code>createOrder</code> → Spring 自动找到所有监听 <code>OrderCreatedEvent</code> 的方法 → 依次执行。</p>
+<hr>
+<h2 id="1-2-改用-POJO-事件"><a href="#1-2-改用-POJO-事件" class="headerlink" title="1.2 改用 POJO 事件"></a>1.2 改用 POJO 事件</h2><p>从 Spring 4.2 开始，事件可以是一个普通的 Java 对象，无需继承任何 Spring 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 纯 POJO 事件 — 零 Spring 依赖</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderCreatedEvent</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long orderId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String userId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> BigDecimal amount;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听器写法完全一样</span></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handleOrderCreated</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;订单 &#123;&#125; 支付金额: &#123;&#125;&quot;</span>, event.getOrderId(), event.getAmount());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>推荐使用 POJO 事件</strong>：事件类不依赖 Spring API，更容易被其他框架&#x2F;非 Spring 模块直接复用。</p>
+</blockquote>
+<hr>
+<h1 id="三、事件监听的核心方式"><a href="#三、事件监听的核心方式" class="headerlink" title="三、事件监听的核心方式"></a>三、事件监听的核心方式</h1><h2 id="1-方式一：注解式-——-EventListener（推荐）"><a href="#1-方式一：注解式-——-EventListener（推荐）" class="headerlink" title="1. 方式一：注解式 —— @EventListener（推荐）"></a>1. 方式一：注解式 —— <code>@EventListener</code>（推荐）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserEventListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 基础用法：按参数类型匹配</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onUserRegistered</span><span class="params">(UserRegisteredEvent event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;用户注册: &#123;&#125;&quot;</span>, event.getUserId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2. 条件过滤：SpEL 表达式</span></span><br><span class="line">    <span class="comment">//    只有 source 为 &quot;admin&quot; 的事件才会触发</span></span><br><span class="line">    <span class="meta">@EventListener(condition = &quot;#event.userId == &#x27;admin&#x27;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAdminAction</span><span class="params">(ActionEvent event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;管理员操作: &#123;&#125;&quot;</span>, event.getAction());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3. 条件过滤：结合多个参数</span></span><br><span class="line">    <span class="comment">//    #root.args[0] 等价于 #event</span></span><br><span class="line">    <span class="meta">@EventListener(condition = &quot;#event.amount &gt; 1000&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onLargeOrder</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        log.warn(<span class="string">&quot;大额订单: &#123;&#125;&quot;</span>, event.getAmount());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 4. 监听多个事件类型</span></span><br><span class="line">    <span class="meta">@EventListener(&#123;UserRegisteredEvent.class, UserActivatedEvent.class&#125;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onUserEvent</span><span class="params">(Object event)</span> &#123;</span><br><span class="line">        <span class="comment">// 通过 instanceof 区分具体事件类型</span></span><br><span class="line">        <span class="keyword">if</span> (event <span class="keyword">instanceof</span> UserRegisteredEvent e) &#123;</span><br><span class="line">            <span class="comment">// 处理注册</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (event <span class="keyword">instanceof</span> UserActivatedEvent e) &#123;</span><br><span class="line">            <span class="comment">// 处理激活</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-condition-表达式详解"><a href="#1-1-condition-表达式详解" class="headerlink" title="1.1 condition 表达式详解"></a>1.1 <code>condition</code> 表达式详解</h3><p><code>condition</code> 使用 SpEL（Spring Expression Language），可访问的根变量：</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>#event</code> 或 <code>#root.event</code></td>
+<td>事件对象本身</td>
+<td><code>#event.amount &gt; 100</code></td>
+</tr>
+<tr>
+<td><code>#root.args[0]</code></td>
+<td>事件的第 0 个参数（即事件对象）</td>
+<td><code>#root.args[0].type == &#39;PAY&#39;</code></td>
+</tr>
+<tr>
+<td><code>#root.args</code></td>
+<td>方法所有参数</td>
+<td><code>#root.args[1] == &#39;admin&#39;</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>注意</strong>：<code>condition</code> 表达式求值失败（如 NPE）默认返回 <code>false</code>，不会报错。复杂的条件逻辑建议在方法体内用代码判断。</p>
+</blockquote>
+<hr>
+<h2 id="2-方式二：接口式-——-ApplicationListener"><a href="#2-方式二：接口式-——-ApplicationListener" class="headerlink" title="2. 方式二：接口式 —— ApplicationListener"></a>2. 方式二：接口式 —— <code>ApplicationListener</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserRegisteredListener</span> <span class="keyword">implements</span> <span class="title class_">ApplicationListener</span>&lt;UserRegisteredEvent&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onApplicationEvent</span><span class="params">(UserRegisteredEvent event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;接口方式监听: &#123;&#125;&quot;</span>, event.getUserId());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>与注解式的对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th><code>@EventListener</code></th>
+<th><code>ApplicationListener</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Spring 版本</strong></td>
+<td>4.2+</td>
+<td>所有版本</td>
+</tr>
+<tr>
+<td><strong>代码侵入性</strong></td>
+<td>低（纯注解，无需实现接口）</td>
+<td>中（需实现接口）</td>
+</tr>
+<tr>
+<td><strong>灵活性</strong></td>
+<td>高（SpEL 条件、多事件、异步）</td>
+<td>低（只能监听一种事件类型）</td>
+</tr>
+<tr>
+<td><strong>方法命名</strong></td>
+<td>任意</td>
+<td>固定 <code>onApplicationEvent</code></td>
+</tr>
+<tr>
+<td><strong>推荐程度</strong></td>
+<td>首选</td>
+<td>仅在 Spring 4.2 之前的旧项目中使用</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-发布事件的方式"><a href="#3-发布事件的方式" class="headerlink" title="3. 发布事件的方式"></a>3. 发布事件的方式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方式一：注入 ApplicationEventPublisher（最常用）</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ApplicationEventPublisher eventPublisher;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 方式二：注入 ApplicationContext（它本身就是 Publisher，范围更大）</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ApplicationContext applicationContext;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(OrderDTO dto)</span> &#123;</span><br><span class="line">        <span class="comment">// ... 业务逻辑</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 两种发布方式等价，底层调用同一个逻辑</span></span><br><span class="line">        eventPublisher.publishEvent(<span class="keyword">new</span> <span class="title class_">OrderCreatedEvent</span>(<span class="built_in">this</span>, dto.getId()));</span><br><span class="line">        <span class="comment">// 或</span></span><br><span class="line">        applicationContext.publishEvent(<span class="keyword">new</span> <span class="title class_">OrderCreatedEvent</span>(<span class="built_in">this</span>, dto.getId()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>建议注入 <code>ApplicationEventPublisher</code></strong> 而非 <code>ApplicationContext</code>：接口更窄，语义更明确，也更方便 Mock 测试。</p>
+</blockquote>
+<hr>
+<h1 id="四、事件广播原理"><a href="#四、事件广播原理" class="headerlink" title="四、事件广播原理"></a>四、事件广播原理</h1><h2 id="1-广播器：ApplicationEventMulticaster"><a href="#1-广播器：ApplicationEventMulticaster" class="headerlink" title="1. 广播器：ApplicationEventMulticaster"></a>1. 广播器：<code>ApplicationEventMulticaster</code></h2><p>Spring 在容器启动时初始化事件广播器，负责将事件分发给匹配的监听器：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext.refresh() → initApplicationEventMulticaster()</span><br><span class="line">                                       │</span><br><span class="line">                                       ▼</span><br><span class="line">                    ┌──────────────────────────────────┐</span><br><span class="line">                    │  SimpleApplicationEventMulticaster│</span><br><span class="line">                    │         (默认实现)                 │</span><br><span class="line">                    │                                  │</span><br><span class="line">                    │  - 维护 Listener 注册表            │</span><br><span class="line">                    │  - 事件 → 遍历 Listener → 逐一触发 │</span><br><span class="line">                    │  - 默认同步调用（同一个线程）       │</span><br><span class="line">                    │  - 可配置线程池实现异步广播         │</span><br><span class="line">                    └──────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键设计：</strong></p>
+<ul>
+<li><strong>默认同步执行</strong>：发布事件的线程会阻塞，直到所有监听器处理完毕</li>
+<li><strong>错误传播</strong>：默认情况下，某个监听器抛出异常会中断后续监听器</li>
+<li><strong>可配置线程池</strong>：注入 <code>Executor</code> 即可切换为异步广播（影响全局）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全局配置：让广播器使用线程池</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EventConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean(name = AbstractApplicationContext.APPLICATION_EVENT_MULTICASTER_BEAN_NAME)</span></span><br><span class="line">    <span class="keyword">public</span> ApplicationEventMulticaster <span class="title function_">applicationEventMulticaster</span><span class="params">(BeanFactory beanFactory)</span> &#123;</span><br><span class="line">        <span class="type">SimpleApplicationEventMulticaster</span> <span class="variable">multicaster</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SimpleApplicationEventMulticaster</span>(beanFactory);</span><br><span class="line">        multicaster.setTaskExecutor(Executors.newVirtualThreadPerTaskExecutor());</span><br><span class="line">        <span class="keyword">return</span> multicaster;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>不建议轻易改为全局异步</strong>：广播器改为异步后，<strong>所有</strong>事件处理都变为异步，包括框架内部事件，可能导致不可预期的启动问题。推荐方案是用 <code>@Async</code> 精准控制单个监听器的异步行为（见 <a href="#%E5%85%AD%E5%BC%82%E6%AD%A5%E4%BA%8B%E4%BB%B6">六、异步事件</a>）。</p>
+</blockquote>
+<hr>
+<h2 id="2-事件发布全流程"><a href="#2-事件发布全流程" class="headerlink" title="2. 事件发布全流程"></a>2. 事件发布全流程</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">publishEvent(event)</span><br><span class="line">  │</span><br><span class="line">  ├─ 1. 断言 event != null</span><br><span class="line">  │</span><br><span class="line">  ├─ 2. 包装：如果不是 ApplicationEvent 的子类</span><br><span class="line">  │      自动包装为 PayloadApplicationEvent</span><br><span class="line">  │</span><br><span class="line">  ├─ 3. getApplicationEventMulticaster()</span><br><span class="line">  │      .multicastEvent(event, eventType)</span><br><span class="line">  │     │</span><br><span class="line">  │     ├─ 4. 匹配：查找订阅了该事件类型的 Listener</span><br><span class="line">  │     │      遍历 Listener 注册表，按事件类型匹配</span><br><span class="line">  │     │</span><br><span class="line">  │     ├─ 5. 逐个调用：</span><br><span class="line">  │     │      for (ApplicationListener&lt;?&gt; listener : listeners) &#123;</span><br><span class="line">  │     │          Executor executor = getTaskExecutor();</span><br><span class="line">  │     │          if (executor != null) &#123;</span><br><span class="line">  │     │              executor.execute(() -&gt; listener.onApplicationEvent(event));  // 异步</span><br><span class="line">  │     │          &#125; else &#123;</span><br><span class="line">  │     │              listener.onApplicationEvent(event);                          // 同步</span><br><span class="line">  │     │          &#125;</span><br><span class="line">  │     │      &#125;</span><br><span class="line">  │     │</span><br><span class="line">  │     └─ 6. 错误处理（默认行为）：</span><br><span class="line">  │            ErrorHandler handler = getErrorHandler();</span><br><span class="line">  │            if (handler != null) &#123;</span><br><span class="line">  │                handler.handleError(t);</span><br><span class="line">  │            &#125; else &#123;</span><br><span class="line">  │                throw t;  // 抛出异常，中断后续监听器</span><br><span class="line">  │            &#125;</span><br><span class="line">  │</span><br><span class="line">  └─ 7. 如果还有父容器（父子 ApplicationContext）</span><br><span class="line">         递归调用父容器的 publishEvent(event)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-监听器注册流程"><a href="#3-监听器注册流程" class="headerlink" title="3. 监听器注册流程"></a>3. 监听器注册流程</h2><p>在容器 refresh() 阶段，<code>EventListenerMethodProcessor</code> 负责将 <code>@EventListener</code> 方法注册为监听器：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">refresh()</span><br><span class="line">  │</span><br><span class="line">  ├─ ... </span><br><span class="line">  │</span><br><span class="line">  ├─ finishBeanFactoryInitialization()</span><br><span class="line">  │     │</span><br><span class="line">  │     └─ preInstantiateSingletons()</span><br><span class="line">  │           │</span><br><span class="line">  │           ├─ 所有非懒加载单例 Bean 创建、初始化</span><br><span class="line">  │           │</span><br><span class="line">  │           └─ afterSingletonsInstantiated() 回调</span><br><span class="line">  │                 │</span><br><span class="line">  │                 └─ EventListenerMethodProcessor.afterSingletonsInstantiated()</span><br><span class="line">  │                         │</span><br><span class="line">  │                         ├─ 遍历所有 Bean</span><br><span class="line">  │                         ├─ 找到标记了 @EventListener 的方法</span><br><span class="line">  │                         ├─ 将每个方法包装为 ApplicationListenerMethodAdapter</span><br><span class="line">  │                         └─ 注册到 ApplicationEventMulticaster</span><br><span class="line">  │</span><br><span class="line">  └─ finishRefresh()</span><br><span class="line">        │</span><br><span class="line">        └─ 发布 ContextRefreshedEvent</span><br><span class="line">              → 此时所有 @EventListener 已经就位，可以正常工作</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>关键结论</strong>：<code>@EventListener</code> 方法在 <code>ContextRefreshedEvent</code> 发布之前就已经注册完毕。因此，监听 <code>ContextRefreshedEvent</code> 是完全可行的。</p>
+</blockquote>
+<hr>
+<h1 id="五、事件层次与类型"><a href="#五、事件层次与类型" class="headerlink" title="五、事件层次与类型"></a>五、事件层次与类型</h1><h2 id="1-Spring-内置事件"><a href="#1-Spring-内置事件" class="headerlink" title="1. Spring 内置事件"></a>1. Spring 内置事件</h2><p>Spring 容器在生命周期各阶段会自动发布一系列标准事件：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">容器启动流程                                事件发布</span><br><span class="line">═══════════════════════════════════════════════════════════════════</span><br><span class="line"></span><br><span class="line">SpringApplication.run()</span><br><span class="line">  │</span><br><span class="line">  ├─ starting()                    → ApplicationStartingEvent</span><br><span class="line">  │                                   (环境未就绪，最早的事件)</span><br><span class="line">  │</span><br><span class="line">  ├─ prepareEnvironment()          → ApplicationEnvironmentPreparedEvent</span><br><span class="line">  │                                   (环境就绪，上下文未创建)</span><br><span class="line">  │</span><br><span class="line">  ├─ prepareContext()              → ApplicationContextInitializedEvent</span><br><span class="line">  │                                   (上下文创建，Bean 未加载)</span><br><span class="line">  │</span><br><span class="line">  ├─ refreshContext()</span><br><span class="line">  │   ├─ prepareRefresh()          → (无事件发布)</span><br><span class="line">  │   ├─ ...</span><br><span class="line">  │   ├─ finishRefresh()           → ContextRefreshedEvent</span><br><span class="line">  │   │                                (所有 Bean 就绪，容器可用)</span><br><span class="line">  │   └─ ...</span><br><span class="line">  │</span><br><span class="line">  ├─ afterRefresh()               → ApplicationStartedEvent</span><br><span class="line">  │                                   (容器就绪，WebServer 已启动)</span><br><span class="line">  │</span><br><span class="line">  ├─ callRunners()                 → ApplicationRunner / CommandLineRunner 执行</span><br><span class="line">  │</span><br><span class="line">  └─ running()                     → ApplicationReadyEvent</span><br><span class="line">                                      (应用完全就绪，可以接收请求)</span><br><span class="line">                                      → ApplicationFailedEvent（启动失败时）</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-关键事件对比"><a href="#1-1-关键事件对比" class="headerlink" title="1.1 关键事件对比"></a>1.1 关键事件对比</h3><table>
+<thead>
+<tr>
+<th>事件</th>
+<th>时机</th>
+<th>适用场景</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>ContextRefreshedEvent</code></strong></td>
+<td>IoC 容器 refresh 完成</td>
+<td>Bean 初始化后的一次性清理、全局校验</td>
+<td>可能被触发多次（如父子容器），建议加 <code>source</code> 判断</td>
+</tr>
+<tr>
+<td><strong><code>ApplicationStartedEvent</code></strong></td>
+<td><code>ContextRefreshedEvent</code> 之后、Runner 之前</td>
+<td>需要在 Runner 之前执行的逻辑</td>
+<td>WebServer 已启动</td>
+</tr>
+<tr>
+<td><strong><code>ApplicationReadyEvent</code></strong></td>
+<td>所有 Runner 执行完毕</td>
+<td>预热缓存、注册到注册中心、启动定时任务</td>
+<td>此时应用已完全可对外服务</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-监听内置事件示例"><a href="#1-2-监听内置事件示例" class="headerlink" title="1.2 监听内置事件示例"></a>1.2 监听内置事件示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ApplicationLifecycleListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onContextRefreshed</span><span class="params">(ContextRefreshedEvent event)</span> &#123;</span><br><span class="line">        <span class="comment">// 注意：可能有父子容器，建议过滤</span></span><br><span class="line">        <span class="keyword">if</span> (event.getApplicationContext().getParent() == <span class="literal">null</span>) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;根容器刷新完成，开始初始化全局缓存&quot;</span>);</span><br><span class="line">            initGlobalCache();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onApplicationReady</span><span class="params">(ApplicationReadyEvent event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;应用完全就绪，注册到 Nacos&quot;</span>);</span><br><span class="line">        registerToServiceRegistry();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-自定义事件层次"><a href="#2-自定义事件层次" class="headerlink" title="2. 自定义事件层次"></a>2. 自定义事件层次</h2><p>通过继承可以实现事件分级——监听父类事件会同时收到所有子类事件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基础事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">BaseOrderEvent</span> <span class="keyword">extends</span> <span class="title class_">ApplicationEvent</span> &#123;</span><br><span class="line">    <span class="meta">@Getter</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long orderId;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BaseOrderEvent</span><span class="params">(Object source, Long orderId)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(source);</span><br><span class="line">        <span class="built_in">this</span>.orderId = orderId;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 具体事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderPaidEvent</span> <span class="keyword">extends</span> <span class="title class_">BaseOrderEvent</span> &#123;</span><br><span class="line">    <span class="meta">@Getter</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> BigDecimal amount;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">OrderPaidEvent</span><span class="params">(Object source, Long orderId, BigDecimal amount)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(source, orderId);</span><br><span class="line">        <span class="built_in">this</span>.amount = amount;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderCancelledEvent</span> <span class="keyword">extends</span> <span class="title class_">BaseOrderEvent</span> &#123;</span><br><span class="line">    <span class="meta">@Getter</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String reason;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">OrderCancelledEvent</span><span class="params">(Object source, Long orderId, String reason)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(source, orderId);</span><br><span class="line">        <span class="built_in">this</span>.reason = reason;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 监听父类 → 接收所有订单相关事件</span></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAnyOrderEvent</span><span class="params">(BaseOrderEvent event)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;订单事件: orderId=&#123;&#125;, type=&#123;&#125;&quot;</span>, </span><br><span class="line">             event.getOrderId(), event.getClass().getSimpleName());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听子类 → 只接收支付事件</span></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onOrderPaid</span><span class="params">(OrderPaidEvent event)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;订单支付: orderId=&#123;&#125;, amount=&#123;&#125;&quot;</span>, </span><br><span class="line">             event.getOrderId(), event.getAmount());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>设计技巧</strong>：使用事件继承体系，可以在不修改代码的前提下，从不同粒度观察事件流——父级监听器做通用处理（如审计），子级监听器做特定处理。</p>
+</blockquote>
+<hr>
+<h1 id="六、异步事件"><a href="#六、异步事件" class="headerlink" title="六、异步事件"></a>六、异步事件</h1><h2 id="1-为什么需要异步事件"><a href="#1-为什么需要异步事件" class="headerlink" title="1. 为什么需要异步事件"></a>1. 为什么需要异步事件</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">同步事件（默认）：</span><br><span class="line">  ┌──────┐ publishEvent   ┌────────────┐</span><br><span class="line">  │ 线程A │ ──────────────▶│ Listener 1 │ ──▶ 耗时 100ms</span><br><span class="line">  │      │                │ Listener 2 │ ──▶ 耗时 200ms</span><br><span class="line">  │  阻塞 │◀──────────────│ Listener 3 │ ──▶ 耗时 50ms</span><br><span class="line">  └──────┘   等待 350ms   └────────────┘</span><br><span class="line">                                  ↑</span><br><span class="line">  问题：核心业务线程被旁路逻辑拖慢</span><br><span class="line"></span><br><span class="line">异步事件：</span><br><span class="line">  ┌──────┐ publishEvent   ┌──────────────┐</span><br><span class="line">  │ 线程A │ ──────────────▶│ 线程池 1 │ Listener 1 │</span><br><span class="line">  │  立即  │               │ 线程池 2 │ Listener 2 │</span><br><span class="line">  │  返回  │               │ 线程池 3 │ Listener 3 │</span><br><span class="line">  └──────┘                └──────────────┘</span><br><span class="line">                                  ↑</span><br><span class="line">  优势：核心线程立即返回，旁路逻辑在线程池中并行执行</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-配置异步事件"><a href="#2-配置异步事件" class="headerlink" title="2. 配置异步事件"></a>2. 配置异步事件</h2><h3 id="2-1-启用-Async-支持"><a href="#2-1-启用-Async-支持" class="headerlink" title="2.1 启用 @Async 支持"></a>2.1 启用 <code>@Async</code> 支持</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableAsync</span>  <span class="comment">// 必须添加此注解</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AsyncConfig</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 自定义事件处理线程池</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * 关键参数：</span></span><br><span class="line"><span class="comment">     * - corePoolSize: 核心线程数</span></span><br><span class="line"><span class="comment">     * - maxPoolSize: 最大线程数</span></span><br><span class="line"><span class="comment">     * - queueCapacity: 缓冲队列大小</span></span><br><span class="line"><span class="comment">     * - rejectedExecutionHandler: 拒绝策略</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean(name = &quot;eventTaskExecutor&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Executor <span class="title function_">eventTaskExecutor</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">ThreadPoolTaskExecutor</span> <span class="variable">executor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolTaskExecutor</span>();</span><br><span class="line">        executor.setCorePoolSize(<span class="number">4</span>);</span><br><span class="line">        executor.setMaxPoolSize(<span class="number">8</span>);</span><br><span class="line">        executor.setQueueCapacity(<span class="number">100</span>);</span><br><span class="line">        executor.setThreadNamePrefix(<span class="string">&quot;event-&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 拒绝策略：由调用线程执行（防止事件丢失）</span></span><br><span class="line">        executor.setRejectedExecutionHandler(<span class="keyword">new</span> <span class="title class_">CallerRunsPolicy</span>());</span><br><span class="line">        executor.initialize();</span><br><span class="line">        <span class="keyword">return</span> executor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-标记异步监听器"><a href="#2-2-标记异步监听器" class="headerlink" title="2.2 标记异步监听器"></a>2.2 标记异步监听器</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderEventListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 异步监听 —— 不阻塞发布者线程</span></span><br><span class="line">    <span class="meta">@Async(&quot;eventTaskExecutor&quot;)</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendSmsNotification</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;异步发送短信, 线程: &#123;&#125;&quot;</span>, Thread.currentThread().getName());</span><br><span class="line">        smsService.send(event.getUserId(), <span class="string">&quot;订单创建成功&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 同步监听 —— 发布者线程直接执行</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateStatistics</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;同步更新统计, 线程: &#123;&#125;&quot;</span>, Thread.currentThread().getName());</span><br><span class="line">        statsService.incrementOrderCount();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-异步事件的三个陷阱"><a href="#3-异步事件的三个陷阱" class="headerlink" title="3. 异步事件的三个陷阱"></a>3. 异步事件的三个陷阱</h2><h3 id="3-1-事务上下文丢失"><a href="#3-1-事务上下文丢失" class="headerlink" title="3.1 事务上下文丢失"></a>3.1 事务上下文丢失</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误：异步线程无法获取事务上下文</span></span><br><span class="line"><span class="meta">@Async</span></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterOrderCreated</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">    <span class="comment">// 此处运行在线程池中，没有原始事务的上下文</span></span><br><span class="line">    orderMapper.selectById(event.getOrderId());  <span class="comment">// 可能读不到未提交的数据</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确：使用 @TransactionalEventListener 确保事务提交后再执行</span></span><br><span class="line"><span class="meta">@Async</span></span><br><span class="line"><span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterOrderCreated</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">    <span class="comment">// 事务已提交，异步执行，数据可见</span></span><br><span class="line">    orderMapper.selectById(event.getOrderId());  <span class="comment">// 安全</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-异常静默丢失"><a href="#3-2-异常静默丢失" class="headerlink" title="3.2 异常静默丢失"></a>3.2 异常静默丢失</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 异步线程的异常不会传播到发布者</span></span><br><span class="line"><span class="meta">@Async</span></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">riskyHandler</span><span class="params">(MyEvent event)</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;处理失败&quot;</span>);  <span class="comment">// 发布者不会感知</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置全局异步异常处理器</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AsyncExceptionConfig</span> <span class="keyword">implements</span> <span class="title class_">AsyncConfigurer</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> AsyncUncaughtExceptionHandler <span class="title function_">getAsyncUncaughtExceptionHandler</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (throwable, method, params) -&gt; &#123;</span><br><span class="line">            log.error(<span class="string">&quot;异步事件处理失败: method=&#123;&#125;, params=&#123;&#125;&quot;</span>, </span><br><span class="line">                      method.getName(), params, throwable);</span><br><span class="line">            <span class="comment">// 这里可以接入告警系统</span></span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-先后顺序不可控"><a href="#3-3-先后顺序不可控" class="headerlink" title="3.3 先后顺序不可控"></a>3.3 先后顺序不可控</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不靠谱的假设</span></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateCache</span><span class="params">(OrderCreatedEvent event)</span> &#123;  <span class="comment">// 同步</span></span><br><span class="line">    cache.put(event.getOrderId(), event);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Async</span></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendNotification</span><span class="params">(OrderCreatedEvent event)</span> &#123;  <span class="comment">// 异步</span></span><br><span class="line">    <span class="comment">// 假设缓存已更新？NO！异步任务执行时机不确定</span></span><br><span class="line">    <span class="type">Order</span> <span class="variable">cached</span> <span class="operator">=</span> cache.get(event.getOrderId());  <span class="comment">// 可能为 null</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果需要顺序保证，就不要用异步；或者用消息队列</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="七、事务感知事件：-TransactionalEventListener"><a href="#七、事务感知事件：-TransactionalEventListener" class="headerlink" title="七、事务感知事件：@TransactionalEventListener"></a>七、事务感知事件：<code>@TransactionalEventListener</code></h1><h2 id="1-为什么需要事务感知"><a href="#1-为什么需要事务感知" class="headerlink" title="1. 为什么需要事务感知"></a>1. 为什么需要事务感知</h2><p>这是 Spring Event 的<strong>杀手级特性</strong>。常见场景：订单创建后需要发送 MQ 消息通知下游。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">错误做法：业务方法内直接发消息</span><br><span class="line">─────────────────────────────────────────────────</span><br><span class="line">  @Transactional</span><br><span class="line">  public void createOrder(Order order) &#123;</span><br><span class="line">      orderMapper.insert(order);             // ① 写入数据库</span><br><span class="line">      mqService.sendMessage(new OrderMsg()); // ② 发送消息</span><br><span class="line">      //                              ↑</span><br><span class="line">      //   如果步骤③回滚了，消息已经发出——无法挽回！</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">正确做法：事务提交后再发消息</span><br><span class="line">─────────────────────────────────────────────────</span><br><span class="line">  @Transactional</span><br><span class="line">  public void createOrder(Order order) &#123;</span><br><span class="line">      orderMapper.insert(order);                          // ① 写入数据库</span><br><span class="line">      eventPublisher.publishEvent(new OrderCreated(...));  // ② 发布事件</span><br><span class="line">  &#125;  // ③ 事务提交</span><br><span class="line">  //    │</span><br><span class="line">  //    ▼</span><br><span class="line">  //  @TransactionalEventListener(AFTER_COMMIT)</span><br><span class="line">  //  → 此时事务已提交，安全发送消息</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-核心用法"><a href="#2-核心用法" class="headerlink" title="2. 核心用法"></a>2. 核心用法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderEventListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@TransactionalEventListener</span> 的 phase 参数：</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     * - AFTER_COMMIT（默认）：事务提交后执行</span></span><br><span class="line"><span class="comment">     * - AFTER_ROLLBACK：事务回滚后执行</span></span><br><span class="line"><span class="comment">     * - AFTER_COMPLETION：事务结束后执行（无论提交还是回滚）</span></span><br><span class="line"><span class="comment">     * - BEFORE_COMMIT：事务提交前执行</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 场景一：事务提交后发送 MQ（默认）</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendOrderMessage</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        <span class="comment">// 此时数据库已提交，消息消费者可以读到数据</span></span><br><span class="line">        mqService.sendMessage(<span class="string">&quot;order-topic&quot;</span>, event);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 场景二：事务提交后更新缓存</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateCache</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        cacheManager.evictUserOrderCache(event.getUserId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 场景三：发送邮件（也需要事务提交保证）</span></span><br><span class="line">    <span class="meta">@Async(&quot;eventTaskExecutor&quot;)</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendEmail</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        emailService.sendOrderConfirmation(event.getUserId(), event.getOrderId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 场景四：事务回滚后记录异常日志</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onRollback</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        log.error(<span class="string">&quot;订单创建失败，事务回滚: orderId=&#123;&#125;&quot;</span>, event.getOrderId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 场景五：无论成功失败都清理资源</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">cleanup</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        temporaryStorage.remove(event.getOrderId());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-TransactionalEventListener-vs-EventListener"><a href="#3-TransactionalEventListener-vs-EventListener" class="headerlink" title="3. @TransactionalEventListener vs @EventListener"></a>3. <code>@TransactionalEventListener</code> vs <code>@EventListener</code></h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th><code>@EventListener</code></th>
+<th><code>@TransactionalEventListener</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>触发时机</strong></td>
+<td>事件发布后即刻执行</td>
+<td>事务完成（commit&#x2F;rollback）后执行</td>
+</tr>
+<tr>
+<td><strong>是否保证数据可见</strong></td>
+<td>可能读到未提交数据</td>
+<td>必然在事务结束后执行</td>
+</tr>
+<tr>
+<td><strong>是否适合发送 MQ</strong></td>
+<td>可能消息发出但事务回滚</td>
+<td>事务成功才发消息</td>
+</tr>
+<tr>
+<td><strong>是否适合发邮件&#x2F;短信</strong></td>
+<td>有风险</td>
+<td>推荐</td>
+</tr>
+<tr>
+<td><strong>默认行为</strong></td>
+<td>立即同步执行</td>
+<td>事务完成后执行（无事务时抛异常）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong><code>fallbackExecution</code> 属性</strong>：设为 <code>true</code> 时，如果当前没有活跃事务，监听器也会执行（等同于普通 <code>@EventListener</code>）。默认 <code>false</code>——必须配合事务操作使用。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 有事务则事务提交后执行，没事务也照常执行</span></span><br><span class="line"><span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handle</span><span class="params">(MyEvent event)</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-实现原理简析"><a href="#4-实现原理简析" class="headerlink" title="4. 实现原理简析"></a>4. 实现原理简析</h2><p><code>@TransactionalEventListener</code> 的核心是 <code>TransactionalEventListenerFactory</code> 和 <code>TransactionalApplicationListenerMethodAdapter</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简化原理</span></span><br><span class="line"><span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handle</span><span class="params">(MyEvent event)</span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Spring 实际做的事：</span></span><br><span class="line"><span class="comment">// 1. 解析 @TransactionalEventListener 注解</span></span><br><span class="line"><span class="comment">// 2. 创建 TransactionalApplicationListenerMethodAdapter 包装原始方法</span></span><br><span class="line"><span class="comment">// 3. 不做直接监听，而是向 TransactionSynchronizationManager 注册一个同步回调</span></span><br><span class="line"><span class="comment">// 4. 事务提交/回滚时，TransactionSynchronization 触发对应的回调</span></span><br><span class="line"><span class="comment">// 5. 回调中调用原始监听方法</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 等价伪代码：</span></span><br><span class="line">TransactionSynchronizationManager.registerSynchronization(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">TransactionSynchronization</span>() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterCommit</span><span class="params">()</span> &#123;</span><br><span class="line">            handle(event);  <span class="comment">// 原始方法</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="八、事件顺序与优先级"><a href="#八、事件顺序与优先级" class="headerlink" title="八、事件顺序与优先级"></a>八、事件顺序与优先级</h1><h2 id="1-Order-控制执行顺序"><a href="#1-Order-控制执行顺序" class="headerlink" title="1. @Order 控制执行顺序"></a>1. <code>@Order</code> 控制执行顺序</h2><p>默认情况下，多个监听器的执行顺序是<strong>不保证</strong>的。当存在依赖关系时，使用 <code>@Order</code> 指定顺序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuditEventHandlers</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第一步：记录日志（最先执行）</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="meta">@Order(1)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logAudit</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        auditLog.insert(event);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 第二步：更新统计（依赖日志已记录）</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="meta">@Order(2)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">updateStats</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        statsService.increment(event.getProductId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 第三步：发送通知（最后执行）</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="meta">@Order(3)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendNotification</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">        notificationService.send(event);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意</strong>：<code>@Order</code> 对同类型的监听器生效，但不保证异步监听器和同步监听器之间的顺序。如果需要严格顺序，建议在同一个同步监听器内编码，或使用消息队列。</p>
+</blockquote>
+<hr>
+<h2 id="2-事件排序总结"><a href="#2-事件排序总结" class="headerlink" title="2. 事件排序总结"></a>2. 事件排序总结</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">同步监听器（同一线程）：</span><br><span class="line">  publishEvent() ──▶ [@Order(1)] ──▶ [@Order(2)] ──▶ [@Order(3)] ──▶ 返回</span><br><span class="line"></span><br><span class="line">异步监听器（线程池）：</span><br><span class="line">  publishEvent() ──▶ 提交到线程池</span><br><span class="line">                     │</span><br><span class="line">                     ├── 线程A: [@Order(1)]  ╮</span><br><span class="line">                     ├── 线程B: [@Order(2)]  ├── 并行执行，顺序不可控</span><br><span class="line">                     └── 线程C: [@Order(3)]  ╯</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="九、泛型事件"><a href="#九、泛型事件" class="headerlink" title="九、泛型事件"></a>九、泛型事件</h1><p>Spring 4.2+ 支持泛型事件，让监听器能根据泛型参数精确匹配：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 泛型事件基类</span></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EntityChangedEvent</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">ApplicationEvent</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> T entity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ChangeType type;  <span class="comment">// CREATE, UPDATE, DELETE</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">EntityChangedEvent</span><span class="params">(Object source, T entity, ChangeType type)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(source);</span><br><span class="line">        <span class="built_in">this</span>.entity = entity;</span><br><span class="line">        <span class="built_in">this</span>.type = type;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布不同类型的事件</span></span><br><span class="line">eventPublisher.publishEvent(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">EntityChangedEvent</span>&lt;&gt;(<span class="built_in">this</span>, user, ChangeType.CREATE));</span><br><span class="line">eventPublisher.publishEvent(</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">EntityChangedEvent</span>&lt;&gt;(<span class="built_in">this</span>, updatedOrder, ChangeType.UPDATE));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EntityChangeListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 只监听 User 类型的变化事件</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onUserChanged</span><span class="params">(EntityChangedEvent&lt;User&gt; event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;User 变更: type=&#123;&#125;, user=&#123;&#125;&quot;</span>, event.getType(), event.getEntity());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 只监听 Order 类型的变化事件</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onOrderChanged</span><span class="params">(EntityChangedEvent&lt;Order&gt; event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;Order 变更: type=&#123;&#125;, order=&#123;&#125;&quot;</span>, event.getType(), event.getEntity().getId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 监听所有类型的变化事件（泛型通配）</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAnyEntityChanged</span><span class="params">(EntityChangedEvent&lt;?&gt; event)</span> &#123;</span><br><span class="line">        log.info(<span class="string">&quot;任意实体变更: type=&#123;&#125;, entityType=&#123;&#125;&quot;</span>, </span><br><span class="line">                 event.getType(), event.getEntity().getClass().getSimpleName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意</strong>：泛型解析利用了 Java 的类型擦除——Spring 通过方法签名的泛型信息进行精确匹配。如果监听方法签名写成 <code>EntityChangedEvent event</code>（无泛型），则会匹配<strong>所有</strong>泛型参数的事件。</p>
+</blockquote>
+<hr>
+<h1 id="十、高级技巧与最佳实践"><a href="#十、高级技巧与最佳实践" class="headerlink" title="十、高级技巧与最佳实践"></a>十、高级技巧与最佳实践</h1><h2 id="1-事件返回处理结果（Spring-5-0-8-0-）"><a href="#1-事件返回处理结果（Spring-5-0-8-0-）" class="headerlink" title="1. 事件返回处理结果（Spring 5.0+&#x2F;8.0+）"></a>1. 事件返回处理结果（Spring 5.0+&#x2F;8.0+）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 监听器的返回值可以被发布者接收</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ValidationListener</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> ValidationResult <span class="title function_">validate</span><span class="params">(OrderBeforeCreateEvent event)</span> &#123;</span><br><span class="line">        <span class="comment">// 执行校验...</span></span><br><span class="line">        <span class="keyword">if</span> (event.getAmount().compareTo(BigDecimal.ZERO) &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> ValidationResult.fail(<span class="string">&quot;金额必须大于0&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ValidationResult.success();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者：收集所有监听器的返回结果</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ApplicationEventPublisher eventPublisher;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(OrderCreateRequest request)</span> &#123;</span><br><span class="line">        <span class="type">OrderBeforeCreateEvent</span> <span class="variable">event</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OrderBeforeCreateEvent</span>(<span class="built_in">this</span>, request);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 如果通过 ApplicationEventPublisher 发布可直接接收返回值</span></span><br><span class="line">        <span class="comment">// 但通常用 ApplicationContext 更方便</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个特性在实践中较少直接使用，了解即可。更常见的做法是抛异常阻止流程。</p>
+</blockquote>
+<hr>
+<h2 id="2-事件作为”内部解耦”手段（模式对比）"><a href="#2-事件作为”内部解耦”手段（模式对比）" class="headerlink" title="2. 事件作为”内部解耦”手段（模式对比）"></a>2. 事件作为”内部解耦”手段（模式对比）</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方案</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单体应用内模块解耦</td>
+<td><strong>Spring Event</strong></td>
+<td>零依赖，低延迟，事务感知</td>
+</tr>
+<tr>
+<td>微服务间异步通信</td>
+<td><strong>RabbitMQ &#x2F; Kafka</strong></td>
+<td>跨 JVM，持久化，重试机制</td>
+</tr>
+<tr>
+<td>高可靠事件（需要持久化）</td>
+<td><strong>数据库发件箱 + MQ</strong></td>
+<td>保证事件不丢失</td>
+</tr>
+<tr>
+<td>实时通知</td>
+<td><strong>WebSocket &#x2F; SSE</strong></td>
+<td>推送实时性</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-最佳实践清单"><a href="#3-最佳实践清单" class="headerlink" title="3. 最佳实践清单"></a>3. 最佳实践清单</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Spring Event 最佳实践总结</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 1. 【事件设计】</span></span><br><span class="line"><span class="comment"> *    - 事件类命名：&#123;实体&#125;&#123;动作&#125;Event，如 OrderCreatedEvent</span></span><br><span class="line"><span class="comment"> *    - 事件是不可变的：所有字段用 final</span></span><br><span class="line"><span class="comment"> *    - 优先用 POJO 事件（Spring 4.2+），无需继承 ApplicationEvent</span></span><br><span class="line"><span class="comment"> *    - 事件携带足够数据，但避免携带整个实体对象（防止过期引用）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 2. 【监听器设计】</span></span><br><span class="line"><span class="comment"> *    - 监听器方法命名：handle&#123;事件名&#125;，如 handleOrderCreated</span></span><br><span class="line"><span class="comment"> *    - 单一职责：一个监听器只做一件事</span></span><br><span class="line"><span class="comment"> *    - 使用 <span class="doctag">@Order</span> 控制依赖顺序</span></span><br><span class="line"><span class="comment"> *    - 监听器内不要再次发布同一个事件（死循环）</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 3. 【异步与事务】</span></span><br><span class="line"><span class="comment"> *    - 旁路逻辑（发邮件、发短信、记录日志）→ <span class="doctag">@Async</span> + <span class="doctag">@EventListener</span></span></span><br><span class="line"><span class="comment"> *    - 事务后处理（发 MQ、清理缓存）→ <span class="doctag">@TransactionalEventListener</span>(AFTER_COMMIT)</span></span><br><span class="line"><span class="comment"> *    - 异步事件务必配置专用线程池，不要用默认的 SimpleAsyncTaskExecutor</span></span><br><span class="line"><span class="comment"> *    - 异步事件务必配置全局异常处理器</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * 4. 【性能考量】</span></span><br><span class="line"><span class="comment"> *    - 同步监听器保持轻量：快速返回，避免阻塞发布线程</span></span><br><span class="line"><span class="comment"> *    - 批量事件考虑聚合：不要在一个循环中逐条 publishEvent</span></span><br><span class="line"><span class="comment"> *    - 大对象事件注意内存占用</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-完整实战示例：用户注册解耦"><a href="#4-完整实战示例：用户注册解耦" class="headerlink" title="4. 完整实战示例：用户注册解耦"></a>4. 完整实战示例：用户注册解耦</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ==================== 事件定义 ====================</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserRegisteredEvent</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Long userId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String email;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String nickname;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> LocalDateTime registeredAt;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserRegisteredEvent</span><span class="params">(Object source, Long userId, </span></span><br><span class="line"><span class="params">                                String email, String nickname)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.userId = userId;</span><br><span class="line">        <span class="built_in">this</span>.email = email;</span><br><span class="line">        <span class="built_in">this</span>.nickname = nickname;</span><br><span class="line">        <span class="built_in">this</span>.registeredAt = LocalDateTime.now();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ==================== 核心业务 ====================</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserMapper userMapper;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ApplicationEventPublisher eventPublisher;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(RegisterRequest request)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 核心：创建用户</span></span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        user.setEmail(request.getEmail());</span><br><span class="line">        user.setNickname(request.getNickname());</span><br><span class="line">        user.setPassword(passwordEncoder.encode(request.getPassword()));</span><br><span class="line">        userMapper.insert(user);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 2. 发布事件——解耦旁路逻辑</span></span><br><span class="line">        eventPublisher.publishEvent(</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">UserRegisteredEvent</span>(<span class="built_in">this</span>, user.getId(), user.getEmail(), user.getNickname())</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ==================== 监听器（各自独立） ====================</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserRegisteredListeners</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MailService mailService;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PointService pointService;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CouponService couponService;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AuditLogService auditService;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CacheManager cacheManager;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ① 同步：记录审计日志（必须成功，轻量快速）</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="meta">@Order(1)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logAudit</span><span class="params">(UserRegisteredEvent event)</span> &#123;</span><br><span class="line">        auditService.record(<span class="string">&quot;USER_REGISTER&quot;</span>, event.getUserId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ② 异步：发送欢迎邮件（可失败，不阻塞注册）</span></span><br><span class="line">    <span class="meta">@Async(&quot;eventTaskExecutor&quot;)</span></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="meta">@Order(2)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendWelcomeEmail</span><span class="params">(UserRegisteredEvent event)</span> &#123;</span><br><span class="line">        mailService.sendWelcome(event.getEmail(), event.getNickname());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ③ 事务提交后：发放新人积分（必须事务成功后才执行）</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line">    <span class="meta">@Order(3)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">grantNewUserPoints</span><span class="params">(UserRegisteredEvent event)</span> &#123;</span><br><span class="line">        pointService.grant(event.getUserId(), <span class="number">100</span>);  <span class="comment">// 新人 100 积分</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ④ 事务提交后：发放新人优惠券</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line">    <span class="meta">@Order(4)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">grantNewUserCoupon</span><span class="params">(UserRegisteredEvent event)</span> &#123;</span><br><span class="line">        couponService.grantNewUserCoupon(event.getUserId());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ⑤ 事务提交后：清理用户列表缓存</span></span><br><span class="line">    <span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line">    <span class="meta">@Order(5)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">evictCache</span><span class="params">(UserRegisteredEvent event)</span> &#123;</span><br><span class="line">        cacheManager.getCache(<span class="string">&quot;userList&quot;</span>).clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="十一、常见问题与避坑"><a href="#十一、常见问题与避坑" class="headerlink" title="十一、常见问题与避坑"></a>十一、常见问题与避坑</h1><h2 id="1-事务内发布事件但监听器读不到新数据"><a href="#1-事务内发布事件但监听器读不到新数据" class="headerlink" title="1. 事务内发布事件但监听器读不到新数据"></a>1. 事务内发布事件但监听器读不到新数据</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 问题场景</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">    orderMapper.insert(order);</span><br><span class="line">    eventPublisher.publishEvent(<span class="keyword">new</span> <span class="title class_">OrderCreatedEvent</span>(<span class="built_in">this</span>, order.getId()));</span><br><span class="line">    <span class="comment">//  ↑ 此时事务未提交</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@EventListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handle</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">    <span class="comment">// 很可能查不到刚插入的 Order（取决于数据库隔离级别）</span></span><br><span class="line">    <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> orderMapper.selectById(event.getOrderId());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解决方案</span></span><br><span class="line"><span class="meta">@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handle</span><span class="params">(OrderCreatedEvent event)</span> &#123;</span><br><span class="line">    <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> orderMapper.selectById(event.getOrderId());  <span class="comment">// 一定能读到</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-循环事件（A-→-B-→-A）"><a href="#2-循环事件（A-→-B-→-A）" class="headerlink" title="2. 循环事件（A → B → A）"></a>2. 循环事件（A → B → A）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 危险：A 监听 B，B 触发 A → 无限循环 → StackOverflowError</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListenerA</span> &#123;</span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onB</span><span class="params">(BEvent event)</span> &#123;</span><br><span class="line">        <span class="comment">// 处理过程中又发布了 AEvent</span></span><br><span class="line">        eventPublisher.publishEvent(<span class="keyword">new</span> <span class="title class_">AEvent</span>(<span class="built_in">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ListenerB</span> &#123;</span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onA</span><span class="params">(AEvent event)</span> &#123;</span><br><span class="line">        eventPublisher.publishEvent(<span class="keyword">new</span> <span class="title class_">BEvent</span>(<span class="built_in">this</span>));  <span class="comment">// 死循环！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 预防措施</span></span><br><span class="line"><span class="comment">// 1. 在事件中加入&quot;来源&quot;标记，避免回路</span></span><br><span class="line"><span class="comment">// 2. 设计时画事件流转图，确保无环</span></span><br><span class="line"><span class="comment">// 3. 使用 ContextRefreshedEvent 或在构造器中做一次全量检查</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-EventListener-不生效排查清单"><a href="#3-EventListener-不生效排查清单" class="headerlink" title="3. @EventListener 不生效排查清单"></a>3. <code>@EventListener</code> 不生效排查清单</h2><table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能原因</th>
+<th>解决</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>监听器完全不触发</td>
+<td>监听器 Bean 未被 Spring 管理</td>
+<td>确保 <code>@Component</code> 且被扫描到</td>
+</tr>
+<tr>
+<td></td>
+<td><code>ApplicationContext</code> 不一致</td>
+<td>确保发布者和监听者在同一容器</td>
+</tr>
+<tr>
+<td></td>
+<td>事件类型不匹配</td>
+<td>检查监听方法参数类型</td>
+</tr>
+<tr>
+<td>条件表达式不生效</td>
+<td>SpEL 语法错误</td>
+<td>简化条件，先在方法体内用 if 判断</td>
+</tr>
+<tr>
+<td></td>
+<td>SpEL 中的 NPE</td>
+<td>表达式默认返回 false，加了 null 检查</td>
+</tr>
+<tr>
+<td>事务监听器不触发</td>
+<td>没有活跃事务</td>
+<td>使用 <code>fallbackExecution = true</code></td>
+</tr>
+<tr>
+<td></td>
+<td>在 <code>@Transactional</code> 外部发布事件</td>
+<td>改为在事务方法内发布</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-事件过多导致启动变慢"><a href="#4-事件过多导致启动变慢" class="headerlink" title="4. 事件过多导致启动变慢"></a>4. 事件过多导致启动变慢</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 问题：每个 @EventListener 注册都需要反射解析，监听器过多时影响启动速度</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 优化：合并同类监听器</span></span><br><span class="line"><span class="comment">// 反例：10 个各自独立的监听器</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Listener1</span> &#123; <span class="meta">@EventListener</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">on</span><span class="params">(MyEvent e)</span> &#123; &#125; &#125;</span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Listener2</span> &#123; <span class="meta">@EventListener</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">on</span><span class="params">(MyEvent e)</span> &#123; &#125; &#125;</span><br><span class="line"><span class="comment">// ... x10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正例：一个类内部按需分发</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyEventDispatcher</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EventListener</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dispatch</span><span class="params">(MyEvent event)</span> &#123;</span><br><span class="line">        handleLogic1(event);</span><br><span class="line">        handleLogic2(event);</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">handleLogic1</span><span class="params">(MyEvent e)</span> &#123; ... &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">handleLogic2</span><span class="params">(MyEvent e)</span> &#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8/" rel="tag"># 事件驱动</a>
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+              <a href="/tags/SpringEvent/" rel="tag"># SpringEvent</a>
+              <a href="/tags/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag"># 观察者模式</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/15/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" rel="prev" title="数据权限控制——从裸奔到终极方案的五年演进">
+                  <i class="fa fa-angle-left"></i> 数据权限控制——从裸奔到终极方案的五年演进
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/21/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E6%9C%AC%E8%B4%A8/" rel="next" title="循环依赖的本质不是注入问题，而是职责耦合问题">
+                  循环依赖的本质不是注入问题，而是职责耦合问题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

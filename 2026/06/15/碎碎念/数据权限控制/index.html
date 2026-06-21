@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="数据权限控制——从裸奔到终极方案的五年演进问题背景假设我们正在开发一个农业信息化系统，核心数据有三张表：    表名 说明    farmer_info 农户信息   land_info 耕地信息   planting_info 种植信息   系统的组织架构分为 县 → 乡镇 → 村 三级，对应的角色与权限如下：    角色 数据可见范围    县级管理员 (COUNTY_ADMIN) 查看全县所">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据权限控制——从裸奔到终极方案的五年演进">
+<meta property="og:url" content="http://example.com/2026/06/15/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/index.html">
+<meta property="og:site_name" content="冉的技术宝典">
+<meta property="og:description" content="数据权限控制——从裸奔到终极方案的五年演进问题背景假设我们正在开发一个农业信息化系统，核心数据有三张表：    表名 说明    farmer_info 农户信息   land_info 耕地信息   planting_info 种植信息   系统的组织架构分为 县 → 乡镇 → 村 三级，对应的角色与权限如下：    角色 数据可见范围    县级管理员 (COUNTY_ADMIN) 查看全县所">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-15T04:00:16.000Z">
+<meta property="article:modified_time" content="2026-06-15T05:40:07.199Z">
+<meta property="article:author" content="冉丝堂">
+<meta property="article:tag" content="AOP">
+<meta property="article:tag" content="JSQLParser">
+<meta property="article:tag" content="MyBatis-Plus">
+<meta property="article:tag" content="安全">
+<meta property="article:tag" content="数据权限">
+<meta property="article:tag" content="架构演进">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2026/06/15/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/06/15/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/","path":"2026/06/15/碎碎念/数据权限控制/","title":"数据权限控制——从裸奔到终极方案的五年演进"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>数据权限控制——从裸奔到终极方案的五年演进 | 冉的技术宝典</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">冉的技术宝典</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E2%80%94%E2%80%94%E4%BB%8E%E8%A3%B8%E5%A5%94%E5%88%B0%E7%BB%88%E6%9E%81%E6%96%B9%E6%A1%88%E7%9A%84%E4%BA%94%E5%B9%B4%E6%BC%94%E8%BF%9B"><span class="nav-text">数据权限控制——从裸奔到终极方案的五年演进</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E8%83%8C%E6%99%AF"><span class="nav-text">问题背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%8E%A9%E8%80%B3%E7%9B%97%E9%93%83%E2%80%94%E2%80%94%E4%BB%80%E4%B9%88%E9%83%BD%E4%B8%8D%E5%81%9A%EF%BC%8C%E7%BA%AF%E9%9D%A0%E5%89%8D%E7%AB%AF%E4%BC%A0%E5%8F%82"><span class="nav-text">第一阶段：掩耳盗铃——什么都不做，纯靠前端传参</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-text">实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%B4%E5%91%BD%E9%97%AE%E9%A2%98"><span class="nav-text">致命问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%9A%E7%AE%80%E5%8D%95%E7%B2%97%E6%9A%B4%E2%80%94%E2%80%94%E5%9C%A8-Service-%E5%B1%82%E7%96%AF%E7%8B%82-if-else"><span class="nav-text">第二阶段：简单粗暴——在 Service 层疯狂 if-else</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F-1"><span class="nav-text">实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E9%9C%B2%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">暴露的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E5%88%9D%E7%AA%A5%E9%97%A8%E5%BE%84%E2%80%94%E2%80%94AOP-DTO-%E9%9D%99%E9%BB%98%E4%BF%AE%E6%AD%A3%E5%8F%82%E6%95%B0"><span class="nav-text">第三阶段：初窥门径——AOP + DTO 静默修正参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F-2"><span class="nav-text">实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E9%9C%B2%E7%9A%84%E6%96%B0%E9%97%AE%E9%A2%98"><span class="nav-text">暴露的新问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%9A%E7%99%BB%E5%A0%82%E5%85%A5%E5%AE%A4%E2%80%94%E2%80%94AOP-%E5%8A%A8%E6%80%81%E6%8B%BC%E6%8E%A5-SQL-%E7%89%87%E6%AE%B5"><span class="nav-text">第四阶段：登堂入室——AOP + 动态拼接 SQL 片段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F-3"><span class="nav-text">实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E7%84%B6%E5%AD%98%E5%9C%A8%E7%9A%84%E5%BC%8A%E7%AB%AF"><span class="nav-text">依然存在的弊端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E9%98%B6%E6%AE%B5%EF%BC%9A%E7%BB%88%E6%9E%81%E6%96%B9%E6%A1%88%E2%80%94%E2%80%94%E5%9F%BA%E4%BA%8E-JSQLParser-AST-%E7%9A%84-MyBatis-%E5%BA%95%E5%B1%82%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-text">第五阶段：终极方案——基于 JSQLParser AST 的 MyBatis 底层拦截器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="nav-text">设计理念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F-4"><span class="nav-text">实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%BC%98%E7%82%B9"><span class="nav-text">方案优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E5%BF%BD%E8%A7%86%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">不可忽视的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E9%81%BF%E5%9D%91%E6%8C%87%E5%8D%97"><span class="nav-text">实战避坑指南</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81INSERT-UPDATE-DELETE-%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="nav-text">一、INSERT &#x2F; UPDATE &#x2F; DELETE 怎么办？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%9D%83%E9%99%90%E5%AD%97%E6%AE%B5%E4%B8%8D%E5%9C%A8%E4%B8%9A%E5%8A%A1%E8%A1%A8%E4%B8%8A%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="nav-text">二、权限字段不在业务表上怎么办？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%A4%9A%E7%A7%9F%E6%88%B7%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">三、多租户与数据权限的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%80%89%E5%9E%8B%E5%86%B3%E7%AD%96%E6%A0%91"><span class="nav-text">四、选型决策树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%88%97%E8%A1%A8%E5%AF%BC%E5%87%BA"><span class="nav-text">五、列表导出</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">冉丝堂</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/15/%E7%A2%8E%E7%A2%8E%E5%BF%B5/%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="数据权限控制——从裸奔到终极方案的五年演进 | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据权限控制——从裸奔到终极方案的五年演进
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-15 12:00:16 / 修改时间：13:40:07" itemprop="dateCreated datePublished" datetime="2026-06-15T12:00:16+08:00">2026-06-15</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="数据权限控制——从裸奔到终极方案的五年演进"><a href="#数据权限控制——从裸奔到终极方案的五年演进" class="headerlink" title="数据权限控制——从裸奔到终极方案的五年演进"></a>数据权限控制——从裸奔到终极方案的五年演进</h1><h2 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h2><p>假设我们正在开发一个<strong>农业信息化系统</strong>，核心数据有三张表：</p>
+<table>
+<thead>
+<tr>
+<th>表名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>farmer_info</code></td>
+<td>农户信息</td>
+</tr>
+<tr>
+<td><code>land_info</code></td>
+<td>耕地信息</td>
+</tr>
+<tr>
+<td><code>planting_info</code></td>
+<td>种植信息</td>
+</tr>
+</tbody></table>
+<p>系统的组织架构分为 <strong>县 → 乡镇 → 村</strong> 三级，对应的角色与权限如下：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>数据可见范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>县级管理员 (<code>COUNTY_ADMIN</code>)</td>
+<td>查看全县所有数据</td>
+</tr>
+<tr>
+<td>乡镇管理员 (<code>TOWN_ADMIN</code>)</td>
+<td>只能看本镇管辖的村数据</td>
+</tr>
+<tr>
+<td>村级管理员 (<code>VILLAGE_ADMIN</code>)</td>
+<td>只能看本村数据</td>
+</tr>
+</tbody></table>
+<p>这个需求本质上是一个<strong>行级数据权限</strong>问题：同一张表，不同角色看到的行不同。前端查询列表时，会传入 <code>townCode</code> 或 <code>villageCode</code> 进行筛选——但后端的权限控制绝不能依赖前端传参。</p>
+<blockquote>
+<p>为了代码连贯性，文中统一使用以下基础类：</p>
+<ul>
+<li><code>LoginUser</code>：当前登录用户实体，包含 <code>getRole()</code> 和 <code>getRegionCode()</code> 方法。</li>
+<li><code>SecurityUtils</code>：获取当前登录用户的工具类。</li>
+<li><code>RoleEnum</code>：角色枚举，含 <code>COUNTY_ADMIN</code>、<code>TOWN_ADMIN</code>、<code>VILLAGE_ADMIN</code>。</li>
+</ul>
+</blockquote>
+<p>面对这个极其通用的需求，我们的代码架构经历了<strong>五个阶段</strong>的痛苦演进。下面逐一展开。</p>
+<hr>
+<h2 id="第一阶段：掩耳盗铃——什么都不做，纯靠前端传参"><a href="#第一阶段：掩耳盗铃——什么都不做，纯靠前端传参" class="headerlink" title="第一阶段：掩耳盗铃——什么都不做，纯靠前端传参"></a>第一阶段：掩耳盗铃——什么都不做，纯靠前端传参</h2><blockquote>
+<p>项目刚启动，需求排山倒海，”权限控制”被贴上了”后期再做”的标签。</p>
+</blockquote>
+<h3 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h3><p>后端完全信任前端，Controller 直接接收参数并查库。</p>
+<p><strong>Controller 层：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/farmer&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FarmerController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> FarmerService farmerService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/list&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Result&lt;List&lt;Farmer&gt;&gt; <span class="title function_">list</span><span class="params">(FarmerQueryDTO dto)</span> &#123;</span><br><span class="line">        <span class="comment">// 前端传什么就查什么，毫无防备</span></span><br><span class="line">        <span class="keyword">return</span> Result.success(farmerService.getList(dto));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Service 层：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 前端传什么 villageCode，我就查什么</span></span><br><span class="line">List&lt;Farmer&gt; list = farmerMapper.selectByVillageCode(dto.getVillageCode());</span><br></pre></td></tr></table></figure>
+
+<p><strong>Mapper.xml：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;Farmer&quot;</span>&gt;</span></span><br><span class="line">    SELECT * FROM farmer_info</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;villageCode != null and villageCode != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">            AND village_code = #&#123;villageCode&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="致命问题"><a href="#致命问题" class="headerlink" title="致命问题"></a>致命问题</h3><ul>
+<li><strong>水平越权（IDOR）</strong>：一个村级管理员（只能看 V01 村）在浏览器抓包后，把请求参数里的 <code>villageCode</code> 改成 <code>V02</code>，就能轻松拉取隔壁村的数据。这根本不叫权限控制，这叫<strong>裸奔</strong>。</li>
+</ul>
+<hr>
+<h2 id="第二阶段：简单粗暴——在-Service-层疯狂-if-else"><a href="#第二阶段：简单粗暴——在-Service-层疯狂-if-else" class="headerlink" title="第二阶段：简单粗暴——在 Service 层疯狂 if-else"></a>第二阶段：简单粗暴——在 Service 层疯狂 if-else</h2><blockquote>
+<p>安全审计给了差评。团队意识到问题后，第一反应是在业务代码里”补丁式”地加上权限校验。</p>
+</blockquote>
+<h3 id="实现方式-1"><a href="#实现方式-1" class="headerlink" title="实现方式"></a>实现方式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FarmerService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> FarmerMapper farmerMapper;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;Farmer&gt; <span class="title function_">getList</span><span class="params">(FarmerQueryDTO dto)</span> &#123;</span><br><span class="line">        <span class="type">LoginUser</span> <span class="variable">loginUser</span> <span class="operator">=</span> SecurityUtils.getLoginUser();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (loginUser != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (RoleEnum.VILLAGE_ADMIN.equals(loginUser.getRole())) &#123;</span><br><span class="line">                dto.setVillageCode(loginUser.getRegionCode()); <span class="comment">// 强制覆盖</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (RoleEnum.TOWN_ADMIN.equals(loginUser.getRole())) &#123;</span><br><span class="line">                dto.setTownCode(loginUser.getRegionCode());    <span class="comment">// 强制覆盖</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 县级管理员不做限制</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> farmerMapper.getList(dto);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="暴露的问题"><a href="#暴露的问题" class="headerlink" title="暴露的问题"></a>暴露的问题</h3><ol>
+<li><strong>代码冗余（违反 DRY 原则）</strong>：系统有 50+ 个查询接口（农户、耕地、农机、补贴……），这段 <code>if-else</code> 要复制粘贴 50 遍。</li>
+<li><strong>极易遗漏</strong>：新同事写了个新接口，忘了加这段判断，系统瞬间再次出现越权漏洞。</li>
+<li><strong>违反开闭原则</strong>：如果新增一个”片区管理员”角色，需要把所有 Service 层代码翻出来改一遍，维护成本极高。</li>
+</ol>
+<hr>
+<h2 id="第三阶段：初窥门径——AOP-DTO-静默修正参数"><a href="#第三阶段：初窥门径——AOP-DTO-静默修正参数" class="headerlink" title="第三阶段：初窥门径——AOP + DTO 静默修正参数"></a>第三阶段：初窥门径——AOP + DTO 静默修正参数</h2><blockquote>
+<p>团队受够了复制粘贴。接触了 Spring AOP 后，决定用切面统一拦截请求，<strong>自动覆盖</strong> DTO 里的 <code>townCode</code> &#x2F; <code>villageCode</code>。</p>
+</blockquote>
+<h3 id="实现方式-2"><a href="#实现方式-2" class="headerlink" title="实现方式"></a>实现方式</h3><p><strong>定义标记接口约束 DTO：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">DataScoped</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setTownCode</span><span class="params">(String townCode)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">setVillageCode</span><span class="params">(String villageCode)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FarmerQueryDTO</span> <span class="keyword">implements</span> <span class="title class_">DataScoped</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String townCode;</span><br><span class="line">    <span class="keyword">private</span> String villageCode;</span><br><span class="line">    <span class="comment">// ... 其他查询参数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>编写 AOP 切面统一拦截：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataScopeAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Around(&quot;@annotation(com.xxx.annotation.DataScope)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">applyDataScope</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        Object[] args = pjp.getArgs();</span><br><span class="line">        <span class="keyword">for</span> (Object arg : args) &#123;</span><br><span class="line">            <span class="keyword">if</span> (arg <span class="keyword">instanceof</span> DataScoped scoped) &#123;</span><br><span class="line">                <span class="type">LoginUser</span> <span class="variable">loginUser</span> <span class="operator">=</span> SecurityUtils.getLoginUser();</span><br><span class="line">                <span class="keyword">if</span> (loginUser != <span class="literal">null</span> &amp;&amp; loginUser.getRole() != <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="comment">// Java 14+ switch 表达式</span></span><br><span class="line">                    <span class="keyword">switch</span> (loginUser.getRole()) &#123;</span><br><span class="line">                        <span class="keyword">case</span> VILLAGE_ADMIN -&gt; scoped.setVillageCode(loginUser.getRegionCode());</span><br><span class="line">                        <span class="keyword">case</span> TOWN_ADMIN   -&gt; scoped.setTownCode(loginUser.getRegionCode());</span><br><span class="line">                        <span class="keyword">default</span> -&gt; &#123;&#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> pjp.proceed();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用起来只需在 Controller 方法上加一个 <code>@DataScope</code> 注解，清爽了不少。</p>
+<h3 id="暴露的新问题"><a href="#暴露的新问题" class="headerlink" title="暴露的新问题"></a>暴露的新问题</h3><p>虽然代码变优雅了，但架构上存在两个隐患：</p>
+<ol>
+<li><strong>“静默修正”掩盖攻击行为</strong>：黑客故意传 <code>V02</code>，AOP 悄悄改成 <code>V01</code>，返回了 V01 的数据。对黑客而言是一种奇怪的体验；对系统而言，<strong>日志里没有任何越权尝试的记录</strong>，安全审计形同虚设。</li>
+<li><strong>强耦合业务字段</strong>：接口写死了 <code>setTownCode</code> &#x2F; <code>setVillageCode</code>。如果新业务表叫”农机设备”且字段名是 <code>town_id</code>，或者”片区管理员”一次管 3 个镇（需用 <code>IN</code> 而非 <code>=</code>），这个设计就彻底瘫痪。</li>
+</ol>
+<hr>
+<h2 id="第四阶段：登堂入室——AOP-动态拼接-SQL-片段"><a href="#第四阶段：登堂入室——AOP-动态拼接-SQL-片段" class="headerlink" title="第四阶段：登堂入室——AOP + 动态拼接 SQL 片段"></a>第四阶段：登堂入室——AOP + 动态拼接 SQL 片段</h2><blockquote>
+<p> 意识到”静默覆盖参数”从安全审计的角度不够理想后，团队换了一个思路：<strong>将前端参数与后端权限参数彻底分离</strong>。AOP 不再修改 <code>townCode</code>，而是生成一段<strong>绝对的权限 SQL 片段</strong>注入到 BaseDTO 中。</p>
+</blockquote>
+<h3 id="实现方式-3"><a href="#实现方式-3" class="headerlink" title="实现方式"></a>实现方式</h3><p><strong>改造基础 DTO（隔离前端参数与后端权限）：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BaseQueryDTO</span> &#123;</span><br><span class="line">    <span class="comment">// 前端正常传入的筛选参数</span></span><br><span class="line">    <span class="keyword">private</span> String townCode;</span><br><span class="line">    <span class="keyword">private</span> String villageCode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 后端 AOP 注入的 SQL 片段，禁止前端传递</span></span><br><span class="line">    <span class="meta">@JsonIgnore</span></span><br><span class="line">    <span class="keyword">private</span> String dataScopeSql;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>改造 AOP（生成权限 SQL 片段）：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataScopeAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// @DataScope 支持配置表别名，如 @DataScope(tableAlias = &quot;f&quot;)</span></span><br><span class="line">    <span class="meta">@Around(&quot;@annotation(dataScope)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">applyDataScope</span><span class="params">(ProceedingJoinPoint pjp, DataScope dataScope)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="keyword">for</span> (Object arg : pjp.getArgs()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (arg <span class="keyword">instanceof</span> BaseQueryDTO dto) &#123;</span><br><span class="line">                <span class="type">LoginUser</span> <span class="variable">loginUser</span> <span class="operator">=</span> SecurityUtils.getLoginUser();</span><br><span class="line">                <span class="keyword">if</span> (loginUser == <span class="literal">null</span> || loginUser.getRole() == <span class="literal">null</span>) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                <span class="type">String</span> <span class="variable">alias</span> <span class="operator">=</span> dataScope.tableAlias();</span><br><span class="line">                <span class="type">String</span> <span class="variable">prefix</span> <span class="operator">=</span> (alias != <span class="literal">null</span> &amp;&amp; !alias.isEmpty()) ? alias + <span class="string">&quot;.&quot;</span> : <span class="string">&quot;&quot;</span>;</span><br><span class="line">                <span class="type">StringBuilder</span> <span class="variable">sql</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">switch</span> (loginUser.getRole()) &#123;</span><br><span class="line">                    <span class="keyword">case</span> VILLAGE_ADMIN -&gt;</span><br><span class="line">                        sql.append(<span class="string">&quot; AND &quot;</span>).append(prefix)</span><br><span class="line">                           .append(<span class="string">&quot;village_code = &#x27;&quot;</span>).append(loginUser.getRegionCode()).append(<span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line">                    <span class="keyword">case</span> TOWN_ADMIN -&gt;</span><br><span class="line">                        sql.append(<span class="string">&quot; AND &quot;</span>).append(prefix)</span><br><span class="line">                           .append(<span class="string">&quot;town_code = &#x27;&quot;</span>).append(loginUser.getRegionCode()).append(<span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将生成的 SQL 片段注入 DTO，Service 层无感知</span></span><br><span class="line">                dto.setDataScopeSql(sql.toString());</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> pjp.proceed();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Mapper.xml 配合兜底：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;getList&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;Farmer&quot;</span>&gt;</span></span><br><span class="line">    SELECT f.* FROM farmer_info f</span><br><span class="line">    <span class="tag">&lt;<span class="name">where</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 前端正常筛选条件 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;villageCode != null and villageCode != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">            AND f.village_code = #&#123;villageCode&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 后端 AOP 动态注入的绝对权限铁闸门 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;dataScopeSql != null and dataScopeSql != &#x27;&#x27;&quot;</span>&gt;</span></span><br><span class="line">            $&#123;dataScopeSql&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">where</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>防御效果</strong>：如果有人越权传了 <code>villageCode = &#39;V02&#39;</code>，最终 SQL 会变成：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WHERE</span> village_code <span class="operator">=</span> <span class="string">&#x27;V02&#x27;</span> <span class="keyword">AND</span> village_code <span class="operator">=</span> <span class="string">&#x27;V01&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>两条件互斥，查不出任何数据，完美防御。</p>
+</blockquote>
+<h3 id="依然存在的弊端"><a href="#依然存在的弊端" class="headerlink" title="依然存在的弊端"></a>依然存在的弊端</h3><p>这是很多传统开源框架（如 RuoYi 早期版本）的通用方案，但仍不完美：</p>
+<ol>
+<li><strong>XML 侵入性太强</strong>：每个 <code>Mapper.xml</code> 的最后都必须手动加上 <code>${dataScopeSql}</code>，少加一处权限就失效。</li>
+<li><strong>内部调用容易翻车</strong>：定时任务（如半夜统计全县数据）直接调用 Service，没经过 AOP 拦截，或没传 DTO，容易引发权限错乱或空指针。</li>
+<li><strong>SQL 注入风险点</strong>：虽然 <code>regionCode</code> 来自服务端 session，但如果拼接方式不当或数据源不可信，<code>${}</code> 本身就是风险敞口。</li>
+</ol>
+<hr>
+<h2 id="第五阶段：终极方案——基于-JSQLParser-AST-的-MyBatis-底层拦截器"><a href="#第五阶段：终极方案——基于-JSQLParser-AST-的-MyBatis-底层拦截器" class="headerlink" title="第五阶段：终极方案——基于 JSQLParser AST 的 MyBatis 底层拦截器"></a>第五阶段：终极方案——基于 JSQLParser AST 的 MyBatis 底层拦截器</h2><h3 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a>设计理念</h3><p><strong>彻底抛掉在应用层拼接 SQL 的思路，直接在 MyBatis 底层进行拦截。</strong></p>
+<p>利用 <code>JSQLParser</code> 引擎，将即将执行的 SQL 解析成<strong>抽象语法树（AST）</strong>，精准定位到 <code>WHERE</code> 节点，动态追加权限条件。好处是：</p>
+<ul>
+<li>Service、Controller、DTO、XML 全部零侵入。</li>
+<li>无论上层代码怎么写，发往数据库的 SQL 都被死死卡住。</li>
+<li>连 <code>LEFT JOIN</code> 的关联表都能自动加上权限。</li>
+</ul>
+<h3 id="实现方式-4"><a href="#实现方式-4" class="headerlink" title="实现方式"></a>实现方式</h3><p><strong>步骤一：引入依赖</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>步骤二：编写自定义数据权限处理器（核心）</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> net.sf.jsqlparser.expression.Expression;</span><br><span class="line"><span class="keyword">import</span> net.sf.jsqlparser.parser.CCJSqlParserUtil;</span><br><span class="line"><span class="keyword">import</span> net.sf.jsqlparser.schema.Table;</span><br><span class="line"><span class="keyword">import</span> com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;</span><br><span class="line"><span class="keyword">import</span> lombok.extern.slf4j.Slf4j;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CustomDataPermissionHandler</span> <span class="keyword">implements</span> <span class="title class_">MultiDataPermissionHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 性能优化：白名单，只拦截业务表，字典表/系统表直接放行</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Set&lt;String&gt; PERMISSION_TABLES = Set.of(</span><br><span class="line">            <span class="string">&quot;farmer_info&quot;</span>, <span class="string">&quot;land_info&quot;</span>, <span class="string">&quot;planting_info&quot;</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Expression <span class="title function_">getSqlSegment</span><span class="params">(Table table, Expression where, String mappedStatementId)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">tableName</span> <span class="operator">=</span> table.getName();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 非业务表，直接放行</span></span><br><span class="line">        <span class="keyword">if</span> (!PERMISSION_TABLES.contains(tableName)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 获取当前登录用户</span></span><br><span class="line">        <span class="type">LoginUser</span> <span class="variable">loginUser</span> <span class="operator">=</span> SecurityUtils.getLoginUser();</span><br><span class="line">        <span class="keyword">if</span> (loginUser == <span class="literal">null</span> || loginUser.getRole() == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 处理表别名 — 多表 JOIN 时避免字段歧义</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">alias</span> <span class="operator">=</span> table.getAlias() != <span class="literal">null</span> ? table.getAlias().getName() + <span class="string">&quot;.&quot;</span> : <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. 按角色构建权限条件</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">sqlFragment</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">switch</span> (loginUser.getRole()) &#123;</span><br><span class="line">            <span class="keyword">case</span> VILLAGE_ADMIN -&gt;</span><br><span class="line">                sqlFragment = alias + <span class="string">&quot;village_code = &#x27;&quot;</span> + loginUser.getRegionCode() + <span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">            <span class="keyword">case</span> TOWN_ADMIN -&gt;</span><br><span class="line">                sqlFragment = alias + <span class="string">&quot;town_code = &#x27;&quot;</span> + loginUser.getRegionCode() + <span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">            <span class="keyword">case</span> COUNTY_ADMIN -&gt; &#123; <span class="keyword">return</span> <span class="literal">null</span>; &#125; <span class="comment">// 县级看全部</span></span><br><span class="line">            <span class="keyword">default</span> -&gt; &#123;</span><br><span class="line">                <span class="comment">// 最小权限原则：未识别角色一律拒绝访问</span></span><br><span class="line">                log.warn(<span class="string">&quot;未处理的数据权限角色: &#123;&#125;&quot;</span>, loginUser.getRole());</span><br><span class="line">                sqlFragment = <span class="string">&quot;1 = 0&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5. 转化为 JSQLParser 的 Expression AST 节点</span></span><br><span class="line">        <span class="keyword">if</span> (sqlFragment != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> CCJSqlParserUtil.parseCondExpression(sqlFragment);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                log.error(<span class="string">&quot;数据权限 SQL 解析异常: &#123;&#125;&quot;</span>, sqlFragment, e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>步骤三：注册拦截器到 Spring 容器</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;</span><br><span class="line"><span class="keyword">import</span> com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;</span><br><span class="line"><span class="keyword">import</span> com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyBatisPlusConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MybatisPlusInterceptor <span class="title function_">mybatisPlusInterceptor</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">MybatisPlusInterceptor</span> <span class="variable">interceptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MybatisPlusInterceptor</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 顺序敏感：数据权限拦截器必须放在分页拦截器之前</span></span><br><span class="line">        <span class="type">DataPermissionInterceptor</span> <span class="variable">dataPermissionInterceptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DataPermissionInterceptor</span>();</span><br><span class="line">        dataPermissionInterceptor.setDataPermissionHandler(<span class="keyword">new</span> <span class="title class_">CustomDataPermissionHandler</span>());</span><br><span class="line">        interceptor.addInnerInterceptor(dataPermissionInterceptor);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分页拦截器</span></span><br><span class="line">        interceptor.addInnerInterceptor(<span class="keyword">new</span> <span class="title class_">PaginationInnerInterceptor</span>());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> interceptor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>步骤四：特殊情况——如何忽略权限？</strong></p>
+<p>定时任务（如”全县夜间大屏统计”）需要查全量数据，只需在 Mapper 方法上加一个注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Mapper</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">FarmerMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;Farmer&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@InterceptorIgnore(dataPermission = &quot;true&quot;)</span></span><br><span class="line">    List&lt;Farmer&gt; <span class="title function_">selectAllForReport</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方案优点"><a href="#方案优点" class="headerlink" title="方案优点"></a>方案优点</h3><ul>
+<li><strong>业务层零侵入</strong>：Service、Controller、DTO、XML 全部保持干净，开发人员完全感知不到权限代码的存在。</li>
+<li><strong>绝对安全</strong>：底层拦截，连 <code>LEFT JOIN</code> 关联表都能自动追加权限条件。</li>
+<li><strong>扩展性强</strong>：新增角色只需在 Handler 的 <code>switch</code> 中加一个分支，无需改动任何业务代码。</li>
+</ul>
+<h3 id="不可忽视的问题"><a href="#不可忽视的问题" class="headerlink" title="不可忽视的问题"></a>不可忽视的问题</h3><ol>
+<li><p><strong>微小性能损耗</strong>：每次查询都需经过 JSQLParser 解析 AST，带来微秒级消耗。<strong>缓解手段</strong>：在 Handler 中维护白名单，只解析特定业务表。</p>
+</li>
+<li><p><strong>复杂 SQL 解析可能失败</strong>：如果历史 XML 中存在极其复杂的嵌套 SQL 或数据库特有函数，JSQLParser 可能抛出 <code>JSQLParserException</code>。<strong>建议</strong>：新项目从一开始就用，老项目迁移时逐表灰度。</p>
+</li>
+<li><p><strong>权限绕过的管理成本</strong>：定时任务 &#x2F; Feign 内部调用需要全量数据时，必须记得加 <code>@InterceptorIgnore(dataPermission = &quot;true&quot;)</code>，忘了加就查不全。<strong>建议</strong>：在 Code Review 中重点检查定时任务 Mapper。</p>
+</li>
+<li><p><strong>跨表权限的隐式陷阱</strong>（最隐蔽）：上面的代码默认每张业务表都有 <code>town_code</code> 和 <code>village_code</code>。但现实中 <code>farmer_info</code> 可能只存了 <code>village_code</code>（因为村属于镇，通过村即可推导镇），此时乡镇管理员执行 <code>WHERE town_code = &#39;T01&#39;</code> 会直接报字段不存在。</p>
+<p><strong>正确做法</strong>：</p>
+<ul>
+<li><strong>方案 A</strong>：子查询反推 —— <code>village_code IN (SELECT village_code FROM sys_village WHERE town_code = &#39;T01&#39;)</code></li>
+<li><strong>方案 B</strong>：在 AST 中判断当前 SQL 是否已 JOIN 了村表，若未 JOIN 则动态追加。</li>
+<li><strong>建议</strong>：在 Handler 中维护一份「表 → 权限字段映射」的配置，而不是硬编码字段名。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="实战避坑指南"><a href="#实战避坑指南" class="headerlink" title="实战避坑指南"></a>实战避坑指南</h2><h3 id="一、INSERT-UPDATE-DELETE-怎么办？"><a href="#一、INSERT-UPDATE-DELETE-怎么办？" class="headerlink" title="一、INSERT &#x2F; UPDATE &#x2F; DELETE 怎么办？"></a>一、INSERT &#x2F; UPDATE &#x2F; DELETE 怎么办？</h3><p>本文重点讨论了 SELECT 查询场景，但 MyBatis-Plus 的 <code>DataPermissionInterceptor</code> <strong>同样会拦截 UPDATE 和 DELETE</strong> 的 WHERE 子句——一个村级管理员即使抓包改了 <code>id</code> 试图修改隔壁村数据，最终执行的 SQL 也会被自动追加 <code>AND village_code = &#39;V01&#39;</code>，更新影响 0 行。</p>
+<p>INSERT 则略有不同：</p>
+<ul>
+<li>前端提交时，<code>requestBody</code> 中的 <code>villageCode</code> 应在 Controller 层校验，确保它与当前用户的辖区一致。</li>
+<li>推荐做法：在 应用层层一处理，强制使用当前用户的所属机构覆盖参数或直接抛异常拒绝。</li>
+</ul>
+<h3 id="二、权限字段不在业务表上怎么办？"><a href="#二、权限字段不在业务表上怎么办？" class="headerlink" title="二、权限字段不在业务表上怎么办？"></a>二、权限字段不在业务表上怎么办？</h3><p>现实中的表结构往往不完美。比如 <code>farmer_info</code> 只有 <code>village_code</code>，没有 <code>town_code</code>。乡镇管理员查农户时，需要：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 乡镇管理员看到的效果：</span></span><br><span class="line"><span class="keyword">SELECT</span> f.<span class="operator">*</span> <span class="keyword">FROM</span> farmer_info f</span><br><span class="line"><span class="keyword">WHERE</span> f.village_code <span class="keyword">IN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> village_code <span class="keyword">FROM</span> sys_village <span class="keyword">WHERE</span> town_code <span class="operator">=</span> <span class="string">&#x27;T01&#x27;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>推荐做法</strong>：在 Handler 中维护配置映射，而不是硬编码字段。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 表 → 权限字段 → 角色 → SQL 策略</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, PermissionStrategy&gt; STRATEGY_MAP = Map.of(</span><br><span class="line">    <span class="string">&quot;farmer_info&quot;</span>, <span class="keyword">new</span> <span class="title class_">PermissionStrategy</span>()</span><br><span class="line">        .forRole(RoleEnum.VILLAGE_ADMIN, <span class="string">&quot;village_code = ?&quot;</span>)</span><br><span class="line">        .forRole(RoleEnum.TOWN_ADMIN,   <span class="string">&quot;village_code IN (SELECT village_code FROM sys_village WHERE town_code = ?)&quot;</span>),</span><br><span class="line">    <span class="string">&quot;land_info&quot;</span>,   <span class="keyword">new</span> <span class="title class_">PermissionStrategy</span>()</span><br><span class="line">        .forRole(RoleEnum.VILLAGE_ADMIN, <span class="string">&quot;village_code = ?&quot;</span>)</span><br><span class="line">        .forRole(RoleEnum.TOWN_ADMIN,   <span class="string">&quot;town_code = ?&quot;</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、多租户与数据权限的关系"><a href="#三、多租户与数据权限的关系" class="headerlink" title="三、多租户与数据权限的关系"></a>三、多租户与数据权限的关系</h3><p>如果你的系统同时需要<strong>多租户隔离</strong>（SaaS）和<strong>组织内数据权限</strong>，这两层应该分开处理：</p>
+<ul>
+<li><strong>租户隔离</strong>：按 <code>tenant_id</code> 全局过滤，可以用 MyBatis-Plus 的 <code>TenantLineInnerInterceptor</code>。</li>
+<li><strong>数据权限</strong>：按角色过滤 <code>village_code</code> &#x2F; <code>town_code</code>，用本文的 <code>DataPermissionInterceptor</code>。</li>
+</ul>
+<p>注意拦截器注册顺序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interceptor.addInnerInterceptor(tenantLineInterceptor);     <span class="comment">// 1. 先租户</span></span><br><span class="line">interceptor.addInnerInterceptor(dataPermissionInterceptor); <span class="comment">// 2. 再数据权限</span></span><br><span class="line">interceptor.addInnerInterceptor(paginationInterceptor);     <span class="comment">// 3. 最后分页</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="四、选型决策树"><a href="#四、选型决策树" class="headerlink" title="四、选型决策树"></a>四、选型决策树</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">你的项目处于什么阶段？</span><br><span class="line">│</span><br><span class="line">├─ 新项目 / 早期阶段</span><br><span class="line">│   → 直接用第五阶段（JSQLParser 拦截器），一步到位</span><br><span class="line">│</span><br><span class="line">├─ 已有项目，MyBatis-Plus 已是核心技术栈</span><br><span class="line">│   → 引入 DataPermissionInterceptor，逐表灰度切换到第五阶段</span><br><span class="line">│</span><br><span class="line">├─ 已有项目，纯 MyBatis 不用 MyBatis-Plus</span><br><span class="line">│   → 考虑第四阶段（AOP + SQL 片段），或自行实现 MyBatis Interceptor</span><br><span class="line">│</span><br><span class="line">└─ 微型项目，只有 2-3 个接口</span><br><span class="line">    → 第二阶段（Service 层 if-else）也可以接受，但要加单元测试覆盖</span><br></pre></td></tr></table></figure>
+
+<h3 id="五、列表导出"><a href="#五、列表导出" class="headerlink" title="五、列表导出"></a>五、列表导出</h3><p>列表导出（Excel 导出）往往复用同一个查询方法。如果导出接口绕过了 Controller 层的 AOP，数据就可能越权泄露。</p>
+<p><strong>排查清单</strong>：</p>
+<ul>
+<li>导出功能是否复用了带权限控制的查询方法？</li>
+<li>导出接口是否经过了 AOP &#x2F; Interceptor 的拦截链？</li>
+<li>如果导出是异步的（消息队列），用户上下文是否正确传递？</li>
+</ul>
+<hr>
+<p>数据权限控制本质上是一个<strong>横切关注点</strong>（Cross-cutting Concern），用 AOP 解决是天经地义的。区别只在于<strong>切在哪里</strong>：</p>
+<ul>
+<li>切在 <strong>DTO 参数</strong>（第三阶段）→ 侵入小，但静默覆盖，审计不友好。</li>
+<li>切在 <strong>SQL 片段</strong>（第四阶段）→ 审计友好，但 XML 侵入大。</li>
+<li>切在 <strong>SQL AST</strong>（第五阶段）→ 全面零侵入，是当前工程上的最优解。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AE%89%E5%85%A8/" rel="tag"># 安全</a>
+              <a href="/tags/%E6%9E%B6%E6%9E%84%E6%BC%94%E8%BF%9B/" rel="tag"># 架构演进</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90/" rel="tag"># 数据权限</a>
+              <a href="/tags/MyBatis-Plus/" rel="tag"># MyBatis-Plus</a>
+              <a href="/tags/AOP/" rel="tag"># AOP</a>
+              <a href="/tags/JSQLParser/" rel="tag"># JSQLParser</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/02-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E6%8B%86%E5%88%86/" rel="prev" title="微服务架构设计与拆分">
+                  <i class="fa fa-angle-left"></i> 微服务架构设计与拆分
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/21/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E4%B8%8E%E5%B7%A5%E5%85%B7%E5%BA%93/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6/Spring%E5%85%A8%E5%AE%B6%E6%A1%B6-SpringEvent/" rel="next" title="Spring全家桶-SpringEvent">
+                  Spring全家桶-SpringEvent <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">冉丝堂</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
