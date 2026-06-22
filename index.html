@@ -2313,84 +2313,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="冉丝堂">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冉的技术宝典">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 冉的技术宝典">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="post-title-link" itemprop="url">API网关与负载均衡</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：16:37:42" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式与微服务</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="一、API-网关的定位与价值"><a href="#一、API-网关的定位与价值" class="headerlink" title="一、API 网关的定位与价值"></a>一、API 网关的定位与价值</h1><h2 id="1-不用网关的世界有多混乱：认证-限流-日志散落各处"><a href="#1-不用网关的世界有多混乱：认证-限流-日志散落各处" class="headerlink" title="1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处"></a>1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处</h2><h2 id="2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合"><a href="#2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合" class="headerlink" title="2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合"></a>2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合</h2><h2 id="3-网关的边界：不是什么都往网关里塞"><a href="#3-网关的边界：不是什么都往网关里塞" class="headerlink" title="3. 网关的边界：不是什么都往网关里塞"></a>3. 网关的边界：不是什么都往网关里塞</h2><h2 id="4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关"><a href="#4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关" class="headerlink" title="4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关"></a>4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关</h2><h1 id="二、主流网关对比"><a href="#二、主流网关对比" class="headerlink" title="二、主流网关对比"></a>二、主流网关对比</h1><h2 id="1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器"><a href="#1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器" class="headerlink" title="1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器"></a>1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器</h2><h2 id="2-Kong：Nginx-Lua-插件丰富-高性能"><a href="#2-Kong：Nginx-Lua-插件丰富-高性能" class="headerlink" title="2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能"></a>2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能</h2><h2 id="3-Zuul-1-x-vs-2-x：经典但已不推荐"><a href="#3-Zuul-1-x-vs-2-x：经典但已不推荐" class="headerlink" title="3. Zuul 1.x vs 2.x：经典但已不推荐"></a>3. Zuul 1.x vs 2.x：经典但已不推荐</h2><h2 id="4-APISIX：Apache-开源的高性能云原生网关"><a href="#4-APISIX：Apache-开源的高性能云原生网关" class="headerlink" title="4. APISIX：Apache 开源的高性能云原生网关"></a>4. APISIX：Apache 开源的高性能云原生网关</h2><h2 id="5-多维对比（性能-扩展性-生态-运维-适用场景）"><a href="#5-多维对比（性能-扩展性-生态-运维-适用场景）" class="headerlink" title="5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）"></a>5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）</h2><h1 id="三、Spring-Cloud-Gateway-深度使用"><a href="#三、Spring-Cloud-Gateway-深度使用" class="headerlink" title="三、Spring Cloud Gateway 深度使用"></a>三、Spring Cloud Gateway 深度使用</h1><h2 id="1-路由谓词（Predicate）与过滤器（Filter）"><a href="#1-路由谓词（Predicate）与过滤器（Filter）" class="headerlink" title="1. 路由谓词（Predicate）与过滤器（Filter）"></a>1. 路由谓词（Predicate）与过滤器（Filter）</h2><h2 id="2-自定义过滤器实战：鉴权-日志-ReqBody-缓存"><a href="#2-自定义过滤器实战：鉴权-日志-ReqBody-缓存" class="headerlink" title="2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存"></a>2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存</h2><h2 id="3-全局跨域（CORS）配置"><a href="#3-全局跨域（CORS）配置" class="headerlink" title="3. 全局跨域（CORS）配置"></a>3. 全局跨域（CORS）配置</h2><h2 id="4-网关层统一鉴权：JWT-解析-RBAC-拦截"><a href="#4-网关层统一鉴权：JWT-解析-RBAC-拦截" class="headerlink" title="4. 网关层统一鉴权：JWT 解析 + RBAC 拦截"></a>4. 网关层统一鉴权：JWT 解析 + RBAC 拦截</h2><h2 id="5-Request-Body-多次读取的坑与-ContentCaching-解决"><a href="#5-Request-Body-多次读取的坑与-ContentCaching-解决" class="headerlink" title="5. Request Body 多次读取的坑与 ContentCaching 解决"></a>5. Request Body 多次读取的坑与 ContentCaching 解决</h2><h2 id="6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节"><a href="#6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节" class="headerlink" title="6. 🔗 已有内容：Filter链底层原理 → Web协议服务器/JavaServlet.md Filter章节"></a>6. 🔗 已有内容：Filter链底层原理 → <code>Web协议服务器/JavaServlet.md</code> Filter章节</h2><h1 id="四、灰度发布与流量路由"><a href="#四、灰度发布与流量路由" class="headerlink" title="四、灰度发布与流量路由"></a>四、灰度发布与流量路由</h1><h2 id="1-金丝雀发布-蓝绿部署-A-B-测试"><a href="#1-金丝雀发布-蓝绿部署-A-B-测试" class="headerlink" title="1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试"></a>1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试</h2><h2 id="2-基于-Header-Cookie-权重-的灰度路由策略"><a href="#2-基于-Header-Cookie-权重-的灰度路由策略" class="headerlink" title="2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略"></a>2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略</h2><h2 id="3-结合-Nacos-元数据实现灰度流量标记透传"><a href="#3-结合-Nacos-元数据实现灰度流量标记透传" class="headerlink" title="3. 结合 Nacos 元数据实现灰度流量标记透传"></a>3. 结合 Nacos 元数据实现灰度流量标记透传</h2><h1 id="五、负载均衡全景架构"><a href="#五、负载均衡全景架构" class="headerlink" title="五、负载均衡全景架构"></a>五、负载均衡全景架构</h1><h2 id="1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现"><a href="#1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现" class="headerlink" title="1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)"></a>1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)</h2><h2 id="2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查"><a href="#2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查" class="headerlink" title="2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查"></a>2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查</h2><h2 id="3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由"><a href="#3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由" class="headerlink" title="3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由"></a>3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由</h2><h2 id="4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）"><a href="#4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）" class="headerlink" title="4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）"></a>4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）</h2><h2 id="5-重试机制与退避策略"><a href="#5-重试机制与退避策略" class="headerlink" title="5. 重试机制与退避策略"></a>5. 重试机制与退避策略</h2><h2 id="6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节"><a href="#6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节" class="headerlink" title="6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → Web协议服务器/HTTP客户端.md 3.2-3.3节"></a>6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → <code>Web协议服务器/HTTP客户端.md</code> 3.2-3.3节</h2><h1 id="六、网关高可用"><a href="#六、网关高可用" class="headerlink" title="六、网关高可用"></a>六、网关高可用</h1><h2 id="1-网关本身需要高可用：多副本-Nginx-前置"><a href="#1-网关本身需要高可用：多副本-Nginx-前置" class="headerlink" title="1. 网关本身需要高可用：多副本 + Nginx 前置"></a>1. 网关本身需要高可用：多副本 + Nginx 前置</h2><h2 id="2-网关层的降级与容错"><a href="#2-网关层的降级与容错" class="headerlink" title="2. 网关层的降级与容错"></a>2. 网关层的降级与容错</h2><h2 id="3-网关的性能优化与监控"><a href="#3-网关的性能优化与监控" class="headerlink" title="3. 网关的性能优化与监控"></a>3. 网关的性能优化与监控</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/03-%E6%9C%8D%E5%8A%A1%E9%97%B4%E9%80%9A%E4%BF%A1%EF%BC%9A%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2603,6 +2525,84 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="一、分布式故障是常态，不是异常"><a href="#一、分布式故障是常态，不是异常" class="headerlink" title="一、分布式故障是常态，不是异常"></a>一、分布式故障是常态，不是异常</h1><h2 id="1-墨菲定律在分布式系统中的表现"><a href="#1-墨菲定律在分布式系统中的表现" class="headerlink" title="1. 墨菲定律在分布式系统中的表现"></a>1. 墨菲定律在分布式系统中的表现</h2><h2 id="2-级联故障：一个慢服务如何拖垮整个系统"><a href="#2-级联故障：一个慢服务如何拖垮整个系统" class="headerlink" title="2. 级联故障：一个慢服务如何拖垮整个系统"></a>2. 级联故障：一个慢服务如何拖垮整个系统</h2><h2 id="3-韧性（Resilience）的四个维度：预防-检测-隔离-恢复"><a href="#3-韧性（Resilience）的四个维度：预防-检测-隔离-恢复" class="headerlink" title="3. 韧性（Resilience）的四个维度：预防&#x2F;检测&#x2F;隔离&#x2F;恢复"></a>3. 韧性（Resilience）的四个维度：预防&#x2F;检测&#x2F;隔离&#x2F;恢复</h2><h2 id="4-🔗-已有内容：超时-重试-熔断-降级的基础代码实现-→-Web协议服务器-HTTP客户端-md-第四章"><a href="#4-🔗-已有内容：超时-重试-熔断-降级的基础代码实现-→-Web协议服务器-HTTP客户端-md-第四章" class="headerlink" title="4. 🔗 已有内容：超时&#x2F;重试&#x2F;熔断&#x2F;降级的基础代码实现 → Web协议服务器/HTTP客户端.md 第四章"></a>4. 🔗 已有内容：超时&#x2F;重试&#x2F;熔断&#x2F;降级的基础代码实现 → <code>Web协议服务器/HTTP客户端.md</code> 第四章</h2><h1 id="二、限流"><a href="#二、限流" class="headerlink" title="二、限流"></a>二、限流</h1><h2 id="1-为什么需要限流：保护自己，也保护下游"><a href="#1-为什么需要限流：保护自己，也保护下游" class="headerlink" title="1. 为什么需要限流：保护自己，也保护下游"></a>1. 为什么需要限流：保护自己，也保护下游</h2><h2 id="2-限流算法对比：计数器-滑动窗口-漏桶-令牌桶"><a href="#2-限流算法对比：计数器-滑动窗口-漏桶-令牌桶" class="headerlink" title="2. 限流算法对比：计数器&#x2F;滑动窗口&#x2F;漏桶&#x2F;令牌桶"></a>2. 限流算法对比：计数器&#x2F;滑动窗口&#x2F;漏桶&#x2F;令牌桶</h2><h2 id="3-Sentinel-限流规则：QPS-vs-并发线程数"><a href="#3-Sentinel-限流规则：QPS-vs-并发线程数" class="headerlink" title="3. Sentinel 限流规则：QPS vs 并发线程数"></a>3. Sentinel 限流规则：QPS vs 并发线程数</h2><h2 id="4-热点参数限流：秒杀场景下的商品-ID-限流"><a href="#4-热点参数限流：秒杀场景下的商品-ID-限流" class="headerlink" title="4. 热点参数限流：秒杀场景下的商品 ID 限流"></a>4. 热点参数限流：秒杀场景下的商品 ID 限流</h2><h2 id="5-集群限流-vs-单机限流"><a href="#5-集群限流-vs-单机限流" class="headerlink" title="5. 集群限流 vs 单机限流"></a>5. 集群限流 vs 单机限流</h2><h2 id="6-网关层-服务层双层限流策略"><a href="#6-网关层-服务层双层限流策略" class="headerlink" title="6. 网关层 + 服务层双层限流策略"></a>6. 网关层 + 服务层双层限流策略</h2><h1 id="三、熔断与降级"><a href="#三、熔断与降级" class="headerlink" title="三、熔断与降级"></a>三、熔断与降级</h1><h2 id="1-熔断器三态状态机：Closed-→-Open-→-Half-Open-的完整流转"><a href="#1-熔断器三态状态机：Closed-→-Open-→-Half-Open-的完整流转" class="headerlink" title="1. 熔断器三态状态机：Closed → Open → Half-Open 的完整流转"></a>1. 熔断器三态状态机：Closed → Open → Half-Open 的完整流转</h2><h2 id="2-Sentinel-熔断策略：慢调用比例-异常比例-异常数"><a href="#2-Sentinel-熔断策略：慢调用比例-异常比例-异常数" class="headerlink" title="2. Sentinel 熔断策略：慢调用比例&#x2F;异常比例&#x2F;异常数"></a>2. Sentinel 熔断策略：慢调用比例&#x2F;异常比例&#x2F;异常数</h2><h2 id="3-降级的四层策略：返回兜底值-返回缓存-降级到备选服务-静默处理"><a href="#3-降级的四层策略：返回兜底值-返回缓存-降级到备选服务-静默处理" class="headerlink" title="3. 降级的四层策略：返回兜底值&#x2F;返回缓存&#x2F;降级到备选服务&#x2F;静默处理"></a>3. 降级的四层策略：返回兜底值&#x2F;返回缓存&#x2F;降级到备选服务&#x2F;静默处理</h2><h2 id="4-业务降级-vs-技术降级"><a href="#4-业务降级-vs-技术降级" class="headerlink" title="4. 业务降级 vs 技术降级"></a>4. 业务降级 vs 技术降级</h2><h2 id="5-Resilience4j-与-Sentinel-的对比与选型"><a href="#5-Resilience4j-与-Sentinel-的对比与选型" class="headerlink" title="5. Resilience4j 与 Sentinel 的对比与选型"></a>5. Resilience4j 与 Sentinel 的对比与选型</h2><h1 id="四、舱壁隔离"><a href="#四、舱壁隔离" class="headerlink" title="四、舱壁隔离"></a>四、舱壁隔离</h1><h2 id="1-线程池隔离-vs-信号量隔离"><a href="#1-线程池隔离-vs-信号量隔离" class="headerlink" title="1. 线程池隔离 vs 信号量隔离"></a>1. 线程池隔离 vs 信号量隔离</h2><h2 id="2-舱壁的粒度：按服务-按接口-按调用方"><a href="#2-舱壁的粒度：按服务-按接口-按调用方" class="headerlink" title="2. 舱壁的粒度：按服务&#x2F;按接口&#x2F;按调用方"></a>2. 舱壁的粒度：按服务&#x2F;按接口&#x2F;按调用方</h2><h2 id="3-Sentinel-的线程池隔离实践"><a href="#3-Sentinel-的线程池隔离实践" class="headerlink" title="3. Sentinel 的线程池隔离实践"></a>3. Sentinel 的线程池隔离实践</h2><h2 id="4-舱壁-降级-超时三件套的配合"><a href="#4-舱壁-降级-超时三件套的配合" class="headerlink" title="4. 舱壁 + 降级 + 超时三件套的配合"></a>4. 舱壁 + 降级 + 超时三件套的配合</h2><h1 id="五、Sentinel-深度实战"><a href="#五、Sentinel-深度实战" class="headerlink" title="五、Sentinel 深度实战"></a>五、Sentinel 深度实战</h1><h2 id="1-Dashboard-控制台部署与规则持久化（Nacos-数据源）"><a href="#1-Dashboard-控制台部署与规则持久化（Nacos-数据源）" class="headerlink" title="1. Dashboard 控制台部署与规则持久化（Nacos 数据源）"></a>1. Dashboard 控制台部署与规则持久化（Nacos 数据源）</h2><h2 id="2-规则类型全景：流量控制-熔断-热点-系统保护-授权"><a href="#2-规则类型全景：流量控制-熔断-热点-系统保护-授权" class="headerlink" title="2. 规则类型全景：流量控制&#x2F;熔断&#x2F;热点&#x2F;系统保护&#x2F;授权"></a>2. 规则类型全景：流量控制&#x2F;熔断&#x2F;热点&#x2F;系统保护&#x2F;授权</h2><h2 id="3-自定义-Slot-Chain-扩展"><a href="#3-自定义-Slot-Chain-扩展" class="headerlink" title="3. 自定义 Slot Chain 扩展"></a>3. 自定义 Slot Chain 扩展</h2><h2 id="4-资源调用链与链路模式-vs-关联模式"><a href="#4-资源调用链与链路模式-vs-关联模式" class="headerlink" title="4. 资源调用链与链路模式 vs 关联模式"></a>4. 资源调用链与链路模式 vs 关联模式</h2><h2 id="5-Sentinel-与-Spring-Cloud-Gateway-的集成"><a href="#5-Sentinel-与-Spring-Cloud-Gateway-的集成" class="headerlink" title="5. Sentinel 与 Spring Cloud Gateway 的集成"></a>5. Sentinel 与 Spring Cloud Gateway 的集成</h2><h1 id="六、容错架构设计"><a href="#六、容错架构设计" class="headerlink" title="六、容错架构设计"></a>六、容错架构设计</h1><h2 id="1-超时：从-API-到-DB-的全链路超时设计"><a href="#1-超时：从-API-到-DB-的全链路超时设计" class="headerlink" title="1. 超时：从 API 到 DB 的全链路超时设计"></a>1. 超时：从 API 到 DB 的全链路超时设计</h2><h2 id="2-重试的底线：幂等性-退避策略-最大重试次数"><a href="#2-重试的底线：幂等性-退避策略-最大重试次数" class="headerlink" title="2. 重试的底线：幂等性&#x2F;退避策略&#x2F;最大重试次数"></a>2. 重试的底线：幂等性&#x2F;退避策略&#x2F;最大重试次数</h2><h2 id="3-故障演练：混沌工程思想入门"><a href="#3-故障演练：混沌工程思想入门" class="headerlink" title="3. 故障演练：混沌工程思想入门"></a>3. 故障演练：混沌工程思想入门</h2><h2 id="4-容错降级的统一框架设计"><a href="#4-容错降级的统一框架设计" class="headerlink" title="4. 容错降级的统一框架设计"></a>4. 容错降级的统一框架设计</h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="post-title-link" itemprop="url">API网关与负载均衡</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：16:37:42" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式与微服务</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="一、API-网关的定位与价值"><a href="#一、API-网关的定位与价值" class="headerlink" title="一、API 网关的定位与价值"></a>一、API 网关的定位与价值</h1><h2 id="1-不用网关的世界有多混乱：认证-限流-日志散落各处"><a href="#1-不用网关的世界有多混乱：认证-限流-日志散落各处" class="headerlink" title="1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处"></a>1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处</h2><h2 id="2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合"><a href="#2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合" class="headerlink" title="2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合"></a>2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合</h2><h2 id="3-网关的边界：不是什么都往网关里塞"><a href="#3-网关的边界：不是什么都往网关里塞" class="headerlink" title="3. 网关的边界：不是什么都往网关里塞"></a>3. 网关的边界：不是什么都往网关里塞</h2><h2 id="4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关"><a href="#4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关" class="headerlink" title="4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关"></a>4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关</h2><h1 id="二、主流网关对比"><a href="#二、主流网关对比" class="headerlink" title="二、主流网关对比"></a>二、主流网关对比</h1><h2 id="1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器"><a href="#1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器" class="headerlink" title="1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器"></a>1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器</h2><h2 id="2-Kong：Nginx-Lua-插件丰富-高性能"><a href="#2-Kong：Nginx-Lua-插件丰富-高性能" class="headerlink" title="2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能"></a>2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能</h2><h2 id="3-Zuul-1-x-vs-2-x：经典但已不推荐"><a href="#3-Zuul-1-x-vs-2-x：经典但已不推荐" class="headerlink" title="3. Zuul 1.x vs 2.x：经典但已不推荐"></a>3. Zuul 1.x vs 2.x：经典但已不推荐</h2><h2 id="4-APISIX：Apache-开源的高性能云原生网关"><a href="#4-APISIX：Apache-开源的高性能云原生网关" class="headerlink" title="4. APISIX：Apache 开源的高性能云原生网关"></a>4. APISIX：Apache 开源的高性能云原生网关</h2><h2 id="5-多维对比（性能-扩展性-生态-运维-适用场景）"><a href="#5-多维对比（性能-扩展性-生态-运维-适用场景）" class="headerlink" title="5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）"></a>5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）</h2><h1 id="三、Spring-Cloud-Gateway-深度使用"><a href="#三、Spring-Cloud-Gateway-深度使用" class="headerlink" title="三、Spring Cloud Gateway 深度使用"></a>三、Spring Cloud Gateway 深度使用</h1><h2 id="1-路由谓词（Predicate）与过滤器（Filter）"><a href="#1-路由谓词（Predicate）与过滤器（Filter）" class="headerlink" title="1. 路由谓词（Predicate）与过滤器（Filter）"></a>1. 路由谓词（Predicate）与过滤器（Filter）</h2><h2 id="2-自定义过滤器实战：鉴权-日志-ReqBody-缓存"><a href="#2-自定义过滤器实战：鉴权-日志-ReqBody-缓存" class="headerlink" title="2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存"></a>2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存</h2><h2 id="3-全局跨域（CORS）配置"><a href="#3-全局跨域（CORS）配置" class="headerlink" title="3. 全局跨域（CORS）配置"></a>3. 全局跨域（CORS）配置</h2><h2 id="4-网关层统一鉴权：JWT-解析-RBAC-拦截"><a href="#4-网关层统一鉴权：JWT-解析-RBAC-拦截" class="headerlink" title="4. 网关层统一鉴权：JWT 解析 + RBAC 拦截"></a>4. 网关层统一鉴权：JWT 解析 + RBAC 拦截</h2><h2 id="5-Request-Body-多次读取的坑与-ContentCaching-解决"><a href="#5-Request-Body-多次读取的坑与-ContentCaching-解决" class="headerlink" title="5. Request Body 多次读取的坑与 ContentCaching 解决"></a>5. Request Body 多次读取的坑与 ContentCaching 解决</h2><h2 id="6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节"><a href="#6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节" class="headerlink" title="6. 🔗 已有内容：Filter链底层原理 → Web协议服务器/JavaServlet.md Filter章节"></a>6. 🔗 已有内容：Filter链底层原理 → <code>Web协议服务器/JavaServlet.md</code> Filter章节</h2><h1 id="四、灰度发布与流量路由"><a href="#四、灰度发布与流量路由" class="headerlink" title="四、灰度发布与流量路由"></a>四、灰度发布与流量路由</h1><h2 id="1-金丝雀发布-蓝绿部署-A-B-测试"><a href="#1-金丝雀发布-蓝绿部署-A-B-测试" class="headerlink" title="1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试"></a>1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试</h2><h2 id="2-基于-Header-Cookie-权重-的灰度路由策略"><a href="#2-基于-Header-Cookie-权重-的灰度路由策略" class="headerlink" title="2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略"></a>2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略</h2><h2 id="3-结合-Nacos-元数据实现灰度流量标记透传"><a href="#3-结合-Nacos-元数据实现灰度流量标记透传" class="headerlink" title="3. 结合 Nacos 元数据实现灰度流量标记透传"></a>3. 结合 Nacos 元数据实现灰度流量标记透传</h2><h1 id="五、负载均衡全景架构"><a href="#五、负载均衡全景架构" class="headerlink" title="五、负载均衡全景架构"></a>五、负载均衡全景架构</h1><h2 id="1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现"><a href="#1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现" class="headerlink" title="1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)"></a>1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)</h2><h2 id="2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查"><a href="#2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查" class="headerlink" title="2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查"></a>2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查</h2><h2 id="3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由"><a href="#3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由" class="headerlink" title="3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由"></a>3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由</h2><h2 id="4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）"><a href="#4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）" class="headerlink" title="4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）"></a>4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）</h2><h2 id="5-重试机制与退避策略"><a href="#5-重试机制与退避策略" class="headerlink" title="5. 重试机制与退避策略"></a>5. 重试机制与退避策略</h2><h2 id="6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节"><a href="#6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节" class="headerlink" title="6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → Web协议服务器/HTTP客户端.md 3.2-3.3节"></a>6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → <code>Web协议服务器/HTTP客户端.md</code> 3.2-3.3节</h2><h1 id="六、网关高可用"><a href="#六、网关高可用" class="headerlink" title="六、网关高可用"></a>六、网关高可用</h1><h2 id="1-网关本身需要高可用：多副本-Nginx-前置"><a href="#1-网关本身需要高可用：多副本-Nginx-前置" class="headerlink" title="1. 网关本身需要高可用：多副本 + Nginx 前置"></a>1. 网关本身需要高可用：多副本 + Nginx 前置</h2><h2 id="2-网关层的降级与容错"><a href="#2-网关层的降级与容错" class="headerlink" title="2. 网关层的降级与容错"></a>2. 网关层的降级与容错</h2><h2 id="3-网关的性能优化与监控"><a href="#3-网关的性能优化与监控" class="headerlink" title="3. 网关的性能优化与监控"></a>3. 网关的性能优化与监控</h2>
       
     </div>
 
