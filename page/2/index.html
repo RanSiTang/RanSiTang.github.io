@@ -469,9 +469,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：17:37:15" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
+      <time title="创建时间：2026-06-09 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-19 19:59:10" itemprop="dateModified" datetime="2026-07-19T19:59:10+08:00">2026-07-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -493,7 +499,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="一、分布式系统的定义与为什么需要它"><a href="#一、分布式系统的定义与为什么需要它" class="headerlink" title="一、分布式系统的定义与为什么需要它"></a>一、分布式系统的定义与为什么需要它</h1><h2 id="1-分布式系统是什么"><a href="#1-分布式系统是什么" class="headerlink" title="1. 分布式系统是什么"></a>1. 分布式系统是什么</h2><p>分布式系统（Distributed System）是一组<strong>通过网络互联的独立计算机节点</strong>，它们共同协作对外呈现为一个统一整体。这个定义有两个关键点：</p>
+          <h1 id="一、分布式系统的定义"><a href="#一、分布式系统的定义" class="headerlink" title="一、分布式系统的定义"></a>一、分布式系统的定义</h1><h2 id="1-分布式系统是什么"><a href="#1-分布式系统是什么" class="headerlink" title="1. 分布式系统是什么"></a>1. 分布式系统是什么</h2><p>分布式系统（Distributed System）是一组<strong>通过网络互联的独立计算机节点</strong>，它们共同协作对外呈现为一个统一整体。这个定义有两个关键点：</p>
 <ul>
 <li><strong>独立节点</strong>：每个节点有自己的 CPU、内存、硬盘，运行自己的操作系统。没有共享内存，没有共享时钟，它们之间唯一可靠的通信方式是<strong>消息传递</strong>（Message Passing）。</li>
 <li><strong>对外统一</strong>：用户感知不到背后的多个节点。你在淘宝下单时，不会关心是哪台服务器处理了你的请求——“下单成功”就够了。</li>
@@ -584,19 +590,23 @@
     CAP --&gt; A[&quot;A — Availability\n（可用性）&quot;]
     CAP --&gt; P[&quot;P — Partition Tolerance\n（分区容错性）&quot;]</code></pre>
 
-<h3 id="C：一致性（Consistency）"><a href="#C：一致性（Consistency）" class="headerlink" title="C：一致性（Consistency）"></a>C：一致性（Consistency）</h3><p><strong>每一次读操作，都能读到最新的写入结果</strong>，或者直接返回错误。</p>
-<p>更精确的定义是<strong>线性一致性（Linearizability）</strong>：所有操作在全局时间轴上有一个全序（Total Order），读操作返回的值等于最近一次写操作写入的值。就像单机系统一样——你写了 <code>x=5</code>，之后的任何读都必须返回 <code>5</code>，而不是 <code>3</code>（旧值）或 <code>null</code>（未复制）。</p>
-<p>注意：这里的”一致性”特指<strong>强一致性 &#x2F; 线性一致性</strong>，与数据库 ACID 中的 C（一致性约束）是两回事。</p>
-<h3 id="A：可用性（Availability）"><a href="#A：可用性（Availability）" class="headerlink" title="A：可用性（Availability）"></a>A：可用性（Availability）</h3><p><strong>每一个非故障节点，在合理的时间内，必须返回一个非错误的响应</strong>。</p>
-<p>换句话说：系统不能”不理你”。请求进来了，就得有回应——即使返回的是一个降级后的结果（比如缓存中的旧数据），也不能是超时或 500 错误。</p>
-<h3 id="P：分区容错性（Partition-Tolerance）"><a href="#P：分区容错性（Partition-Tolerance）" class="headerlink" title="P：分区容错性（Partition Tolerance）"></a>P：分区容错性（Partition Tolerance）</h3><p><strong>当节点之间的网络出现分区（消息延迟或丢失）时，系统仍然能继续运行</strong>。</p>
-<p>网络分区（Network Partition）不是”网络断了”，而是节点之间互相收不到消息——可能是交换机故障、网线被踢、机房之间光缆被挖断、甚至是 GC 导致的消息延迟超过了超时阈值。</p>
+<h3 id="1-1-C：一致性（Consistency）"><a href="#1-1-C：一致性（Consistency）" class="headerlink" title="1.1 C：一致性（Consistency）"></a>1.1 C：一致性（Consistency）</h3><p><strong>每一次读操作都能读到最新的写入结果</strong>，或直接返回错误。</p>
+<p>更精确的定义是<strong>线性一致性</strong>：所有操作在全局时间轴上有一个全序，读操作返回的值必定是最近一次写操作写入的值。就像单机系统一样——你写了 <code>x=5</code>，之后的任何读都必须返回 <code>5</code>，而不是 <code>3</code>（旧值）或 <code>null</code>（未复制）。</p>
 <blockquote>
-<p><strong>关键认知</strong>：在分布式系统中，网络分区不是小概率事件，而是<strong>必然会发生</strong>的日常事件。Google Chubby 团队的数据显示，一个集群每年至少经历一次网络分区事件。因此，<strong>P 不是可选项</strong>——除非你的系统只有一台机器（那就不叫分布式系统了）。</p>
+<p>注意：这里的“一致性”特指<strong>强一致性&#x2F;线性一致性</strong>，与数据库 ACID 中的 C（一致性约束）是两个不同的概念。</p>
 </blockquote>
 <hr>
-<h2 id="2-CAP-的三角困境：为什么三者不可兼得"><a href="#2-CAP-的三角困境：为什么三者不可兼得" class="headerlink" title="2. CAP 的三角困境：为什么三者不可兼得"></a>2. CAP 的三角困境：为什么三者不可兼得</h2><p>CAP 定理的核心结论：<strong>在一个存在网络分区的分布式系统中，你最多只能同时满足 C 和 A 中的一个。</strong> 或者说，当网络出现分区时，你必须在 C 和 A 之间做出选择。</p>
-<p>为什么？考虑以下场景：</p>
+<h3 id="1-2-A：可用性（Availability）"><a href="#1-2-A：可用性（Availability）" class="headerlink" title="1.2 A：可用性（Availability）"></a>1.2 A：可用性（Availability）</h3><p><strong>每一个非故障节点，在合理的时间内，必须返回一个非错误的响应</strong>。</p>
+<p>换句话说，系统不能“不理你”。请求进来了，就必须给予回应——即使返回的是降级后的结果（比如缓存中的旧数据），也绝不能是超时或 500 错误。</p>
+<hr>
+<h3 id="1-3-P：分区容错性（Partition-Tolerance）"><a href="#1-3-P：分区容错性（Partition-Tolerance）" class="headerlink" title="1.3 P：分区容错性（Partition Tolerance）"></a>1.3 P：分区容错性（Partition Tolerance）</h3><p><strong>当节点间的网络出现分区（消息延迟或丢失）时，系统仍然能够继续运行</strong>。</p>
+<p>网络分区不单指“网线断了”，还包括交换机故障、机房之间光缆被挖断、甚至 GC 停顿导致的消息延迟超过超时阈值——总之，节点间互相无法通信即是分区。</p>
+<blockquote>
+<p><strong>关键认知</strong>：在分布式系统中，网络分区不是小概率事件，而是<strong>必然会发生</strong>的日常。Google Chubby 团队的数据显示，一个集群每年至少经历一次网络分区。因此，<strong>P 不是可选项</strong>——除非你的系统只有一台机器（那就不叫分布式系统了）。设计分布式系统时，必须假设分区一定会发生，并提前决定应对策略。</p>
+</blockquote>
+<hr>
+<h2 id="2-CAP-的三角困境"><a href="#2-CAP-的三角困境" class="headerlink" title="2. CAP 的三角困境"></a>2. CAP 的三角困境</h2><p>CAP 定理的核心结论：<strong>在一个存在网络分区的分布式系统中，你最多只能同时满足 C 和 A 中的一个。</strong> 或者说，当分区发生时，必须在 C 和 A 之间做出选择。</p>
+<p>考虑以下场景：</p>
 <pre><code class="highlight mermaid">sequenceDiagram
     participant C as 客户端
     participant N1 as 节点 1（主）
@@ -609,125 +619,189 @@
     Note over N2: 此时你有两个选择：&lt;br/&gt;1. 返回旧值（牺牲 C，保 A）&lt;br/&gt;2. 返回错误（牺牲 A，保 C）</code></pre>
 
 <ul>
-<li>节点 1 和节点 2 之间网络断开（分区发生）。</li>
-<li>客户端向节点 1 写入了 <code>x=5</code>，但节点 2 收不到这个更新。</li>
-<li>此时客户端向节点 2 读 <code>x</code>。</li>
+<li>节点 1 与节点 2 之间网络断开（分区发生）。</li>
+<li>客户端向节点 1 写入了 <code>x=5</code>，但节点 2 收不到这次更新。</li>
+<li>此时客户端向节点 2 读取 <code>x</code>。</li>
 </ul>
-<p><strong>如果保证 A（可用性）</strong>：节点 2 必须返回一个非错误的结果，但它不知道 <code>x</code> 已更新——它只能返回旧值 <code>x=3</code>（或 <code>null</code>）。这违反了 C（一致性）。</p>
-<p><strong>如果保证 C（一致性）</strong>：节点 2 不能返回旧值，只能返回错误 “我数据可能不一致，拒绝服务”。这违反了 A（可用性）。</p>
-<p>这就是 CAP 的不可能三角：<strong>分区发生 → C 和 A 矛盾 → 你必须选一个牺牲</strong>。</p>
+<p><strong>如果保证 A（可用性）</strong>：节点 2 必须返回一个非错误结果，但它不知道 <code>x</code> 已经更新，只能返回旧值 <code>x=3</code>（或 <code>null</code>）。这违反了 <strong>C（一致性）</strong>。</p>
+<p><strong>如果保证 C（一致性）</strong>：节点 2 不能返回旧值，只能返回错误（如“数据可能不一致，拒绝服务”）。这违反了 <strong>A（可用性）</strong>。</p>
+<p>这就是 CAP 的不可能三角：<strong>分区发生 → C 和 A 矛盾 → 你必须选择牺牲一个</strong>。</p>
 <blockquote>
-<p><strong>一句话</strong>：分区发生时，要数据一致性还是要服务可用性？选 C（CP 系统），还是选 A（AP 系统）。</p>
+<p><strong>一句话</strong>：分区发生时，是要数据一致性还是服务可用性？选 C（CP 系统），还是选 A（AP 系统）。</p>
 </blockquote>
 <hr>
-<h2 id="3-CP-vs-AP-的取舍：典型产品选型分析"><a href="#3-CP-vs-AP-的取舍：典型产品选型分析" class="headerlink" title="3. CP vs AP 的取舍：典型产品选型分析"></a>3. CP vs AP 的取舍：典型产品选型分析</h2><p>当分区恢复后，系统需要做额外的工作来恢复一致性——这也印证了”不能同时满足 C 和 A”的结论。</p>
+<h2 id="3-CP-vs-AP-的取舍"><a href="#3-CP-vs-AP-的取舍" class="headerlink" title="3. CP vs AP 的取舍"></a>3. CP vs AP 的取舍</h2><p>当分区恢复后，系统通常需要额外的工作来恢复一致性，这也印证了“不能同时完美满足 C 和 A”的结论。</p>
 <table>
 <thead>
 <tr>
-<th>类型</th>
-<th>典型产品</th>
-<th>分区时的行为</th>
-<th>适用场景</th>
+<th align="left">类型</th>
+<th align="left">典型产品</th>
+<th align="left">分区时的行为</th>
+<th align="left">适用场景</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>CP 系统</strong>（牺牲 A）</td>
-<td>ZooKeeper、etcd、Consul（默认）、HBase</td>
-<td>拒绝部分节点的读写请求，保证数据一致，直到分区恢复</td>
-<td>配置管理、服务发现元数据、分布式锁、选主——要求数据绝对不能错</td>
+<td align="left"><strong>CP 系统</strong></td>
+<td align="left">ZooKeeper、etcd、Consul（默认）、HBase</td>
+<td align="left">拒绝部分节点的读写请求，保证数据一致，直到分区恢复</td>
+<td align="left">配置管理、服务发现元数据、分布式锁、选主——要求数据绝对不能错</td>
 </tr>
 <tr>
-<td><strong>AP 系统</strong>（牺牲 C）</td>
-<td>Eureka、Cassandra、DynamoDB（默认）、CouchDB</td>
-<td>允许所有节点继续响应请求，接受短暂的数据不一致，分区恢复后通过 Gossip&#x2F;Merkle Tree 等机制同步</td>
-<td>服务发现列表、商品信息、社交 Feed——短暂不一致不致命</td>
+<td align="left"><strong>AP 系统</strong></td>
+<td align="left">Eureka、Cassandra、DynamoDB（默认）、CouchDB</td>
+<td align="left">允许所有节点继续响应，接受短暂的不一致，分区恢复后通过 Gossip&#x2F;Merkle Tree 等机制同步</td>
+<td align="left">服务发现列表、商品信息、社交 Feed——短暂不一致不致命</td>
 </tr>
 <tr>
-<td><strong>混合&#x2F;可配置</strong></td>
-<td>Nacos（AP&#x2F;CP 可切换）、Consul（提供三种一致性模式）</td>
-<td>允许用户根据场景在一致性级别之间权衡</td>
-<td>一个注册中心，不同功能用不同模式</td>
+<td align="left"><strong>混合&#x2F;可配置</strong></td>
+<td align="left">Nacos（AP&#x2F;CP 可切换）、Consul（提供三种一致性模式）</td>
+<td align="left">允许用户根据场景选择一致性级别</td>
+<td align="left">一个注册中心，不同功能走不同模式</td>
 </tr>
 </tbody></table>
-<h3 id="具体产品深入"><a href="#具体产品深入" class="headerlink" title="具体产品深入"></a>具体产品深入</h3><p><strong>ZooKeeper（CP）</strong>：当 Leader 宕机或网络分区导致集群中存活节点数不足半数（法定人数）时，整个 ZooKeeper 集群拒绝服务——所有写操作全部阻塞，只允许读操作（且读到的可能是旧数据，但不会读到错误的中间状态）。这就是 ZK 不适合做大规模服务发现注册中心的核心原因：<strong>注册中心如果因为一致性而拒绝服务，业务就中断了</strong>。</p>
-<p><strong>Eureka（AP）</strong>：当网络分区发生时，每个 Eureka 节点独立接受注册和查询请求。即使注册信息已经过时（某个服务明明挂了还显示在线），也要先”可用”——不能因为注册信息不一致就让整个调用链断了。配合客户端的重试和断路器机制，比 “注册中心不可用” 要好得多。但代价是<strong>可能调用到一个已经挂了但注册中心还不知道的实例</strong>。</p>
-<p><strong>Nacos</strong>：同时支持 AP 和 CP 模式。临时实例（ephemeral）走 AP 协议（Distro），持久实例（persistent）走 CP 协议（Raft）。这种设计体现了工程上的务实态度——不是”选 CP 还是选 AP”，而是”不同数据选不同策略”。</p>
+<p><strong>具体产品深入</strong></p>
+<p><strong>ZooKeeper（CP）</strong>：当发生网络分区导致集群中存活节点数不足半数（失去法定人数）时，整个 ZooKeeper 集群进入只读模式，拒绝所有写请求。虽然可以提供读服务，但读到的可能是旧数据（不会读到错误的中间状态）。这也正是 ZK 不适合做大规模服务注册中心的核心原因：<strong>注册中心如果因追求强一致而不可写，业务就会中断</strong>。</p>
+<p><strong>Eureka（AP）</strong>：当网络分区发生时，每个 Eureka 节点独立接受注册和查询。即使注册信息已过时（某服务已经宕机却仍显示在线），也优先保证“可用”——不能因注册信息不一致导致整个调用链中断。配合客户端重试与断路器机制，这种设计往往优于“注册中心直接不可用”，但代价是<strong>可能调用到已挂掉却尚未被剔除的实例</strong>。</p>
+<p><strong>Nacos</strong>：同时支持 AP 和 CP 模式。临时实例走 AP 协议（Distro），持久实例走 CP 协议（Raft）。这种“不同数据选择不同策略”的设计，体现了工程上的务实态度——不是“选 CP 还是 AP”，而是“按场景灵活权衡”。</p>
 <hr>
-<h2 id="4-CAP-的实践误区"><a href="#4-CAP-的实践误区" class="headerlink" title="4. CAP 的实践误区"></a>4. CAP 的实践误区</h2><h3 id="误区一：「我们选-CA-系统，不要-P」"><a href="#误区一：「我们选-CA-系统，不要-P」" class="headerlink" title="误区一：「我们选 CA 系统，不要 P」"></a>误区一：「我们选 CA 系统，不要 P」</h3><p><strong>不存在 CA 分布式的系统</strong>。网络分区是客观物理现实，不是你能”不选”的。一个宣称自己是”CA”的分布式系统，要么(a)真的是单机系统，要么(b)在网络分区时行为未定义——实际上它的 C 和 A 都没保住。<strong>在分布式语境下，CA &#x3D; 单机</strong>。</p>
-<h3 id="误区二：「CAP-是非黑即白的二选一」"><a href="#误区二：「CAP-是非黑即白的二选一」" class="headerlink" title="误区二：「CAP 是非黑即白的二选一」"></a>误区二：「CAP 是非黑即白的二选一」</h3><p>CAP 定理说的是极端情况下的取舍，但<strong>工程实践中不是”全有或全无”</strong>。常规状态下（无网络分区），系统完全可以同时提供 C 和 A。即使分区发生，也有很多灰色地带：可以”部分可用”（降级服务），”部分一致”（只保证关键数据一致）。比如一个电商系统可以允许商品评论短暂不一致（AP），但订单状态必须强一致（CP）。</p>
-<h3 id="误区三：「选-CP-一定比-AP-好」"><a href="#误区三：「选-CP-一定比-AP-好」" class="headerlink" title="误区三：「选 CP 一定比 AP 好」"></a>误区三：「选 CP 一定比 AP 好」</h3><p>数据一致性听起来更”安全”，但代价是可用性下降。在互联网场景中，<strong>可用性的优先级通常高于强一致性</strong>——用户宁愿看到一个稍旧的价格，也不愿页面 500 错误。场景决定取舍，没有哪个更好。</p>
+<h2 id="4-CAP-的实践误区"><a href="#4-CAP-的实践误区" class="headerlink" title="4. CAP 的实践误区"></a>4. CAP 的实践误区</h2><h3 id="4-1-误区一：「我们选-CA-系统，不要-P」"><a href="#4-1-误区一：「我们选-CA-系统，不要-P」" class="headerlink" title="4.1 误区一：「我们选 CA 系统，不要 P」"></a>4.1 误区一：「我们选 CA 系统，不要 P」</h3><p><strong>不存在 CA 分布式的系统</strong>。网络分区是客观物理现实，不是你能”不选”的。一个宣称自己是”CA”的分布式系统，要么真的是单机系统，要么在网络分区时行为未定义——实际上它的 C 和 A 都没保住。<strong>在分布式语境下，CA &#x3D; 单机</strong>。</p>
+<h3 id="4-2-误区二：「CAP-是非黑即白的二选一」"><a href="#4-2-误区二：「CAP-是非黑即白的二选一」" class="headerlink" title="4.2 误区二：「CAP 是非黑即白的二选一」"></a>4.2 误区二：「CAP 是非黑即白的二选一」</h3><p>CAP 定理说的是极端情况下的取舍，但<strong>工程实践中不是”全有或全无”</strong>。常规状态下（无网络分区），系统完全可以同时提供 C 和 A。即使分区发生，也有很多灰色地带：可以”部分可用”（降级服务），”部分一致”（只保证关键数据一致）。比如一个电商系统可以允许商品评论短暂不一致（AP），但订单状态必须强一致（CP）。</p>
+<h3 id="4-3-误区三：「选-CP-一定比-AP-好」"><a href="#4-3-误区三：「选-CP-一定比-AP-好」" class="headerlink" title="4.3 误区三：「选 CP 一定比 AP 好」"></a>4.3 误区三：「选 CP 一定比 AP 好」</h3><p>数据一致性听起来更”安全”，但代价是可用性下降。在互联网场景中，<strong>可用性的优先级通常高于强一致性</strong>——用户宁愿看到一个稍旧的价格，也不愿页面 500 错误。场景决定取舍，没有哪个更好。</p>
 <hr>
-<h1 id="三、BASE-理论"><a href="#三、BASE-理论" class="headerlink" title="三、BASE 理论"></a>三、BASE 理论</h1><p>CAP 定理给出了理论边界，而 BASE 理论给出了工程实践方案。它是由 eBay 架构师 Dan Pritchett 提出的，核心思想是：<strong>既然强一致性代价太高，能不能通过”最终一致性”达到工程可行的折中？</strong></p>
-<p>BASE 是三个词组的缩写：</p>
-<h2 id="1-Basically-Available（基本可用）"><a href="#1-Basically-Available（基本可用）" class="headerlink" title="1. Basically Available（基本可用）"></a>1. Basically Available（基本可用）</h2><p>系统在出现故障时，<strong>允许损失部分可用性，但保证核心功能可用</strong>。不是”系统不可用”，而是”核心流程还能跑”。</p>
-<p>具体手段：</p>
-<ul>
-<li><strong>降级服务</strong>：双 11 高峰期，淘宝关闭”年度账单”等非核心功能，把资源留给下单链路</li>
-<li><strong>限流与排队</strong>：超过系统承受能力的请求进入排队而非直接拒绝，体验降级但服务不挂</li>
-<li><strong>降级数据源</strong>：主库挂了，自动切到只读副本——可以查但不能写，比完全不可用要好</li>
-<li><strong>兜底数据</strong>：个性化推荐服务挂了，返回热门商品列表代替</li>
-</ul>
+<h1 id="三、BASE-理论"><a href="#三、BASE-理论" class="headerlink" title="三、BASE 理论"></a>三、BASE 理论</h1><p>CAP 定理划定了分布式系统的理论边界——CP 与 AP 之间必须取舍。而 BASE 理论则给出了<strong>工程实践的折中方案</strong>：既然强一致性的代价过高，能否通过”最终一致性”实现可用性与正确性的平衡？</p>
+<p>BASE 由 eBay 架构师 Dan Pritchett 于 2008 年在 ACM Queue 上正式提出，是对大规模分布式系统实践经验的总结。其名称是三个概念的缩写。</p>
+<h2 id="1-Basically-Available（基本可用）"><a href="#1-Basically-Available（基本可用）" class="headerlink" title="1. Basically Available（基本可用）"></a>1. Basically Available（基本可用）</h2><p><strong>核心含义</strong>：系统在局部故障时，允许损失<strong>部分可用性</strong>，但必须保证<strong>核心功能持续运转</strong>。</p>
+<p>这里的”损失”是可控的降级，而非完全不可用。常见的工程手段包括：</p>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>说明</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>功能降级</strong></td>
+<td>关闭非核心功能，把资源集中到关键链路</td>
+<td>双11期间淘宝关闭”年度账单”、”猜你喜欢”，保障下单与支付</td>
+</tr>
+<tr>
+<td><strong>限流与排队</strong></td>
+<td>超量请求进入队列等待，而非直接拒绝503</td>
+<td>秒杀系统流量削峰，用户等待几秒而非看到错误页</td>
+</tr>
+<tr>
+<td><strong>数据源降级</strong></td>
+<td>主库故障时自动切换到只读副本</td>
+<td>查询可用，写入暂停——比完全不可用体验好得多</td>
+</tr>
+<tr>
+<td><strong>兜底数据</strong></td>
+<td>个性化服务异常时，返回预计算的通用结果</td>
+<td>推荐系统挂了，返回热门商品榜单而非白屏</td>
+</tr>
+</tbody></table>
 <blockquote>
-<p>基本可用 ≠ 完全可用。它是”打得折”的可用——损失的是<strong>服务完整度</strong>，保住的是<strong>服务连续性</strong>。</p>
+<p><strong>关键区分</strong>：基本可用 ≠ 完全可用。它牺牲的是<strong>服务完整度</strong>（功能有所裁减），保住的是<strong>服务连续性</strong>（核心流程不中断）。这是一种<strong>有意识的工程妥协</strong>，而非被动的系统失控。</p>
 </blockquote>
-<h2 id="2-Soft-State（软状态）"><a href="#2-Soft-State（软状态）" class="headerlink" title="2. Soft State（软状态）"></a>2. Soft State（软状态）</h2><p>系统中的数据可以存在<strong>中间状态</strong>，这些中间状态不会影响系统的整体可用性，但会让数据在不同节点上出现短暂不一致。这种”允许一定时间窗口内的不一致”就是软状态。</p>
-<p>举个支付场景的例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户账户余额在主库已扣款 → 但从库还没同步 → 用户刷新页面看到的是旧余额</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="2-Soft-State（软状态）"><a href="#2-Soft-State（软状态）" class="headerlink" title="2. Soft State（软状态）"></a>2. Soft State（软状态）</h2><p><strong>核心含义</strong>：系统数据可以存在<strong>中间状态</strong>，允许不同节点在一个有限时间窗口内持有不同版本的数据，无需立即同步至全局一致。</p>
+<p>软状态是对 <strong>Hard State（硬状态）</strong> 的放松：</p>
+<ul>
+<li><strong>硬状态</strong>：每次数据变更必须在事务提交前同步到所有副本，所有观察者在任意时刻看到的值相同（即强一致性）</li>
+<li><strong>软状态</strong>：允许副本之间存在短暂的数据差异，系统正在异步地向最终一致状态收敛</li>
+</ul>
+<p><strong>举例——支付场景中的软状态</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">t=0ms  用户点击&quot;确认支付&quot;</span><br><span class="line">t=1ms  主库完成扣款，余额更新为 ¥100</span><br><span class="line">t=50ms 用户刷新个人中心（读从库）→ 仍显示 ¥200（旧值）</span><br><span class="line">t=500ms 主从同步完成，从库余额更新为 ¥100</span><br><span class="line">t=501ms 用户再次刷新 → 显示 ¥200（已一致）</span><br></pre></td></tr></table></figure>
 
-<p>这个”旧余额”就是软状态。它不是错误，而是系统正在收敛过程中的瞬态。只要几秒或几分钟后数据一致了，就是可以接受的。</p>
+<p><code>t=50ms</code> 时用户看到的 <code>¥200</code> 就是<strong>软状态</strong>。它不是数据错误，而是系统在异步复制过程中的<strong>瞬态</strong>，只要在可接受的时间窗口内完成收敛，这种中间状态就是被允许的。</p>
 <blockquote>
-<p>软状态是对 <strong>Hard State（硬状态）</strong> 的放松。硬状态意味着数据的每一次变更必须立即对所有观察者可见（即强一致性）。</p>
+<p>软状态意味着系统状态不需要外部输入也会自发变化（随着同步的推进而变化），这与传统状态机的”无输入则状态不变”有本质区别。</p>
 </blockquote>
-<h2 id="3-Eventually-Consistent（最终一致性）"><a href="#3-Eventually-Consistent（最终一致性）" class="headerlink" title="3. Eventually Consistent（最终一致性）"></a>3. Eventually Consistent（最终一致性）</h2><p><strong>系统保证在没有新的更新之后，最终所有副本都会收敛到相同的值</strong>。它不承诺”立刻”一致，但承诺”最终”一致。</p>
-<p>最终一致性的关键在于<strong>时间窗口</strong>——从写入到所有副本可见的延迟是多长？这个窗口越短越好，但不为零。典型场景：</p>
-<ul>
-<li><strong>DNS</strong>：修改域名解析记录，全球生效需要几分钟到几十分钟——这是经典且成功的最终一致性系统</li>
-<li><strong>用户头像修改</strong>：上传新头像后，评论区和个人主页可能显示不同版本长达数小时——用户容忍度内</li>
-<li><strong>库存扣减</strong>：秒杀场景下，库存数据在主库扣减后几百毫秒同步到缓存——这个窗口必须尽可能短</li>
-</ul>
-<h2 id="4-BASE-与-ACID-的关系：不是替代，而是互补"><a href="#4-BASE-与-ACID-的关系：不是替代，而是互补" class="headerlink" title="4. BASE 与 ACID 的关系：不是替代，而是互补"></a>4. BASE 与 ACID 的关系：不是替代，而是互补</h2><p>这是一个非常重要的认知纠偏：</p>
+<hr>
+<h2 id="3-Eventually-Consistent（最终一致性）"><a href="#3-Eventually-Consistent（最终一致性）" class="headerlink" title="3. Eventually Consistent（最终一致性）"></a>3. Eventually Consistent（最终一致性）</h2><p><strong>核心含义</strong>：系统保证，在没有新的写入操作后，经过有限时间，<strong>所有副本最终收敛到相同的值</strong>。</p>
+<p>最终一致性是软状态的逻辑延伸——它为软状态加上了<strong>收敛性保证</strong>：中间状态不会永远存在，系统一定会自愈。</p>
+<p><strong>关键参数：不一致窗口（Inconsistency Window）</strong></p>
+<p>从写入完成到所有副本可见之间的时延，是衡量最终一致性质量的核心指标，这个窗口<strong>越短越好，但不为零</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>不一致窗口</th>
+<th>用户容忍度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DNS 解析记录变更</td>
+<td>数分钟～数小时（TTL 决定）</td>
+<td>高，运维操作，非实时业务</td>
+</tr>
+<tr>
+<td>用户头像修改</td>
+<td>数秒～数分钟</td>
+<td>高，视觉差异无业务影响</td>
+</tr>
+<tr>
+<td>社交媒体发帖</td>
+<td>数百毫秒～数秒</td>
+<td>中，偶尔刷不出可接受</td>
+</tr>
+<tr>
+<td>秒杀库存扣减</td>
+<td>必须 &lt; 100ms</td>
+<td>极低，窗口过大直接导致超卖</td>
+</tr>
+</tbody></table>
+<p>最后一个案例揭示了一个重要事实：<strong>最终一致性不是免费的午餐</strong>。不一致窗口的长短直接影响业务风险，工程师必须根据业务容忍度设计收敛速度。</p>
+<blockquote>
+<p><strong>常见误区</strong>：最终一致性不等于”随便什么时候一致都行”。它有隐含前提——<strong>系统必须存在有效的同步&#x2F;修复机制</strong>（如异步复制、反熵协议、读修复），否则”最终”可能永远不会到来。</p>
+</blockquote>
+<hr>
+<h2 id="4-BASE-与-ACID-的关系"><a href="#4-BASE-与-ACID-的关系" class="headerlink" title="4. BASE 与 ACID 的关系"></a>4. BASE 与 ACID 的关系</h2><p>这是一个非常重要的认知纠偏：</p>
 <table>
 <thead>
 <tr>
 <th></th>
-<th>ACID</th>
-<th>BASE</th>
+<th><strong>ACID</strong></th>
+<th><strong>BASE</strong></th>
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>核心价值</strong></td>
+<td><strong>核心追求</strong></td>
 <td>一致性（Consistency）</td>
 <td>可用性（Availability）</td>
 </tr>
 <tr>
-<td><strong>适用场景</strong></td>
-<td>传统关系型数据库（单机&#x2F;小集群）</td>
-<td>大规模分布式系统</td>
-</tr>
-<tr>
 <td><strong>数据状态</strong></td>
-<td>硬状态——事务结束后数据立即一致</td>
+<td>硬状态——事务结束后立即全局可见</td>
 <td>软状态——存在可接受的不一致窗口</td>
 </tr>
 <tr>
-<td><strong>典型实现</strong></td>
-<td>锁机制、MVCC、WAL</td>
-<td>异步复制、Gossip、反熵修复</td>
+<td><strong>适用规模</strong></td>
+<td>单机或小规模集群</td>
+<td>大规模分布式系统</td>
+</tr>
+<tr>
+<td><strong>典型实现机制</strong></td>
+<td>锁、MVCC、WAL、两阶段提交</td>
+<td>异步复制、Gossip 协议、反熵修复、向量时钟</td>
 </tr>
 <tr>
 <td><strong>设计哲学</strong></td>
-<td>宁可慢、不可错</td>
-<td>宁可短暂错、不可不可用</td>
+<td>宁可慢，不可错</td>
+<td>宁可短暂不一致，不可整体不可用</td>
+</tr>
+<tr>
+<td><strong>典型系统</strong></td>
+<td>MySQL、PostgreSQL、Oracle</td>
+<td>Cassandra、DynamoDB、CouchDB</td>
 </tr>
 </tbody></table>
-<p><strong>ACID 和 BASE 不是二选一</strong>。在一个成熟的系统中：</p>
-<ul>
-<li><strong>订单、支付、账户</strong>：走 ACID（强一致，数据错了比系统挂了更严重）</li>
-<li><strong>商品展示、推荐、评价</strong>：走 BASE（最终一致，短暂不一致用户无感）</li>
-<li><strong>日志、埋点、监控</strong>：走 BASE（丢失个别数据点不影响业务决策）</li>
-</ul>
+<p><strong>ACID 和 BASE 不是二选一的对立选项</strong>，成熟系统通常根据业务性质分层混用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────┐</span><br><span class="line">│               电商系统示例                    │</span><br><span class="line">├─────────────────┬───────────────────────────┤</span><br><span class="line">│  ACID（强一致）   │    订单、支付、账户余额      │</span><br><span class="line">│                 │    → 数据错比系统挂更严重    │</span><br><span class="line">├─────────────────┼───────────────────────────┤</span><br><span class="line">│  BASE（最终      │    商品展示、推荐、评价、     │</span><br><span class="line">│  一致）          │    购物车、浏览历史          │</span><br><span class="line">│                 │    → 短暂不一致用户无感知    │</span><br><span class="line">├─────────────────┼───────────────────────────┤</span><br><span class="line">│  BASE（宽松）    │    日 志、埋点、行为统计      │</span><br><span class="line">│                 │    →少量数据丢失不影响决策    │</span><br><span class="line">└─────────────────┴───────────────────────────┘</span><br></pre></td></tr></table></figure>
+
 <blockquote>
-<p><strong>一句话</strong>：ACID 管”钱”；BASE 管”内容”。两者在系统中共存，各司其职。</p>
+<p><strong>一句话总结</strong>：ACID 管”钱”，BASE 管”内容”。两者在架构中共存，各司其职，边界由<strong>业务对数据错误的容忍程度</strong>决定。</p>
 </blockquote>
 <hr>
 <h1 id="四、一致性模型深入"><a href="#四、一致性模型深入" class="headerlink" title="四、一致性模型深入"></a>四、一致性模型深入</h1><p>CAP 定理中的 C 是”线性一致性”，是强一致性的极致。但工程实践中，一致性是一个<strong>光谱</strong>，有多个层次可选。理解这些模型，才能在不同场景做出正确的技术选择。</p>
@@ -1032,102 +1106,6 @@
 <blockquote>
 <p><strong>一句话</strong>：物理时钟用于监控和日志就够了。<strong>分布式协调和排序，永远不要依赖物理时钟</strong>。</p>
 </blockquote>
-<hr>
-<h1 id="七、核心概念速查表"><a href="#七、核心概念速查表" class="headerlink" title="七、核心概念速查表"></a>七、核心概念速查表</h1><p>分布式系统涉及的概念繁多。以下速查表覆盖了最常见的核心概念及其一句话解释：</p>
-<table>
-<thead>
-<tr>
-<th>概念</th>
-<th>英文</th>
-<th>一句话解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>两阶段提交</strong></td>
-<td>2PC (Two-Phase Commit)</td>
-<td>协调者先问所有参与者”能提交吗”（Prepare），再通知大家”提交吧”（Commit）——简单但有阻塞问题</td>
-</tr>
-<tr>
-<td><strong>三阶段提交</strong></td>
-<td>3PC (Three-Phase Commit)</td>
-<td>在 2PC 基础上增加了 PreCommit 阶段和超时机制，减少阻塞概率但不能根本解决</td>
-</tr>
-<tr>
-<td><strong>法定人数读写</strong></td>
-<td>Quorum (NWR)</td>
-<td>N&#x3D;副本总数, W&#x3D;写成功所需节点数, R&#x3D;读成功所需节点数 —— W+R &gt; N 即可保证读写一致性</td>
-</tr>
-<tr>
-<td><strong>租约</strong></td>
-<td>Lease</td>
-<td>一段时间内的”独占权限”，到期自动失效——基于时间的授权机制，用于分布式锁、选主等场景</td>
-</tr>
-<tr>
-<td><strong>Gossip 协议</strong></td>
-<td>Gossip Protocol</td>
-<td>每节点周期性随机选几个对等节点交换信息，类似流言传播——最终一致，可扩展性好，Cassandra&#x2F;HashiCorp Serf 的核心协议</td>
-</tr>
-<tr>
-<td><strong>反熵</strong></td>
-<td>Anti-Entropy</td>
-<td>通过比对 Merkle Tree 等数据结构，主动修复副本之间的不一致——与 Gossip 互补</td>
-</tr>
-<tr>
-<td><strong>Merkle 树</strong></td>
-<td>Merkle Tree</td>
-<td>每个叶子节点是数据块的哈希，非叶子节点是子节点哈希的哈希——快速定位两份数据的差异位置</td>
-</tr>
-<tr>
-<td><strong>逻辑时钟</strong></td>
-<td>Lamport Timestamp</td>
-<td>整数计数器，保证因果顺序（a → b ⇒ TS(a) &lt; TS(b)）——不依赖物理时钟的事件排序</td>
-</tr>
-<tr>
-<td><strong>向量时钟</strong></td>
-<td>Vector Clock</td>
-<td>N 维计数器，可以精确判断任意两事件的先后、并发关系——比 Lamport 时间戳信息量更丰富</td>
-</tr>
-<tr>
-<td><strong>共识算法</strong></td>
-<td>Consensus Algorithm</td>
-<td>让多个节点对同一个值达成一致的协议——Paxos 和 Raft 是典型代表</td>
-</tr>
-<tr>
-<td><strong>脑裂</strong></td>
-<td>Split Brain</td>
-<td>网络分区导致集群出现两个互不知道的 Leader，各自写数据导致数据分叉——共识算法的头号敌人</td>
-</tr>
-<tr>
-<td><strong>拜占庭容错</strong></td>
-<td>BFT (Byzantine Fault Tolerance)</td>
-<td>能容忍节点”作恶”（返回任意错误&#x2F;恶意数据）的共识协议——比普通共识代价大得多，用于区块链等对抗性环境</td>
-</tr>
-<tr>
-<td><strong>分布式快照</strong></td>
-<td>Chandy-Lamport Snapshot</td>
-<td>用 Marker 消息记录系统在”某一逻辑时刻”的全局状态——不依赖物理时钟</td>
-</tr>
-<tr>
-<td><strong>幂等性</strong></td>
-<td>Idempotency</td>
-<td>同一个操作执行一次和执行多次的结果相同——分布式系统中的”安全网”，配合唯一 ID 实现</td>
-</tr>
-<tr>
-<td><strong>最终一致性</strong></td>
-<td>Eventual Consistency</td>
-<td>没有新写入之后，最终所有副本一致——DNS 是教科书级的最终一致性系统</td>
-</tr>
-<tr>
-<td><strong>线性一致性</strong></td>
-<td>Linearizability</td>
-<td>最强的一致性模型——操作在全局时间轴上有一个全序，读一定返回最近写的结果</td>
-</tr>
-<tr>
-<td><strong>隔离性</strong></td>
-<td>Isolation</td>
-<td>事务并发执行时互不干扰的程度——数据库 ACID 中的 I，与分布式一致性是不同的概念</td>
-</tr>
-</tbody></table>
 
       
     </div>
@@ -1391,6 +1369,84 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="冉丝堂">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 冉的技术宝典">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="post-title-link" itemprop="url">API网关与负载均衡</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：16:37:42" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式与微服务</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="一、API-网关的定位与价值"><a href="#一、API-网关的定位与价值" class="headerlink" title="一、API 网关的定位与价值"></a>一、API 网关的定位与价值</h1><h2 id="1-不用网关的世界有多混乱：认证-限流-日志散落各处"><a href="#1-不用网关的世界有多混乱：认证-限流-日志散落各处" class="headerlink" title="1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处"></a>1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处</h2><h2 id="2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合"><a href="#2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合" class="headerlink" title="2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合"></a>2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合</h2><h2 id="3-网关的边界：不是什么都往网关里塞"><a href="#3-网关的边界：不是什么都往网关里塞" class="headerlink" title="3. 网关的边界：不是什么都往网关里塞"></a>3. 网关的边界：不是什么都往网关里塞</h2><h2 id="4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关"><a href="#4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关" class="headerlink" title="4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关"></a>4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关</h2><h1 id="二、主流网关对比"><a href="#二、主流网关对比" class="headerlink" title="二、主流网关对比"></a>二、主流网关对比</h1><h2 id="1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器"><a href="#1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器" class="headerlink" title="1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器"></a>1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器</h2><h2 id="2-Kong：Nginx-Lua-插件丰富-高性能"><a href="#2-Kong：Nginx-Lua-插件丰富-高性能" class="headerlink" title="2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能"></a>2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能</h2><h2 id="3-Zuul-1-x-vs-2-x：经典但已不推荐"><a href="#3-Zuul-1-x-vs-2-x：经典但已不推荐" class="headerlink" title="3. Zuul 1.x vs 2.x：经典但已不推荐"></a>3. Zuul 1.x vs 2.x：经典但已不推荐</h2><h2 id="4-APISIX：Apache-开源的高性能云原生网关"><a href="#4-APISIX：Apache-开源的高性能云原生网关" class="headerlink" title="4. APISIX：Apache 开源的高性能云原生网关"></a>4. APISIX：Apache 开源的高性能云原生网关</h2><h2 id="5-多维对比（性能-扩展性-生态-运维-适用场景）"><a href="#5-多维对比（性能-扩展性-生态-运维-适用场景）" class="headerlink" title="5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）"></a>5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）</h2><h1 id="三、Spring-Cloud-Gateway-深度使用"><a href="#三、Spring-Cloud-Gateway-深度使用" class="headerlink" title="三、Spring Cloud Gateway 深度使用"></a>三、Spring Cloud Gateway 深度使用</h1><h2 id="1-路由谓词（Predicate）与过滤器（Filter）"><a href="#1-路由谓词（Predicate）与过滤器（Filter）" class="headerlink" title="1. 路由谓词（Predicate）与过滤器（Filter）"></a>1. 路由谓词（Predicate）与过滤器（Filter）</h2><h2 id="2-自定义过滤器实战：鉴权-日志-ReqBody-缓存"><a href="#2-自定义过滤器实战：鉴权-日志-ReqBody-缓存" class="headerlink" title="2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存"></a>2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存</h2><h2 id="3-全局跨域（CORS）配置"><a href="#3-全局跨域（CORS）配置" class="headerlink" title="3. 全局跨域（CORS）配置"></a>3. 全局跨域（CORS）配置</h2><h2 id="4-网关层统一鉴权：JWT-解析-RBAC-拦截"><a href="#4-网关层统一鉴权：JWT-解析-RBAC-拦截" class="headerlink" title="4. 网关层统一鉴权：JWT 解析 + RBAC 拦截"></a>4. 网关层统一鉴权：JWT 解析 + RBAC 拦截</h2><h2 id="5-Request-Body-多次读取的坑与-ContentCaching-解决"><a href="#5-Request-Body-多次读取的坑与-ContentCaching-解决" class="headerlink" title="5. Request Body 多次读取的坑与 ContentCaching 解决"></a>5. Request Body 多次读取的坑与 ContentCaching 解决</h2><h2 id="6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节"><a href="#6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节" class="headerlink" title="6. 🔗 已有内容：Filter链底层原理 → Web协议服务器/JavaServlet.md Filter章节"></a>6. 🔗 已有内容：Filter链底层原理 → <code>Web协议服务器/JavaServlet.md</code> Filter章节</h2><h1 id="四、灰度发布与流量路由"><a href="#四、灰度发布与流量路由" class="headerlink" title="四、灰度发布与流量路由"></a>四、灰度发布与流量路由</h1><h2 id="1-金丝雀发布-蓝绿部署-A-B-测试"><a href="#1-金丝雀发布-蓝绿部署-A-B-测试" class="headerlink" title="1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试"></a>1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试</h2><h2 id="2-基于-Header-Cookie-权重-的灰度路由策略"><a href="#2-基于-Header-Cookie-权重-的灰度路由策略" class="headerlink" title="2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略"></a>2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略</h2><h2 id="3-结合-Nacos-元数据实现灰度流量标记透传"><a href="#3-结合-Nacos-元数据实现灰度流量标记透传" class="headerlink" title="3. 结合 Nacos 元数据实现灰度流量标记透传"></a>3. 结合 Nacos 元数据实现灰度流量标记透传</h2><h1 id="五、负载均衡全景架构"><a href="#五、负载均衡全景架构" class="headerlink" title="五、负载均衡全景架构"></a>五、负载均衡全景架构</h1><h2 id="1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现"><a href="#1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现" class="headerlink" title="1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)"></a>1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)</h2><h2 id="2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查"><a href="#2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查" class="headerlink" title="2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查"></a>2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查</h2><h2 id="3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由"><a href="#3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由" class="headerlink" title="3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由"></a>3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由</h2><h2 id="4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）"><a href="#4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）" class="headerlink" title="4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）"></a>4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）</h2><h2 id="5-重试机制与退避策略"><a href="#5-重试机制与退避策略" class="headerlink" title="5. 重试机制与退避策略"></a>5. 重试机制与退避策略</h2><h2 id="6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节"><a href="#6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节" class="headerlink" title="6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → Web协议服务器/HTTP客户端.md 3.2-3.3节"></a>6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → <code>Web协议服务器/HTTP客户端.md</code> 3.2-3.3节</h2><h1 id="六、网关高可用"><a href="#六、网关高可用" class="headerlink" title="六、网关高可用"></a>六、网关高可用</h1><h2 id="1-网关本身需要高可用：多副本-Nginx-前置"><a href="#1-网关本身需要高可用：多副本-Nginx-前置" class="headerlink" title="1. 网关本身需要高可用：多副本 + Nginx 前置"></a>1. 网关本身需要高可用：多副本 + Nginx 前置</h2><h2 id="2-网关层的降级与容错"><a href="#2-网关层的降级与容错" class="headerlink" title="2. 网关层的降级与容错"></a>2. 网关层的降级与容错</h2><h2 id="3-网关的性能优化与监控"><a href="#3-网关的性能优化与监控" class="headerlink" title="3. 网关的性能优化与监控"></a>3. 网关的性能优化与监控</h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/07-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1547,7 +1603,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/08-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E3%80%81ID%E7%94%9F%E6%88%90%E4%B8%8E%E5%B9%82%E7%AD%89%E6%80%A7/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/09-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1565,7 +1621,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/08-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E3%80%81ID%E7%94%9F%E6%88%90%E4%B8%8E%E5%B9%82%E7%AD%89%E6%80%A7/" class="post-title-link" itemprop="url">分布式锁、ID生成与幂等性</a>
+          <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/09-%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">分布式缓存架构</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1577,7 +1633,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：16:38:15" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
+      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：16:38:24" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1599,85 +1655,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="一、分布式锁：为什么需要它"><a href="#一、分布式锁：为什么需要它" class="headerlink" title="一、分布式锁：为什么需要它"></a>一、分布式锁：为什么需要它</h1><h2 id="1-单机锁的失效：synchronized-ReentrantLock-跨不过-JVM-边界"><a href="#1-单机锁的失效：synchronized-ReentrantLock-跨不过-JVM-边界" class="headerlink" title="1. 单机锁的失效：synchronized&#x2F;ReentrantLock 跨不过 JVM 边界"></a>1. 单机锁的失效：synchronized&#x2F;ReentrantLock 跨不过 JVM 边界</h2><h2 id="2-分布式锁的三大要求：互斥-防死锁-容错性"><a href="#2-分布式锁的三大要求：互斥-防死锁-容错性" class="headerlink" title="2. 分布式锁的三大要求：互斥&#x2F;防死锁&#x2F;容错性"></a>2. 分布式锁的三大要求：互斥&#x2F;防死锁&#x2F;容错性</h2><h2 id="3-🔗-已有内容：Java-并发锁机制-→-基础核心层-Java-九、并发编程-md"><a href="#3-🔗-已有内容：Java-并发锁机制-→-基础核心层-Java-九、并发编程-md" class="headerlink" title="3. 🔗 已有内容：Java 并发锁机制 → 基础核心层/Java/九、并发编程.md"></a>3. 🔗 已有内容：Java 并发锁机制 → <code>基础核心层/Java/九、并发编程.md</code></h2><h1 id="二、分布式锁的实现方案"><a href="#二、分布式锁的实现方案" class="headerlink" title="二、分布式锁的实现方案"></a>二、分布式锁的实现方案</h1><h2 id="1-数据库唯一索引：最简单也最脆弱"><a href="#1-数据库唯一索引：最简单也最脆弱" class="headerlink" title="1. 数据库唯一索引：最简单也最脆弱"></a>1. 数据库唯一索引：最简单也最脆弱</h2><h2 id="2-ZooKeeper-临时顺序节点-Watch-机制"><a href="#2-ZooKeeper-临时顺序节点-Watch-机制" class="headerlink" title="2. ZooKeeper 临时顺序节点 + Watch 机制"></a>2. ZooKeeper 临时顺序节点 + Watch 机制</h2><h2 id="3-Redis-Redisson-的看门狗机制"><a href="#3-Redis-Redisson-的看门狗机制" class="headerlink" title="3. Redis + Redisson 的看门狗机制"></a>3. Redis + Redisson 的看门狗机制</h2><h2 id="4-etcd-分布式锁"><a href="#4-etcd-分布式锁" class="headerlink" title="4. etcd 分布式锁"></a>4. etcd 分布式锁</h2><h2 id="5-四种方案的对比矩阵（性能-可靠性-复杂度-生态）"><a href="#5-四种方案的对比矩阵（性能-可靠性-复杂度-生态）" class="headerlink" title="5. 四种方案的对比矩阵（性能&#x2F;可靠性&#x2F;复杂度&#x2F;生态）"></a>5. 四种方案的对比矩阵（性能&#x2F;可靠性&#x2F;复杂度&#x2F;生态）</h2><h1 id="三、Redisson-分布式锁深度使用"><a href="#三、Redisson-分布式锁深度使用" class="headerlink" title="三、Redisson 分布式锁深度使用"></a>三、Redisson 分布式锁深度使用</h1><h2 id="1-可重入锁与公平锁"><a href="#1-可重入锁与公平锁" class="headerlink" title="1. 可重入锁与公平锁"></a>1. 可重入锁与公平锁</h2><h2 id="2-RedLock-算法：安全性与争议"><a href="#2-RedLock-算法：安全性与争议" class="headerlink" title="2. RedLock 算法：安全性与争议"></a>2. RedLock 算法：安全性与争议</h2><h2 id="3-看门狗自动续期机制"><a href="#3-看门狗自动续期机制" class="headerlink" title="3. 看门狗自动续期机制"></a>3. 看门狗自动续期机制</h2><h2 id="4-读写锁：读多写少的场景优化"><a href="#4-读写锁：读多写少的场景优化" class="headerlink" title="4. 读写锁：读多写少的场景优化"></a>4. 读写锁：读多写少的场景优化</h2><h2 id="5-联锁与红锁"><a href="#5-联锁与红锁" class="headerlink" title="5. 联锁与红锁"></a>5. 联锁与红锁</h2><h2 id="6-🔗-已有内容：Redis-基础操作与集群-→-数据库与持久化-非关系型数据库-Redis-md"><a href="#6-🔗-已有内容：Redis-基础操作与集群-→-数据库与持久化-非关系型数据库-Redis-md" class="headerlink" title="6. 🔗 已有内容：Redis 基础操作与集群 → 数据库与持久化/非关系型数据库/Redis.md"></a>6. 🔗 已有内容：Redis 基础操作与集群 → <code>数据库与持久化/非关系型数据库/Redis.md</code></h2><h1 id="四、分布式锁的工程陷阱"><a href="#四、分布式锁的工程陷阱" class="headerlink" title="四、分布式锁的工程陷阱"></a>四、分布式锁的工程陷阱</h1><h2 id="1-锁粒度过大：一把锁锁住了所有流量"><a href="#1-锁粒度过大：一把锁锁住了所有流量" class="headerlink" title="1. 锁粒度过大：一把锁锁住了所有流量"></a>1. 锁粒度过大：一把锁锁住了所有流量</h2><h2 id="2-忘解锁导致死锁"><a href="#2-忘解锁导致死锁" class="headerlink" title="2. 忘解锁导致死锁"></a>2. 忘解锁导致死锁</h2><h2 id="3-锁超时但业务未完成：自动续约的必要性"><a href="#3-锁超时但业务未完成：自动续约的必要性" class="headerlink" title="3. 锁超时但业务未完成：自动续约的必要性"></a>3. 锁超时但业务未完成：自动续约的必要性</h2><h2 id="4-Redis-主从切换时锁丢失"><a href="#4-Redis-主从切换时锁丢失" class="headerlink" title="4. Redis 主从切换时锁丢失"></a>4. Redis 主从切换时锁丢失</h2><h2 id="5-性能优化：分段锁思想"><a href="#5-性能优化：分段锁思想" class="headerlink" title="5. 性能优化：分段锁思想"></a>5. 性能优化：分段锁思想</h2><h1 id="五、分布式-ID-生成"><a href="#五、分布式-ID-生成" class="headerlink" title="五、分布式 ID 生成"></a>五、分布式 ID 生成</h1><h2 id="1-为什么不用数据库自增-ID：单点瓶颈-不适合分库分表"><a href="#1-为什么不用数据库自增-ID：单点瓶颈-不适合分库分表" class="headerlink" title="1. 为什么不用数据库自增 ID：单点瓶颈&#x2F;不适合分库分表"></a>1. 为什么不用数据库自增 ID：单点瓶颈&#x2F;不适合分库分表</h2><h2 id="2-UUID-的致命缺陷：无序导致索引页分裂"><a href="#2-UUID-的致命缺陷：无序导致索引页分裂" class="headerlink" title="2. UUID 的致命缺陷：无序导致索引页分裂"></a>2. UUID 的致命缺陷：无序导致索引页分裂</h2><h2 id="3-Snowflake-算法解析：1位符号-41位时间-10位机器-12位序列号"><a href="#3-Snowflake-算法解析：1位符号-41位时间-10位机器-12位序列号" class="headerlink" title="3. Snowflake 算法解析：1位符号+41位时间+10位机器+12位序列号"></a>3. Snowflake 算法解析：1位符号+41位时间+10位机器+12位序列号</h2><h2 id="4-时钟回拨的解决方案"><a href="#4-时钟回拨的解决方案" class="headerlink" title="4. 时钟回拨的解决方案"></a>4. 时钟回拨的解决方案</h2><h2 id="5-美团-Leaf：号段模式-Snowflake-模式的工业级实践"><a href="#5-美团-Leaf：号段模式-Snowflake-模式的工业级实践" class="headerlink" title="5. 美团 Leaf：号段模式 + Snowflake 模式的工业级实践"></a>5. 美团 Leaf：号段模式 + Snowflake 模式的工业级实践</h2><h2 id="6-百度-UidGenerator：基于-Snowflake-的增强版"><a href="#6-百度-UidGenerator：基于-Snowflake-的增强版" class="headerlink" title="6. 百度 UidGenerator：基于 Snowflake 的增强版"></a>6. 百度 UidGenerator：基于 Snowflake 的增强版</h2><h2 id="7-分布式-ID-的技术选型（性能-趋势递增-中心化-依赖）"><a href="#7-分布式-ID-的技术选型（性能-趋势递增-中心化-依赖）" class="headerlink" title="7. 分布式 ID 的技术选型（性能&#x2F;趋势递增&#x2F;中心化&#x2F;依赖）"></a>7. 分布式 ID 的技术选型（性能&#x2F;趋势递增&#x2F;中心化&#x2F;依赖）</h2><h1 id="六、幂等性设计"><a href="#六、幂等性设计" class="headerlink" title="六、幂等性设计"></a>六、幂等性设计</h1><h2 id="1-幂等性的定义：f-f-x-f-x-的工程翻译"><a href="#1-幂等性的定义：f-f-x-f-x-的工程翻译" class="headerlink" title="1. 幂等性的定义：f(f(x)) &#x3D; f(x) 的工程翻译"></a>1. 幂等性的定义：f(f(x)) &#x3D; f(x) 的工程翻译</h2><h2 id="2-幂等键（Idempotency-Key）方案"><a href="#2-幂等键（Idempotency-Key）方案" class="headerlink" title="2. 幂等键（Idempotency-Key）方案"></a>2. 幂等键（Idempotency-Key）方案</h2><h2 id="3-数据库唯一约束去重表"><a href="#3-数据库唯一约束去重表" class="headerlink" title="3. 数据库唯一约束去重表"></a>3. 数据库唯一约束去重表</h2><h2 id="4-状态机保证幂等"><a href="#4-状态机保证幂等" class="headerlink" title="4. 状态机保证幂等"></a>4. 状态机保证幂等</h2><h2 id="5-Token-机制防重复提交"><a href="#5-Token-机制防重复提交" class="headerlink" title="5. Token 机制防重复提交"></a>5. Token 机制防重复提交</h2><h2 id="6-分布式锁实现请求串行化"><a href="#6-分布式锁实现请求串行化" class="headerlink" title="6. 分布式锁实现请求串行化"></a>6. 分布式锁实现请求串行化</h2><h2 id="7-各方案的适用场景与组合使用"><a href="#7-各方案的适用场景与组合使用" class="headerlink" title="7. 各方案的适用场景与组合使用"></a>7. 各方案的适用场景与组合使用</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="冉丝堂">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="冉的技术宝典">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 冉的技术宝典">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/09/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/05-API%E7%BD%91%E5%85%B3%E4%B8%8E%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/" class="post-title-link" itemprop="url">API网关与负载均衡</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2026-06-09 00:00:00 / 修改时间：16:37:42" itemprop="dateCreated datePublished" datetime="2026-06-09T00:00:00+08:00">2026-06-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">分布式与微服务</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="一、API-网关的定位与价值"><a href="#一、API-网关的定位与价值" class="headerlink" title="一、API 网关的定位与价值"></a>一、API 网关的定位与价值</h1><h2 id="1-不用网关的世界有多混乱：认证-限流-日志散落各处"><a href="#1-不用网关的世界有多混乱：认证-限流-日志散落各处" class="headerlink" title="1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处"></a>1. 不用网关的世界有多混乱：认证&#x2F;限流&#x2F;日志散落各处</h2><h2 id="2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合"><a href="#2-网关的四大核心职责：路由转发-认证鉴权-限流熔断-日志聚合" class="headerlink" title="2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合"></a>2. 网关的四大核心职责：路由转发&#x2F;认证鉴权&#x2F;限流熔断&#x2F;日志聚合</h2><h2 id="3-网关的边界：不是什么都往网关里塞"><a href="#3-网关的边界：不是什么都往网关里塞" class="headerlink" title="3. 网关的边界：不是什么都往网关里塞"></a>3. 网关的边界：不是什么都往网关里塞</h2><h2 id="4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关"><a href="#4-BFF（Backend-for-Frontend）模式：为不同客户端定制专属网关" class="headerlink" title="4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关"></a>4. BFF（Backend for Frontend）模式：为不同客户端定制专属网关</h2><h1 id="二、主流网关对比"><a href="#二、主流网关对比" class="headerlink" title="二、主流网关对比"></a>二、主流网关对比</h1><h2 id="1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器"><a href="#1-Spring-Cloud-Gateway：响应式-Java生态-灵活的路由谓词与过滤器" class="headerlink" title="1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器"></a>1. Spring Cloud Gateway：响应式&#x2F;Java生态&#x2F;灵活的路由谓词与过滤器</h2><h2 id="2-Kong：Nginx-Lua-插件丰富-高性能"><a href="#2-Kong：Nginx-Lua-插件丰富-高性能" class="headerlink" title="2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能"></a>2. Kong：Nginx+Lua&#x2F;插件丰富&#x2F;高性能</h2><h2 id="3-Zuul-1-x-vs-2-x：经典但已不推荐"><a href="#3-Zuul-1-x-vs-2-x：经典但已不推荐" class="headerlink" title="3. Zuul 1.x vs 2.x：经典但已不推荐"></a>3. Zuul 1.x vs 2.x：经典但已不推荐</h2><h2 id="4-APISIX：Apache-开源的高性能云原生网关"><a href="#4-APISIX：Apache-开源的高性能云原生网关" class="headerlink" title="4. APISIX：Apache 开源的高性能云原生网关"></a>4. APISIX：Apache 开源的高性能云原生网关</h2><h2 id="5-多维对比（性能-扩展性-生态-运维-适用场景）"><a href="#5-多维对比（性能-扩展性-生态-运维-适用场景）" class="headerlink" title="5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）"></a>5. 多维对比（性能&#x2F;扩展性&#x2F;生态&#x2F;运维&#x2F;适用场景）</h2><h1 id="三、Spring-Cloud-Gateway-深度使用"><a href="#三、Spring-Cloud-Gateway-深度使用" class="headerlink" title="三、Spring Cloud Gateway 深度使用"></a>三、Spring Cloud Gateway 深度使用</h1><h2 id="1-路由谓词（Predicate）与过滤器（Filter）"><a href="#1-路由谓词（Predicate）与过滤器（Filter）" class="headerlink" title="1. 路由谓词（Predicate）与过滤器（Filter）"></a>1. 路由谓词（Predicate）与过滤器（Filter）</h2><h2 id="2-自定义过滤器实战：鉴权-日志-ReqBody-缓存"><a href="#2-自定义过滤器实战：鉴权-日志-ReqBody-缓存" class="headerlink" title="2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存"></a>2. 自定义过滤器实战：鉴权&#x2F;日志&#x2F;ReqBody 缓存</h2><h2 id="3-全局跨域（CORS）配置"><a href="#3-全局跨域（CORS）配置" class="headerlink" title="3. 全局跨域（CORS）配置"></a>3. 全局跨域（CORS）配置</h2><h2 id="4-网关层统一鉴权：JWT-解析-RBAC-拦截"><a href="#4-网关层统一鉴权：JWT-解析-RBAC-拦截" class="headerlink" title="4. 网关层统一鉴权：JWT 解析 + RBAC 拦截"></a>4. 网关层统一鉴权：JWT 解析 + RBAC 拦截</h2><h2 id="5-Request-Body-多次读取的坑与-ContentCaching-解决"><a href="#5-Request-Body-多次读取的坑与-ContentCaching-解决" class="headerlink" title="5. Request Body 多次读取的坑与 ContentCaching 解决"></a>5. Request Body 多次读取的坑与 ContentCaching 解决</h2><h2 id="6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节"><a href="#6-🔗-已有内容：Filter链底层原理-→-Web协议服务器-JavaServlet-md-Filter章节" class="headerlink" title="6. 🔗 已有内容：Filter链底层原理 → Web协议服务器/JavaServlet.md Filter章节"></a>6. 🔗 已有内容：Filter链底层原理 → <code>Web协议服务器/JavaServlet.md</code> Filter章节</h2><h1 id="四、灰度发布与流量路由"><a href="#四、灰度发布与流量路由" class="headerlink" title="四、灰度发布与流量路由"></a>四、灰度发布与流量路由</h1><h2 id="1-金丝雀发布-蓝绿部署-A-B-测试"><a href="#1-金丝雀发布-蓝绿部署-A-B-测试" class="headerlink" title="1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试"></a>1. 金丝雀发布&#x2F;蓝绿部署&#x2F;A&#x2F;B 测试</h2><h2 id="2-基于-Header-Cookie-权重-的灰度路由策略"><a href="#2-基于-Header-Cookie-权重-的灰度路由策略" class="headerlink" title="2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略"></a>2. 基于 Header&#x2F;Cookie&#x2F;权重 的灰度路由策略</h2><h2 id="3-结合-Nacos-元数据实现灰度流量标记透传"><a href="#3-结合-Nacos-元数据实现灰度流量标记透传" class="headerlink" title="3. 结合 Nacos 元数据实现灰度流量标记透传"></a>3. 结合 Nacos 元数据实现灰度流量标记透传</h2><h1 id="五、负载均衡全景架构"><a href="#五、负载均衡全景架构" class="headerlink" title="五、负载均衡全景架构"></a>五、负载均衡全景架构</h1><h2 id="1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现"><a href="#1-三层负载均衡视图：Nginx-七层-→-网关-应用层-→-客户端-服务发现" class="headerlink" title="1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)"></a>1. 三层负载均衡视图：Nginx(七层) → 网关(应用层) → 客户端(服务发现)</h2><h2 id="2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查"><a href="#2-Nginx-层：四层-TCP-与七层-HTTP-负载均衡、upstream-配置、健康检查" class="headerlink" title="2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查"></a>2. Nginx 层：四层(TCP)与七层(HTTP)负载均衡、upstream 配置、健康检查</h2><h2 id="3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由"><a href="#3-网关层：Spring-Cloud-Gateway-Route-结合注册中心实现动态路由" class="headerlink" title="3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由"></a>3. 网关层：Spring Cloud Gateway Route 结合注册中心实现动态路由</h2><h2 id="4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）"><a href="#4-客户端层：负载均衡算法（轮询-加权-IP哈希-最少连接-一致性哈希）" class="headerlink" title="4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）"></a>4. 客户端层：负载均衡算法（轮询&#x2F;加权&#x2F;IP哈希&#x2F;最少连接&#x2F;一致性哈希）</h2><h2 id="5-重试机制与退避策略"><a href="#5-重试机制与退避策略" class="headerlink" title="5. 重试机制与退避策略"></a>5. 重试机制与退避策略</h2><h2 id="6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节"><a href="#6-🔗-已有内容：Feign-LoadBalancer-轮询策略-→-Web协议服务器-HTTP客户端-md-3-2-3-3节" class="headerlink" title="6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → Web协议服务器/HTTP客户端.md 3.2-3.3节"></a>6. 🔗 已有内容：Feign + LoadBalancer + 轮询策略 → <code>Web协议服务器/HTTP客户端.md</code> 3.2-3.3节</h2><h1 id="六、网关高可用"><a href="#六、网关高可用" class="headerlink" title="六、网关高可用"></a>六、网关高可用</h1><h2 id="1-网关本身需要高可用：多副本-Nginx-前置"><a href="#1-网关本身需要高可用：多副本-Nginx-前置" class="headerlink" title="1. 网关本身需要高可用：多副本 + Nginx 前置"></a>1. 网关本身需要高可用：多副本 + Nginx 前置</h2><h2 id="2-网关层的降级与容错"><a href="#2-网关层的降级与容错" class="headerlink" title="2. 网关层的降级与容错"></a>2. 网关层的降级与容错</h2><h2 id="3-网关的性能优化与监控"><a href="#3-网关的性能优化与监控" class="headerlink" title="3. 网关的性能优化与监控"></a>3. 网关的性能优化与监控</h2>
+          <h1 id="一、缓存在微服务中的定位"><a href="#一、缓存在微服务中的定位" class="headerlink" title="一、缓存在微服务中的定位"></a>一、缓存在微服务中的定位</h1><h2 id="1-缓存金字塔：浏览器→CDN→反向代理→应用→数据库"><a href="#1-缓存金字塔：浏览器→CDN→反向代理→应用→数据库" class="headerlink" title="1. 缓存金字塔：浏览器→CDN→反向代理→应用→数据库"></a>1. 缓存金字塔：浏览器→CDN→反向代理→应用→数据库</h2><h2 id="2-缓存的本质：用空间换时间-允许数据有”有效期”"><a href="#2-缓存的本质：用空间换时间-允许数据有”有效期”" class="headerlink" title="2. 缓存的本质：用空间换时间 + 允许数据有”有效期”"></a>2. 缓存的本质：用空间换时间 + 允许数据有”有效期”</h2><h2 id="3-缓存不是银弹：复杂性、一致性、内存成本"><a href="#3-缓存不是银弹：复杂性、一致性、内存成本" class="headerlink" title="3. 缓存不是银弹：复杂性、一致性、内存成本"></a>3. 缓存不是银弹：复杂性、一致性、内存成本</h2><h2 id="4-🔗-已有内容：Redis-数据结构-持久化-集群-分布式锁-ID-基础-→-数据库与持久化-非关系型数据库-Redis-md"><a href="#4-🔗-已有内容：Redis-数据结构-持久化-集群-分布式锁-ID-基础-→-数据库与持久化-非关系型数据库-Redis-md" class="headerlink" title="4. 🔗 已有内容：Redis 数据结构&#x2F;持久化&#x2F;集群&#x2F;分布式锁&#x2F;ID 基础 → 数据库与持久化/非关系型数据库/Redis.md"></a>4. 🔗 已有内容：Redis 数据结构&#x2F;持久化&#x2F;集群&#x2F;分布式锁&#x2F;ID 基础 → <code>数据库与持久化/非关系型数据库/Redis.md</code></h2><h1 id="二、缓存策略"><a href="#二、缓存策略" class="headerlink" title="二、缓存策略"></a>二、缓存策略</h1><h2 id="1-Cache-Aside（旁路缓存）：最经典的读写策略"><a href="#1-Cache-Aside（旁路缓存）：最经典的读写策略" class="headerlink" title="1. Cache Aside（旁路缓存）：最经典的读写策略"></a>1. Cache Aside（旁路缓存）：最经典的读写策略</h2><h2 id="2-Read-Write-Through：缓存代理数据库"><a href="#2-Read-Write-Through：缓存代理数据库" class="headerlink" title="2. Read&#x2F;Write Through：缓存代理数据库"></a>2. Read&#x2F;Write Through：缓存代理数据库</h2><h2 id="3-Write-Behind（异步写回）：最高性能的写策略"><a href="#3-Write-Behind（异步写回）：最高性能的写策略" class="headerlink" title="3. Write Behind（异步写回）：最高性能的写策略"></a>3. Write Behind（异步写回）：最高性能的写策略</h2><h2 id="4-四种缓存策略的对比与适用场景"><a href="#4-四种缓存策略的对比与适用场景" class="headerlink" title="4. 四种缓存策略的对比与适用场景"></a>4. 四种缓存策略的对比与适用场景</h2><h1 id="三、缓存与数据库一致性"><a href="#三、缓存与数据库一致性" class="headerlink" title="三、缓存与数据库一致性"></a>三、缓存与数据库一致性</h1><h2 id="1-先删缓存还是先更新数据库？全面分析"><a href="#1-先删缓存还是先更新数据库？全面分析" class="headerlink" title="1. 先删缓存还是先更新数据库？全面分析"></a>1. 先删缓存还是先更新数据库？全面分析</h2><h2 id="2-延迟双删：解决并发读写的不一致"><a href="#2-延迟双删：解决并发读写的不一致" class="headerlink" title="2. 延迟双删：解决并发读写的不一致"></a>2. 延迟双删：解决并发读写的不一致</h2><h2 id="3-订阅-Binlog-异步更新缓存（Canal-MQ）"><a href="#3-订阅-Binlog-异步更新缓存（Canal-MQ）" class="headerlink" title="3. 订阅 Binlog 异步更新缓存（Canal + MQ）"></a>3. 订阅 Binlog 异步更新缓存（Canal + MQ）</h2><h2 id="4-最终一致性-兜底策略"><a href="#4-最终一致性-兜底策略" class="headerlink" title="4. 最终一致性 + 兜底策略"></a>4. 最终一致性 + 兜底策略</h2><h2 id="5-缓存更新-vs-缓存删除的选择"><a href="#5-缓存更新-vs-缓存删除的选择" class="headerlink" title="5. 缓存更新 vs 缓存删除的选择"></a>5. 缓存更新 vs 缓存删除的选择</h2><h1 id="四、缓存三大经典问题"><a href="#四、缓存三大经典问题" class="headerlink" title="四、缓存三大经典问题"></a>四、缓存三大经典问题</h1><h2 id="1-缓存穿透：查询不存在的数据-→-布隆过滤器-空值缓存"><a href="#1-缓存穿透：查询不存在的数据-→-布隆过滤器-空值缓存" class="headerlink" title="1. 缓存穿透：查询不存在的数据 → 布隆过滤器&#x2F;空值缓存"></a>1. 缓存穿透：查询不存在的数据 → 布隆过滤器&#x2F;空值缓存</h2><h2 id="2-缓存击穿：热点-Key-过期-→-互斥锁-逻辑过期"><a href="#2-缓存击穿：热点-Key-过期-→-互斥锁-逻辑过期" class="headerlink" title="2. 缓存击穿：热点 Key 过期 → 互斥锁&#x2F;逻辑过期"></a>2. 缓存击穿：热点 Key 过期 → 互斥锁&#x2F;逻辑过期</h2><h2 id="3-缓存雪崩：大量-Key-同时过期-→-随机过期时间-多级缓存-熔断降级"><a href="#3-缓存雪崩：大量-Key-同时过期-→-随机过期时间-多级缓存-熔断降级" class="headerlink" title="3. 缓存雪崩：大量 Key 同时过期 → 随机过期时间&#x2F;多级缓存&#x2F;熔断降级"></a>3. 缓存雪崩：大量 Key 同时过期 → 随机过期时间&#x2F;多级缓存&#x2F;熔断降级</h2><h1 id="五、多级缓存架构"><a href="#五、多级缓存架构" class="headerlink" title="五、多级缓存架构"></a>五、多级缓存架构</h1><h2 id="1-本地缓存（Caffeine-Guava）-分布式缓存（Redis）"><a href="#1-本地缓存（Caffeine-Guava）-分布式缓存（Redis）" class="headerlink" title="1. 本地缓存（Caffeine&#x2F;Guava） + 分布式缓存（Redis）"></a>1. 本地缓存（Caffeine&#x2F;Guava） + 分布式缓存（Redis）</h2><h2 id="2-两级缓存的一致性协调"><a href="#2-两级缓存的一致性协调" class="headerlink" title="2. 两级缓存的一致性协调"></a>2. 两级缓存的一致性协调</h2><h2 id="3-热点探测与热点缓存自动预热"><a href="#3-热点探测与热点缓存自动预热" class="headerlink" title="3. 热点探测与热点缓存自动预热"></a>3. 热点探测与热点缓存自动预热</h2><h2 id="4-多级缓存的成本与收益"><a href="#4-多级缓存的成本与收益" class="headerlink" title="4. 多级缓存的成本与收益"></a>4. 多级缓存的成本与收益</h2><h1 id="六、Redis-在生产中的架构实践"><a href="#六、Redis-在生产中的架构实践" class="headerlink" title="六、Redis 在生产中的架构实践"></a>六、Redis 在生产中的架构实践</h1><h2 id="1-Redis-Cluster-的分片与重新分片"><a href="#1-Redis-Cluster-的分片与重新分片" class="headerlink" title="1. Redis Cluster 的分片与重新分片"></a>1. Redis Cluster 的分片与重新分片</h2><h2 id="2-哨兵模式的高可用架构"><a href="#2-哨兵模式的高可用架构" class="headerlink" title="2. 哨兵模式的高可用架构"></a>2. 哨兵模式的高可用架构</h2><h2 id="3-大-Key-与热-Key-的治理"><a href="#3-大-Key-与热-Key-的治理" class="headerlink" title="3. 大 Key 与热 Key 的治理"></a>3. 大 Key 与热 Key 的治理</h2><h2 id="4-缓存监控与告警指标"><a href="#4-缓存监控与告警指标" class="headerlink" title="4. 缓存监控与告警指标"></a>4. 缓存监控与告警指标</h2>
       
     </div>
 
